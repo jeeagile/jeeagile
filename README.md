@@ -168,8 +168,7 @@ jeeagile
 
 #### 项目捐赠
 项目的发展离不开你的支持，请作者喝杯咖 吧☕  
-
-![donate](http://jeeagile.vip/images/donate.png)
+![donate](https://images.gitee.com/uploads/images/2021/0620/174238_d50b32f9_9223129.png "donate.png")
 
 #### 反馈交流
 - QQ交流群：796838714
