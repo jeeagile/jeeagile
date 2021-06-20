@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>jeeagile-admin</artifactId>
+        <groupId>com.jeeagile</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>jeeagile-admin-web</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-system-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-monitor-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-quartz-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-logger-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-security-shiro</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-admin-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-admin-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+<!--        <dependency>-->
+<!--            <groupId>com.jeeagile</groupId>-->
+<!--            <artifactId>jeeagile-protocol-dubbo</artifactId>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
+<!--        </dependency>-->
+
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <mainClass>com.jeeagile.admin.AgileAdminServiceApplication</mainClass>
+                </configuration>
+            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>com.spotify</groupId>-->
+<!--                <artifactId>docker-maven-plugin</artifactId>-->
+<!--                <version>1.2.2</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>build-image</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <dockerHost>http://**.**.**.**:2375</dockerHost>-->
+<!--                    <imageName>${project.artifactId}</imageName>-->
+<!--                    <imageTags>-->
+<!--                        <imageTag>${project.version}</imageTag>-->
+<!--                    </imageTags>-->
+<!--                    <forceTags>true</forceTags>-->
+<!--                    <dockerDirectory>${project.basedir}</dockerDirectory>-->
+<!--                    <resources>-->
+<!--                        <resource>-->
+<!--                            <targetPath>/</targetPath>-->
+<!--                            <directory>${project.build.directory}</directory>-->
+<!--                            <include>${project.build.finalName}.jar</include>-->
+<!--                        </resource>-->
+<!--                    </resources>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+        </plugins>
+    </build>
+</project>

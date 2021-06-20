@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.4</version>
+    </parent>
+
+    <modules>
+        <module>jeeagile-core</module>
+        <module>jeeagile-frame</module>
+        <module>jeeagile-module</module>
+        <module>jeeagile-plugin</module>
+        <module>jeeagile-security</module>
+<!--        <module>jeeagile-protocol</module>-->
+    </modules>
+
+    <groupId>com.jeeagile</groupId>
+    <artifactId>jeeagile-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <description>敏捷开发平台</description>
+
+    <properties>
+        <jeeagile.version>1.0-SNAPSHOT</jeeagile.version>
+
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-text.version>3.12.0</commons-text.version>
+        <commons-io.version>2.8.0</commons-io.version>
+        <commons-codec.version>1.15</commons-codec.version>
+        <commons-crypto.version>1.1.0</commons-crypto.version>
+
+        <fastjson.version>1.2.76</fastjson.version>
+        <mybatis-plus.version>3.4.2</mybatis-plus.version>
+        <dubbo.version>2.7.11</dubbo.version>
+
+        <hibernate-validator.version>7.0.0.Final</hibernate-validator.version>
+        <jakarta.el.version>4.0.0</jakarta.el.version>
+        <jakarta.validation-api.version>3.0.0</jakarta.validation-api.version>
+
+        <swagger-annotations.version>1.6.2</swagger-annotations.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <swagger-bootstrap-ui.version>1.9.6</swagger-bootstrap-ui.version>
+
+
+        <UserAgentUtils.version>1.21</UserAgentUtils.version>
+        <shiro-spring.version>1.7.0</shiro-spring.version>
+
+        <lombok.version>1.18.18</lombok.version>
+
+
+        <alibaba.druid.version>1.2.6</alibaba.druid.version>
+
+        <activiti.version>7.1.0.M6</activiti.version>
+
+        <hessian.version>4.0.65</hessian.version>
+        <oshi.version>5.7.2</oshi.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
+        <junit.version>4.13.2</junit.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-crypto</artifactId>
+                <version>${commons-crypto.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-annotations.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox-swagger2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>swagger-bootstrap-ui</artifactId>
+                <version>${swagger-bootstrap-ui.version}</version>
+            </dependency>
+
+
+
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-dependencies-zookeeper</artifactId>
+                <version>${dubbo.version}</version>
+                <type>pom</type>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.caucho</groupId>
+                <artifactId>hessian</artifactId>
+                <version>${hessian.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.bitwalker</groupId>
+                <artifactId>UserAgentUtils</artifactId>
+                <version>${UserAgentUtils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro-spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>jakarta.el</artifactId>
+                <version>${jakarta.el.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta.validation-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${alibaba.druid.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring-boot-starter</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${kaptcha.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-core</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-frame-api</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-frame-model</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-frame-service</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-frame-web</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-security-shiro</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-system-api</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-system-model</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-system-service</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-system-web</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-monitor-api</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-monitor-model</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-monitor-service</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-monitor-web</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-quartz-api</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-quartz-model</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-quartz-service</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-quartz-web</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-logger-api</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-logger-model</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-logger-service</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-logger-web</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-activiti-api</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-activiti-model</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-activiti-service</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-activiti-web</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-protocol-dubbo</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-protocol-rabbit</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

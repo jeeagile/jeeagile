@@ -1,0 +1,9 @@
+# 忽略build目录下类型为js的文件的语法检查
+build/*.js
+# 忽略src/assets目录下文件的语法检查
+src/assets
+# 忽略public目录下文件的语法检查
+public
+# 忽略dist目录下文件的语法检查
+dist
+

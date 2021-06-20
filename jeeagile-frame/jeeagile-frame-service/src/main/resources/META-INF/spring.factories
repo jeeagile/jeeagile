@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.jeeagile.frame.autoconfigure.AgileMybatisAutoConfiguration,\
+com.jeeagile.frame.autoconfigure.AgileServiceAutoConfiguration,\
+com.jeeagile.frame.autoconfigure.AgileTransactionAutoConfig

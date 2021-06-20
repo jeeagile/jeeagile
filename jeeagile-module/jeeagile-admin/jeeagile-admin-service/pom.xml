@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>jeeagile-admin</artifactId>
+        <groupId>com.jeeagile</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>jeeagile-admin-service</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-system-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-monitor-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-quartz-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-logger-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-admin-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.22</version>
+        </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>oracle</groupId>-->
+        <!--            <artifactId>oracle</artifactId>-->
+        <!--            <version>6.0</version>-->
+        <!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.sqlserver</groupId>-->
+<!--            <artifactId>mssql-jdbc</artifactId>-->
+<!--            <version>6.2.0.jre8</version>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>com.jeeagile</groupId>-->
+        <!--            <artifactId>jeeagile-protocol-dubbo</artifactId>-->
+        <!--        </dependency>-->
+
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>

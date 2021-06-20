@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.jeeagile.frame.autoconfigure.AgileWebAutoConfigure,\
+com.jeeagile.frame.autoconfigure.AgileSwaggerAutoConfig
