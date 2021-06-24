@@ -14,6 +14,7 @@ import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
@@ -33,6 +34,9 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
+            if(handlerMethod.getBean() instanceof ErrorController){
+                return true;
+            }
             checkUserSecurity(handlerMethod);
         }
         return true;
@@ -49,12 +53,12 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             if (agileSecurity == null) {
                 throw new AgileAuthException("请设置用户安全接口类《UserSecurity》");
             }
+
             AgileDemo agileDemo = handlerMethod.getMethodAnnotation(AgileDemo.class);
             if (agileDemo != null && AgileUtil.isDemoEnabled()) {
                 throw new AgileDemoException();
             }
 
-            AgileSecurityContext.putCurrentUser(agileSecurity.getUserData());
             AgileRequiresAuthentication agileRequiresAuthentication = handlerMethod.getMethodAnnotation(AgileRequiresAuthentication.class);
             if (agileRequiresAuthentication != null && !agileSecurity.checkAuthenticated()) {
                 throw new AgileAuthException("用户未验证通过！");
@@ -74,7 +78,7 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             if (agileRequiresPermissions != null) {
                 agileSecurity.checkPermission(agileRequiresPermissions);
             }
-
+            AgileSecurityContext.putCurrentUser(agileSecurity.getUserData());
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
