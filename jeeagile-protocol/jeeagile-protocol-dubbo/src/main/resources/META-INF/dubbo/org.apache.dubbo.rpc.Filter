@@ -1,0 +1,3 @@
+providerContext=com.jeeagile.dubbo.filter.AgileProviderContextFilter
+serviceContext=com.jeeagile.dubbo.filter.AgileServiceContextFilter
+exceptionFilter=com.jeeagile.dubbo.filter.AgileExceptionFilter

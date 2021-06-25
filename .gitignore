@@ -2,5 +2,6 @@
 *.iml
 target
 
-jeeagile-protocol
+jeeagile-protocol-cloud
+jeeagile-protocol-rabbit
 
