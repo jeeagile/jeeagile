@@ -211,7 +211,6 @@ public class AgileGeneratorUtil {
 
     private static final String VELOCITY_INIT_CLASS_KEY = "file.resource.loader.class";
     private static final String VELOCITY_INIT_CLASS_NAME = "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader";
-    private static final String TEMPLATE_PATH = "template/";
 
     /**
      * 初始化Velocity
@@ -327,18 +326,18 @@ public class AgileGeneratorUtil {
      */
     public static List<String> getTemplateList(String tableType) {
         List<String> templates = new ArrayList<>();
-        templates.add(TEMPLATE_PATH + "/java/mapper.java.vm");
-        templates.add(TEMPLATE_PATH + "/java/entity.java.vm");
-        templates.add(TEMPLATE_PATH + "/java/service.java.vm");
-        templates.add(TEMPLATE_PATH + "/java/serviceImpl.java.vm");
-        templates.add(TEMPLATE_PATH + "/java/controller.java.vm");
-        templates.add(TEMPLATE_PATH + "/xml/mapper.xml.vm");
-        templates.add(TEMPLATE_PATH + "/sql/sql.vm");
-        templates.add(TEMPLATE_PATH + "/js/api.js.vm");
+        templates.add( "template/java/mapper.java.vm");
+        templates.add("template/java/entity.java.vm");
+        templates.add("template/java/service.java.vm");
+        templates.add("template/java/serviceImpl.java.vm");
+        templates.add("template/java/controller.java.vm");
+        templates.add("template/xml/mapper.xml.vm");
+        templates.add("template/sql/sql.vm");
+        templates.add("template/js/api.js.vm");
         if (AgileGeneratorConstants.TABLE_TYPE_CRUD.equals(tableType)) {
-            templates.add(TEMPLATE_PATH + "/vue/index.vue.vm");
+            templates.add("template/vue/index.vue.vm");
         } else if (AgileGeneratorConstants.TABLE_TYPE_TREE.equals(tableType)) {
-            templates.add(TEMPLATE_PATH + "/vue/index-tree.vue.vm");
+            templates.add("template/vue/index-tree.vue.vm");
         }
         return templates;
     }
