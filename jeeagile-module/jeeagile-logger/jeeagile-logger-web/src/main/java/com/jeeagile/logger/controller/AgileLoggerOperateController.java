@@ -31,7 +31,7 @@ public class AgileLoggerOperateController extends AgileBaseController {
     private IAgileLoggerOperateService agileLoggerOperateService;
 
     @PostMapping(value = "/page")
-    @ApiOperation(value = "分页查询参操作日志", notes = "分页查询参操作日志")
+    @ApiOperation(value = "分页查询操作日志", notes = "分页查询操作日志")
     public AgileResult<AgilePage<AgileLoggerOperate>> selectPage(@RequestBody AgilePageable<AgileLoggerOperate> agilePageable) {
         return this.rtnSuccess(agileLoggerOperateService.selectPage(agilePageable));
     }

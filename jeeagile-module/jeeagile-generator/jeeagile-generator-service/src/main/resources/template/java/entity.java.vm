@@ -1,0 +1,49 @@
+package ${packageName}.entity.${moduleName};
+
+#foreach ($import in $importList)
+import ${import};
+#end
+import com.baomidou.mybatisplus.annotation.TableName;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+#if($tableType=="tree")
+import com.jeeagile.frame.entity.AgileBaseTreeModel;
+#set($BaseEntity="AgileBaseTreeModel")
+#elseif($tableType=="crud")
+import com.jeeagile.frame.entity.AgileBaseModel;
+#set($BaseEntity="AgileBaseModel")
+#end
+
+/**
+ * @author ${author}
+ * @date ${datetime}
+ * @description ${functionName} 实体对象
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@TableName("${tableName}")
+public class ${ClassName} extends ${BaseEntity}<${ClassName}> {
+#foreach ($column in $columnList)
+#if(!($column.javaField == "id" || $column.javaField == "parentId" || $column.javaField == "createUser" || $column.javaField == "createTime" || $column.javaField == "updateUser" || $column.javaField == "updateTime"))
+    /**
+     * $column.columnComment
+     */
+#if($column.listFlag=="1")
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#if($column.requiredFlag=="1")
+    @NotNull(message = "$comment不能为空！")
+#end
+#end
+    private $column.javaType $column.javaField;
+
+#end
+#end
+}

@@ -28,6 +28,10 @@
             <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-logger-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-generator-service</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.jeeagile</groupId>

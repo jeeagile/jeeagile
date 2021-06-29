@@ -11,5 +11,11 @@
 
     <artifactId>jeeagile-generator-model</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-frame-model</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

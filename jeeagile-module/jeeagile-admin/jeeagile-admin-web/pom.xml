@@ -28,7 +28,10 @@
             <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-logger-web</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-generator-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-security-shiro</artifactId>

@@ -1,0 +1,13 @@
+-- 菜单 SQL
+insert into agile_sys_menu (id, parent_id, menu_name, menu_sort, menu_path, menu_comp, menu_frame,  menu_type, menu_visible, menu_status, menu_perm, menu_icon, remark)
+values('${menuId}', '${parentMenuId}', '${functionName}',  '1', '${businessName}', '${moduleName}/${businessName}/index', 1, 'C', '0', '0', '${permissionPrefix}:list', '#', '${functionName}菜单');
+
+-- 按钮 权限 SQL
+insert into agile_sys_menu (id, parent_id, menu_name, menu_sort, menu_path, menu_comp, menu_frame,  menu_type, menu_visible, menu_status, menu_perm, menu_icon, remark)
+values('$StringUtil.getUuid()', '${menuId}', '${functionName}新增', '1',  '#', '', 1, 'F', '0', '0', '${permissionPrefix}:add', '#', '');
+
+insert into agile_sys_menu (id, parent_id, menu_name, menu_sort, menu_path, menu_comp, menu_frame,  menu_type, menu_visible, menu_status, menu_perm, menu_icon, remark)
+values('$StringUtil.getUuid()', '${menuId}', '${functionName}修改', '2',  '#', '', 1, 'F', '0', '0', '${permissionPrefix}:update', '#', '');
+
+insert into agile_sys_menu (id, parent_id, menu_name, menu_sort, menu_path, menu_comp, menu_frame,  menu_type, menu_visible, menu_status, menu_perm, menu_icon, remark)
+values('$StringUtil.getUuid()', '${menuId}', '${functionName}删除', '3',  '#', '', 1, 'F', '0', '0', '${permissionPrefix}:delete', '#',  '');

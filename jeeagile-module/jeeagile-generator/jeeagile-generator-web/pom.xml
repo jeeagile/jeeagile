@@ -11,5 +11,16 @@
 
     <artifactId>jeeagile-generator-web</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-frame-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-generator-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

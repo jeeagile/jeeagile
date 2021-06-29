@@ -1,0 +1,33 @@
+import { postApi } from '@/utils/axios'
+#if($tableType!="tree")
+/**
+ * 分页查询${functionName}列表
+ */
+export const select${ClassName}Page = data => postApi('/${moduleName}/${businessName}/page', data)
+#end
+
+/**
+ * 查询${functionName}列表
+ */
+export const select${ClassName}List = data => postApi('/${moduleName}/${businessName}/list', data)
+
+/**
+ * 查看${functionName}
+ */
+export const detail${ClassName} = data => postApi('/${moduleName}/${businessName}/detail', data)
+
+/**
+ * 新增${functionName}
+ */
+export const add${ClassName} = data => postApi('/${moduleName}/${businessName}/add', data)
+
+/**
+ * 修改${functionName}
+ */
+export const update${ClassName} = data => postApi('/${moduleName}/${businessName}/update', data)
+
+/**
+ * 删除${functionName}
+ */
+export const delete${ClassName} = data => postApi('/${moduleName}/${businessName}/delete', data)
+

@@ -14,19 +14,11 @@
     <dependencies>
         <dependency>
             <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-system-model</artifactId>
+            <artifactId>jeeagile-frame-model</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-monitor-model</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-quartz-model</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-logger-model</artifactId>
+            <artifactId>jeeagile-generator-model</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -13,7 +13,7 @@ import com.jeeagile.logger.entity.AgileLoggerOperate;
 public interface IAgileLoggerOperateService extends IAgileBaseService<AgileLoggerOperate> {
 
     /**
-     * 分页查询参数配置数据
+     * 分页查询操作日志数据
      */
     AgilePage<AgileLoggerOperate> selectPage(AgilePageable<AgileLoggerOperate> agilePageable);
 

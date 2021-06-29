@@ -8,11 +8,15 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.jeeagile.frame.annotation.AgileMapperScan;
 import com.jeeagile.frame.handler.AgileMetaObjectHandler;
+import org.apache.ibatis.mapping.DatabaseIdProvider;
+import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Properties;
 
 /**
  * @author JeeAgile
@@ -44,5 +48,16 @@ public class AgileMybatisAutoConfiguration {
     @Bean
     public MetaObjectHandler metaObjectHandler() {
         return new AgileMetaObjectHandler();
+    }
+
+    @Bean
+    public DatabaseIdProvider databaseIdProvider() {
+        VendorDatabaseIdProvider databaseIdProvider = new VendorDatabaseIdProvider();
+        Properties properties = new Properties();
+        properties.put("Oracle", "oracle");
+        properties.put("MySQL", "mysql");
+        properties.put("SQLServer","sqlServer");
+        databaseIdProvider.setProperties(properties);
+        return databaseIdProvider;
     }
 }

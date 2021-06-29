@@ -6,9 +6,9 @@ import store from '@/store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
-import {Message} from 'element-ui'
+import { Message } from 'element-ui'
 
-import {getUserToken} from '@/utils/cookie'
+import { getUserToken } from '@/utils/cookie'
 
 import Layout from '@/layout/index'
 
@@ -91,7 +91,20 @@ export const agileRouter = [
         component: () => import('@/views/tool/form/FormDrawer'),
         name: 'FormDrawer',
         meta: { title: '表单运行', icon: '' },
-        params: {  }
+        params: {}
+      }
+    ]
+  },
+  {
+    path: '/generator',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'edit/:tableId(.*)',
+        component: (resolve) => require(['@/views/tool/generator/editTable'], resolve),
+        name: 'GenEdit',
+        meta: { title: '修改生成配置' }
       }
     ]
   }

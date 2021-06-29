@@ -28,8 +28,8 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     }
 
     @Override
-    public List<AgileSysConfig> selectConfigList(AgileSysConfig AgileSysConfig) {
-        return this.list(getSysConfigQueryWrapper(AgileSysConfig));
+    public List<AgileSysConfig> selectConfigList(AgileSysConfig agileSysConfig) {
+        return this.list(getSysConfigQueryWrapper(agileSysConfig));
     }
 
     @Override

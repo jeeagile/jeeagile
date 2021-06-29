@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
-import {Message, MessageBox} from 'element-ui'
-import {getUserToken} from '@/utils/cookie'
+import { Message, MessageBox } from 'element-ui'
+import { getUserToken } from '@/utils/cookie'
 // api 的 base_url
 const baseURL = process.env.VUE_APP_BASE_API
 
@@ -37,11 +37,10 @@ service.interceptors.response.use(
     }
     if (res.code === '1000' || res.code === '1001') {
       MessageBox.confirm('用户登录状态已过期，您可以继续留在该页面，或重新登录', '系统提示', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
+        confirmButtonText: '重新登录',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         store.dispatch('user/fedLogOut').then(() => {
           window.location.href = '/'
         })

@@ -11,5 +11,19 @@
 
     <artifactId>jeeagile-generator-service</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-frame-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-generator-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+        </dependency>
+    </dependencies>
 </project>

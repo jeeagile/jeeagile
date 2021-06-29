@@ -14,20 +14,9 @@
     <dependencies>
         <dependency>
             <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-system-api</artifactId>
+            <artifactId>jeeagile-frame-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-monitor-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-quartz-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-logger-api</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-admin-model</artifactId>

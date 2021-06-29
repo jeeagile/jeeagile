@@ -1,0 +1,81 @@
+package ${packageName}.controller.${moduleName};
+
+import io.swagger.annotations.ApiOperation;
+import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
+import com.jeeagile.frame.annotation.AgileLogger;
+import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.result.AgileResult;
+import com.jeeagile.frame.controller.AgileBaseController;
+import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ${packageName}.entity.${moduleName}.${ClassName};
+import ${packageName}.service.${moduleName}.I${ClassName}Service;
+#if($tableType!="tree")
+import com.jeeagile.frame.page.AgilePage;
+import com.jeeagile.frame.page.AgilePageable;
+#end
+import java.util.List;
+/**
+ * @author ${author}
+ * @date ${datetime}
+ * @description ${functionName} 前端控制器
+ */
+@RestController
+@RequestMapping("/${moduleName}/${businessName}")
+public class ${ClassName}Controller extends AgileBaseController {
+
+    @AgileProvider
+    private I${ClassName}Service ${className}Service;
+#if($tableType!="tree")
+
+    @PostMapping(value = "/page")
+    @ApiOperation(value = "分页查询${functionName}列表", notes = "分页查询${functionName}列表")
+    public AgileResult<AgilePage<${ClassName}>> selectPage(@RequestBody AgilePageable<${ClassName}> agilePageable) {
+        return this.rtnSuccess(${className}Service.selectPage(agilePageable));
+    }
+#end
+
+    @PostMapping(value = "/list")
+    @ApiOperation(value = "查询${functionName}列表", notes = "查询${functionName}列表")
+    public AgileResult<List<${ClassName}>> selectList(@RequestBody ${ClassName} ${className}) {
+        return this.rtnSuccess(${className}Service.selectList(${className}));
+    }
+
+    @PostMapping("/detail")
+    @ApiOperation(value = "根据主键查询${functionName}详细信息", notes = "根据ID主键查询${functionName}详细信息")
+    public AgileResult<${ClassName}> detail(@SingleRequestBody String ${className}Id) {
+        return this.rtnSuccess(${className}Service.selectById(${className}Id));
+    }
+
+    @PostMapping("/add")
+    @ApiOperation(value = "新增${functionName}", notes = "新增${functionName}")
+    @AgileRequiresPermissions("${permissionPrefix}:add")
+    @AgileLogger(title = "新增${functionName}", type = AgileLoggerType.ADD)
+    public AgileResult<Object> add(@RequestBody ${ClassName} ${className}) {
+        ${className}Service.save(${className});
+        return this.rtnSuccess("${functionName}保存成功！");
+    }
+
+
+    @PostMapping("/update")
+    @ApiOperation(value = "修改${functionName}", notes = "修改${functionName}")
+    @AgileRequiresPermissions("${permissionPrefix}:update")
+    @AgileLogger(title = "修改${functionName}", type = AgileLoggerType.UPDATE)
+    public AgileResult<Object> update(@RequestBody ${ClassName} ${className}) {
+        ${className}Service.updateById(${className});
+        return this.rtnSuccess("${functionName}修改成功！");
+    }
+
+    @PostMapping("/delete")
+    @ApiOperation(value = "删除${functionName}", notes = "删除${functionName}")
+    @AgileRequiresPermissions("${permissionPrefix}:delete")
+    @AgileLogger(title = "删除${functionName}", type = AgileLoggerType.DELETE)
+    public AgileResult<Object> delete(@SingleRequestBody String ${className}Id) {
+        ${className}Service.deleteById(${className}Id);
+        return this.rtnSuccess("${functionName}删除成功！");
+    }
+}

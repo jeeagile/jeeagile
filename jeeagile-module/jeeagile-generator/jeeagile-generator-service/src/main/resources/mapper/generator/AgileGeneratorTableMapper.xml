@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeagile.generator.mapper.AgileGeneratorTableMapper">
+
+    <select id="selectDbTablePage" parameterType="com.jeeagile.generator.entity.AgileGeneratorTable" resultType="com.jeeagile.generator.entity.AgileGeneratorTable" databaseId="mysql">
+        select table_name, table_comment, create_time, update_time from information_schema.tables
+        where table_schema = (select database())
+        and table_name not in (select table_name from agile_generator_table)
+        and table_name not like 'act_%'
+        <if test="agileGeneratorTable.tableName != null and agileGeneratorTable.tableName != ''">
+            and table_name = #{swztGenTable.tableName}
+        </if>
+        <if test="agileGeneratorTable.tableComment != null and agileGeneratorTable.tableComment != ''">
+            and tableComment like concat('%', #{swztGenTable.tableComment}, '%')
+        </if>
+    </select>
+
+    <select id="selectDbTablePage" parameterType="com.jeeagile.generator.entity.AgileGeneratorTable" resultType="com.jeeagile.generator.entity.AgileGeneratorTable" databaseId="oracle">
+        select lower(a.table_name) table_name, b.comments table_comment, c.created create_time, c.last_ddl_time update_time
+        from user_tables a, user_tab_comments b, user_objects c
+        where a.table_name = b.table_name
+        and a.table_name not in (select table_name from agile_generator_table)
+        and a.table_name not like 'ACT_%'
+        and a.table_name = c.object_name
+        <if test="agileGeneratorTable.tableName != null and agileGeneratorTable.tableName != ''">
+            and a.table_name = upper(#{swztGenTable.tableName})
+        </if>
+        <if test="agileGeneratorTable.tableComment != null and agileGeneratorTable.tableComment != ''">
+            and a.tableComment like '%'||#{swztGenTable.tableComment}||'%'
+        </if>
+    </select>
+
+
+    <select id="selectDbTableByTableName" parameterType="String" resultType="com.jeeagile.generator.entity.AgileGeneratorTable" databaseId="mysql">
+        select table_name, table_comment, create_time, update_time from information_schema.tables
+        where table_schema = (select database())
+        and table_name not in (select table_name from agile_generator_table)
+        and table_name = #{tableName}
+    </select>
+
+    <select id="selectDbTableByTableName" parameterType="String" resultType="com.jeeagile.generator.entity.AgileGeneratorTable" databaseId="oracle">
+        select lower(a.table_name) table_name, b.comments table_comment, c.created create_time, c.last_ddl_time update_time
+        from user_tables a, user_tab_comments b, user_objects c
+        where a.table_name = b.table_name
+        and a.table_name = c.object_name
+        and a.table_name not in (select table_name from agile_generator_table)
+        and a.table_name = upper (#{tableName})
+    </select>
+
+    <select id="selectDbTableColumnByTableName" parameterType="String" resultType="com.jeeagile.generator.entity.AgileGeneratorTableColumn" databaseId="mysql">
+        select column_name, (case when (is_nullable = 'no'  and  column_key != 'PRI') then '1' else null end) as required_flag,
+        (case when column_key = 'PRI' then '1' else '0' end) as pk_flag,
+        (case when (column_key = 'PRI' and extra = 'auto_increment') then '1' when column_key = 'PRI' then '2' else null end) as pk_type,
+        ordinal_position as column_sort, column_comment, column_type
+        from information_schema.columns where table_schema = (select database()) and table_name = (#{tableName})
+        order by ordinal_position
+    </select>
+
+    <select id="selectDbTableColumnByTableName" parameterType="String" resultType="com.jeeagile.generator.entity.AgileGeneratorTableColumn" databaseId="oracle">
+        select lower(c.column_name) column_name,
+        case when cu.column_name is null and c.NULLABLE='N' then '1' else null end as required_flag,
+        case when cu.column_name is null then '0' else '1' end as pk_flag,
+        case when cu.column_name is null then null else '2' end pk_type,
+        column_id as column_sort,cmts.comments column_comment, lower(c.data_type) column_type
+        from user_tab_columns  c
+        left join user_constraints au on c.table_name = au.table_name and au.constraint_type = 'P'
+        left join user_cons_columns cu on cu.constraint_name = au.constraint_name and c.column_name = cu.column_name
+        left join user_col_comments cmts on cmts.table_name = c.table_name and cmts.column_name = c.column_name
+        where c.table_name = upper (#{tableName})
+        order by c.column_id
+    </select>
+</mapper>

@@ -1,0 +1,119 @@
+package ${packageName}.service.${moduleName};
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jeeagile.core.protocol.annotation.AgileService;
+import com.jeeagile.core.util.StringUtil;
+import ${packageName}.entity.${moduleName}.${ClassName};
+import ${packageName}.mapper.${moduleName}.${ClassName}Mapper;
+#if($tableType=="tree")
+import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
+#set($BaseServiceImpl="AgileBaseTreeServiceImpl")
+#elseif($tableType=="crud")
+import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import com.jeeagile.frame.page.AgilePage;
+import com.jeeagile.frame.page.AgilePageable;
+#set($BaseServiceImpl="AgileBaseServiceImpl")
+#end
+
+import java.util.List;
+/**
+ * @author ${author}
+ * @date ${datetime}
+ * @description ${functionName} 业务处理层
+ */
+@AgileService
+public class ${ClassName}ServiceImpl extends ${BaseServiceImpl}<${ClassName}Mapper, ${ClassName}>  implements I${ClassName}Service {
+
+#if($tableType!="tree")
+    @Override
+    public AgilePage<${ClassName}> selectPage(AgilePageable<${ClassName}> agilePageable) {
+        return this.page(agilePageable, get${ClassName}QueryWrapper(agilePageable.getQueryCond()));
+    }
+#end
+    @Override
+    public List<${ClassName}> selectList(${ClassName} ${className}) {
+        return this.list(get${ClassName}QueryWrapper(${className}));
+    }
+
+    @Override
+    public ${ClassName} selectById(String ${className}Id) {
+        return this.getById(${className}Id);
+    }
+
+    @Override
+    public boolean save(${ClassName} ${className}) {
+        //校验业务数据
+        ${className}.validate();
+        return super.save(${className});
+    }
+
+    @Override
+    public boolean updateById(${ClassName} ${className}) {
+        //校验业务数据
+        ${className}.validate();
+        return super.updateById(${className});
+    }
+
+    @Override
+    public boolean deleteById(String ${className}Id) {
+        return super.removeById(${className}Id);
+    }
+
+    /**
+    * 拼装查询条件
+    */
+    private QueryWrapper<${ClassName}> get${ClassName}QueryWrapper(${ClassName} ${className}) {
+        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<>();
+        if (${className} != null) {
+#foreach($column in $columnList)
+#set($queryType=$column.queryType)
+#set($javaField=$column.javaField)
+#set($javaType=$column.javaType)
+#set($columnName=$column.columnName)
+#set($JavaField=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#if($column.queryFlag=="1")
+#if($column.queryType == "EQ")
+            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
+                queryWrapper.lambda().eq(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            }
+#elseif($queryType == "NE")
+            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
+                queryWrapper.lambda().ne(${ClassName}::get$JavaField, ${className}.get$JavaField());
+             }
+#elseif($queryType == "GT")
+            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
+                queryWrapper.lambda().gt(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            }
+#elseif($queryType == "GE")
+            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
+                queryWrapper.lambda().ge(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            }
+#elseif($queryType == "LT")
+            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
+                queryWrapper.lambda().lt(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            }
+#elseif($queryType == "LE")
+            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
+                queryWrapper.lambda().le(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            }
+#elseif($queryType == "LIKE")
+            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
+                queryWrapper.lambda().like(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            }
+#elseif($queryType == "LIKE_LEFT")
+            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
+                queryWrapper.lambda().likeLeft(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            }
+#elseif($queryType == "LIKE_RIGHT")
+            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
+                queryWrapper.lambda().likeRight(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            }
+#elseif($queryType == "BETWEEN")
+
+#end
+#end
+#end
+        }
+        return queryWrapper;
+    }
+}

@@ -1,0 +1,20 @@
+package ${packageName}.mapper.${moduleName};
+
+import com.jeeagile.frame.annotation.AgileMapperScan;
+#if($tableType=="tree")
+#set($BaseMapper="AgileBaseTreeMapper")
+import com.jeeagile.frame.mapper.AgileBaseTreeMapper;
+#elseif($tableType=="crud")
+#set($BaseMapper="AgileBaseMapper")
+import com.jeeagile.frame.mapper.AgileBaseMapper;
+#end
+import ${packageName}.entity.${moduleName}.${ClassName};
+/**
+ * @author ${author}
+ * @date ${datetime}
+ * @description ${functionName} Mapper接口
+ */
+@AgileMapperScan
+public interface ${ClassName}Mapper extends ${BaseMapper}<${ClassName}> {
+
+}

@@ -10,6 +10,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jeeagile-generator-api</artifactId>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-frame-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-generator-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>
