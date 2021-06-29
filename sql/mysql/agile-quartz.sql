@@ -5,12 +5,12 @@ drop table if exists agile_quartz_job;
 /*==============================================================*/
 create table agile_quartz_job
 (
-  id                    varchar(32) not null comment '主键id',
+  id                    varchar(32) not null comment '主键',
   job_name              varchar(100) not null comment '任务名称',
   job_code              varchar(100) not null comment '任务编码',
   job_cron              varchar(150) not null comment 'cron 表达式',
-  job_status            char(1) not null comment '状态：1暂停、0启用',
-  bean_name             varchar(200) not null comment ' bean名称',
+  job_status            char(1) not null comment '状态（0:暂停 1:启用）',
+  bean_name             varchar(200) not null comment 'bean名称',
   method_name           varchar(100) not null comment '执行方法',
   method_param          varchar(300) default null comment '执行参数',
   remark                varchar(250) default null comment '备注',

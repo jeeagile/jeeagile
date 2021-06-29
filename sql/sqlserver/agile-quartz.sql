@@ -37,7 +37,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '主键id',
+   '主键',
    'user', @CurrentUser, 'table', 'agile_quartz_job', 'column', 'id'
 go
 
@@ -65,7 +65,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '状态：1暂停、0启用',
+   '状态（0:暂停 1:启用）',
    'user', @CurrentUser, 'table', 'agile_quartz_job', 'column', 'job_status'
 go
 

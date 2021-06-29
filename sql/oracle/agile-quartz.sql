@@ -23,11 +23,11 @@ create table agile_quartz_job
 
 comment on table agile_quartz_job is '定时任务表';
 
-comment on column agile_quartz_job.id is '主键id';
+comment on column agile_quartz_job.id is '主键';
 comment on column agile_quartz_job.job_name is '任务名称';
 comment on column agile_quartz_job.job_code is '任务编码';
 comment on column agile_quartz_job.job_cron is 'cron 表达式';
-comment on column agile_quartz_job.job_status is '状态：1暂停、0启用';
+comment on column agile_quartz_job.job_status is '状态（0:暂停 1:启用）';
 comment on column agile_quartz_job.bean_name is 'bean名称';
 comment on column agile_quartz_job.method_name is '执行方法';
 comment on column agile_quartz_job.method_param is '执行参数';

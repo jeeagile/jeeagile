@@ -167,7 +167,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '参数主键id',
+   '参数主键',
    'user', @CurrentUser, 'table', 'agile_sys_config', 'column', 'id'
 go
 
@@ -195,7 +195,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '系统内置标识（1：是 0：否）',
+   '系统内置（0:否 1:是）',
    'user', @CurrentUser, 'table', 'agile_sys_config', 'column', 'system_flag'
 go
 
@@ -257,21 +257,21 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '部门表',
+   '部门管理表',
    'user', @CurrentUser, 'table', 'agile_sys_dept'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '部门id',
+   '部门主键',
    'user', @CurrentUser, 'table', 'agile_sys_dept', 'column', 'id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '上级部门id',
+   '上级部门',
    'user', @CurrentUser, 'table', 'agile_sys_dept', 'column', 'parent_id'
 go
 
@@ -299,7 +299,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '部门状态（0正常 1停用）',
+   '部门状态（0:正常 1:停用）',
    'user', @CurrentUser, 'table', 'agile_sys_dept', 'column', 'dept_status'
 go
 
@@ -362,7 +362,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '字典主键id',
+   '字典类型主键',
    'user', @CurrentUser, 'table', 'agile_sys_dict_type', 'column', 'id'
 go
 
@@ -383,14 +383,14 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '状态（0正常 1停用）',
+   '状态（0:正常 1:停用）',
    'user', @CurrentUser, 'table', 'agile_sys_dict_type', 'column', 'dict_status'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '系统内置标识（1：是 0：否）',
+   '系统内置（0:否 1:是）',
    'user', @CurrentUser, 'table', 'agile_sys_dict_type', 'column', 'system_flag'
 go
 
@@ -470,14 +470,14 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '字典id',
+   '字典数据主键',
    'user', @CurrentUser, 'table', 'agile_sys_dict_data', 'column', 'id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '上级字典id',
+   '上级字典',
    'user', @CurrentUser, 'table', 'agile_sys_dict_data', 'column', 'parent_id'
 go
 
@@ -512,14 +512,14 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '字典状态（0正常 1停用）',
+   '字典状态（0:正常 1:停用）',
    'user', @CurrentUser, 'table', 'agile_sys_dict_data', 'column', 'dict_status'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '系统内置标识（1：是 0：否）',
+   '系统内置（0:否 1:是）',
    'user', @CurrentUser, 'table', 'agile_sys_dict_data', 'column', 'system_flag'
 go
 
@@ -613,7 +613,7 @@ create table agile_sys_menu (
    menu_type            char(1)              not null,
    menu_visible         char(1)              not null default '0',
    menu_status          char(1)              not null default '0',
-   menu_frame           int                  not null default 1,
+   menu_frame           char(1)              not null default '1',
    menu_perm            varchar(100)         null,
    remark               varchar(300)         null,
    create_user          varchar(32)          null,
@@ -634,14 +634,14 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '菜单主键id',
+   '菜单主键',
    'user', @CurrentUser, 'table', 'agile_sys_menu', 'column', 'id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '父级菜单id',
+   '上级菜单',
    'user', @CurrentUser, 'table', 'agile_sys_menu', 'column', 'parent_id'
 go
 
@@ -683,28 +683,28 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '菜单类型（m目录 c菜单 f按钮）',
+   '菜单类型（M:目录 C:菜单 F:按钮）',
    'user', @CurrentUser, 'table', 'agile_sys_menu', 'column', 'menu_type'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '菜单显示状态（0显示 1隐藏）',
+   '菜单显示状态（0:显示 1:隐藏）',
    'user', @CurrentUser, 'table', 'agile_sys_menu', 'column', 'menu_visible'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '菜单状态（0正常 1停用）',
+   '菜单状态（0:正常 1:停用）',
    'user', @CurrentUser, 'table', 'agile_sys_menu', 'column', 'menu_status'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '外链标识（0是 1否）',
+   '外链标识（0:是 1:否）',
    'user', @CurrentUser, 'table', 'agile_sys_menu', 'column', 'menu_frame'
 go
 
@@ -750,86 +750,86 @@ execute sp_addextendedproperty 'MS_Description',
    'user', @CurrentUser, 'table', 'agile_sys_menu', 'column', 'update_time'
 go
 
-INSERT INTO agile_sys_menu VALUES ('1','0','系统管理',1,'','system','system','M','0','0',1,'','系统管理目录',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('1','0','系统管理',1,'','system','system','M','0','0','1','','系统管理目录',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('101','1','用户管理',1,'system/user/index','user','user','C','0','0',1,'system:user:list','用户管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10101','101','用户新增',1,'','','#','F','0','0',1,'system:user:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10102','101','用户修改',2,'','','#','F','0','0',1,'system:user:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10103','101','用户删除',3,'','','#','F','0','0',1,'system:user:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10104','101','重置密码',4,'','','#','F','0','0',1,'system:user:resetPwd','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('101','1','用户管理',1,'system/user/index','user','user','C','0','0','1','system:user:list','用户管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10101','101','用户新增',1,'','','#','F','0','0','1','system:user:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10102','101','用户修改',2,'','','#','F','0','0','1','system:user:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10103','101','用户删除',3,'','','#','F','0','0','1','system:user:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10104','101','重置密码',4,'','','#','F','0','0','1','system:user:resetPwd','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('102','1','角色管理',2,'system/role/index','role','role','C','0','0',1,'system:role:list','角色管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10201','102','角色新增',1,'','','#','F','0','0',1,'system:role:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10202','102','角色修改',2,'','','#','F','0','0',1,'system:role:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10203','102','角色删除',3,'','','#','F','0','0',1,'system:role:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('102','1','角色管理',2,'system/role/index','role','role','C','0','0','1','system:role:list','角色管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10201','102','角色新增',1,'','','#','F','0','0','1','system:role:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10202','102','角色修改',2,'','','#','F','0','0','1','system:role:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10203','102','角色删除',3,'','','#','F','0','0','1','system:role:delete','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('103','1','菜单管理',3,'system/menu/index','menu','menu','C','0','0',1,'system:menu:list','菜单管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10301','103','菜单新增',1,'','','#','F','0','0',1,'system:menu:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10302','103','菜单修改',2,'','','#','F','0','0',1,'system:menu:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10303','103','菜单删除',3,'','','#','F','0','0',1,'system:menu:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10304','103','菜单排序',4,'','',NULL,'F','0','0',1,'system:menu:sort','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('103','1','菜单管理',3,'system/menu/index','menu','menu','C','0','0','1','system:menu:list','菜单管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10301','103','菜单新增',1,'','','#','F','0','0','1','system:menu:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10302','103','菜单修改',2,'','','#','F','0','0','1','system:menu:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10303','103','菜单删除',3,'','','#','F','0','0','1','system:menu:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10304','103','菜单排序',4,'','',NULL,'F','0','0','1','system:menu:sort','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('104','1','部门管理',4,'system/dept/index','dept','dept','C','0','0',1,'system:dept:list','部门管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10401','104','部门新增',1,'','','#','F','0','0',1,'system:dept:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10402','104','部门修改',2,'','','#','F','0','0',1,'system:dept:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10403','104','部门删除',3,'','','#','F','0','0',1,'system:dept:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('104','1','部门管理',4,'system/dept/index','dept','dept','C','0','0','1','system:dept:list','部门管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10401','104','部门新增',1,'','','#','F','0','0','1','system:dept:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10402','104','部门修改',2,'','','#','F','0','0','1','system:dept:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10403','104','部门删除',3,'','','#','F','0','0','1','system:dept:delete','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('105','1','岗位管理',5,'system/post/index','post','post','C','0','0',1,'system:post:list','岗位管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10501','105','岗位新增',1,'','','#','F','0','0',1,'system:post:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10502','105','岗位修改',2,'','','#','F','0','0',1,'system:post:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10503','105','岗位删除',3,'','','#','F','0','0',1,'system:post:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('105','1','岗位管理',5,'system/post/index','post','post','C','0','0','1','system:post:list','岗位管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10501','105','岗位新增',1,'','','#','F','0','0','1','system:post:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10502','105','岗位修改',2,'','','#','F','0','0','1','system:post:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10503','105','岗位删除',3,'','','#','F','0','0','1','system:post:delete','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('106','1','字典管理',6,'system/dict/index','dict','dict','C','0','0',1,'system:dict:list','字典管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10601','106','字典新增',1,'','#','#','F','0','0',1,'system:dict:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10602','106','字典修改',2,'','#','#','F','0','0',1,'system:dict:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10603','106','字典删除',3,'','#','#','F','0','0',1,'system:dict:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('106','1','字典管理',6,'system/dict/index','dict','dict','C','0','0','1','system:dict:list','字典管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10601','106','字典新增',1,'','#','#','F','0','0','1','system:dict:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10602','106','字典修改',2,'','#','#','F','0','0','1','system:dict:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10603','106','字典删除',3,'','#','#','F','0','0','1','system:dict:delete','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('107','1','参数设置',7,'system/config/index','config','config','C','0','0',1,'system:config:list','参数设置菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10701','107','参数新增',1,'','#','#','F','0','0',1,'system:config:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10702','107','参数修改',2,'','#','#','F','0','0',1,'system:config:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10703','107','参数删除',3,'','#','#','F','0','0',1,'system:config:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('107','1','参数设置',7,'system/config/index','config','config','C','0','0','1','system:config:list','参数设置菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10701','107','参数新增',1,'','#','#','F','0','0','1','system:config:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10702','107','参数修改',2,'','#','#','F','0','0','1','system:config:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10703','107','参数删除',3,'','#','#','F','0','0','1','system:config:delete','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('2','0','系统监控',2,NULL,'monitor','monitor','M','0','0',1,'','系统监控目录',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('201','2','在线用户',1,'monitor/online/index','online','online','C','0','0',1,'monitor:online:list','在线用户菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('20101','201','批量强退',1,'','#','#','F','0','0',1,'monitor:online:batchLogout','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('20102','201','单户强退',2,'','#','#','F','0','0',1,'monitor:online:forceLogout','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('2','0','系统监控',2,NULL,'monitor','monitor','M','0','0','1','','系统监控目录',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('201','2','在线用户',1,'monitor/online/index','online','online','C','0','0','1','monitor:online:list','在线用户菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('20101','201','批量强退',1,'','#','#','F','0','0','1','monitor:online:batchLogout','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('20102','201','单户强退',2,'','#','#','F','0','0','1','monitor:online:forceLogout','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('202','2','数据监控',2,'monitor/druid/index','druid','druid','C','0','0',1,'monitor:druid:list','数据监控菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('202','2','数据监控',2,'monitor/druid/index','druid','druid','C','0','0','1','monitor:druid:list','数据监控菜单',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('203','2','服务监控',3,'monitor/server/index','server','server','C','0','0',1,'monitor:server:info','服务监控菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('203','2','服务监控',3,'monitor/server/index','server','server','C','0','0','1','monitor:server:info','服务监控菜单',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('3','0','系统工具',3,NULL,'tool','tool','M','0','0',1,'','系统工具目录',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('3','0','系统工具',3,NULL,'tool','tool','M','0','0','1','','系统工具目录',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('301','3','表单构建',1,'tool/form/index','form','form','C','0','0',1,'tool:form:list','表单构建菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('301','3','表单构建',1,'tool/form/index','form','form','C','0','0','1','tool:form:list','表单构建菜单',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('302','3','代码生成',2,'tool/generator/index','generator','generator','C','0','0',1,'tool:gen:list','代码生成菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('30201','302','生成查询',1,'','#','#','F','0','0',1,'tool:generator:query','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('30202','302','生成修改',2,'','#','#','F','0','0',1,'tool:generator:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('30203','302','生成删除',3,'','#','#','F','0','0',1,'tool:generator:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('30204','302','导入代码',2,'','#','#','F','0','0',1,'tool:generator:import','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('30205','302','预览代码',4,'','#','#','F','0','0',1,'tool:generator:preview','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('30206','302','生成代码',5,'','#','#','F','0','0',1,'tool:generator:code','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('302','3','代码生成',2,'tool/generator/index','generator','generator','C','0','0','1','tool:gen:list','代码生成菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('30201','302','生成修改',1,'','#','#','F','0','0','1','tool:generator:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('30202','302','生成删除',2,'','#','#','F','0','0','1','tool:generator:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('30203','302','导入代码',3,'','#','#','F','0','0','1','tool:generator:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('30204','302','同步信息',4,'','#','#','F','0','0','1','tool:generator:sync','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('30205','302','预览代码',5,'','#','#','F','0','0','1','tool:generator:preview','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('30206','302','生成代码',6,'','#','#','F','0','0','1','tool:generator:code','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('303','3','系统接口',3,'tool/swagger/index','swagger','swagger','C','0','0',1,'tool:swagger:list','系统接口菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('303','3','系统接口',3,'tool/swagger/index','swagger','swagger','C','0','0','1','tool:swagger:list','系统接口菜单',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('4','0','任务管理',4,'','quartz','job','M','0','0',1,'','任务管理目录',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('4','0','任务管理',4,'','quartz','job','M','0','0','1','','任务管理目录',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('401','4','定时任务',1,'quartz/job/index','job','job','C','0','0',1,'quartz:job:list','定时任务菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40101','401','任务新增',1,'','#','#','F','0','0',1,'quartz:job:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40102','401','任务修改',2,'','#','#','F','0','0',1,'quartz:job:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40103','401','任务删除',3,'','#','#','F','0','0',1,'quartz:job:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40104','401','状态修改',4,'','#','#','F','0','0',1,'quartz:job:status','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('401','4','定时任务',1,'quartz/job/index','job','job','C','0','0','1','quartz:job:list','定时任务菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40101','401','任务新增',1,'','#','#','F','0','0','1','quartz:job:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40102','401','任务修改',2,'','#','#','F','0','0','1','quartz:job:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40103','401','任务删除',3,'','#','#','F','0','0','1','quartz:job:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40104','401','状态修改',4,'','#','#','F','0','0','1','quartz:job:status','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('5','0','日志管理',5,'','logger','log','M','0','0',1,'','日志管理目录',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('5','0','日志管理',5,'','logger','log','M','0','0','1','','日志管理目录',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('501','5','操作日志',1,'logger/operate/index','operate','operate','C','0','0',1,'logger:operate:list','操作日志菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50101','501','查看',1,'','','','F','0','0',1,'logger:operate:detail','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50102','501','清空',2,'','','','F','0','0',1,'logger:operate:clear','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50103','501','删除',3,'','#','#','F','0','0',1,'logger:operate:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('501','5','操作日志',1,'logger/operate/index','operate','operate','C','0','0','1','logger:operate:list','操作日志菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50101','501','查看',1,'','','','F','0','0','1','logger:operate:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50102','501','清空',2,'','','','F','0','0','1','logger:operate:clear','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50103','501','删除',3,'','#','#','F','0','0','1','logger:operate:delete','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('502','5','登录日志',2,'logger/login/index','login','login','C','0','0',1,'logger:login:list','登录日志菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50201','502','清空',1,'','','','F','0','0',1,'logger:login:clear','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50202','502','删除',2,'','#','#','F','0','0',1,'logger:login:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('502','5','登录日志',2,'logger/login/index','login','login','C','0','0','1','logger:login:list','登录日志菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50201','502','清空',1,'','','','F','0','0','1','logger:login:clear','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50202','502','删除',2,'','#','#','F','0','0','1','logger:login:delete','',NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
 /* Table: agile_sys_post 岗位信息表                              */
@@ -859,7 +859,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '岗位主键id',
+   '岗位主键',
    'user', @CurrentUser, 'table', 'agile_sys_post', 'column', 'id'
 go
 
@@ -887,7 +887,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '状态（0正常 1停用）',
+   '状态（0:正常 1:停用）',
    'user', @CurrentUser, 'table', 'agile_sys_post', 'column', 'post_status'
 go
 
@@ -957,7 +957,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '角色主键id',
+   '角色主键',
    'user', @CurrentUser, 'table', 'agile_sys_role', 'column', 'id'
 go
 
@@ -985,14 +985,14 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '角色状态（0正常 1停用）',
+   '角色状态（0:正常 1:停用）',
    'user', @CurrentUser, 'table', 'agile_sys_role', 'column', 'role_status'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '数据范围 值参见字典sys_data_scope',
+   '数据范围（字典sys_data_scope）',
    'user', @CurrentUser, 'table', 'agile_sys_role', 'column', 'data_scope'
 go
 
@@ -1058,21 +1058,21 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '角色部门主键id',
+   '角色部门主键',
    'user', @CurrentUser, 'table', 'agile_sys_role_dept', 'column', 'id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '角色id',
+   '角色主键',
    'user', @CurrentUser, 'table', 'agile_sys_role_dept', 'column', 'role_id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '部门id',
+   '部门主键',
    'user', @CurrentUser, 'table', 'agile_sys_role_dept', 'column', 'dept_id'
 go
 
@@ -1129,21 +1129,21 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '角色菜单主键id',
+   '角色菜单主键',
    'user', @CurrentUser, 'table', 'agile_sys_role_menu', 'column', 'id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '角色id',
+   '角色主键',
    'user', @CurrentUser, 'table', 'agile_sys_role_menu', 'column', 'role_id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '菜单id',
+   '菜单主键',
    'user', @CurrentUser, 'table', 'agile_sys_role_menu', 'column', 'menu_id'
 go
 
@@ -1258,7 +1258,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '用户主键id',
+   '用户主键',
    'user', @CurrentUser, 'table', 'agile_sys_user', 'column', 'id'
 go
 
@@ -1342,7 +1342,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '部门主键id',
+   '部门主键',
    'user', @CurrentUser, 'table', 'agile_sys_user', 'column', 'dept_id'
 go
 
@@ -1409,21 +1409,21 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '用户岗位主键id',
+   '用户岗位主键',
    'user', @CurrentUser, 'table', 'agile_sys_user_post', 'column', 'id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '用户id',
+   '用户主键',
    'user', @CurrentUser, 'table', 'agile_sys_user_post', 'column', 'user_id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '岗位id',
+   '岗位主键',
    'user', @CurrentUser, 'table', 'agile_sys_user_post', 'column', 'post_id'
 go
 
@@ -1482,21 +1482,21 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '用户角色主键id',
+   '用户角色主键',
    'user', @CurrentUser, 'table', 'agile_sys_user_role', 'column', 'id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '用户id',
+   '用户主键',
    'user', @CurrentUser, 'table', 'agile_sys_user_role', 'column', 'user_id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '角色id',
+   '角色主键',
    'user', @CurrentUser, 'table', 'agile_sys_user_role', 'column', 'role_id'
 go
 

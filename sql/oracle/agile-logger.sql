@@ -22,7 +22,7 @@ create table agile_logger_login
 
 comment on table agile_logger_login is '用户登录日志表';
 
-comment on column agile_logger_login.id is '日志id';
+comment on column agile_logger_login.id is '登录日志主键';
 comment on column agile_logger_login.login_name is '登录用户名';
 comment on column agile_logger_login.login_time is '登录时间';
 comment on column agile_logger_login.remote_ip is '操作ip地址';
@@ -66,10 +66,8 @@ create table agile_logger_operate
 
 comment on table agile_logger_operate is '用户操作日志表';
 
-comment on column agile_logger_operate.id is '日志id';
-
+comment on column agile_logger_operate.id is '操作日志主键';
 comment on column agile_logger_operate.title is '日志标题';
-
 comment on column agile_logger_operate.type is '日志类型';
 comment on column agile_logger_operate.user_name is '操作人员名称';
 comment on column agile_logger_operate.req_uri is '请求uri';

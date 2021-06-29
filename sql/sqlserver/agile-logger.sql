@@ -42,7 +42,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '日志id',
+   '登录日志主键',
    'user', @CurrentUser, 'table', 'agile_logger_login', 'column', 'id'
 go
 

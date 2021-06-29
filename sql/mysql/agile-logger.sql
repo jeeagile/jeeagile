@@ -6,7 +6,7 @@ drop table if exists agile_logger_operate;
 /*==============================================================*/
 create table agile_logger_login
 (
-  id                    varchar(32) not null comment '日志id',
+  id                    varchar(32) not null comment '登录日志主键',
   login_name            varchar(150) not null comment '登录用户名',
   login_time            datetime not null comment '登录时间',
   remote_ip             varchar(50) not null comment '操作ip地址',
@@ -27,7 +27,7 @@ alter table agile_logger_login comment '用户登录日志表';
 /*==============================================================*/
 create table agile_logger_operate
 (
-  id                    varchar(32) not null comment '日志id',
+  id                    varchar(32) not null comment '操作日志主键',
   title                 varchar(100) not null comment '日志标题',
   type                  varchar(10) not null comment '日志类型',
   user_name             varchar(10) not null comment '操作人员名称',
