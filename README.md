@@ -166,7 +166,7 @@ jeeagile
 - gitee      https://gitee.com/jeeagile/jeeagile
 
 #### 特别提醒
-为了平台的发展，暂不上传dubbo和rabbitmq组件代码，如有需要可联系作者。
+为了平台的发展，暂不上传rabbitmq组件代码，如有需要可联系作者。
 当然只要您按照自定义注解进行模块开发，切换dubbo或者rabbitmq完全没有问题，且会全力支持解决所遇到的任何问题，感谢您的信任和使用。
 
 #### 特别鸣谢
