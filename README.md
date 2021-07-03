@@ -42,7 +42,7 @@
 
 2、前端
 
-* VUE 、Element UI
+* VUE、Element UI
 
 
 #### 系统内置模块功能
