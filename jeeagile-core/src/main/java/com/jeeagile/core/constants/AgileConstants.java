@@ -20,6 +20,8 @@ public class AgileConstants {
     // 用户信息KEY 用于上下文用户信息传递
     public static final String AGILE_USER_DATA = "AGILE_USER_DATA";
 
+    public static final String AGILE_TOKEN = "AGILE_TOKEN";
+
     // 数据范围 01 全部数据权限
     public static final String AGILE_DATA_SCOPE_01 = "01";
     // 数据范围 02 本部门数据权限

@@ -9,6 +9,7 @@ import com.jeeagile.shiro.listener.AgileSessionListener;
 import com.jeeagile.shiro.realm.AgileAuthorizingRealm;
 import com.jeeagile.shiro.security.AgileShiroSecurity;
 import com.jeeagile.shiro.session.AgileSessionIdGenerator;
+import com.jeeagile.shiro.session.AgileWebSessionManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -113,7 +114,7 @@ public class AgileShiroAutoConfigure {
      */
     @Bean("sessionManager")
     public SessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        AgileWebSessionManager sessionManager = new AgileWebSessionManager();
         Collection<SessionListener> sessionListenerList = new ArrayList<>();
         sessionListenerList.add(new AgileSessionListener());
         sessionManager.setSessionListeners(sessionListenerList);
