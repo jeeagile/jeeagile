@@ -162,8 +162,8 @@ jeeagile
 ```
 
 #### 项目源码
-- github     https://github.com/jeeagile/jeeagile
-- gitee      https://gitee.com/jeeagile/jeeagile
+- github      https://github.com/jeeagile/jeeagile
+- gitee       https://gitee.com/jeeagile/jeeagile
 
 #### 特别提醒
 为了平台的发展，暂不上传rabbitmq组件代码，如有需要可联系作者。
