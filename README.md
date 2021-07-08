@@ -7,6 +7,7 @@
 - JeeAgile项目模块这么多？请不要被吓到。当你真正去使用他时候，就会发现她有很多灵活之处。
 - JeeAgile架构以Spring Boot为核心，将代码架构分为model层、api层、service层和web层共四层，可基于配置和自定义注解进行单体应用和分布式应用切换。
 - JeeAgile对广大码农同学完全开源，同时也会根据广大码农同学的意见不断优化和改进。
+
 **开发文档：**  [http://docs.jeeagile.vip](http://docs.jeeagile.vip) ---完善中，敬请期待
 
 **体验地址：**  [http://demo.jeeagile.vip](http://demo.jeeagile.vip)
@@ -43,7 +44,7 @@
 * VUE、Element UI 
 
 
-#### 系统内置模块功能
+#### 内置功能
 1、系统管理
 - 用户管理：提供用户的相关配置
 - 角色管理：权限与菜单进行分配
@@ -72,7 +73,7 @@
 - 待开发
 
 
-#### 平台目录结构说明
+#### 目录说明
 -----------------------------------
 ```
 jeeagile      
@@ -158,11 +159,6 @@ jeeagile
 ├─jeeagile-ui          前端UI模块（包括登录、系统管理、监控、队列、日志等）
 │  
 ```
-
-#### 项目源码
-- github      https://github.com/jeeagile/jeeagile
-- gitee       https://gitee.com/jeeagile/jeeagile
-
 #### 特别提醒
 出于各种原因，暂不上传rabbitmq插件代码，如有需要可联系作者（QQ:1393704475）。
 
