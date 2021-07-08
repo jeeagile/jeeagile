@@ -14,6 +14,11 @@
 
 **账号密码：** `admin / 123456`
 
+#### 项目源码
+- gitee      https://gitee.com/jeeagile/jeeagile
+- github     https://github.com/jeeagile/jeeagile
+
+
 #### 架构亮点
 - 完全的模块化，超前的平台架构和模块化的设计理念，便于灵活扩展和二次开发。
 - 完善的组件化，JeeAgile将提供各种丰富的前后端组件，开发者可根据自身需要选择使用。
