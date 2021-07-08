@@ -160,8 +160,8 @@ jeeagile
 ```
 
 #### 项目源码
-- github     https://github.com/jeeagile/jeeagile
-- gitee      https://gitee.com/jeeagile/jeeagile
+- github      https://github.com/jeeagile/jeeagile
+- gitee       https://gitee.com/jeeagile/jeeagile
 
 #### 特别提醒
 出于各种原因，暂不上传rabbitmq插件代码，如有需要可联系作者（QQ:1393704475）。
