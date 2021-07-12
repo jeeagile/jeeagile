@@ -59,5 +59,5 @@ public interface AgileUserDetailsMapper {
             " m.menu_visible, m.menu_status, m.menu_perm,  m.menu_type, m.menu_icon, m.menu_sort" +
             " from agile_sys_menu m where m.menu_type in ('M', 'C') and m.menu_status = 0" +
             " order by m.parent_id, m.menu_sort")
-    List<AgileSysMenu> getUserMenuAll();
+    List<AgileSysMenu> getSuperAdminMenu();
 }

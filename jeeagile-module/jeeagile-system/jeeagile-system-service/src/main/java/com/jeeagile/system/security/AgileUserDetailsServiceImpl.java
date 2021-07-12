@@ -102,6 +102,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     private AgileUserData getAgileUserData(AgileSysUser agileSysUser) {
         AgileUserData agileUserData = new AgileUserData();
         BeanUtils.copyProperties(agileSysUser, agileUserData);
+        agileUserData.setPassword(agileSysUser.getUserPwd());
         agileUserData.setUserId(agileSysUser.getId());
         return agileUserData;
     }
@@ -110,7 +111,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     public List<String> getUserPerm(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
-                if (agileBaseUser.getUserId().equals("0")) {
+                if (agileBaseUser.isSuperAdmin()) {
                     List<String> userPermList = new ArrayList<>();
                     userPermList.add("*:*:*");
                     return userPermList;
@@ -131,7 +132,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     public List<String> getUserRole(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
-                if (agileBaseUser.getUserId().equals("0")) {
+                if (agileBaseUser.isSuperAdmin()) {
                     List<String> userRoleList = new ArrayList<>();
                     userRoleList.add("admin");
                     return userRoleList;
@@ -152,8 +153,8 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     public List getUserMenu(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
-                if (agileBaseUser.getUserId().equals("0")) {
-                    return agileUserDetailsMapper.getUserMenuAll();
+                if (agileBaseUser.isSuperAdmin()) {
+                    return agileUserDetailsMapper.getSuperAdminMenu();
                 } else {
                     return agileUserDetailsMapper.getUserMenuByUserId(agileBaseUser.getUserId());
                 }
