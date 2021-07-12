@@ -52,7 +52,7 @@
 
         <lombok.version>1.18.18</lombok.version>
 
-
+        <google-format.version>1.10.0</google-format.version>
         <alibaba.druid.version>1.2.6</alibaba.druid.version>
 
         <velocity.version>1.7</velocity.version>
@@ -231,6 +231,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.google.googlejavaformat</groupId>
+                <artifactId>google-java-format</artifactId>
+                <version>${google-format.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
@@ -272,6 +278,11 @@
                 <version>${jeeagile.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-security-spring</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
