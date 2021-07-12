@@ -97,7 +97,7 @@
       },
       /** 强退按钮操作 */
       handleForceLogout(row) {
-        this.$confirm('是否确认强退名称为"' + row.userName + '"的数据项?', '警告', {
+        this.$confirm('是否确认强退用户名称为"' + row.userName + '"的用户吗?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
