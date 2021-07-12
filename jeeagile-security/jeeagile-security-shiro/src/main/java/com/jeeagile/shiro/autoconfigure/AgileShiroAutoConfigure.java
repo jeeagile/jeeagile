@@ -165,14 +165,11 @@ public class AgileShiroAutoConfigure {
         filterChainMap.put("/system/kaptcha/**", "anon");
         filterChainMap.put("/system/user/login", "anon");
 
-        if (agileSecurityProperties.getAnonUrl() != null) {
-            for (String strUrl : agileSecurityProperties.getAnonUrl()) {
-                if (StringUtil.isEmpty(strUrl) || getProhibitAnonUrl().indexOf(strUrl) > -1) {
-                    continue;
-                }
-                filterChainMap.put(strUrl, "anon");
-            }
+
+        for (String strUrl : agileSecurityProperties.getAnonUrl()) {
+            filterChainMap.put(strUrl, "anon");
         }
+
         filterChainMap.put("/**", "user");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainMap);

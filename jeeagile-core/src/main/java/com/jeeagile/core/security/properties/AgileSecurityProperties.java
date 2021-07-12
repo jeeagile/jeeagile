@@ -1,10 +1,14 @@
 package com.jeeagile.core.security.properties;
 
 import com.jeeagile.core.constants.AgileConstants;
+import com.jeeagile.core.util.ArrayUtil;
+import com.jeeagile.core.util.StringUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +20,7 @@ import java.util.List;
 @Accessors(chain = true)
 @ConfigurationProperties(AgileConstants.AGILE_SECURITY)
 public class AgileSecurityProperties {
+    private static String[] FILTER_ANON_URL = {"**" , "/**"};
     /**
      * 无需认证URL
      */
@@ -25,4 +30,16 @@ public class AgileSecurityProperties {
      * session超时时间
      */
     private long sessionTimeOut = 180000L;
+
+    public List<String> getAnonUrl() {
+        List<String> filterUrl = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(anonUrl)) {
+            for (String url : anonUrl) {
+                if (StringUtil.isNotEmpty(url) && !ArrayUtil.contains(FILTER_ANON_URL, url)) {
+                    filterUrl.add(url);
+                }
+            }
+        }
+        return filterUrl;
+    }
 }
