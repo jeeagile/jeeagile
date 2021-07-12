@@ -1,4 +1,5 @@
 import { postApi } from '@/utils/axios'
+
 #if($tableType!="tree")
 /**
  * 分页查询${functionName}列表

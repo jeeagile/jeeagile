@@ -13,23 +13,11 @@
 #end
 #if($column.htmlType == "input")
       <el-form-item label="${comment}" prop="${column.javaField}">
-        <el-input
-          v-model="queryParam.queryCond.${column.javaField}"
-          placeholder="请输入${comment}"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParam.queryCond.${column.javaField}" placeholder="请输入${comment}" clearable size="small" @keyup.enter.native="handleQuery"/>
       </el-form-item>
 #elseif($column.htmlType == "number")
         <el-form-item label="${comment}" prop="${column.javaField}">
-          <el-input_number
-            v-model="queryParam.queryCond.${column.javaField}"
-            placeholder="请输入${comment}"
-            clearable
-            size="small"
-            @keyup.enter.native="handleQuery"
-        />
+          <el-input_number v-model="queryParam.queryCond.${column.javaField}" placeholder="请输入${comment}" clearable size="small" @keyup.enter.native="handleQuery"/>
     </el-form-item>
 #elseif(($column.htmlType == "select" || $column.htmlType == "radio") && "" != $dictType)
       <el-form-item label="${comment}" prop="${column.javaField}">
@@ -335,18 +323,18 @@ export default {
 #else
 #set($comment=$column.columnComment)
 #end
-    // $comment字典翻译
+    /** $comment字典翻译 */
     ${column.javaField}Format(row, column) {
       return this.handleDictLabel#if($column.htmlType == "checkbox")s#end(this.${column.javaField}OptionList, row.${column.javaField})
     },
 #end
 #end
-    // 取消按钮
+    /** 取消按钮 */
     cancel() {
       this.openDialog = false
       this.reset()
     },
-    // 表单重置
+    /** 表单重置 */
     reset() {
       this.form = {
 #foreach ($column in $columnList)
@@ -373,7 +361,7 @@ export default {
       this.resetForm('queryForm')
       this.handleQuery()
     },
-    // 多选框选中数据
+    /** 多选框选中数据 */
     handleSelectionChange(selection) {
       this.selectRowList = selection
       this.single = selection.length !== 1

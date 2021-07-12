@@ -307,18 +307,18 @@ export default {
 #else
 #set($comment=$column.columnComment)
 #end
-    // $comment字典翻译
+    /** $comment字典翻译 */
     ${column.javaField}Format(row, column) {
       return this.handleDictLabel#if($column.htmlType == "checkbox")s#end(this.${column.javaField}OptionList, row.${column.javaField})
     },
 #end
 #end
-    // 取消按钮
+    /** 取消按钮 */
     cancel() {
       this.openDialog = false
       this.reset()
     },
-    // 表单重置
+    /** 表单重置 */
     reset() {
       this.form = {
 #foreach ($column in $columnList)

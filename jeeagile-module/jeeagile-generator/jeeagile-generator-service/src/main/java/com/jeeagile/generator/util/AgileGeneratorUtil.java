@@ -326,7 +326,7 @@ public class AgileGeneratorUtil {
      */
     public static List<String> getTemplateList(String tableType) {
         List<String> templates = new ArrayList<>();
-        templates.add( "template/java/mapper.java.vm");
+        templates.add("template/java/mapper.java.vm");
         templates.add("template/java/entity.java.vm");
         templates.add("template/java/service.java.vm");
         templates.add("template/java/serviceImpl.java.vm");
@@ -447,6 +447,4 @@ public class AgileGeneratorUtil {
         velocityContext.put("treeParentCode" , StringUtil.toCamelCase(agileGeneratorTableInfo.getTreeParentCode()));
         velocityContext.put("treeName" , StringUtil.toCamelCase(agileGeneratorTableInfo.getTreeName()));
     }
-
-
 }
