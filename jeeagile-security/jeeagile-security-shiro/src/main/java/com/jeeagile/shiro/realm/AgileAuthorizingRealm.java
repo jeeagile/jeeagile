@@ -35,11 +35,11 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
 
     @Lazy
     @AgileProvider
-    private IAgileUserDetailsService agileUserService;
+    private IAgileUserDetailsService agileUserDetailsService;
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) {
-        if (agileUserService == null) {
+        if (agileUserDetailsService == null) {
             throw new AgileFrameException(AgileResultCode.FAIL_SERVER_EXCEPTION, "请设置用户验证接口实现类！");
         }
         String loginName = (String) authenticationToken.getPrincipal();// 获取用户名
@@ -49,12 +49,12 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
         }
         String password = new String(credentials);// 把字符数组转换为String类型(用户输入的密码)
         try {
-            AgileBaseUser userData = agileUserService.getUserDataByLoginName(loginName);
+            AgileBaseUser userData = agileUserDetailsService.getUserDataByLoginName(loginName);
             if (userData != null && StringUtil.isNotEmpty(userData.getUserId())) {
-                if (AgileSecurityUtil.encryptPassword(password).equals(userData.getUserPwd())) {
+                if (AgileSecurityUtil.encryptPassword(password).equals(userData.getPassword())) {
                     userData.setUserToken(SecurityUtils.getSubject().getSession().getId().toString());
-                    userData.setUserPerm(agileUserService.getUserPerm(userData));
-                    userData.setUserRole(agileUserService.getUserRole(userData));
+                    userData.setUserPerm(agileUserDetailsService.getUserPerm(userData));
+                    userData.setUserRole(agileUserDetailsService.getUserRole(userData));
                     HttpServletRequest httpServletRequest = SpringServletUtil.getHttpServletRequest();
                     if (httpServletRequest != null) {
                         UserAgent userAgent = UserAgentUtil.getUserAgent(httpServletRequest);
@@ -95,14 +95,14 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
             SimpleAuthorizationInfo authenticationInfo = new SimpleAuthorizationInfo();
             List<String> userPermList = userData.getUserPerm();
             if (userPermList == null || userPermList.isEmpty()) {
-                userPermList = agileUserService.getUserPerm(userData);
+                userPermList = agileUserDetailsService.getUserPerm(userData);
                 userData.setUserPerm(userPermList);
             }
             authenticationInfo.addStringPermissions(userPermList);
 
             List<String> userRoleList = userData.getUserRole();
             if (userRoleList == null || userRoleList.isEmpty()) {
-                userRoleList = agileUserService.getUserRole(userData);
+                userRoleList = agileUserDetailsService.getUserRole(userData);
                 userData.setUserRole(userRoleList);
             }
             authenticationInfo.addRoles(userRoleList);

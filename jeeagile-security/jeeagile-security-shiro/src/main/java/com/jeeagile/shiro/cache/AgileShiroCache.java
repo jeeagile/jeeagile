@@ -38,8 +38,11 @@ public class AgileShiroCache<K, V> implements org.apache.shiro.cache.Cache<K, V>
         //调用spring的Cache的get方法
         Cache.ValueWrapper valueWrapper = this.cache.get(k);
         if (valueWrapper == null) {
+            this.keySet.remove(k);
             return null;
         }
+        // 防止服务重启Session未失效
+        this.keySet.add(k);
         return (V) valueWrapper.get();
     }
 
@@ -52,7 +55,7 @@ public class AgileShiroCache<K, V> implements org.apache.shiro.cache.Cache<K, V>
             this.cache.put(k, v);
             this.keySet.add(k);
         } catch (Exception ex) {
-            log.warn("SHIRO缓存PUT方法出现异常:{}",ex.getMessage());
+            log.warn("SHIRO缓存PUT方法出现异常:{}" , ex.getMessage());
         }
         return v;
     }
@@ -66,10 +69,10 @@ public class AgileShiroCache<K, V> implements org.apache.shiro.cache.Cache<K, V>
         try {
             //调用spring的Cache的evict方法
             this.cache.evict(k);
-            this.keySet.remove(k);
         } catch (Exception ex) {
-            log.warn("SHIRO缓存REMOVE方法出现异常:{}",ex.getMessage());
+            log.warn("SHIRO缓存REMOVE方法出现异常:{}" , ex.getMessage());
         }
+        this.keySet.remove(k);
         return v;
     }
 

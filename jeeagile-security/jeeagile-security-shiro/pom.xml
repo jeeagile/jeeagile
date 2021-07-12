@@ -29,7 +29,6 @@
         <dependency>
             <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
