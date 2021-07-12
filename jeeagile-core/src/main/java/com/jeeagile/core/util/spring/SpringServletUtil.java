@@ -1,5 +1,7 @@
 package com.jeeagile.core.util.spring;
 
+import com.jeeagile.core.constants.AgileConstants;
+import com.jeeagile.core.util.StringUtil;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -49,5 +51,17 @@ public class SpringServletUtil {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    public static String getUserToken() {
+        return getUserToken(getHttpServletRequest());
+    }
+
+    public static String getUserToken(HttpServletRequest httpServletRequest) {
+        String userToken = httpServletRequest.getHeader(AgileConstants.AGILE_TOKEN);
+        if (StringUtil.isEmpty(userToken)) {
+            userToken = httpServletRequest.getParameter(AgileConstants.AGILE_TOKEN);
+        }
+        return userToken;
     }
 }
