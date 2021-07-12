@@ -35,6 +35,26 @@ public class StringUtil {
     }
 
     /**
+     * 判断字符串对象是为空
+     *
+     * @param object
+     * @return
+     */
+    public static boolean isEmpty(Object object) {
+        return object == null || "".equals(object.toString()) || "null".equalsIgnoreCase(object.toString());
+    }
+
+    /**
+     * 判断字符串对象不为空
+     *
+     * @param object
+     * @return
+     */
+    public static boolean isNotEmpty(Object object) {
+        return !isEmpty(object);
+    }
+
+    /**
      * 杀空函数，将"null"和null对象转换为""
      *
      * @param str 输入字符串

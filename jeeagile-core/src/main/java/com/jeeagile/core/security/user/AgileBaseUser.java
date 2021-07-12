@@ -1,10 +1,12 @@
 package com.jeeagile.core.security.user;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.jeeagile.core.util.AgileUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,7 +30,7 @@ public abstract class AgileBaseUser implements Serializable {
      * 用户密码
      */
     @JSONField(serialize = false)
-    private String userPwd;
+    private String password;
 
     /**
      * 用户TOKEN
@@ -75,6 +77,11 @@ public abstract class AgileBaseUser implements Serializable {
     private String loginAddress;
 
     /**
+     * 登录时间
+     */
+    private Date loginTime = new Date();
+
+    /**
      * 用户权限编码
      */
     private List<String> userPerm;
@@ -85,6 +92,14 @@ public abstract class AgileBaseUser implements Serializable {
     private List<String> userRole;
 
     /**
+     * 判断用户是否为超管用户
+     * @return
+     */
+    public boolean isSuperAdmin() {
+        return this.userId.equals("0") || AgileUtil.isSuperAdmin(this.userName);
+    }
+
+    /**
      * 设置缓存key值为用户ID
      *
      * @return
@@ -93,4 +108,5 @@ public abstract class AgileBaseUser implements Serializable {
     public String toString() {
         return this.getUserId();
     }
+
 }
