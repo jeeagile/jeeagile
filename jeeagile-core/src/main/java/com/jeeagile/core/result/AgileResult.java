@@ -216,7 +216,7 @@ public class AgileResult<T> implements Serializable {
      * @return
      */
     public static <T> AgileResult<T> error(IAgileResultCode agileResultCode, Exception ex) {
-        return new AgileResult<>(agileResultCode, AgileResult.judgeExceptionMessage(ex));
+        return new AgileResult<>(agileResultCode, AgileResult.handlerExceptionMessage(ex));
     }
 
     /**
@@ -228,7 +228,7 @@ public class AgileResult<T> implements Serializable {
      * @return
      */
     public static <T> AgileResult<T> error(IAgileResultCode agileResultCode, Exception ex, String defaultMsg) {
-        String message = AgileResult.judgeExceptionMessage(ex);
+        String message = AgileResult.handlerExceptionMessage(ex);
         if (StringUtil.isEmpty(message)) {
             message = defaultMsg;
         }
@@ -248,7 +248,7 @@ public class AgileResult<T> implements Serializable {
         if (ex instanceof AgileBaseException) {
             agileResultCode = ((AgileBaseException) ex).getAgileResultCode();
         }
-        String message = AgileResult.judgeExceptionMessage(ex);
+        String message = AgileResult.handlerExceptionMessage(ex);
         if (StringUtil.isEmpty(message)) {
             message = defaultMsg;
         }
@@ -261,9 +261,9 @@ public class AgileResult<T> implements Serializable {
      * @param ex
      * @return
      */
-    private static String judgeExceptionMessage(Exception ex) {
+    private static String handlerExceptionMessage(Exception ex) {
         String msg = "";
-        if (judgeTimeOutException(ex) > -1) {
+        if (handlerTimeOutException(ex) > -1) {
             msg = "服务器开小差，请稍后重试！";
         } else {
             if (ex instanceof AgileBaseException) {
@@ -274,12 +274,9 @@ public class AgileResult<T> implements Serializable {
     }
 
     /**
-     * 处理超时异常信息
-     *
-     * @param ex
-     * @return
+     * 处理dubbo超时异常信息
      */
-    private static int judgeTimeOutException(Exception ex) {
+    private static int handlerTimeOutException(Exception ex) {
         String exceptionMessage = ex.getMessage() == null ? String.valueOf(ex) : ex.getMessage();
         return exceptionMessage.indexOf("times of the providers");
     }
