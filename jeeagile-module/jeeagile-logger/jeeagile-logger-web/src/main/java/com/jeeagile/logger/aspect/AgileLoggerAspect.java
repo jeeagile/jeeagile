@@ -1,7 +1,6 @@
 package com.jeeagile.logger.aspect;
 
 import com.alibaba.fastjson.JSON;
-import com.jeeagile.core.exception.AgileDemoException;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
@@ -9,7 +8,7 @@ import com.jeeagile.core.util.StringUtil;
 import com.jeeagile.core.util.UserAgentUtil;
 import com.jeeagile.core.util.system.util.SystemUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
-import com.jeeagile.frame.enums.AgileCommonStatus;
+import com.jeeagile.core.enums.AgileCommonStatus;
 import com.jeeagile.frame.enums.AgileLoggerType;
 import com.jeeagile.logger.entity.AgileLoggerLogin;
 import com.jeeagile.logger.entity.AgileLoggerOperate;
