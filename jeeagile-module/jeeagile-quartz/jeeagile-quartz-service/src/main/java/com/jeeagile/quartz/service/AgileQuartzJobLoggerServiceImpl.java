@@ -56,7 +56,7 @@ public class AgileQuartzJobLoggerServiceImpl extends AgileBaseServiceImpl<AgileQ
                 queryWrapper.lambda().eq(AgileQuartzJobLogger::getStatus, agileQuartzJobLogger.getStatus());
             }
         }
-        queryWrapper.lambda().orderByAsc(AgileQuartzJobLogger::getStartTime);
+        queryWrapper.lambda().orderByDesc(AgileQuartzJobLogger::getStartTime);
         return queryWrapper;
     }
 
