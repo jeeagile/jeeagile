@@ -2,6 +2,7 @@ package com.jeeagile.frame.entity;
 
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.jeeagile.core.util.StringUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,5 +16,21 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public abstract class AgileModel<T extends AgileModel<T>> extends Model<T> {
+    /**
+     * 判断主键是否为空
+     *
+     * @return
+     */
+    public boolean isNotEmptyPk() {
+        return StringUtil.isNotEmpty(this.pkVal());
+    }
 
+    /**
+     * 判断主键是否为空
+     *
+     * @return
+     */
+    public boolean isEmptyPk() {
+        return StringUtil.isEmpty(this.pkVal());
+    }
 }

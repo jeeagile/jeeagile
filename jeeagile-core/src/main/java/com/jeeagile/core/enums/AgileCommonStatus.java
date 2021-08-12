@@ -1,9 +1,9 @@
-package com.jeeagile.frame.enums;
+package com.jeeagile.core.enums;
 
 /**
  * @author JeeAgile
  * @date 2021-03-21
- * @description 是否枚举类
+ * @description 成功失败枚举类
  */
 public enum AgileCommonStatus {
     SUCCESS("0", "成功"),
