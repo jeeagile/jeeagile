@@ -89,7 +89,7 @@ public class AgileQuartzJobController extends AgileBaseController {
     @AgileLogger(title = "执行任务", type = AgileLoggerType.DELETE)
     @AgileRequiresPermissions("quartz:job:execute")
     public AgileResult execute(@SingleRequestBody String quartzJobId) {
-        agileQuartzJobService.deleteQuartzJobById(quartzJobId);
-        return this.rtnSuccess("定时任务信息删除成功！");
+        agileQuartzJobService.executeQuartzJobById(quartzJobId);
+        return this.rtnSuccess("执行任务成功！");
     }
 }

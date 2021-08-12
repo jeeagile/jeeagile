@@ -1,15 +1,18 @@
 <template>
   <div class="app-container">
     <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
-      <el-form-item label="任务编码" prop="jobGroup">
-        <el-input v-model="queryParam.queryCond.jobCode" placeholder="请输入任务编码" clearable size="small" @keyup.enter.native="handleQuery"/>
+      <el-form-item label="任务编码" prop="jobCode">
+        <el-input v-model="queryParam.queryCond.jobCode" placeholder="请输入任务编码" clearable size="small"
+                  @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="任务名称" prop="jobName">
-        <el-input v-model="queryParam.queryCond.jobName" placeholder="请输入任务名称" clearable size="small" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.queryCond.jobName" placeholder="请输入任务名称" clearable size="small"
+                  @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="任务状态" prop="status">
         <el-select v-model="queryParam.queryCond.jobStatus" placeholder="请选择任务状态" clearable size="small">
-          <el-option v-for="dict in jobStatusOption" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+          <el-option v-for="dict in jobStatusOption" :key="dict.dictValue" :label="dict.dictLabel"
+                     :value="dict.dictValue"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -20,17 +23,19 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPerm="['monitor:job:add']">
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPerm="['quartz:job:add']">
           新增
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPerm="['monitor:job:update']">
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+                   v-hasPerm="['quartz:job:update']">
           修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete" v-hasPerm="['monitor:job:delete']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete"
+                   v-hasPerm="['quartz:job:delete']">
           删除
         </el-button>
       </el-col>
@@ -46,31 +51,48 @@
       <el-table-column label="Cron执行表达式" align="center" prop="jobCron" :show-overflow-tooltip="true"/>
       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.jobStatus" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"/>
+          <el-switch v-model="scope.row.jobStatus" active-value="0" inactive-value="1"
+                     @change="handleStatusChange(scope.row)"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="300px">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit"  @click="handleUpdate(scope.row)" v-hasPerm="['monitor:job:update']">
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                     v-hasPerm="['quartz:job:update']">
             编辑
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-caret-right" @click="handleExecute(scope.row)" v-hasPerm="['monitor:job:execute']">
+          <el-button size="mini" type="text" icon="el-icon-caret-right" @click="handleExecute(scope.row)"
+                     v-hasPerm="['quartz:job:execute']">
             执行
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)" v-hasPerm="['monitor:job:detail']">
-            详细
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                     v-hasPerm="['quartz:job:delete']">
+            删除
           </el-button>
+
+          <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)">
+            <span class="el-dropdown-link">
+              <i class="el-icon-d-arrow-right el-icon--right"></i>更多操作
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="handleView" icon="el-icon-view">任务详细</el-dropdown-item>
+              <el-dropdown-item command="handleJobLogger" icon="el-icon-s-operation" v-hasPerm="['job:logger:query']">
+                执行日志
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- 分页 -->
-    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal" :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getJobList"/>
+    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getJobList"/>
 
 
     <!-- 添加或修改定时任务对话框 -->
     <el-dialog :title="dialogTitle" :visible.sync="open" width="700px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="任务编码" prop="jobCode">
@@ -83,8 +105,18 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="任务分组" prop="jobGroup">
+              <el-input v-model="form.jobGroup" placeholder="请输入任务分组"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="Cron表达式" prop="jobCron">
+              <cron-input v-model="form.jobCron"></cron-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="Bean名称" prop="beanName">
-              <el-input v-model="form.beanName" placeholder="请输入调用目标spring bean name"/>
+              <el-input v-model="form.beanName" placeholder="请输入调用spring bean name"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -94,12 +126,15 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="执行参数" prop="remark">
-              <el-input v-model="form.methodParam" type="textarea" placeholder="请输入内容"/>
+              <el-input v-model="form.methodParam" type="textarea" placeholder="多个参数之间用&符隔开，支持json格式参数（通过json直接转对象使用）"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="Cron表达式" prop="jobCron">
-              <el-input v-model="form.jobCron" placeholder="请输入cron执行表达式"/>
+            <el-form-item label="并发策略" prop="concurrent">
+              <el-radio-group v-model="form.concurrent" size="small">
+                <el-radio label="0">允许</el-radio>
+                <el-radio label="1">禁止</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -108,6 +143,15 @@
                 <el-radio v-for="dict in jobStatusOption" :key="dict.dictValue" :label="dict.dictValue">
                   {{ dict.dictLabel }}
                 </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="执行策略" prop="initMisfire">
+              <el-radio-group v-model="form.initMisfire" size="small">
+                <el-radio-button label="1">立即执行</el-radio-button>
+                <el-radio-button label="2">执行一次</el-radio-button>
+                <el-radio-button label="3">放弃执行</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -130,15 +174,44 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="任务编码：">{{ form.jobCode }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="任务名称：">{{ form.jobName }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="Bean名称：">{{ form.beanName }}</el-form-item>
-            <el-form-item label="执行方法：">{{ form.methodName }}</el-form-item>
+            <el-form-item label="任务分组：">{{ form.jobGroup }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="任务状态：">{{ jobStatusFormat(form) }}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Cron表达式：">{{ form.jobCron }}</el-form-item>
-            <el-form-item label="任务状态：">{{ jobStatusFormat(form) }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="下次执行时间：">{{ form.nextTime }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="Bean名称：">{{ form.beanName }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="执行方法：">{{ form.methodName }}</el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="执行参数：">{{ form.methodParam }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="并发策略：">
+              <div v-if="form.concurrent == 0">允许</div>
+              <div v-else-if="form.concurrent == 1">禁止</div>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="执行策略：">
+              <div v-if="form.initMisfire == 0">默认策略</div>
+              <div v-else-if="form.initMisfire == 1">立即执行</div>
+              <div v-else-if="form.initMisfire == 2">执行一次</div>
+              <div v-else-if="form.initMisfire == 3">放弃执行</div>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -150,10 +223,12 @@
 </template>
 
 <script>
+  import CronInput from '@/components/Cron/cron-input'
   import { selectJobPage, detailJob, addJob, updateJob, deleteJob, executeJob, changeJobStatus } from '@/api/quartz/job'
 
   export default {
     name: 'Job',
+    components: { CronInput },
     data() {
       return {
         // 遮罩层
@@ -197,6 +272,9 @@
           jobName: [
             { required: true, message: '任务名称不能为空', trigger: 'blur' }
           ],
+          jobGroup: [
+            { required: true, message: '任务分组不能为空', trigger: 'blur' }
+          ],
           beanName: [
             { required: true, message: '调用目标名不能为空', trigger: 'blur' }
           ],
@@ -204,7 +282,7 @@
             { required: true, message: '调用方法名不能为空', trigger: 'blur' }
           ],
           jobCron: [
-            { required: true, message: 'cron执行表达式不能为空', trigger: 'blur' }
+            { required: true, message: 'Cron表达式不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -241,11 +319,13 @@
           jobCode: undefined,
           jobName: undefined,
           jobGroup: undefined,
-          jobCron: undefined,
+          jobCron: '* * * * * ? *',
           jobStatus: '0',
           beanName: undefined,
           methodName: undefined,
           methodParam: undefined,
+          initMisfire: '1',
+          concurrent: '1',
           remark: undefined
         }
         this.resetForm('form')
@@ -294,12 +374,30 @@
           this.messageSuccess('执行成功')
         })
       },
+      // 更多操作触发
+      handleCommand(command, row) {
+        switch (command) {
+        case 'handleView':
+          this.handleView(row)
+          break
+        case 'handleJobLogger':
+          this.handleJobLogger(row)
+          break
+        default:
+          break
+        }
+      },
       /** 任务详细信息 */
       handleView(row) {
         detailJob(row.id).then(response => {
           this.form = response.data
           this.openView = true
         })
+      },
+      /** 任务日志列表查询 */
+      handleJobLogger(row) {
+        const jobCode = row.jobCode || 0
+        this.$router.push({ path: '/job/logger/' + jobCode })
       },
       /** 新增按钮操作 */
       handleAdd() {

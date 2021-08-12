@@ -96,6 +96,19 @@ export const agileRouter = [
     ]
   },
   {
+    path: '/job',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'logger/:jobCode(.*)',
+        component: () => import('@/views/quartz/job/logger/index'),
+        name: 'JobLogger',
+        meta: { title: '执行日志' }
+      }
+    ]
+  },
+  {
     path: '/generator',
     component: Layout,
     hidden: true,

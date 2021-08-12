@@ -1,26 +1,26 @@
 <template>
   <div class="app-container">
     <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
-      <el-form-item label="日志标题" prop="title">
-        <el-input v-model="queryParam.queryCond.title" placeholder="请输入日志标题" clearable style="width: 240px;"
+      <el-form-item label="任务编码" prop="jobCode">
+        <el-input v-model="queryParam.queryCond.jobCode" placeholder="请输入任务编码" clearable style="width: 240px;"
                   size="small" @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="操作人员" prop="opsName">
-        <el-input v-model="queryParam.queryCond.userName" placeholder="请输入操作人员" clearable style="width: 240px;"
+      <el-form-item label="任务名称" prop="jobName">
+        <el-input v-model="queryParam.queryCond.jobName" placeholder="请输入任务名称" clearable style="width: 240px;"
                   size="small" @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="日志类型" prop="type">
-        <el-select v-model="queryParam.queryCond.type" placeholder="操作类型" clearable size="small" style="width: 240px">
-          <el-option v-for="dict in typeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
-        </el-select>
+      <el-form-item label="任务分组" prop="jobGroup">
+        <el-input v-model="queryParam.queryCond.jobGroup" placeholder="请输入任务分组" clearable style="width: 240px;"
+                  size="small" @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParam.queryCond.status" placeholder="操作状态" clearable size="small" style="width: 240px">
+      <el-form-item label="执行状态" prop="status">
+        <el-select v-model="queryParam.queryCond.status" placeholder="请选择执行状态" clearable size="small"
+                   style="width: 240px">
           <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
                      :value="dict.dictValue"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="操作时间">
+      <el-form-item label="执行时间">
         <el-date-picker v-model="dateRange" size="small" style="width: 240px" value-format="yyyy-MM-dd" type="daterange"
                         range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"/>
       </el-form-item>
@@ -32,12 +32,14 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete" v-hasPerm="['logger:operate:delete']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete"
+                   v-hasPerm="['job:logger:delete']">
           删除
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleClear" v-hasPerm="['logger:operate:clear']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleClear"
+                   v-hasPerm="['job:logger:clear']">
           清空
         </el-button>
       </el-col>
@@ -46,70 +48,50 @@
 
     <el-table v-loading="loading" :data="loggerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="日志标题" align="center" prop="title"/>
-      <el-table-column label="日志类型" align="center" prop="type" :formatter="typeFormat"/>
-      <el-table-column label="请求方式" align="center" prop="reqMethod"/>
-      <el-table-column label="操作人员" align="center" prop="userName"/>
-      <el-table-column label="主机" align="center" prop="remoteIp" width="130" :show-overflow-tooltip="true"/>
-      <el-table-column label="操作地点" align="center" prop="remoteLocation" :show-overflow-tooltip="true"/>
-      <el-table-column label="操作状态" align="center" prop="status" :formatter="statusFormat"/>
-      <el-table-column label="操作日期" align="center" prop="createTime" width="180"/>
-      <el-table-column label="执行时间" align="center" prop="executeTime" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.executeTime < 30000" type="success" size="mini">{{scope.row.executeTime}}ms</el-tag>
-          <el-tag v-else-if="scope.row.executeTime < 90000" type="warning" size="mini">{{scope.row.executeTime}}ms
-          </el-tag>
-          <el-tag v-else size="mini" type="danger">{{scope.row.executeTime}}ms</el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column label="任务编码" align="center" prop="jobCode" :show-overflow-tooltip="true"/>
+      <el-table-column label="任务名称" align="center" prop="jobName" :show-overflow-tooltip="true"/>
+      <el-table-column label="任务分组" align="center" prop="jobGroup" :show-overflow-tooltip="true"/>
+      <el-table-column label="Bean名称" align="center" prop="beanName" :show-overflow-tooltip="true"/>
+      <el-table-column label="执行方法" align="center" prop="methodName" :show-overflow-tooltip="true"/>
+      <el-table-column label="执行时间" align="center" prop="startTime" :show-overflow-tooltip="true"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)" v-hasPerm="['logger:operate:detail']">
+          <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)"
+                     v-hasPerm="['job:logger:detail']">
             详细
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal" :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getLoggerList"/>
+    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
+                @pagination="getLoggerList"/>
 
-    <!-- 操作日志详细 -->
-    <el-dialog title="操作日志详细" :visible.sync="openDialog" width="700px" append-to-body>
-      <el-form ref="form" :model="form" label-width="100px" size="mini">
+    <!-- 任务执行日志详细 -->
+    <el-dialog title="任务执行日志详细" :visible.sync="openDialog" width="700px" append-to-body>
+      <el-form ref="form" :model="form" label-width="120px" size="mini">
         <el-row>
-          <el-col :span="24">
-            <el-form-item label="日志标题：">{{ form.title }} / {{ typeFormat(form) }}</el-form-item>
+          <el-col :span="12">
+            <el-form-item label="任务编码：">{{ form.jobCode }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="请求方式：">{{ form.reqMethod }}</el-form-item>
+            <el-form-item label="任务名称：">{{ form.jobName }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="执行时间：">{{ form.executeTime }}ms</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="登录信息：">{{ form.createUserName }} / {{ form.remoteIp }} / {{ form.remoteLocation }}
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="服务地址：">{{ form.serverAddress }}{{ form.reqUri }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="操作方法：">{{ form.handleMethod }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="请求参数：">{{ form.reqData }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="返回参数：">{{ form.resData }}</el-form-item>
+            <el-form-item label="任务分组：">{{ form.jobGroup }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="操作状态：">{{ statusFormat(form) }}</el-form-item>
+            <el-form-item label="Cron表达式：">{{ form.jobCron }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="操作时间：">{{ form.createTime }}</el-form-item>
+            <el-form-item label="Bean名称：">{{ form.beanName }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="执行方法：">{{ form.methodName }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item v-if="form.status === 1" label="异常信息：">{{ form.message }}</el-form-item>
+            <el-form-item label="执行参数：">{{ form.methodParam }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -121,7 +103,7 @@
 </template>
 
 <script>
-  import { selectLoggerPage, deleteLogger, clearLogger } from '@/api/logger/logger'
+  import { selectLoggerPage, deleteLogger, clearLogger } from '@/api/quartz/logger'
 
   export default {
     name: 'Operate',
@@ -155,20 +137,19 @@
           pageSize: 10,
           currentPage: 1,
           queryCond: {
-            title: undefined,
-            type: undefined,
-            status: undefined,
-            userName: undefined
+            jobCode: undefined,
+            jobName: undefined,
+            jobGroup: undefined,
+            status: undefined
           }
         }
       }
     },
     created() {
+      const jobCode = this.$route.params && this.$route.params.jobCode
+      this.queryParam.queryCond.jobCode = jobCode
       this.getLoggerList()
-      this.getDictDataByDictType('sys_logger_type').then(response => {
-        this.typeOptions = response.data
-      })
-      this.getDictDataByDictType('sys_logger_status').then(response => {
+      this.getDictDataByDictType('sys_common_status').then(response => {
         this.statusOptions = response.data
       })
     },
@@ -186,10 +167,6 @@
       /** 操作日志状态字典翻译 */
       statusFormat(row) {
         return this.handleDictLabel(this.statusOptions, row.status)
-      },
-      /** 操作日志类型字典翻译 */
-      typeFormat(row) {
-        return this.handleDictLabel(this.typeOptions, row.type)
       },
       /** 搜索按钮操作 */
       handleQuery() {

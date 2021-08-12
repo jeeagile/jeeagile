@@ -1,9 +1,11 @@
-package com.jeeagile.quartz.entity;
+package com.jeeagile.quartz.vo;
 
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.quartz.entity.AgileQuartzJob;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * @author JeeAgile
@@ -13,6 +15,6 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileQuartzLog extends AgileBaseModel<AgileQuartzLog> {
-
+public class AgileQuartzJobInfo extends AgileQuartzJob {
+    private Date nextTime;
 }
