@@ -48,12 +48,13 @@
 
     <el-table v-loading="loading" :data="loggerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="任务编码" align="center" prop="jobCode" :show-overflow-tooltip="true"/>
+      <el-table-column label="任务编码" align="center" prop="jobCode"/>
       <el-table-column label="任务名称" align="center" prop="jobName" :show-overflow-tooltip="true"/>
       <el-table-column label="任务分组" align="center" prop="jobGroup" :show-overflow-tooltip="true"/>
       <el-table-column label="Bean名称" align="center" prop="beanName" :show-overflow-tooltip="true"/>
       <el-table-column label="执行方法" align="center" prop="methodName" :show-overflow-tooltip="true"/>
-      <el-table-column label="执行时间" align="center" prop="startTime" :show-overflow-tooltip="true"/>
+      <el-table-column label="执行时间" align="center" prop="startTime" width="150px"/>
+      <el-table-column label="执行状态" align="center" prop="status" :formatter="statusFormat"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)"
@@ -92,6 +93,21 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="执行参数：">{{ form.methodParam }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="开始时间：">{{ form.startTime }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="结束时间：">{{ form.stopTime }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="执行状态：">{{ statusFormat(form) }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="执行时间：">{{ form.executeTime }}毫秒</el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item v-if="form.status === 1" label="异常信息：">{{ form.message }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -164,7 +180,7 @@
           }
         )
       },
-      /** 操作日志状态字典翻译 */
+      /** 执行状态字典翻译 */
       statusFormat(row) {
         return this.handleDictLabel(this.statusOptions, row.status)
       },
