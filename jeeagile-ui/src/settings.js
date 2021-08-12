@@ -2,7 +2,7 @@ module.exports = {
   /**
    * 标题
    */
-  title: 'JeeAgile 敏捷快速开发平台',
+  title: 'JeeAgile',
 
   /**
    * 是否系统布局配置

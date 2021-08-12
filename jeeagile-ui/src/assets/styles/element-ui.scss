@@ -53,6 +53,14 @@
   margin: 0 auto;
 }
 
+.el-dialog__body {
+  padding: 10px;
+}
+
+.el-dialog__footer {
+  padding: 10px;
+}
+
 // refine element ui upload
 .upload-container {
   .el-upload {

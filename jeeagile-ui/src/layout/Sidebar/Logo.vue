@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title: 'JeeAgile 敏捷快速开发平台',
+      title: 'JeeAgile',
       logo: logoImg
     }
   }
@@ -49,7 +49,6 @@ export default {
   height: 50px;
   line-height: 50px;
   background: #2b2f3a;
-  text-align: center;
   overflow: hidden;
 
   & .sidebar-logo-link {
@@ -60,7 +59,8 @@ export default {
       width: 32px;
       height: 32px;
       vertical-align: middle;
-      margin-right: 12px;
+      margin-left: 10px;
+      margin-right: 30px;
     }
 
     & .sidebar-title {
