@@ -119,7 +119,7 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
                 wrapper.eq(AgileSysConfig::getConfigKey, agileSysConfig.getConfigKey()).or().eq(AgileSysConfig::getConfigName, agileSysConfig.getConfigName())
         );
         if (this.count(queryWrapper) > 0) {
-            throw new AgileValidateException("参数名称或参数键名不能与已存在的数据重复！");
+            throw new AgileValidateException("参数名称或参数键名已存在！");
         }
     }
 }
