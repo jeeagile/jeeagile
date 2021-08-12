@@ -15,7 +15,7 @@ create table agile_logger_login
   device_name           varchar(100) not null comment '请求设备名称',
   os_name               varchar(100) not null comment '请求设备操作系统名称',
   browser_name          varchar(100) not null comment '请求浏览器名称',
-  status                varchar(1) not null comment '登录状态',
+  status                varchar(1) not null comment '登录状态（0：成功 1：失败）',
   message               longtext comment '登录信息',
   primary key (id)
 );
@@ -43,7 +43,7 @@ create table agile_logger_operate
   os_name               varchar(100) not null comment '请求设备操作系统名称',
   browser_name          varchar(100) not null comment '请求浏览器名称',
   execute_time          decimal(10,0) not null comment '执行时间(毫秒)',
-  status                varchar(1) not null comment '日志状态',
+  status                varchar(1) not null comment '日志状态（0：成功 1：失败）',
   message               longtext comment '异常信息',
   create_user           varchar(32) default null comment '创建人',
   create_time           datetime default null comment '创建时间',

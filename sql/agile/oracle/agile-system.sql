@@ -324,7 +324,12 @@ INSERT INTO agile_sys_menu VALUES ('40102','401','任务修改',2,'','#','#','F'
 INSERT INTO agile_sys_menu VALUES ('40103','401','任务删除',3,'','#','#','F','0','0','1','quartz:job:delete','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('40104','401','状态修改',4,'','#','#','F','0','0','1','quartz:job:status','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('5','0','日志管理',5,'','logger','log','M','0','0','1','','日志管理目录',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('402','4','执行日志',1,'quartz/job/logger/index','jobLogger','logger','C','0','0','1','job:logger:query','操作日志菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40201','402','查看',1,'','','','F','0','0','1','job:logger:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40202','402','清空',2,'','','','F','0','0','1','job:logger:clear','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40203','402','删除',3,'','#','#','F','0','0','1','job:logger:delete','',NULL,NULL,NULL,NULL);
+
+INSERT INTO agile_sys_menu VALUES ('5','0','日志管理',5,'','logger','logger','M','0','0','1','','日志管理目录',NULL,NULL,NULL,NULL);
 
 INSERT INTO agile_sys_menu VALUES ('501','5','操作日志',1,'logger/operate/index','operate','operate','C','0','0','1','logger:operate:list','操作日志菜单',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50101','501','查看',1,'','','','F','0','0','1','logger:operate:detail','',NULL,NULL,NULL,NULL);

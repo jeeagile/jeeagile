@@ -105,7 +105,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '登录状态',
+   '登录状态（0：成功 1：失败）',
    'user', @CurrentUser, 'table', 'agile_logger_login', 'column', 'status'
 go
 
@@ -268,7 +268,7 @@ go
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
-   '日志状态',
+   '日志状态（0：成功 1：失败）',
    'user', @CurrentUser, 'table', 'agile_logger_operate', 'column', 'status'
 go
 

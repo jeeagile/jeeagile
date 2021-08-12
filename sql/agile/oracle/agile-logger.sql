@@ -31,7 +31,7 @@ comment on column agile_logger_login.server_address is '服务器ip地址';
 comment on column agile_logger_login.device_name is '请求设备名称';
 comment on column agile_logger_login.os_name is '请求设备操作系统名称';
 comment on column agile_logger_login.browser_name is '请求浏览器名称';
-comment on column agile_logger_login.status is '登录状态';
+comment on column agile_logger_login.status is '登录状态（0：成功 1：失败）';
 comment on column agile_logger_login.message is '登录信息';
 
 /*==============================================================*/
@@ -82,7 +82,7 @@ comment on column agile_logger_operate.device_name is '请求设备名称';
 comment on column agile_logger_operate.os_name is '请求设备操作系统名称';
 comment on column agile_logger_operate.browser_name is '请求浏览器名称';
 comment on column agile_logger_operate.execute_time is '执行时间(毫秒)';
-comment on column agile_logger_operate.status is '日志状态';
+comment on column agile_logger_operate.status is '日志状态（0：成功 1：失败）';
 comment on column agile_logger_operate.message is '异常信息';
 comment on column agile_logger_operate.create_user is '创建人';
 comment on column agile_logger_operate.create_time is '创建时间';
