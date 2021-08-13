@@ -13,19 +13,20 @@ import java.util.Map;
 @Slf4j
 @Component("agileTask")
 public class AgileTask {
-    public void text() {
+
+    public void task() {
         log.debug("定时任务测试！");
     }
 
-    public void text(int ss) {
-        log.debug("定时任务测试！" + ss);
+    public void task(int param) {
+        log.debug("定时任务测试，参数：" + param);
     }
 
-    public void text(int ss, String ssss) {
-        log.debug("定时任务测试！" + ss + ":" + ssss);
+    public void task(int paramOne, boolean paramTwo) {
+        log.debug("定时任务测试，参数：" + paramOne + "----" + paramTwo);
     }
 
-    public void text(int ss, String ssss, Map param) {
-        log.debug("定时任务测试！" + ss + ":" + ssss + ":" + param.toString());
+    public void task(int paramOne, double paramTwo, Map paramThree) {
+        log.debug("定时任务测试，参数：" + paramOne + "----" + paramTwo + "-----" + paramThree.toString());
     }
 }
