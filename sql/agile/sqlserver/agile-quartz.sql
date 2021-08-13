@@ -155,6 +155,10 @@ execute sp_addextendedproperty 'MS_Description',
    'user', @CurrentUser, 'table', 'agile_quartz_job', 'column', 'update_time'
 go
 
+INSERT INTO agile_quartz_job VALUES ('1','无参同名方法','001','task','0/20 * * * * ? *','0','agileTask','task','','1','1',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_quartz_job VALUES ('2','一个参数同名方法','002','task','0/20 * * * * ? *','0','agileTask','task','66','1','1',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_quartz_job VALUES ('3','两个参数同名方法','003','task','0/20 * * * * ? *','0','agileTask','task','88&true','1','1',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_quartz_job VALUES ('4','三个参数同名方法（复杂对象）','004','task','0/20 * * * * ? *','0','agileTask','task','66&66.88&{code:33,name:\"agile\",group:\"task\"}','1','1',NULL,NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
 /* Table: agile_quartz_job_logger 任务执行日志表                 */
@@ -277,4 +281,5 @@ go
 
 /*==============================================================*/
 /* spring boot quartz 默认表（可到官方自行下载）                 */
+/* 官网地址：http://www.quartz-scheduler.org/                   */
 /*==============================================================*/
