@@ -131,6 +131,7 @@ public class AgileQuartzJobServiceImpl extends AgileBaseServiceImpl<AgileQuartzJ
                 queryWrapper.lambda().eq(AgileQuartzJob::getJobStatus, agileQuartzJob.getJobStatus());
             }
         }
+        queryWrapper.lambda().orderByAsc(AgileQuartzJob::getJobCode);
         return queryWrapper;
     }
 }
