@@ -125,7 +125,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="执行参数" prop="remark">
+            <el-form-item prop="methodParam">
+              <span slot="label">执行参数
+                <el-tooltip content="存在多个同名方法将根据参数个数确定执行方法，如果不存在则随机获取一个同名方法执行" placement="top">
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </span>
               <el-input v-model="form.methodParam" type="textarea" placeholder="多个参数之间用&符隔开，支持json格式参数（通过json直接转对象使用）"/>
             </el-form-item>
           </el-col>
