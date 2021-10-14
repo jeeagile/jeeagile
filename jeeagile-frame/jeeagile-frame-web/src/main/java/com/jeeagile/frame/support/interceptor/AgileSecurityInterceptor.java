@@ -53,15 +53,16 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             if (agileSecurity == null) {
                 throw new AgileAuthException("请设置用户安全接口类《UserSecurity》");
             }
-            //如果为超管用户则不在进行权限校验
-            if (agileSecurity.getUserData().isSuperAdmin()) {
-                return;
-            }
 
             //演示模式拦截
             AgileDemo agileDemo = handlerMethod.getMethodAnnotation(AgileDemo.class);
             if (agileDemo != null && AgileUtil.isDemoEnabled()) {
                 throw new AgileDemoException();
+            }
+
+            //如果为超管用户则不在进行权限校验
+            if (agileSecurity.getUserData().isSuperAdmin()) {
+                return;
             }
 
             AgileRequiresAuthentication agileRequiresAuthentication = handlerMethod.getMethodAnnotation(AgileRequiresAuthentication.class);

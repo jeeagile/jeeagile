@@ -3,6 +3,8 @@ package com.jeeagile.system.vo;
 import com.jeeagile.frame.vo.AgileBaseVo;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * @author JeeAgile
@@ -10,6 +12,8 @@ import lombok.Data;
  * @description
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 public class AgileUpdatePwd extends AgileBaseVo {
     /**
      * 用户ID

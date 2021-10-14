@@ -8,7 +8,7 @@
 - JeeAgile架构以Spring Boot为核心，将代码架构分为model层、api层、service层和web层共四层，可基于配置和自定义注解进行单体应用和分布式应用切换。
 - JeeAgile对广大码农同学完全开源，同时也会根据广大码农同学的意见不断优化和改进。
 
-**开发文档：**  [http://docs.jeeagile.vip](http://docs.jeeagile.vip) ---完善中，敬请期待
+**开发文档：**  [http://docs.jeeagile.vip](http://docs.jeeagile.vip)
 
 **体验地址：**  [http://demo.jeeagile.vip](http://demo.jeeagile.vip)
 
