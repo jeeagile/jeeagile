@@ -50,7 +50,7 @@ import static org.springframework.core.GenericTypeResolver.resolveTypeArgument;
  * @date 2021-03-21
  * @description
  */
-public abstract class AbstractProviderBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor,MergedBeanDefinitionPostProcessor, PriorityOrdered,
+public abstract class AbstractProviderBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor, MergedBeanDefinitionPostProcessor, PriorityOrdered,
         BeanFactoryAware, EnvironmentAware, DisposableBean {
 
     private final static int CACHE_SIZE = Integer.getInteger("", 32);
@@ -122,7 +122,7 @@ public abstract class AbstractProviderBeanPostProcessor implements SmartInstanti
             @Override
             public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
                 for (Class<? extends Annotation> annotationType : getAnnotationTypes()) {
-                    AnnotationAttributes attributes = getAnnotationAttributes(field, annotationType, getEnvironment(), true, true);
+                    AnnotationAttributes attributes = getAnnotationAttributes(field, annotationType, getEnvironment(), true, true, new String[0]);
                     if (attributes != null) {
                         attributes = getDubboProviderAnnotationAttributes(attributes);
                         if (Modifier.isStatic(field.getModifiers())) {
@@ -182,7 +182,7 @@ public abstract class AbstractProviderBeanPostProcessor implements SmartInstanti
     private AnnotationAttributes getDubboProviderAnnotationAttributes(AnnotationAttributes annotationAttributes) {
         if (annotationAttributes.containsKey("dubboProvider")) {
             DubboProvider dubboProvider = annotationAttributes.getAnnotation("dubboProvider", DubboProvider.class);
-            AnnotationAttributes dubboAnnotationAttributes = org.springframework.core.annotation.AnnotationUtils.getAnnotationAttributes(dubboProvider, false, false);
+            AnnotationAttributes dubboAnnotationAttributes = getAnnotationAttributes(dubboProvider, getEnvironment(), true, new String[0]);
             annotationAttributes.putAll(dubboAnnotationAttributes);
             annotationAttributes.remove("dubboProvider");
             annotationAttributes.remove("rabbitProvider");
