@@ -155,7 +155,7 @@ public abstract class AbstractProviderBeanPostProcessor implements SmartInstanti
                     return;
                 }
                 for (Class<? extends Annotation> annotationType : getAnnotationTypes()) {
-                    AnnotationAttributes attributes = getAnnotationAttributes(bridgedMethod, annotationType, getEnvironment(), true, true);
+                    AnnotationAttributes attributes = getAnnotationAttributes(bridgedMethod, annotationType, getEnvironment(), true, true, new String[0]);
                     if (attributes != null && method.equals(ClassUtils.getMostSpecificMethod(method, beanClass))) {
                         attributes = getDubboProviderAnnotationAttributes(attributes);
                         if (Modifier.isStatic(method.getModifiers())) {
