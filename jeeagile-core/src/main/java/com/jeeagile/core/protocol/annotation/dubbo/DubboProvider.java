@@ -161,7 +161,7 @@ public @interface DubboProvider {
     /**
      * Timeout value for service invocation, default value is 0
      */
-    int timeout() default 120000;
+    int timeout() default 0;
 
     /**
      * Specify cache implementation for service invocation, legal values include: lru, threadlocal, jcache
