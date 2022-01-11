@@ -6,6 +6,7 @@ import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileOnlineUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageUtil;
@@ -38,6 +39,7 @@ public class AgileOnlineController extends AgileBaseController {
         return this.rtnSuccess(getOnlineUserList(agilePageable));
     }
 
+    @AgileDemo
     @PostMapping(value = "/forceLogout")
     @ApiOperation(value = "强剔用户", notes = "强剔用户")
     @AgileRequiresPermissions("monitor:online:forceLogout")
@@ -46,6 +48,7 @@ public class AgileOnlineController extends AgileBaseController {
         return this.rtnSuccess();
     }
 
+    @AgileDemo
     @PostMapping(value = "/batchLogout")
     @ApiOperation(value = "批量强剔用户", notes = "批量强剔用户")
     @AgileRequiresPermissions("monitor:online:batchLogout")

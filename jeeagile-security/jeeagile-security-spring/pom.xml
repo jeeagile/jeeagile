@@ -22,10 +22,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-core</artifactId>
         </dependency>

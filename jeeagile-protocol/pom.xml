@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>jeeagile-protocol-dubbo</module>
-        <module>jeeagile-protocol-rabbit</module>
-        <module>jeeagile-protocol-cloud</module>
+<!--        <module>jeeagile-protocol-rabbit</module>-->
+<!--        <module>jeeagile-protocol-cloud</module>-->
     </modules>
 </project>

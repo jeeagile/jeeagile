@@ -32,12 +32,12 @@ public @interface RabbitService {
     /**
      * 接收超时时间
      */
-    long receiveTimeout() default 0L;
+    long receiveTimeout() default 50000L;
 
     /**
      * 响应超时时间
      */
-    long replyTimeout() default 5000L;
+    long replyTimeout() default 50000L;
 
     /**
      * 消息的过期时间

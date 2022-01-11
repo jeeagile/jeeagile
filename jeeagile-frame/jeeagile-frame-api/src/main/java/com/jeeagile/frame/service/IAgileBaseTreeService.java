@@ -22,5 +22,5 @@ public interface IAgileBaseTreeService<T> extends IAgileBaseService<T> {
      * @param parentUuid
      * @return
      */
-    int countChild(Serializable parentUuid);
+    long countChild(Serializable parentUuid);
 }

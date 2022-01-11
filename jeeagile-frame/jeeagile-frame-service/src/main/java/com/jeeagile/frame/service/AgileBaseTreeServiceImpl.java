@@ -25,7 +25,7 @@ public class AgileBaseTreeServiceImpl<M extends AgileBaseTreeMapper<T>, T extend
     }
 
     @Override
-    public int countChild(Serializable parentId) {
+    public long countChild(Serializable parentId) {
         QueryWrapper<T> wrapper = new QueryWrapper<>();
         if (parentId == null) {
             parentId = "0";
