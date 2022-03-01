@@ -5,6 +5,7 @@ import com.jeeagile.core.util.StringUtil;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,6 +46,9 @@ public class SpringServletUtil {
         return httpServletResponse;
     }
 
+    /**
+     * 根据上下文获取ServletRequestAttributes
+     */
     public static ServletRequestAttributes getServletRequestAttributes() {
         try {
             return (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -53,15 +57,43 @@ public class SpringServletUtil {
         }
     }
 
+    /**
+     * 获取用户TOKEN
+     */
     public static String getUserToken() {
         return getUserToken(getHttpServletRequest());
     }
 
+    /**
+     * 获取用户TOKEN
+     */
     public static String getUserToken(HttpServletRequest httpServletRequest) {
         String userToken = httpServletRequest.getHeader(AgileConstants.AGILE_TOKEN);
         if (StringUtil.isEmpty(userToken)) {
             userToken = httpServletRequest.getParameter(AgileConstants.AGILE_TOKEN);
         }
+        if (StringUtil.isEmpty(userToken)) {
+            userToken = getCookieValue(httpServletRequest, AgileConstants.AGILE_TOKEN);
+        }
         return userToken;
+    }
+
+    /**
+     * 根据COOKIE名称获取对应得COOKIE值
+     */
+    public static String getSpringCookieValue(String cookieName) {
+        return getCookieValue(getHttpServletRequest(), cookieName);
+    }
+
+    /**
+     * 根据COOKIE名称获取对应得COOKIE值
+     */
+    public static String getCookieValue(HttpServletRequest httpServletRequest, String cookieName) {
+        for (Cookie cookie : httpServletRequest.getCookies()) {
+            if (cookie.getName().equals(cookieName)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }
