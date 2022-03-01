@@ -31,19 +31,14 @@ public @interface DubboProvider {
     String client() default "";
 
     /**
-     * Whether to enable generic invocation, default value is false
-     */
-    boolean generic() default false;
-
-    /**
      * Check if service provider is available during boot up, default value is true
      */
     boolean check() default true;
 
     /**
-     * Whether eager initialize the reference bean when all properties are set, default value is false
+     * Whether eager initialize the reference bean when all properties are set, default value is true ( null as true)
      */
-    boolean init() default false;
+    boolean init() default true;
 
     /**
      * Whether to make connection when the client is created, the default value is false
@@ -53,7 +48,7 @@ public @interface DubboProvider {
     /**
      * Export an stub service for event dispatch, default value is false.
      * <p>
-     * see org.apache.dubbo.processor.Constants#STUB_EVENT_METHODS_KEY
+     * see org.apache.dubbo.rpc.Constants#STUB_EVENT_METHODS_KEY
      */
     boolean stubevent() default false;
 
@@ -90,14 +85,14 @@ public @interface DubboProvider {
     /**
      * Maximum connections service provider can accept, default value is 0 - connection is shared
      */
-    int connections() default 0;
+    int connections() default -1;
 
     /**
      * The callback instance limit peer connection
      * <p>
-     * see org.apache.dubbo.processor.Constants#DEFAULT_CALLBACK_INSTANCES
+     * see org.apache.dubbo.rpc.Constants#DEFAULT_CALLBACK_INSTANCES
      */
-    int callbacks() default 0;
+    int callbacks() default -1;
 
     /**
      * Callback method name when connected, default value is empty string
@@ -124,12 +119,10 @@ public @interface DubboProvider {
      * <p>
      * see Constants#DEFAULT_RETRIES
      */
-    int retries() default 2;
+    int retries() default -1;
 
     /**
      * Load balance strategy, legal values include: random, roundrobin, leastactive
-     * <p>
-     * see Constants#DEFAULT_LOADBALANCE
      */
     String loadbalance() default "";
 
@@ -141,7 +134,7 @@ public @interface DubboProvider {
     /**
      * Maximum active requests allowed, default value is 0
      */
-    int actives() default 0;
+    int actives() default -1;
 
     /**
      * Whether the async request has already been sent, the default value is false
@@ -154,14 +147,14 @@ public @interface DubboProvider {
     String mock() default "";
 
     /**
-     * Whether to use JSR303 validation, legal values are: true
+     * Whether to use JSR303 validation, legal values are: true, false
      */
     String validation() default "";
 
     /**
      * Timeout value for service invocation, default value is 0
      */
-    int timeout() default 0;
+    int timeout() default -1;
 
     /**
      * Specify cache implementation for service invocation, legal values include: lru, threadlocal, jcache
@@ -183,14 +176,9 @@ public @interface DubboProvider {
     String[] listener() default {};
 
     /**
-     * Customized parameter key-value pair, for example: {key1, value1, key2, value2}
+     * Customized parameter key-value pair, for example: {key1, value1, key2, value2} or {"key1=value1", "key2=value2"}
      */
     String[] parameters() default {};
-
-    /**
-     * Application associated name
-     */
-    String application() default "";
 
     /**
      * Module associated name
@@ -214,8 +202,6 @@ public @interface DubboProvider {
 
     /**
      * The communication protocol of Dubbo Service
-     *
-     * @return the default value is ""
      */
     String protocol() default "";
 
@@ -229,15 +215,32 @@ public @interface DubboProvider {
      */
     String merger() default "";
 
+//    /**
+//     * methods support
+//     */
+//    AgileMethod[] methods() default {};
+
     /**
      * The id
+     * NOTE: The id attribute is ignored when using @DubboReference on @Bean method
      *
      * @return default value is empty
+     * @since 2.7.3
      */
     String id() default "";
 
     /**
-     * @return The service names that the Dubbo interface subscribed
+     * declares which app or service this interface belongs to
      */
-    String[] services() default {};
+    String[] providedBy() default {};
+
+    /**
+     * the scope for referring/exporting a service, if it's local, it means searching in current JVM only.
+     */
+    String scope() default "";
+
+    /**
+     * Weather the reference is refer asynchronously
+     */
+    boolean referAsync() default false;
 }

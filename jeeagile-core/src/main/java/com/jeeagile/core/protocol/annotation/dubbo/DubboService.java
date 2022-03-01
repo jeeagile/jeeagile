@@ -28,7 +28,7 @@ public @interface DubboService {
     boolean export() default true;
 
     /**
-     * Service token, default value is false
+     * Service token, default value is empty string
      */
     String token() default "";
 
@@ -43,14 +43,14 @@ public @interface DubboService {
     boolean dynamic() default true;
 
     /**
-     * Access log for the service, default value is ""
+     * Access log for the service, default value is empty string
      */
     String accesslog() default "";
 
     /**
-     * Maximum concurrent executes for the service, default value is 0 - no limits
+     * Maximum concurrent executes for the service, default value is -1 - no limits
      */
-    int executes() default 0;
+    int executes() default -1;
 
     /**
      * Whether to register the service to register center, default value is true
@@ -58,21 +58,24 @@ public @interface DubboService {
     boolean register() default true;
 
     /**
-     * Service weight value, default value is 0
+     * Service weight value, default value is -1
      */
-    int weight() default 0;
+    int weight() default -1;
 
     /**
-     * Service doc, default value is ""
+     * Service doc, default value is empty string
      */
     String document() default "";
 
     /**
-     * Delay time for service registration, default value is 0
+     * Delay time for service registration, default value is -1
      */
-    int delay() default 0;
+    int delay() default -1;
 
-
+    /**
+     * @see DubboService#stub()
+     * @deprecated
+     */
     String local() default "";
 
     /**
@@ -91,16 +94,16 @@ public @interface DubboService {
     String proxy() default "";
 
     /**
-     * Maximum connections service provider can accept, default value is 0 - connection is shared
+     * Maximum connections service provider can accept, default value is -1 - connection is shared
      */
-    int connections() default 0;
+    int connections() default -1;
 
     /**
      * The callback instance limit peer connection
      * <p>
-     * see org.apache.dubbo.processor.Constants#DEFAULT_CALLBACK_INSTANCES
+     * see org.apache.dubbo.common.constants.CommonConstants.DEFAULT_CALLBACK_INSTANCES
      */
-    int callbacks() default 0;
+    int callbacks() default -1;
 
     /**
      * Callback method name when connected, default value is empty string
@@ -125,17 +128,22 @@ public @interface DubboService {
     /**
      * Service invocation retry times
      */
-    int retries() default 2;
+    int retries() default -1;
 
     /**
      * Load balance strategy, legal values include: random, roundrobin, leastactive
      */
-    String loadbalance() default "random";
+    String loadbalance() default "";
 
     /**
-     * Maximum active requests allowed, default value is 0
+     * Whether to enable async invocation, default value is false
      */
-    int actives() default 0;
+    boolean async() default false;
+
+    /**
+     * Maximum active requests allowed, default value is -1
+     */
+    int actives() default -1;
 
     /**
      * Whether the async request has already been sent, the default value is false
@@ -148,14 +156,14 @@ public @interface DubboService {
     String mock() default "";
 
     /**
-     * Whether to use JSR303 validation, legal values are: true
+     * Whether to use JSR303 validation, legal values are: true, false
      */
     String validation() default "";
 
     /**
-     * Timeout value for service invocation, default value is 0
+     * Timeout value for service invocation, default value is -1
      */
-    int timeout() default 120000;
+    int timeout() default -1;
 
     /**
      * Specify cache implementation for service invocation, legal values include: lru, threadlocal, jcache
@@ -179,7 +187,10 @@ public @interface DubboService {
 
     /**
      * Application spring bean name
+     *
+     * @deprecated This attribute was deprecated, use bind application/module of spring ApplicationContext
      */
+    @Deprecated
     String application() default "";
 
     /**
@@ -211,4 +222,21 @@ public @interface DubboService {
      * Service tag name
      */
     String tag() default "";
+
+//    /**
+//     * methods support
+//     *
+//     * @return
+//     */
+//    AgileMethod[] methods() default {};
+
+    /**
+     * the scope for referring/exporting a service, if it's local, it means searching in current JVM only.
+     */
+    String scope() default "";
+
+    /**
+     * Weather the service is export asynchronously
+     */
+    boolean exportAsync() default false;
 }
