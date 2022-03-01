@@ -29,7 +29,7 @@ import java.util.List;
 @Api(value = "部门管理", tags = "部门管理")
 public class AgileSysDeptController extends AgileBaseController {
 
-    @AgileProvider()
+    @AgileProvider
     private IAgileSysDeptService agileSysDeptService;
 
     @PostMapping("/selectList")

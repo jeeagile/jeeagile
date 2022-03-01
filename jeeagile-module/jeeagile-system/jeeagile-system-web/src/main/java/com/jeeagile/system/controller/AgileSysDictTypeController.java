@@ -30,7 +30,7 @@ import java.util.List;
 @RequestMapping("/system/dict/type")
 @Api(value = "字典类型管理", tags = "字典类型管理")
 public class AgileSysDictTypeController extends AgileBaseController {
-    @AgileProvider()
+    @AgileProvider
     private IAgileSysDictTypeService agileSysDictTypeService;
 
     @PostMapping(value = "/selectPage")
