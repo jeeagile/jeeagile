@@ -1,6 +1,6 @@
 package com.jeeagile.monitor.controller;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.protocol.properties.AgileProtocolProperties;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
@@ -28,7 +28,7 @@ import javax.annotation.Resource;
 @Api(value = "服务器监控", tags = "服务器监控")
 public class AgileServerController extends AgileBaseController {
 
-    @AgileProvider
+    @AgileReference
     private IAgileServerService agileServerService;
 
     @Resource

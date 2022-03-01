@@ -5,7 +5,7 @@ import com.jeeagile.system.service.IAgileSysPersonService;
 import com.jeeagile.system.vo.AgilePersonInfo;
 import com.jeeagile.system.vo.AgileUpdatePerson;
 import com.jeeagile.core.constants.AgileConstants;
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgileRequiresUser;
 import com.jeeagile.core.util.AgileUtil;
@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Api(value = "个人中心", tags = "个人中心")
 @RequestMapping("/system/person")
 public class AgileSysPersonController extends AgileBaseController {
-    @AgileProvider
+    @AgileReference
     private IAgileSysPersonService agilePersonService;
 
 

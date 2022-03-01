@@ -1,6 +1,6 @@
 package com.jeeagile.system.controller;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgileRequiresUser;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/system/user")
 public class AgileSysLoginController extends AgileBaseController {
 
-    @AgileProvider
+    @AgileReference
     private IAgileUserDetailsService agileUserDetailsService;
 
     @PostMapping("/login")

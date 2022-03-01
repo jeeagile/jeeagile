@@ -1,6 +1,6 @@
 package com.jeeagile.quartz.controller;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/quartz/job/logger")
 @Api(value = "任务执行日志管理", tags = "任务执行日志管理")
 public class AgileQuartzJobLoggerController extends AgileBaseController {
-    @AgileProvider
+    @AgileReference
     private IAgileQuartzJobLoggerService agileQuartzLoggerService;
 
     @PostMapping(value = "/page")

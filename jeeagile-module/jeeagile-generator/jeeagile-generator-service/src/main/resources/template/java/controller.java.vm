@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.enums.AgileLoggerType;
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/${moduleName}/${businessName}")
 public class ${ClassName}Controller extends AgileBaseController {
 
-    @AgileProvider
+    @AgileReference
     private I${ClassName}Service ${className}Service;
 #if($tableType!="tree")
 

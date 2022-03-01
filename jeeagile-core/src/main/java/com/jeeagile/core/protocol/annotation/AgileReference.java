@@ -1,8 +1,8 @@
 package com.jeeagile.core.protocol.annotation;
 
 
-import com.jeeagile.core.protocol.annotation.dubbo.DubboProvider;
-import com.jeeagile.core.protocol.annotation.rabbit.RabbitProvider;
+import com.jeeagile.core.protocol.annotation.dubbo.DubboReference;
+import com.jeeagile.core.protocol.annotation.rabbit.RabbitReference;
 
 import java.lang.annotation.*;
 
@@ -14,7 +14,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface AgileProvider {
+public @interface AgileReference {
 
     /**
      * 接口类型
@@ -39,12 +39,12 @@ public @interface AgileProvider {
     /**
      * rabbit配置
      */
-    RabbitProvider rabbitProvider() default @RabbitProvider();
+    RabbitReference rabbitReference() default @RabbitReference();
 
     /**
      * dubbo配置
      */
-    DubboProvider dubboProvider() default @DubboProvider();
+    DubboReference dubboReference() default @DubboReference();
 
     /**
      * 方法配置

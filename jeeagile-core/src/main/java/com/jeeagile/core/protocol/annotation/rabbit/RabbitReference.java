@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  */
 @Target({})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RabbitProvider {
+public @interface RabbitReference {
     /**
      * 用来生成交换机名、队列名、路由名
      */

@@ -1,8 +1,7 @@
 package com.jeeagile.system.controller;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
-import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
@@ -31,7 +30,7 @@ import java.util.List;
 @Api(value = "字典数据管理", tags = "字典数据管理")
 public class AgileSysDictDataController extends AgileBaseController {
 
-    @AgileProvider
+    @AgileReference
     private IAgileSysDictDataService agileSysDictDataService;
 
     @PostMapping(value = "/selectPage")

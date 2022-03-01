@@ -2,8 +2,8 @@ package com.jeeagile.core.autoconfigure;
 
 import com.jeeagile.core.cache.code.AgileCodeCacheListener;
 import com.jeeagile.core.constants.AgileConstants;
-import com.jeeagile.core.protocol.processor.LocalProviderBeanPostProcessor;
-import com.jeeagile.core.protocol.processor.LocalServiceBeanPostProcessor;
+import com.jeeagile.core.protocol.processor.AgileReferenceBeanPostProcessor;
+import com.jeeagile.core.protocol.processor.AgileServiceBeanPostProcessor;
 import com.jeeagile.core.protocol.properties.AgileProtocolProperties;
 import com.jeeagile.core.security.properties.AgileSecurityProperties;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -26,14 +26,14 @@ public class AgileCoreAutoConfigure {
 
     @Bean
     @ConditionalOnProperty(prefix = AgileConstants.AGILE_PROTOCOL, name = AgileConstants.AGILE_PROTOCOL_TYPE, havingValue = "local", matchIfMissing = true)
-    public LocalProviderBeanPostProcessor localProviderBeanPostProcessor() {
-        return new LocalProviderBeanPostProcessor();
+    public AgileReferenceBeanPostProcessor agileReferenceBeanPostProcessor() {
+        return new AgileReferenceBeanPostProcessor();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = AgileConstants.AGILE_PROTOCOL, name = AgileConstants.AGILE_PROTOCOL_TYPE, havingValue = "local", matchIfMissing = true)
-    public LocalServiceBeanPostProcessor localServiceBeanPostProcessor() {
-        return new LocalServiceBeanPostProcessor();
+    public AgileServiceBeanPostProcessor agileServiceBeanPostProcessor() {
+        return new AgileServiceBeanPostProcessor();
     }
 
     @Bean

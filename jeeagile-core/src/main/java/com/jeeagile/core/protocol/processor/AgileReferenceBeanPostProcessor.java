@@ -1,6 +1,6 @@
 package com.jeeagile.core.protocol.processor;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
@@ -42,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2021-03-21
  * @description
  */
-public class LocalProviderBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor, MergedBeanDefinitionPostProcessor, PriorityOrdered, BeanFactoryAware {
+public class AgileReferenceBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor, MergedBeanDefinitionPostProcessor, PriorityOrdered, BeanFactoryAware {
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -59,16 +59,16 @@ public class LocalProviderBeanPostProcessor implements SmartInstantiationAwareBe
 
     /**
      * Create a new {@code AutowiredAnnotationBeanPostProcessor} for Spring's
-     * standard {@link AgileProvider @Autowired} and {@link Value @Value} annotations.
+     * standard {@link AgileReference @Autowired} and {@link Value @Value} annotations.
      * if available.
      */
     @SuppressWarnings("unchecked")
-    public LocalProviderBeanPostProcessor() {
-        this.agileInvokeAnnotationTypes.add(AgileProvider.class);
+    public AgileReferenceBeanPostProcessor() {
+        this.agileInvokeAnnotationTypes.add(AgileReference.class);
         this.agileInvokeAnnotationTypes.add(Value.class);
         try {
             this.agileInvokeAnnotationTypes.add((Class<? extends Annotation>)
-                    ClassUtils.forName("javax.inject.Inject", LocalProviderBeanPostProcessor.class.getClassLoader()));
+                    ClassUtils.forName("javax.inject.Inject", AgileReferenceBeanPostProcessor.class.getClassLoader()));
             logger.trace("JSR-330 'javax.inject.Inject' annotation found and supported for autowiring");
         } catch (ClassNotFoundException ex) {
             // JSR-330 API not available - simply skip.
@@ -80,7 +80,7 @@ public class LocalProviderBeanPostProcessor implements SmartInstantiationAwareBe
      * Set the 'autowired' annotation type, to be used on constructors, fields,
      * setter methods, and arbitrary config methods.
      * <p>The default autowired annotation types are the Spring-provided
-     * {@link AgileProvider @Autowired} and {@link Value @Value} annotations as well
+     * {@link AgileReference @Autowired} and {@link Value @Value} annotations as well
      * <p>This setter property exists so that developers can provide their own
      * (non-Spring-specific) annotation type to indicate that a member is supposed
      * to be autowired.
@@ -95,7 +95,7 @@ public class LocalProviderBeanPostProcessor implements SmartInstantiationAwareBe
      * Set the 'autowired' annotation types, to be used on constructors, fields,
      * setter methods, and arbitrary config methods.
      * <p>The default autowired annotation types are the Spring-provided
-     * {@link AgileProvider @Autowired} and {@link Value @Value} annotations as well
+     * {@link AgileReference @Autowired} and {@link Value @Value} annotations as well
      * <p>This setter property exists so that developers can provide their own
      * (non-Spring-specific) annotation types to indicate that a member is supposed
      * to be autowired.
@@ -362,7 +362,7 @@ public class LocalProviderBeanPostProcessor implements SmartInstantiationAwareBe
                         return;
                     }
                     boolean required = determineRequiredStatus(ann);
-                    currElements.add(new LocalProviderBeanPostProcessor.AutowiredFieldElement(field, required));
+                    currElements.add(new AgileReferenceBeanPostProcessor.AutowiredFieldElement(field, required));
                 }
             });
 
@@ -387,7 +387,7 @@ public class LocalProviderBeanPostProcessor implements SmartInstantiationAwareBe
                     }
                     boolean required = determineRequiredStatus(ann);
                     PropertyDescriptor pd = BeanUtils.findPropertyForMethod(bridgedMethod, clazz);
-                    currElements.add(new LocalProviderBeanPostProcessor.AutowiredMethodElement(method, required, pd));
+                    currElements.add(new AgileReferenceBeanPostProcessor.AutowiredMethodElement(method, required, pd));
                 }
             });
 
@@ -554,7 +554,7 @@ public class LocalProviderBeanPostProcessor implements SmartInstantiationAwareBe
                                 String autowiredBeanName = autowiredBeanNames.iterator().next();
                                 if (beanFactory.containsBean(autowiredBeanName) &&
                                         beanFactory.isTypeMatch(autowiredBeanName, field.getType())) {
-                                    this.cachedFieldValue = new LocalProviderBeanPostProcessor.ShortcutDependencyDescriptor(
+                                    this.cachedFieldValue = new AgileReferenceBeanPostProcessor.ShortcutDependencyDescriptor(
                                             desc, autowiredBeanName, field.getType());
                                 }
                             }
@@ -634,7 +634,7 @@ public class LocalProviderBeanPostProcessor implements SmartInstantiationAwareBe
                                     String autowiredBeanName = it.next();
                                     if (beanFactory.containsBean(autowiredBeanName) &&
                                             beanFactory.isTypeMatch(autowiredBeanName, paramTypes[i])) {
-                                        cachedMethodArguments[i] = new LocalProviderBeanPostProcessor.ShortcutDependencyDescriptor(
+                                        cachedMethodArguments[i] = new AgileReferenceBeanPostProcessor.ShortcutDependencyDescriptor(
                                                 descriptors[i], autowiredBeanName, paramTypes[i]);
                                     }
                                 }

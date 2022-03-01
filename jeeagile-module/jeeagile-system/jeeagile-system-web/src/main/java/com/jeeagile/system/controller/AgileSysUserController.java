@@ -2,7 +2,7 @@ package com.jeeagile.system.controller;
 
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
 import com.jeeagile.core.cache.util.AgileCacheUtil;
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "用户管理", tags = "用户管理")
 public class AgileSysUserController extends AgileBaseController {
 
-    @AgileProvider
+    @AgileReference
     private IAgileSysUserService agileSysUserService;
 
     @PostMapping(value = "/selectPage")

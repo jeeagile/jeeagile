@@ -1,6 +1,6 @@
 package com.jeeagile.logger.aspect;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.util.AddressUtil;
 import com.jeeagile.logger.entity.AgileLoggerLogin;
 import com.jeeagile.logger.entity.AgileLoggerOperate;
@@ -19,10 +19,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 class AgileAsyncTask {
-    @AgileProvider
+    @AgileReference
     private IAgileLoggerOperateService agileLoggerOperateService;
 
-    @AgileProvider
+    @AgileReference
     private IAgileLoggerLoginService agileLoggerLoginService;
 
     @Async("AgileAsyncTask")

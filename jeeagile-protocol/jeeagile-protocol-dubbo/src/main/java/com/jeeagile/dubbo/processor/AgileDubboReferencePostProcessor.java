@@ -1,6 +1,6 @@
 package com.jeeagile.dubbo.processor;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import org.apache.dubbo.common.utils.Assert;
 import org.apache.dubbo.common.utils.ClassUtils;
 import org.apache.dubbo.common.utils.StringUtils;
@@ -75,7 +75,7 @@ public class AgileDubboReferencePostProcessor extends AbstractAgileBeanPostProce
     private BeanDefinitionRegistry beanDefinitionRegistry;
 
     public AgileDubboReferencePostProcessor() {
-        super(AgileProvider.class);
+        super(AgileReference.class);
     }
 
     @Override

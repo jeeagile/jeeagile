@@ -14,7 +14,7 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
  * @date 2021-03-21
  * @description
  */
-public class LocalServiceBeanPostProcessor implements BeanDefinitionRegistryPostProcessor {
+public class AgileServiceBeanPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {

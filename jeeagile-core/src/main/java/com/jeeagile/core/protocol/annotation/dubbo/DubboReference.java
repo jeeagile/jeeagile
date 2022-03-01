@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({})
-public @interface DubboProvider {
+public @interface DubboReference {
     /**
      * Service group, default value is empty string
      */
@@ -214,11 +214,6 @@ public @interface DubboProvider {
      * Service merger
      */
     String merger() default "";
-
-//    /**
-//     * methods support
-//     */
-//    AgileMethod[] methods() default {};
 
     /**
      * The id

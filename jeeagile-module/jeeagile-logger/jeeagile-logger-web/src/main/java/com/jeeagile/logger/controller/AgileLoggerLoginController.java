@@ -1,6 +1,6 @@
 package com.jeeagile.logger.controller;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/logger/login")
 @Api(value = "登录日志管理", tags = "登录日志管理")
 public class AgileLoggerLoginController extends AgileBaseController {
-    @AgileProvider
+    @AgileReference
     private IAgileLoggerLoginService agileLoggerLoginService;
 
     @PostMapping(value = "/page")

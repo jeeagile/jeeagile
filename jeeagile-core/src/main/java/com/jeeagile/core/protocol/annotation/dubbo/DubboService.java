@@ -209,13 +209,6 @@ public @interface DubboService {
      */
     String tag() default "";
 
-//    /**
-//     * methods support
-//     *
-//     * @return
-//     */
-//    AgileMethod[] methods() default {};
-
     /**
      * the scope for referring/exporting a service, if it's local, it means searching in current JVM only.
      */

@@ -1,6 +1,6 @@
 package com.jeeagile.system.controller;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
@@ -33,7 +33,7 @@ import java.util.List;
 @Api(value = "角色管理", tags = "角色管理")
 public class AgileSysRoleController extends AgileBaseController {
 
-    @AgileProvider
+    @AgileReference
     private IAgileSysRoleService agileSysRoleService;
 
     @PostMapping(value = "/selectPage")

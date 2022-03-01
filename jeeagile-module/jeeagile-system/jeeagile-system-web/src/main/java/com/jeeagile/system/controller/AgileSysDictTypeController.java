@@ -1,6 +1,6 @@
 package com.jeeagile.system.controller;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
@@ -30,7 +30,7 @@ import java.util.List;
 @RequestMapping("/system/dict/type")
 @Api(value = "字典类型管理", tags = "字典类型管理")
 public class AgileSysDictTypeController extends AgileBaseController {
-    @AgileProvider
+    @AgileReference
     private IAgileSysDictTypeService agileSysDictTypeService;
 
     @PostMapping(value = "/selectPage")

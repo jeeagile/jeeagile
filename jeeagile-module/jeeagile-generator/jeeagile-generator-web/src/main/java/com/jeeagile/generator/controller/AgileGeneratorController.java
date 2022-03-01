@@ -1,6 +1,6 @@
 package com.jeeagile.generator.controller;
 
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
@@ -33,7 +33,7 @@ import java.util.Map;
 @RequestMapping("/generator")
 @Api(value = "代码生成", tags = "代码生成")
 public class AgileGeneratorController extends AgileBaseController {
-    @AgileProvider
+    @AgileReference
     private IAgileGeneratorTableService agileGeneratorTableService;
 
     @PostMapping(value = "/selectTablePage")

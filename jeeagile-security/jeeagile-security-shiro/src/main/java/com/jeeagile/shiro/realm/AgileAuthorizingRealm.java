@@ -3,7 +3,7 @@ package com.jeeagile.shiro.realm;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.exception.AgileFrameException;
-import com.jeeagile.core.protocol.annotation.AgileProvider;
+import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.base.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileBaseUser;
@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class AgileAuthorizingRealm extends AuthorizingRealm {
 
-    @AgileProvider
+    @AgileReference
     private IAgileUserDetailsService agileUserDetailsService;
 
     @Override

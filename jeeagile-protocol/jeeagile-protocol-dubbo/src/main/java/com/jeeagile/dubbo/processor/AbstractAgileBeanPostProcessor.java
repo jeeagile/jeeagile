@@ -16,7 +16,7 @@
  */
 package com.jeeagile.dubbo.processor;
 
-import com.jeeagile.core.protocol.annotation.dubbo.DubboProvider;
+import com.jeeagile.core.protocol.annotation.dubbo.DubboReference;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
@@ -152,7 +152,7 @@ public abstract class AbstractAgileBeanPostProcessor implements MergedBeanDefini
                 for (Class<? extends Annotation> annotationType : getAnnotationTypes()) {
                     AnnotationAttributes attributes = getAnnotationAttributes(field, annotationType, getEnvironment(), true, true);
                     if (attributes != null) {
-                        attributes = getAgileAnnotationAttributes(attributes);
+                        attributes = getAgileReferenceAnnotationAttributes(attributes);
                         if (Modifier.isStatic(field.getModifiers())) {
                             if (logger.isWarnEnabled()) {
                                 logger.warn("@" + annotationType.getName() + " is not supported on static fields: " + field);
@@ -193,7 +193,7 @@ public abstract class AbstractAgileBeanPostProcessor implements MergedBeanDefini
                 for (Class<? extends Annotation> annotationType : getAnnotationTypes()) {
                     AnnotationAttributes attributes = getAnnotationAttributes(bridgedMethod, annotationType, getEnvironment(), true, true);
                     if (attributes != null && method.equals(ClassUtils.getMostSpecificMethod(method, beanClass))) {
-                        attributes = getAgileAnnotationAttributes(attributes);
+                        attributes = getAgileReferenceAnnotationAttributes(attributes);
                         if (Modifier.isStatic(method.getModifiers())) {
                             throw new IllegalStateException("When using @" + annotationType.getName() + " to inject interface proxy, it is not supported on static methods: " + method);
                         }
@@ -210,13 +210,13 @@ public abstract class AbstractAgileBeanPostProcessor implements MergedBeanDefini
         return elements;
     }
 
-    private AnnotationAttributes getAgileAnnotationAttributes(AnnotationAttributes annotationAttributes) {
-        if (annotationAttributes.containsKey("dubboProvider")) {
-            DubboProvider dubboProvider = annotationAttributes.getAnnotation("dubboProvider", DubboProvider.class);
-            AnnotationAttributes dubboAnnotationAttributes = getAnnotationAttributes(dubboProvider, getEnvironment(), true, new String[0]);
+    private AnnotationAttributes getAgileReferenceAnnotationAttributes(AnnotationAttributes annotationAttributes) {
+        if (annotationAttributes.containsKey("dubboReference")) {
+            DubboReference dubboReference = annotationAttributes.getAnnotation("dubboReference", DubboReference.class);
+            AnnotationAttributes dubboAnnotationAttributes = getAnnotationAttributes(dubboReference, getEnvironment(), true, new String[0]);
             annotationAttributes.putAll(dubboAnnotationAttributes);
-            annotationAttributes.remove("dubboProvider");
-            annotationAttributes.remove("rabbitProvider");
+            annotationAttributes.remove("dubboReference");
+            annotationAttributes.remove("rabbitReference");
         }
         return annotationAttributes;
     }
@@ -269,9 +269,6 @@ public abstract class AbstractAgileBeanPostProcessor implements MergedBeanDefini
     @Override
     public void destroy() throws Exception {
         for (Object object : injectedObjectsCache.values()) {
-            if (logger.isInfoEnabled()) {
-                logger.info(object + " was destroying!");
-            }
             if (object instanceof DisposableBean) {
                 ((DisposableBean) object).destroy();
             }
@@ -279,10 +276,6 @@ public abstract class AbstractAgileBeanPostProcessor implements MergedBeanDefini
 
         injectionMetadataCache.clear();
         injectedObjectsCache.clear();
-
-        if (logger.isInfoEnabled()) {
-            logger.info(getClass() + " was destroying!");
-        }
 
     }
 
