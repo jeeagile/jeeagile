@@ -50,11 +50,11 @@
             <version>8.0.22</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>oracle</groupId>-->
-        <!--            <artifactId>oracle</artifactId>-->
-        <!--            <version>6.0</version>-->
-        <!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>oracle</groupId>-->
+<!--            <artifactId>oracle</artifactId>-->
+<!--            <version>6.0</version>-->
+<!--        </dependency>-->
 
 <!--        <dependency>-->
 <!--            <groupId>com.microsoft.sqlserver</groupId>-->
@@ -63,10 +63,10 @@
 <!--            <scope>runtime</scope>-->
 <!--        </dependency>-->
 
-        <!--        <dependency>-->
-        <!--            <groupId>com.jeeagile</groupId>-->
-        <!--            <artifactId>jeeagile-protocol-dubbo</artifactId>-->
-        <!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.jeeagile</groupId>-->
+<!--            <artifactId>jeeagile-protocol-dubbo</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>net.sf.ehcache</groupId>
