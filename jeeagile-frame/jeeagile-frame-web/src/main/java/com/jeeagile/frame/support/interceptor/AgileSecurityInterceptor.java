@@ -34,10 +34,9 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            if (handlerMethod.getBean() instanceof ErrorController) {
-                return true;
+            if (!(handlerMethod.getBean() instanceof ErrorController)) {
+                checkUserSecurity(handlerMethod);
             }
-            checkUserSecurity(handlerMethod);
         }
         return true;
     }
@@ -49,10 +48,14 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
      */
     private void checkUserSecurity(HandlerMethod handlerMethod) {
         try {
+            //获取当前用户安全认证
             IAgileSecurity agileSecurity = AgileSecurityUtil.getAgileSecurity();
             if (agileSecurity == null) {
                 throw new AgileAuthException("请设置用户安全接口类《UserSecurity》");
             }
+
+            //当前线程存放用户信息
+            AgileSecurityContext.putCurrentUser(agileSecurity.getUserData());
 
             //演示模式拦截
             AgileDemo agileDemo = handlerMethod.getMethodAnnotation(AgileDemo.class);
@@ -84,11 +87,10 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             if (agileRequiresPermissions != null) {
                 agileSecurity.checkPermission(agileRequiresPermissions);
             }
-            AgileSecurityContext.putCurrentUser(agileSecurity.getUserData());
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
-            logger.error("用户权限验证异常" , ex);
+            logger.error("用户权限验证异常", ex);
             throw new AgileAuthException("用户权限验证异常！");
         }
     }
