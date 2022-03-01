@@ -79,7 +79,7 @@ public class AgileQuartzJobController extends AgileBaseController {
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "更新任务状态", notes = "更新任务状态")
     @AgileLogger(title = "更新任务状态", type = AgileLoggerType.UPDATE)
-    public AgileResult<String> changeRoleStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
+    public AgileResult<String> changeJobStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
         agileQuartzJobService.changeQuartzJobStatus(agileUpdateStatus);
         return this.rtnSuccess();
     }
