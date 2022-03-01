@@ -73,12 +73,6 @@ public @interface DubboService {
     int delay() default -1;
 
     /**
-     * @see DubboService#stub()
-     * @deprecated
-     */
-    String local() default "";
-
-    /**
      * Service stub name, use interface name + Local if not set
      */
     String stub() default "";
@@ -184,14 +178,6 @@ public @interface DubboService {
      * Customized parameter key-value pair, for example: {key1, value1, key2, value2}
      */
     String[] parameters() default {};
-
-    /**
-     * Application spring bean name
-     *
-     * @deprecated This attribute was deprecated, use bind application/module of spring ApplicationContext
-     */
-    @Deprecated
-    String application() default "";
 
     /**
      * Module spring bean name
