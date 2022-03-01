@@ -2,7 +2,6 @@ package com.jeeagile.shiro.autoconfigure;
 
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
 import com.jeeagile.core.security.properties.AgileSecurityProperties;
-import com.jeeagile.core.util.StringUtil;
 import com.jeeagile.shiro.cache.AgileShiroCacheManager;
 import com.jeeagile.shiro.filter.AgileAuthenticationFilter;
 import com.jeeagile.shiro.listener.AgileSessionListener;
@@ -20,7 +19,6 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -81,7 +79,7 @@ public class AgileShiroAutoConfigure {
      *
      * @return
      */
-    @Bean
+    @Bean("agileAuthorizingRealm")
     public AgileAuthorizingRealm agileAuthorizingRealm() {
         AgileAuthorizingRealm agileAuthorizingRealm = new AgileAuthorizingRealm();
         agileAuthorizingRealm.setCachingEnabled(true);
@@ -139,9 +137,9 @@ public class AgileShiroAutoConfigure {
      * 权限管理
      */
     @Bean
-    public SecurityManager securityManager() {
+    public SecurityManager securityManager(AgileAuthorizingRealm agileAuthorizingRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(agileAuthorizingRealm());
+        securityManager.setRealm(agileAuthorizingRealm);
         //配置 ehcache缓存管理器
         securityManager.setCacheManager(agileShiroCacheManager());
         //配置自定义session管理，使用ehcache 或redis
@@ -174,18 +172,6 @@ public class AgileShiroAutoConfigure {
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainMap);
         return shiroFilterFactoryBean;
-    }
-
-    /**
-     * 禁止配置**开头地址
-     *
-     * @return
-     */
-    private List<String> getProhibitAnonUrl() {
-        List<String> filterAnonUrl = new ArrayList<>();
-        filterAnonUrl.add("**");
-        filterAnonUrl.add("/**");
-        return filterAnonUrl;
     }
 
     @Bean
