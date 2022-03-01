@@ -61,7 +61,12 @@ public class SpringServletUtil {
      * 获取用户TOKEN
      */
     public static String getUserToken() {
-        return getUserToken(getHttpServletRequest());
+        HttpServletRequest httpServletRequest = getHttpServletRequest();
+        if (httpServletRequest != null) {
+            return getUserToken(httpServletRequest);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -82,7 +87,12 @@ public class SpringServletUtil {
      * 根据COOKIE名称获取对应得COOKIE值
      */
     public static String getSpringCookieValue(String cookieName) {
-        return getCookieValue(getHttpServletRequest(), cookieName);
+        HttpServletRequest httpServletRequest = getHttpServletRequest();
+        if (httpServletRequest != null) {
+            return getCookieValue(httpServletRequest, cookieName);
+        } else {
+            return null;
+        }
     }
 
     /**
