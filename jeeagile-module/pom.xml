@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>jeeagile-admin</module>
-        <module>jeeagile-activiti</module>
         <module>jeeagile-quartz</module>
         <module>jeeagile-system</module>
         <module>jeeagile-monitor</module>
