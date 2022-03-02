@@ -1,4 +1,4 @@
-package com.jeeagile.core.security.base;
+package com.jeeagile.core.security.userdetails;
 
 import com.jeeagile.core.security.user.AgileBaseUser;
 

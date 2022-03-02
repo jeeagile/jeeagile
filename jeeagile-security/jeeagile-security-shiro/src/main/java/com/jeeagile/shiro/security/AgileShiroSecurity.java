@@ -6,7 +6,7 @@ import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgileLogical;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.core.security.annotation.AgileRequiresRoles;
-import com.jeeagile.core.security.base.IAgileSecurity;
+import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;

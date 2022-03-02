@@ -4,7 +4,7 @@ import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgileRequiresUser;
-import com.jeeagile.core.security.base.IAgileUserDetailsService;
+import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.StringUtil;

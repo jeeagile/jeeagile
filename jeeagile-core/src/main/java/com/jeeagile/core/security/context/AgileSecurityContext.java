@@ -2,7 +2,7 @@ package com.jeeagile.core.security.context;
 
 import com.jeeagile.core.protocol.enums.AgileProtocolType;
 import com.jeeagile.core.protocol.properties.AgileProtocolProperties;
-import com.jeeagile.core.security.base.IAgileSecurity;
+import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.util.spring.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;

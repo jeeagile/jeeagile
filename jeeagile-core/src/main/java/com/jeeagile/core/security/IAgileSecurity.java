@@ -1,4 +1,4 @@
-package com.jeeagile.core.security.base;
+package com.jeeagile.core.security;
 
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.core.security.annotation.AgileRequiresRoles;

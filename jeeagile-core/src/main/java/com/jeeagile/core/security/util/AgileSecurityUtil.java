@@ -5,7 +5,7 @@ import com.jeeagile.core.cache.util.AgileCacheUtil;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.result.AgileResultCode;
-import com.jeeagile.core.security.base.IAgileSecurity;
+import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;

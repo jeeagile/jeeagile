@@ -5,7 +5,7 @@ import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResultCode;
-import com.jeeagile.core.security.base.IAgileUserDetailsService;
+import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.util.StringUtil;
 import com.jeeagile.core.util.UserAgentUtil;

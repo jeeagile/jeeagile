@@ -7,7 +7,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresAuthentication;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.core.security.annotation.AgileRequiresRoles;
 import com.jeeagile.core.security.annotation.AgileRequiresUser;
-import com.jeeagile.core.security.base.IAgileSecurity;
+import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileUtil;
