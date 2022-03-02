@@ -9,6 +9,7 @@ import com.jeeagile.frame.entity.AgileValidateModel;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -96,7 +97,7 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
         // default method ignored
     }
 
-    default boolean deleteById(String id) {
+    default boolean deleteById(Serializable id) {
         this.deleteBefore(id);
         this.removeById(id);
         this.deleteAfter(id);
@@ -108,14 +109,14 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
      *
      * @param id
      */
-    default void deleteBefore(String id) {
+    default void deleteBefore(Serializable id) {
         // default method ignored
     }
 
     /**
      * 删除后操作
      */
-    default void deleteAfter(String id) {
+    default void deleteAfter(Serializable id) {
         // default method ignored
     }
 

@@ -15,8 +15,15 @@ import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.io.Serializable;
 import java.util.List;
 
+/**
+ * @author JeeAgile
+ * @date 2022-03-02
+ * @description
+ */
 public abstract class AgileCrudController<I extends IAgileService<T>, T extends AgileModel> extends AgileBaseController {
     @AgileReference
     private I agileBaseService;
@@ -71,7 +78,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @PostMapping("/delete")
     @ApiOperation(value = "删除数据", notes = "删除数据")
     @AgileLogger(title = "删除数据", type = AgileLoggerType.DELETE)
-    public AgileResult delete(@SingleRequestBody String id) {
+    public AgileResult delete(@SingleRequestBody Serializable id) {
         this.deleteBefore(id);
         if (agileBaseService.deleteById(id)) {
             this.deleteAfter(id);
@@ -131,7 +138,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
      *
      * @param id 主键
      */
-    protected void deleteBefore(String id) {
+    protected void deleteBefore(Serializable id) {
         // default method ignored
     }
 
@@ -140,7 +147,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
      *
      * @param id
      */
-    protected void deleteAfter(String id) {
+    protected void deleteAfter(Serializable id) {
         // default method ignored
     }
 }
