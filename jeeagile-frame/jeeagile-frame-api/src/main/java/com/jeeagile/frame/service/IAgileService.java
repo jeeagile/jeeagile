@@ -48,7 +48,7 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
         return entity;
     }
 
-    default void validateModel(T entity) {
+    default void validateEntity(T entity) {
         if (entity instanceof AgileValidateModel) {
             ((AgileValidateModel) entity).validate();
         }
@@ -60,7 +60,7 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
      * @param entity
      */
     default void saveBefore(T entity) {
-        this.validateModel(entity);
+        this.validateEntity(entity);
     }
 
 
@@ -87,7 +87,7 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
      * @param entity
      */
     default void updateBefore(T entity) {
-        this.validateModel(entity);
+        this.validateEntity(entity);
     }
 
     /**

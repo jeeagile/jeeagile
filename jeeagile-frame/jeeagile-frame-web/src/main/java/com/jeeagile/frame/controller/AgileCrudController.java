@@ -93,7 +93,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
      *
      * @param entity
      */
-    protected void validateModel(T entity) {
+    protected void validateEntity(T entity) {
         if (entity instanceof AgileValidateModel) {
             ((AgileValidateModel) entity).validate();
         }
@@ -105,7 +105,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
      * @param entity
      */
     protected void saveBefore(T entity) {
-        this.validateModel(entity);
+        this.validateEntity(entity);
     }
 
     /**
@@ -121,7 +121,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
      * @param entity
      */
     protected void updateBefore(T entity) {
-        this.validateModel(entity);
+        this.validateEntity(entity);
     }
 
     /**
