@@ -1,5 +1,6 @@
 package com.jeeagile.frame.autoconfigure;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
@@ -17,7 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
-
 /**
  * @author JeeAgile
  * @date 2021-03-21
@@ -35,6 +35,7 @@ public class AgileMybatisAutoConfiguration {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
         mapperScannerConfigurer.setBasePackage("com.jeeagile");
         mapperScannerConfigurer.setAnnotationClass(AgileMapperScan.class);
+        mybatisPlusProperties.getGlobalConfig().getDbConfig().setWhereStrategy(FieldStrategy.NOT_EMPTY);
         return mapperScannerConfigurer;
     }
 
