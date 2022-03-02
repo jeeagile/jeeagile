@@ -15,7 +15,7 @@ public interface IAgileLoggerOperateService extends IAgileBaseService<AgileLogge
     /**
      * 分页查询操作日志数据
      */
-    AgilePage<AgileLoggerOperate> selectPage(AgilePageable<AgileLoggerOperate> agilePageable);
+    AgilePage<AgileLoggerOperate> selectLoggerPage(AgilePageable<AgileLoggerOperate> agilePageable);
 
     /**
      * 保存系统操作日志

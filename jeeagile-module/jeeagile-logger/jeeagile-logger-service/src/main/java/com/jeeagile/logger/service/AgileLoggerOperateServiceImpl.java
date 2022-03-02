@@ -18,7 +18,7 @@ import com.jeeagile.logger.mapper.AgileLoggerOperateMapper;
 public class AgileLoggerOperateServiceImpl extends AgileBaseServiceImpl<AgileLoggerOperateMapper, AgileLoggerOperate> implements IAgileLoggerOperateService {
 
     @Override
-    public AgilePage<AgileLoggerOperate> selectPage(AgilePageable<AgileLoggerOperate> agilePageable) {
+    public AgilePage<AgileLoggerOperate> selectLoggerPage(AgilePageable<AgileLoggerOperate> agilePageable) {
         return this.page(agilePageable, getLoggerOperateQueryWrapper(agilePageable.getQueryCond()));
     }
 

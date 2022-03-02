@@ -2,7 +2,7 @@ package com.jeeagile.quartz.service;
 
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
-import com.jeeagile.frame.service.IAgileBaseService;
+import com.jeeagile.frame.service.IAgileService;
 import com.jeeagile.quartz.entity.AgileQuartzJobLogger;
 
 /**
@@ -10,7 +10,7 @@ import com.jeeagile.quartz.entity.AgileQuartzJobLogger;
  * @date 2021-03-21
  * @description
  */
-public interface IAgileQuartzJobLoggerService extends IAgileBaseService<AgileQuartzJobLogger> {
+public interface IAgileQuartzJobLoggerService extends IAgileService<AgileQuartzJobLogger> {
     /**
      * 分页查询任务日志
      */

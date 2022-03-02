@@ -5,7 +5,7 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.StringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
-import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import com.jeeagile.frame.service.AgileServiceImpl;
 import com.jeeagile.quartz.entity.AgileQuartzJobLogger;
 import com.jeeagile.quartz.mapper.AgileQuartzJobLoggerMapper;
 
@@ -15,7 +15,7 @@ import com.jeeagile.quartz.mapper.AgileQuartzJobLoggerMapper;
  * @description
  */
 @AgileService
-public class AgileQuartzJobLoggerServiceImpl extends AgileBaseServiceImpl<AgileQuartzJobLoggerMapper, AgileQuartzJobLogger> implements IAgileQuartzJobLoggerService {
+public class AgileQuartzJobLoggerServiceImpl extends AgileServiceImpl<AgileQuartzJobLoggerMapper, AgileQuartzJobLogger> implements IAgileQuartzJobLoggerService {
 
     @Override
     public AgilePage<AgileQuartzJobLogger> selectQuartzJobLoggerPage(AgilePageable<AgileQuartzJobLogger> agilePageable) {
