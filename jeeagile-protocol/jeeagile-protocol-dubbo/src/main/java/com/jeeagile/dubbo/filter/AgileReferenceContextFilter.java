@@ -14,7 +14,7 @@ import org.apache.dubbo.rpc.*;
  * @description
  */
 @Activate(group = {CommonConstants.CONSUMER})
-public class AgileProviderContextFilter implements Filter {
+public class AgileReferenceContextFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         AgileBaseUser userData = AgileSecurityContext.getCurrentUser();
