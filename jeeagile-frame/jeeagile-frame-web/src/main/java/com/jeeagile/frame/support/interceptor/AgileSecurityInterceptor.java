@@ -3,10 +3,7 @@ package com.jeeagile.frame.support.interceptor;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.exception.AgileDemoException;
-import com.jeeagile.core.security.annotation.AgileRequiresAuthentication;
-import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
-import com.jeeagile.core.security.annotation.AgileRequiresRoles;
-import com.jeeagile.core.security.annotation.AgileRequiresUser;
+import com.jeeagile.core.security.annotation.*;
 import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
@@ -68,6 +65,15 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
                 return;
             }
 
+            AgileRequiresGuest agileRequiresGuest = handlerMethod.getBeanType().getAnnotation(AgileRequiresGuest.class);
+            if (agileRequiresGuest != null) {
+                return;
+            }
+            agileRequiresGuest = handlerMethod.getMethodAnnotation(AgileRequiresGuest.class);
+            if (agileRequiresGuest != null) {
+                return;
+            }
+
             AgileRequiresAuthentication agileRequiresAuthentication = handlerMethod.getMethodAnnotation(AgileRequiresAuthentication.class);
             if (agileRequiresAuthentication != null && !agileSecurity.checkAuthenticated()) {
                 throw new AgileAuthException("用户未验证通过！");
@@ -83,9 +89,14 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
                 agileSecurity.checkRole(agileRequiresRoles);
             }
 
+            AgilePermissionsPrefix agilePermissionsPrefix = handlerMethod.getBeanType().getAnnotation(AgilePermissionsPrefix.class);
             AgileRequiresPermissions agileRequiresPermissions = handlerMethod.getMethodAnnotation(AgileRequiresPermissions.class);
             if (agileRequiresPermissions != null) {
-                agileSecurity.checkPermission(agileRequiresPermissions);
+                if (agilePermissionsPrefix != null) {
+                    agileSecurity.checkPermission(agilePermissionsPrefix, agileRequiresPermissions);
+                } else {
+                    agileSecurity.checkPermission(agileRequiresPermissions);
+                }
             }
         } catch (AgileBaseException ex) {
             throw ex;

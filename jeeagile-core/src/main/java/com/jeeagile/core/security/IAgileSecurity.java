@@ -1,10 +1,12 @@
 package com.jeeagile.core.security;
 
+import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.core.security.annotation.AgileRequiresRoles;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
+import com.jeeagile.core.util.StringUtil;
 
 import java.util.List;
 
@@ -72,6 +74,33 @@ public interface IAgileSecurity {
      * @return
      */
     void checkPermission(AgileRequiresPermissions agileRequiresPermissions);
+
+    /**
+     * 校验用户权限
+     *
+     * @return
+     */
+    void checkPermission(AgilePermissionsPrefix agilePermissionsPrefix, AgileRequiresPermissions agileRequiresPermissions);
+
+    /**
+     * 拼接权限字符串
+     *
+     * @param agilePermissionsPrefix
+     * @param agileRequiresPermissions
+     * @return
+     */
+    default String[] getPermissions(AgilePermissionsPrefix agilePermissionsPrefix, AgileRequiresPermissions agileRequiresPermissions) {
+        String prefix = agilePermissionsPrefix.value();
+        String[] perms = agileRequiresPermissions.value();
+        if (StringUtil.isNotEmpty(prefix)) {
+            String[] newPerms = new String[perms.length];
+            for (int i = 0; i < perms.length; i++) {
+                newPerms[i] = prefix + ":" + perms[i];
+            }
+            return newPerms;
+        }
+        return perms;
+    }
 
     /**
      * 校验用户角色

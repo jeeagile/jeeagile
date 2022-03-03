@@ -7,6 +7,7 @@ import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgileLogical;
+import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.core.security.annotation.AgileRequiresRoles;
 import com.jeeagile.core.security.IAgileSecurity;
@@ -101,23 +102,25 @@ public class AgileSpringSecurity implements IAgileSecurity {
             throw new AgileAuthException("用户权限验证异常！");
         }
     }
-
-    @Override
-    public void checkPermission(AgileRequiresPermissions agileRequiresPermissions) {
+    /**
+     * 校验用户权限
+     * @param perms
+     * @param agileLogical
+     */
+    private void checkPermission(String[] perms, AgileLogical agileLogical) {
         try {
             if (getUserData().isSuperAdmin()) {
                 return;
             }
-            String[] perms = agileRequiresPermissions.value();
             if (perms.length == 1) {
-                checkPermissions(perms[0]);
+                hasPermissions(perms[0]);
                 return;
             }
-            if (AgileLogical.AND.equals(agileRequiresPermissions.logical())) {
-                checkPermissions(perms);
+            if (AgileLogical.AND.equals(agileLogical)) {
+                hasPermissions(perms);
                 return;
             }
-            if (AgileLogical.OR.equals(agileRequiresPermissions.logical())) {
+            if (AgileLogical.OR.equals(agileLogical)) {
                 boolean hasAtLeastOnePermission = false;
                 for (String permission : perms) {
                     if (hasPermission(permission)) {
@@ -132,9 +135,19 @@ public class AgileSpringSecurity implements IAgileSecurity {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
-            log.error("用户权限校验异常" , ex);
+            log.error("用户权限校验异常:{}", ex.getMessage());
             throw new AgileAuthException("用户权限验证异常！");
         }
+    }
+    @Override
+    public void checkPermission(AgileRequiresPermissions agileRequiresPermissions) {
+        this.checkPermission(agileRequiresPermissions.value(), agileRequiresPermissions.logical());
+    }
+
+    @Override
+    public void checkPermission(AgilePermissionsPrefix agilePermissionsPrefix, AgileRequiresPermissions agileRequiresPermissions) {
+        String[] perms = this.getPermissions(agilePermissionsPrefix, agileRequiresPermissions);
+        this.checkPermission(perms, agileRequiresPermissions.logical());
     }
 
     @Override
@@ -176,7 +189,7 @@ public class AgileSpringSecurity implements IAgileSecurity {
         return ArrayUtils.contains(this.getUserData().getUserPerm().toArray(), permission);
     }
 
-    private void checkPermissions(String... permissions) {
+    private void hasPermissions(String... permissions) {
         for (String permission : permissions) {
             if (!hasPermission(permission)) {
                 throw new AgileAuthException(AgileResultCode.FAIL_USER_PERMS);

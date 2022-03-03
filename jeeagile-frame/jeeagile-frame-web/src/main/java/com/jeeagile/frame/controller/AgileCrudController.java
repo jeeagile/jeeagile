@@ -3,6 +3,7 @@ package com.jeeagile.frame.controller;
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
+import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.entity.AgileModel;
@@ -31,6 +32,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @PostMapping(value = "/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @AgileLogger(title = "分页查询", type = AgileLoggerType.SELECT)
+    @AgileRequiresPermissions("page")
     public AgileResult<AgilePage<T>> selectPage(@RequestBody AgilePageable<T> agilePageable) {
         return this.rtnSuccess(agileBaseService.selectPage(agilePageable));
     }
@@ -38,6 +40,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @PostMapping(value = "/list")
     @ApiOperation(value = "查询列表", notes = "查询列表")
     @AgileLogger(title = "查询列表", type = AgileLoggerType.SELECT)
+    @AgileRequiresPermissions("list")
     public AgileResult<List<T>> selectList(@RequestBody T agileModel) {
         return this.rtnSuccess(agileBaseService.selectList(agileModel));
     }
@@ -45,18 +48,20 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @PostMapping("/detail")
     @ApiOperation(value = "查看明细", notes = "查看明细")
     @AgileLogger(title = "查看明细", type = AgileLoggerType.DETAIL)
+    @AgileRequiresPermissions("detail")
     public AgileResult<T> detail(@SingleRequestBody String id) {
         return this.rtnSuccess(agileBaseService.getById(id));
     }
 
     @AgileDemo
     @PostMapping("/add")
-    @ApiOperation(value = "保存数据", notes = "保存数据")
-    @AgileLogger(title = "保存数据", type = AgileLoggerType.ADD)
-    public AgileResult<T> save(@RequestBody T entity) {
+    @ApiOperation(value = "新增数据", notes = "新增数据")
+    @AgileLogger(title = "新增数据", type = AgileLoggerType.ADD)
+    @AgileRequiresPermissions("add")
+    public AgileResult<T> add(@RequestBody T entity) {
         this.saveBefore(entity);
         entity = agileBaseService.saveEntity(entity);
-        this.saveBefore(entity);
+        this.saveAfter(entity);
         return this.rtnSuccess(entity);
     }
 
@@ -64,6 +69,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @PostMapping("/update")
     @ApiOperation(value = "更新数据", notes = "更新数据")
     @AgileLogger(title = "更新数据", type = AgileLoggerType.UPDATE)
+    @AgileRequiresPermissions("update")
     public AgileResult update(@RequestBody T entity) {
         this.updateBefore(entity);
         if (agileBaseService.updateEntity(entity)) {
@@ -78,6 +84,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @PostMapping("/delete")
     @ApiOperation(value = "删除数据", notes = "删除数据")
     @AgileLogger(title = "删除数据", type = AgileLoggerType.DELETE)
+    @AgileRequiresPermissions("delete")
     public AgileResult delete(@SingleRequestBody Serializable id) {
         this.deleteBefore(id);
         if (agileBaseService.deleteById(id)) {

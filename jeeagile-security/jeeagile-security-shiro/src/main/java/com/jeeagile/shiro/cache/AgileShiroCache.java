@@ -41,8 +41,6 @@ public class AgileShiroCache<K, V> implements org.apache.shiro.cache.Cache<K, V>
             this.keySet.remove(k);
             return null;
         }
-        // 防止服务重启Session未失效
-        this.keySet.add(k);
         return (V) valueWrapper.get();
     }
 
