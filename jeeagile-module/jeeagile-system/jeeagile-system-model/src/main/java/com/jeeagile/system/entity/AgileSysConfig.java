@@ -1,7 +1,9 @@
 package com.jeeagile.system.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseModel;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -20,21 +22,22 @@ public class AgileSysConfig extends AgileBaseModel<AgileSysConfig> {
     /**
      * 参数名称
      */
-    @NotNull(message = "参数名称不能为空！")
+    @NotEmpty(message = "参数名称不能为空！")
     @Size(max = 50, message = "参数名称长度最大值为50！")
+    @TableField(whereStrategy = FieldStrategy.NOT_EMPTY)
     private String configName;
 
     /**
      * 参数键名
      */
-    @NotNull(message = "参数键名不能为空！")
+    @NotEmpty(message = "参数键名不能为空！")
     @Size(max = 50, message = "参数键名长度最大值为50！")
     private String configKey;
 
     /**
      * 参数键值
      */
-    @NotNull(message = "参数键值不能为空！")
+    @NotEmpty(message = "参数键值不能为空！")
     @Size(max = 150, message = "参数键值长度最大值为150！")
     private String configValue;
 
@@ -42,7 +45,7 @@ public class AgileSysConfig extends AgileBaseModel<AgileSysConfig> {
      * 系统参数标识(1:是 0:否)
      */
     @Pattern(regexp = "[01]", message = "系统内置标识值必须为0或1（1:是 0:否）！")
-    private String systemFlag;
+    private String systemFlag = "0";
 
     /**
      * 备注信息

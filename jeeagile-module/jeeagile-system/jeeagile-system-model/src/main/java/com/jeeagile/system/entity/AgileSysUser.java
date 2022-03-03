@@ -4,6 +4,7 @@ package com.jeeagile.system.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -24,14 +25,14 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 用户名
      */
-    @NotNull(message = "用户名不能为空!")
+    @NotEmpty(message = "用户名不能为空!")
     @Size(max = 30, message = "用户名最大长度为30!")
     private String userName;
 
     /**
      * 用户昵称
      */
-    @NotNull(message = "用户昵称不能为空!")
+    @NotEmpty(message = "用户昵称不能为空!")
     @Size(max = 50, message = "用户昵称最大长度为50")
     private String nickName;
 

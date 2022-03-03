@@ -1,7 +1,7 @@
 package com.jeeagile.system.entity;
 
 import com.jeeagile.frame.entity.AgileBaseModel;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -21,14 +21,14 @@ public class AgileSysDictType extends AgileBaseModel<AgileSysDictType> {
     /**
      * 字典类型
      */
-    @NotNull(message = "字典类型不能为空！")
+    @NotEmpty(message = "字典类型不能为空！")
     @Size(max = 50, message = "字典类型长度最大值为50！")
     private String dictType;
 
     /**
      * 字典名称
      */
-    @NotNull(message = "字典名称不能为空！")
+    @NotEmpty(message = "字典名称不能为空！")
     @Size(max = 50, message = "字典名称长度最大值为50！")
     private String dictName;
 

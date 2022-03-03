@@ -1,7 +1,7 @@
 package com.jeeagile.system.entity;
 
 import com.jeeagile.frame.entity.AgileBaseModel;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -20,21 +20,21 @@ public class AgileSysPost extends AgileBaseModel<AgileSysPost> {
    /**
      * 岗位编码
      */
-    @NotNull(message = "岗位编码不能为空！")
+    @NotEmpty(message = "岗位编码不能为空！")
     @Size(max = 20, message = "岗位编码长度最大值为20！")
     private String postCode;
 
     /**
      * 岗位名称
      */
-    @NotNull(message = "岗位名称不能为空！")
+    @NotEmpty(message = "岗位名称不能为空！")
     @Size(max = 50, message = "岗位名称长度最大值为50！")
     private String postName;
 
     /**
      * 岗位排序
      */
-    @NotNull(message = "岗位排序不能为空！")
+    @NotEmpty(message = "岗位排序不能为空！")
     private Integer postSort;
 
     /**

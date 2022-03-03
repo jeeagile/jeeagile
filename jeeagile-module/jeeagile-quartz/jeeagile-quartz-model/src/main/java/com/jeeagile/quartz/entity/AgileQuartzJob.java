@@ -1,9 +1,7 @@
 package com.jeeagile.quartz.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.jeeagile.frame.entity.AgileBaseModel;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,34 +20,34 @@ public class AgileQuartzJob extends AgileBaseModel<AgileQuartzJob> {
     /**
      * 任务名称
      */
-    @NotNull(message = "任务名称不能为空！")
+    @NotEmpty(message = "任务名称不能为空！")
     @Size(max = 50, message = "任务名称最大长度为50！")
     private String jobName;
 
     /**
      * 任务编码
      */
-    @NotNull(message = "任务编码不能为空！")
+    @NotEmpty(message = "任务编码不能为空！")
     @Size(max = 30, message = "任务编码最大长度为30！")
     private String jobCode;
 
     /**
      * 任务分组
      */
-    @NotNull(message = "任务分组不能为空！")
+    @NotEmpty(message = "任务分组不能为空！")
     @Size(max = 30, message = "任务分组最大长度为30！")
     private String jobGroup;
 
     /**
      * Bean名称
      */
-    @NotNull(message = "Bean名称不能为空！")
+    @NotEmpty(message = "Bean名称不能为空！")
     private String beanName;
 
     /**
      * 执行方法
      */
-    @NotNull(message = "执行方法不能为空！")
+    @NotEmpty(message = "执行方法不能为空！")
     private String methodName;
 
     /**
@@ -60,14 +58,14 @@ public class AgileQuartzJob extends AgileBaseModel<AgileQuartzJob> {
     /**
      * cron执行表达式
      */
-    @NotNull(message = "Cron执行表达式不能为空!")
+    @NotEmpty(message = "Cron执行表达式不能为空!")
     private String jobCron;
 
     /**
      * 菜单状态（0正常 1停用）
      */
-    @NotNull(message = "任务状态不能为空!")
-    private String jobStatus;
+    @NotEmpty(message = "任务状态不能为空!")
+    private String jobStatus = "0";
 
     /**
      * 初始策略（0:默认 1:立即触发执行 2:触发一次执行 3:不触发立即执行）

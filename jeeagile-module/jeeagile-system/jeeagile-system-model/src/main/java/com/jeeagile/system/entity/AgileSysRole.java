@@ -1,7 +1,7 @@
 package com.jeeagile.system.entity;
 
 import com.jeeagile.frame.entity.AgileBaseModel;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -20,14 +20,14 @@ public class AgileSysRole extends AgileBaseModel<AgileSysRole> {
     /**
      * 角色编码
      */
-    @NotNull(message = "角色编码不能为空！")
+    @NotEmpty(message = "角色编码不能为空！")
     @Size(max = 30, message = "角色编码长度最大值为30！")
     private String roleCode;
 
     /**
      * 角色名称
      */
-    @NotNull(message = "角色名称不能为空！")
+    @NotEmpty(message = "角色名称不能为空！")
     @Size(max = 50, message = "角色名称长度最大值为50！")
     private String roleName;
 
@@ -40,7 +40,7 @@ public class AgileSysRole extends AgileBaseModel<AgileSysRole> {
     /**
      * 角色排序
      */
-    @NotNull(message = "角色排序不能为空！")
+    @NotEmpty(message = "角色排序不能为空！")
     private Integer roleSort;
 
     /**

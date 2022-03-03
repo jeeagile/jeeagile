@@ -1,6 +1,7 @@
 package com.jeeagile.system.entity;
 
 import com.jeeagile.frame.entity.AgileBaseTreeModel;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -21,21 +22,21 @@ public class AgileSysDictData extends AgileBaseTreeModel<AgileSysDictData> {
     /**
      * 字典类型
      */
-    @NotNull(message = "字典类型不能为空！")
+    @NotEmpty(message = "字典类型不能为空！")
     @Size(max = 50, message = "字典类型长度最大值为50！")
     private String dictType;
 
     /**
      * 字典标签
      */
-    @NotNull(message = "字典标签不能为空！")
+    @NotEmpty(message = "字典标签不能为空！")
     @Size(max = 50, message = "字典标签长度最大值为50！")
     private String dictLabel;
 
     /**
      * 字典键值
      */
-    @NotNull(message = "字典键值不能为空！")
+    @NotEmpty(message = "字典键值不能为空！")
     @Size(max = 50, message = "字典键值长度最大值为50！")
     private String dictValue;
 
@@ -54,7 +55,7 @@ public class AgileSysDictData extends AgileBaseTreeModel<AgileSysDictData> {
      * 系统参数标识(1:是 0:否)
      */
     @Pattern(regexp = "[01]", message = "系统内置标识值必须为0或1（1:是 0:否）！")
-    private String systemFlag;
+    private String systemFlag = "0";
     /**
      * 备注
      */
