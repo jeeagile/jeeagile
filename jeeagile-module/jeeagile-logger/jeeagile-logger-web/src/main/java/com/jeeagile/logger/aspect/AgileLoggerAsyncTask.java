@@ -1,7 +1,7 @@
 package com.jeeagile.logger.aspect;
 
 import com.jeeagile.core.protocol.annotation.AgileReference;
-import com.jeeagile.core.util.AddressUtil;
+import com.jeeagile.core.util.AgileNetUtil;
 import com.jeeagile.logger.entity.AgileLoggerLogin;
 import com.jeeagile.logger.entity.AgileLoggerOperate;
 import com.jeeagile.logger.service.IAgileLoggerLoginService;
@@ -18,27 +18,27 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-class AgileAsyncTask {
+class AgileLoggerAsyncTask {
     @AgileReference
     private IAgileLoggerOperateService agileLoggerOperateService;
 
     @AgileReference
     private IAgileLoggerLoginService agileLoggerLoginService;
 
-    @Async("AgileAsyncTask")
+    @Async("AgileLoggerAsyncTask")
     public void saveAgileLoggerOperate(AgileLoggerOperate agileLoggerOperate) {
         try {
-            agileLoggerOperate.setRemoteLocation(AddressUtil.getRealAddressByIp(agileLoggerOperate.getRemoteIp()));
+            agileLoggerOperate.setRemoteLocation(AgileNetUtil.getAddressByIp(agileLoggerOperate.getRemoteIp()));
             agileLoggerOperateService.saveLoggerOperate(agileLoggerOperate);
         } catch (Exception ex) {
             log.warn("操作日志记录发生异常!", ex);
         }
     }
 
-    @Async("AgileAsyncTask")
+    @Async("AgileLoggerAsyncTask")
     public void saveAgileLoggerLogin(AgileLoggerLogin agileLoggerLogin) {
         try {
-            agileLoggerLogin.setRemoteLocation(AddressUtil.getRealAddressByIp(agileLoggerLogin.getRemoteIp()));
+            agileLoggerLogin.setRemoteLocation(AgileNetUtil.getAddressByIp(agileLoggerLogin.getRemoteIp()));
             agileLoggerLoginService.saveLoggerLogin(agileLoggerLogin);
         } catch (Exception ex) {
             log.warn("登录日志记录发生异常!", ex);

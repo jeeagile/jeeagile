@@ -45,7 +45,7 @@ import java.util.List;
 @Order
 public class AgileLoggerAspect implements ApplicationListener<WebServerInitializedEvent> {
     @Autowired
-    private AgileAsyncTask agileAsyncTask;
+    private AgileLoggerAsyncTask agileLoggerAsyncTask;
 
     private int serverPort;
 
@@ -113,7 +113,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                     }
                     AgileLoggerLogin agileLoggerLogin = getAgileLoggerLogin(httpServletRequest, throwable);
                     agileLoggerLogin.setLoginName(agileLoginUser.getUserName());
-                    agileAsyncTask.saveAgileLoggerLogin(agileLoggerLogin);
+                    agileLoggerAsyncTask.saveAgileLoggerLogin(agileLoggerLogin);
                 } else {
                     AgileLoggerOperate agileLoggerOperate = getAgileLoggerOperate(httpServletRequest, throwable);
                     agileLoggerOperate.setTitle(agileLogger.title());
@@ -127,7 +127,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                     if (agileLogger.saveParam()) {
                         this.putParam(joinPoint, rtnObject, agileLoggerOperate);
                     }
-                    agileAsyncTask.saveAgileLoggerOperate(agileLoggerOperate);
+                    agileLoggerAsyncTask.saveAgileLoggerOperate(agileLoggerOperate);
                 }
             }
         } catch (Exception ex) {
