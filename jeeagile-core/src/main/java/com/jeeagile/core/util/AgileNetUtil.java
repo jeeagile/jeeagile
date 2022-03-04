@@ -20,7 +20,7 @@ public class AgileNetUtil {
     //http://ip.aliyun.com/outGetIpInfo?&accessKey=alibaba-inc
     //http://whois.pconline.com.cn/ipJson.jsp
     public static final String IP_URL = "http://ip.aliyun.com/outGetIpInfo?&accessKey=alibaba-inc";
-    public static final String UNKNOWN_IP = "XX XX XX";
+    public static final String UNKNOWN_IP = "XX XX";
 
     /**
      * 获取IP地址归属地区
@@ -42,7 +42,13 @@ public class AgileNetUtil {
                     String country = dataObj.getString("country");
                     String region = dataObj.getString("region");
                     String city = dataObj.getString("city");
-                    return String.format("%s %s %s", country, region, city);
+                    region = region.replace("XX", "");
+                    city = city.replace("XX", "");
+                    if (country.equals("中国")) {
+                        return String.format("%s %s", region, city);
+                    } else {
+                        return String.format("%s %s", country, region);
+                    }
                 }
             }
         } catch (Exception e) {
