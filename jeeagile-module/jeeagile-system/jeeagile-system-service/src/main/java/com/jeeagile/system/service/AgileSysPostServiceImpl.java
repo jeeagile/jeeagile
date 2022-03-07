@@ -2,7 +2,7 @@ package com.jeeagile.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
@@ -68,15 +68,15 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
         QueryWrapper<AgileSysPost> queryWrapper = new QueryWrapper<>();
         if (agileSysPost != null) {
             //岗位名称
-            if (StringUtil.isNotEmpty(agileSysPost.getPostName())) {
+            if (AgileStringUtil.isNotEmpty(agileSysPost.getPostName())) {
                 queryWrapper.lambda().like(AgileSysPost::getPostName, agileSysPost.getPostName());
             }
             //岗位编码
-            if (StringUtil.isNotEmpty(agileSysPost.getPostCode())) {
+            if (AgileStringUtil.isNotEmpty(agileSysPost.getPostCode())) {
                 queryWrapper.lambda().like(AgileSysPost::getPostCode, agileSysPost.getPostCode());
             }
             //岗位状态
-            if (StringUtil.isNotEmpty(agileSysPost.getPostStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileSysPost.getPostStatus())) {
                 queryWrapper.lambda().eq(AgileSysPost::getPostStatus, agileSysPost.getPostStatus());
             }
         }

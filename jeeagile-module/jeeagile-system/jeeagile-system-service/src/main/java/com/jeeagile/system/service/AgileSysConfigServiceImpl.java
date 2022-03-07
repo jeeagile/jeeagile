@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -82,7 +82,7 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     @Override
     public String getDefaultPwd() {
         String defaultPwd = getConfigValueByKey("sys.user.pwd");
-        if (StringUtil.isEmpty(defaultPwd)) {
+        if (AgileStringUtil.isEmpty(defaultPwd)) {
             defaultPwd = "888888";
         }
         return defaultPwd;
@@ -94,13 +94,13 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     private QueryWrapper<AgileSysConfig> getSysConfigQueryWrapper(AgileSysConfig agileSysConfig) {
         QueryWrapper<AgileSysConfig> queryWrapper = new QueryWrapper<>();
         if (agileSysConfig != null) {
-            if (StringUtil.isNotEmpty(agileSysConfig.getConfigName())) {
+            if (AgileStringUtil.isNotEmpty(agileSysConfig.getConfigName())) {
                 queryWrapper.lambda().like(AgileSysConfig::getConfigName, agileSysConfig.getConfigName());
             }
-            if (StringUtil.isNotEmpty(agileSysConfig.getConfigKey())) {
+            if (AgileStringUtil.isNotEmpty(agileSysConfig.getConfigKey())) {
                 queryWrapper.lambda().like(AgileSysConfig::getConfigKey, agileSysConfig.getConfigKey());
             }
-            if (StringUtil.isNotEmpty(agileSysConfig.getSystemFlag())) {
+            if (AgileStringUtil.isNotEmpty(agileSysConfig.getSystemFlag())) {
                 queryWrapper.lambda().like(AgileSysConfig::getSystemFlag, agileSysConfig.getSystemFlag());
             }
         }

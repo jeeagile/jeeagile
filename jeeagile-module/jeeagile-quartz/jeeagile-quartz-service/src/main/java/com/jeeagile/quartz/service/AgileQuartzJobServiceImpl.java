@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.enums.AgileStatusEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -121,13 +121,13 @@ public class AgileQuartzJobServiceImpl extends AgileBaseServiceImpl<AgileQuartzJ
     private QueryWrapper<AgileQuartzJob> getQuartzJobQueryWrapper(AgileQuartzJob agileQuartzJob) {
         QueryWrapper<AgileQuartzJob> queryWrapper = new QueryWrapper<>();
         if (agileQuartzJob != null) {
-            if (StringUtil.isNotEmpty(agileQuartzJob.getJobCode())) {
+            if (AgileStringUtil.isNotEmpty(agileQuartzJob.getJobCode())) {
                 queryWrapper.lambda().eq(AgileQuartzJob::getJobCode, agileQuartzJob.getJobCode());
             }
-            if (StringUtil.isNotEmpty(agileQuartzJob.getJobName())) {
+            if (AgileStringUtil.isNotEmpty(agileQuartzJob.getJobName())) {
                 queryWrapper.lambda().like(AgileQuartzJob::getJobName, agileQuartzJob.getJobName());
             }
-            if (StringUtil.isNotEmpty(agileQuartzJob.getJobStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileQuartzJob.getJobStatus())) {
                 queryWrapper.lambda().eq(AgileQuartzJob::getJobStatus, agileQuartzJob.getJobStatus());
             }
         }

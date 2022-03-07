@@ -2,7 +2,7 @@ package com.jeeagile.core.security.properties;
 
 import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.util.AgileArrayUtil;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -35,7 +35,7 @@ public class AgileSecurityProperties {
         List<String> filterUrl = new ArrayList<>();
         if (!CollectionUtils.isEmpty(anonUrl)) {
             for (String url : anonUrl) {
-                if (StringUtil.isNotEmpty(url) && !AgileArrayUtil.contains(FILTER_ANON_URL, url)) {
+                if (AgileStringUtil.isNotEmpty(url) && !AgileArrayUtil.contains(FILTER_ANON_URL, url)) {
                     filterUrl.add(url);
                 }
             }

@@ -2,8 +2,8 @@ package com.jeeagile.springsecurity.filter;
 
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
 import com.jeeagile.core.cache.util.AgileCacheUtil;
-import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.spring.SpringServletUtil;
+import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.spring.AgileServletUtil;
 import com.jeeagile.springsecurity.userdetails.AgileUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,11 +28,11 @@ public class AgileUserTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String userToken = SpringServletUtil.getUserToken(httpServletRequest);
+        String userToken = AgileServletUtil.getUserToken(httpServletRequest);
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        if (StringUtil.isNotEmpty(userToken) && securityContext.getAuthentication() == null) {
+        if (AgileStringUtil.isNotEmpty(userToken) && securityContext.getAuthentication() == null) {
             AgileUserDetails agileUserDetails = (AgileUserDetails) AgileCacheUtil.get(AgileCacheConstants.AGILE_CACHE_SESSION_NAME, userToken);
-            if (agileUserDetails != null && StringUtil.isNotEmpty(agileUserDetails.getUsername())) {
+            if (agileUserDetails != null && AgileStringUtil.isNotEmpty(agileUserDetails.getUsername())) {
                 AgileCacheUtil.put(AgileCacheConstants.AGILE_CACHE_SESSION_NAME, userToken, agileUserDetails);
                 SessionInformation sessionInformation = sessionRegistry.getSessionInformation(userToken);
                 if (sessionInformation == null) {

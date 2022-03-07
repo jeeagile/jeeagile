@@ -1,8 +1,8 @@
 package com.jeeagile.core.util.file;
 
-import com.jeeagile.core.util.DateUtil;
-import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.system.util.SystemUtil;
+import com.jeeagile.core.util.AgileDateUtil;
+import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.system.util.AgileSystemUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +17,7 @@ import java.util.UUID;
  * @description
  */
 @Slf4j
-public class FileUtil {
+public class AgileFileUtil {
 
     /**
      * 获取文件系统分隔符
@@ -25,7 +25,7 @@ public class FileUtil {
      * @return
      */
     public static String getFileSeparator() {
-        return SystemUtil.get("file.separator");
+        return AgileSystemUtil.get("file.separator");
     }
 
     /**
@@ -34,7 +34,7 @@ public class FileUtil {
      * @return
      */
     public static String getFilePath() {
-        String dateStr = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
+        String dateStr = AgileDateUtil.formatDate(new Date(), "yyyy-MM-dd");
         return dateStr.replace("-", getFileSeparator()) + getFileSeparator() + getFileUuidName();
     }
 
@@ -56,9 +56,9 @@ public class FileUtil {
      */
     public static final String getFileExtName(MultipartFile file) {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        if (StringUtil.isEmpty(extension))
+        if (AgileStringUtil.isEmpty(extension))
         {
-            extension = FileTypeUtil.getExtension(file.getContentType());
+            extension = AgileFileType.getExtension(file.getContentType());
         }
         return extension;
     }

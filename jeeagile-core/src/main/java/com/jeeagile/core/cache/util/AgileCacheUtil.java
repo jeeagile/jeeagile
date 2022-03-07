@@ -1,6 +1,6 @@
 package com.jeeagile.core.cache.util;
 
-import com.jeeagile.core.util.spring.SpringContextUtil;
+import com.jeeagile.core.util.spring.AgileSpringUtil;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
@@ -17,7 +17,7 @@ public class AgileCacheUtil {
     }
 
     private static CacheManager getCacheManager() {
-        return ((CacheManager) SpringContextUtil.getBean("cacheManager"));
+        return ((CacheManager) AgileSpringUtil.getBean("cacheManager"));
     }
 
     /**

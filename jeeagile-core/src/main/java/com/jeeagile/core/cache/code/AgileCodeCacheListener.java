@@ -2,7 +2,7 @@ package com.jeeagile.core.cache.code;
 
 import com.jeeagile.core.cache.code.annotation.AgileCodeCache;
 import com.jeeagile.core.util.AgileArrayUtil;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +88,7 @@ public class AgileCodeCacheListener implements ApplicationListener<ContextRefres
             return false;
         }
 
-        if (StringUtil.isEmpty(agileCodeCache.value())) {
+        if (AgileStringUtil.isEmpty(agileCodeCache.value())) {
             logger.error("代码缓存方法没有设置缓存名称：{}.{}", bean.getClass().getName(), method.getName());
             return false;
         }

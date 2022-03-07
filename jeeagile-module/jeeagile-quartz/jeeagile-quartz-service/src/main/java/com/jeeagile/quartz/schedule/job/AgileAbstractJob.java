@@ -3,8 +3,8 @@ package com.jeeagile.quartz.schedule.job;
 import com.alibaba.fastjson.JSONObject;
 import com.jeeagile.core.enums.AgileCommonStatus;
 import com.jeeagile.core.exception.AgileFrameException;
-import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.spring.SpringContextUtil;
+import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.spring.AgileSpringUtil;
 import com.jeeagile.quartz.entity.AgileQuartzJob;
 import com.jeeagile.quartz.entity.AgileQuartzJobLogger;
 import com.jeeagile.quartz.schedule.AgileScheduleConstants;
@@ -67,7 +67,7 @@ public abstract class AgileAbstractJob implements Job {
         } else {
             agileQuartzJobLogger.setStatus(AgileCommonStatus.SUCCESS.getCode());
         }
-        SpringContextUtil.getBean(IAgileQuartzJobLoggerService.class).save(agileQuartzJobLogger);
+        AgileSpringUtil.getBean(IAgileQuartzJobLoggerService.class).save(agileQuartzJobLogger);
     }
 
     protected void doExecute(JobExecutionContext context, AgileQuartzJob agileQuartzJob) throws Exception {
@@ -80,7 +80,7 @@ public abstract class AgileAbstractJob implements Job {
     protected void invokeMethod(AgileQuartzJob agileQuartzJob) throws Exception {
         Object bean = null;
         if (!agileQuartzJob.getBeanName().contains(".")) {
-            bean = SpringContextUtil.getBean(agileQuartzJob.getBeanName());
+            bean = AgileSpringUtil.getBean(agileQuartzJob.getBeanName());
         } else {
             bean = Class.forName(agileQuartzJob.getBeanName()).newInstance();
         }
@@ -107,7 +107,7 @@ public abstract class AgileAbstractJob implements Job {
         }
         //获取方法个数，用于对比执行的是那个方法
         int methodParamCount = 0;
-        if (StringUtil.isNotEmpty(agileQuartzJob.getMethodParam())) {
+        if (AgileStringUtil.isNotEmpty(agileQuartzJob.getMethodParam())) {
             methodParamCount = agileQuartzJob.getMethodParam().split("&").length;
         }
         //对比参数个数确定要执行的方法
@@ -122,7 +122,7 @@ public abstract class AgileAbstractJob implements Job {
             invokeMethod = methodList.get(0);
         }
         if (invokeMethod.getParameterCount() == 0) {
-            if (StringUtil.isNotEmpty(agileQuartzJob.getMethodParam())) {
+            if (AgileStringUtil.isNotEmpty(agileQuartzJob.getMethodParam())) {
                 log.warn("任务要执行方法属于无参方法，但任务设定了参数，请核实！");
             }
             ReflectionUtils.invokeMethod(invokeMethod, bean);

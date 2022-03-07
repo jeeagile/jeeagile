@@ -1,21 +1,14 @@
 package ${packageName}.service.${moduleName};
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
 import ${packageName}.entity.${moduleName}.${ClassName};
 import ${packageName}.mapper.${moduleName}.${ClassName}Mapper;
 #if($tableType=="tree")
-import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
-#set($BaseServiceImpl="AgileBaseTreeServiceImpl")
+    #set($BaseServiceImpl="AgileBaseTreeServiceImpl")
 #elseif($tableType=="crud")
-import com.jeeagile.frame.service.AgileBaseServiceImpl;
-import com.jeeagile.frame.page.AgilePage;
-import com.jeeagile.frame.page.AgilePageable;
-#set($BaseServiceImpl="AgileBaseServiceImpl")
+    #set($BaseServiceImpl="AgileBaseServiceImpl")
 #end
 
-import java.util.List;
 /**
  * @author ${author}
  * @date ${datetime}

@@ -7,7 +7,7 @@ import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.enums.AgileStatusEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
@@ -32,7 +32,7 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
 
     @Override
     public List<AgileSysDictData> selectDictDataList(AgileSysDictData agileSysDictData) {
-        if (agileSysDictData == null || StringUtil.isEmpty(agileSysDictData.getDictType())) {
+        if (agileSysDictData == null || AgileStringUtil.isEmpty(agileSysDictData.getDictType())) {
             throw new AgileValidateException("字典类型不能为空！");
         }
         return this.list(getSysDictDataQueryWrapper(agileSysDictData));
@@ -78,7 +78,7 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
 
     @Override
     public boolean deleteDictDataByDictType(String dictType) {
-        if (StringUtil.isEmpty(dictType)) {
+        if (AgileStringUtil.isEmpty(dictType)) {
             throw new AgileValidateException("字典类型不能为空！");
         }
         QueryWrapper<AgileSysDictData> queryWrapper = new QueryWrapper<>();
@@ -110,19 +110,19 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
         QueryWrapper<AgileSysDictData> queryWrapper = new QueryWrapper<>();
         if (agileSysDictData != null) {
             //添加字典类型查询条件
-            if (StringUtil.isNotEmpty(agileSysDictData.getDictType())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictType())) {
                 queryWrapper.lambda().eq(AgileSysDictData::getDictType, agileSysDictData.getDictType());
             }
             //添加字典标签查询条件
-            if (StringUtil.isNotEmpty(agileSysDictData.getDictLabel())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictLabel())) {
                 queryWrapper.lambda().like(AgileSysDictData::getDictLabel, agileSysDictData.getDictLabel());
             }
             //添加字典键值查询条件
-            if (StringUtil.isNotEmpty(agileSysDictData.getDictValue())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictValue())) {
                 queryWrapper.lambda().like(AgileSysDictData::getDictValue, agileSysDictData.getDictValue());
             }
             //添加状态查询条件
-            if (StringUtil.isNotEmpty(agileSysDictData.getDictStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictStatus())) {
                 queryWrapper.lambda().like(AgileSysDictData::getDictStatus, agileSysDictData.getDictStatus());
             }
         }

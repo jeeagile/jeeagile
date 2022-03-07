@@ -1,6 +1,6 @@
 package com.jeeagile.shiro.session;
 
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 
@@ -16,6 +16,6 @@ public class AgileSessionIdGenerator implements SessionIdGenerator {
     }
 
     public Serializable generateId(Session session) {
-        return StringUtil.getUuid();
+        return AgileStringUtil.getUuid();
     }
 }

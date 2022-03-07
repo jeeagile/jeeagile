@@ -2,7 +2,7 @@ package com.jeeagile.quartz.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileServiceImpl;
@@ -43,16 +43,16 @@ public class AgileQuartzJobLoggerServiceImpl extends AgileServiceImpl<AgileQuart
     private QueryWrapper<AgileQuartzJobLogger> getQuartzJobLoggerQueryWrapper(AgileQuartzJobLogger agileQuartzJobLogger) {
         QueryWrapper<AgileQuartzJobLogger> queryWrapper = new QueryWrapper<>();
         if (agileQuartzJobLogger != null) {
-            if (StringUtil.isNotEmpty(agileQuartzJobLogger.getJobCode())) {
+            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getJobCode())) {
                 queryWrapper.lambda().eq(AgileQuartzJobLogger::getJobCode, agileQuartzJobLogger.getJobCode());
             }
-            if (StringUtil.isNotEmpty(agileQuartzJobLogger.getJobName())) {
+            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getJobName())) {
                 queryWrapper.lambda().like(AgileQuartzJobLogger::getJobName, agileQuartzJobLogger.getJobName());
             }
-            if (StringUtil.isNotEmpty(agileQuartzJobLogger.getJobGroup())) {
+            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getJobGroup())) {
                 queryWrapper.lambda().like(AgileQuartzJobLogger::getJobGroup, agileQuartzJobLogger.getJobGroup());
             }
-            if (StringUtil.isNotEmpty(agileQuartzJobLogger.getStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getStatus())) {
                 queryWrapper.lambda().eq(AgileQuartzJobLogger::getStatus, agileQuartzJobLogger.getStatus());
             }
         }

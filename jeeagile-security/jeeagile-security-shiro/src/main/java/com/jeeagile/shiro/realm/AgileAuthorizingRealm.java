@@ -9,9 +9,9 @@ import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileNetUtil;
-import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.UserAgentUtil;
-import com.jeeagile.core.util.spring.SpringServletUtil;
+import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.AgileAgentUtil;
+import com.jeeagile.core.util.spring.AgileServletUtil;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -47,15 +47,15 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
         String password = new String(credentials);// 把字符数组转换为String类型(用户输入的密码)
         try {
             AgileBaseUser userData = agileUserDetailsService.getUserDataByLoginName(loginName);
-            if (userData != null && StringUtil.isNotEmpty(userData.getUserId())) {
+            if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
                 if (AgileSecurityUtil.encryptPassword(password).equals(userData.getPassword())) {
                     userData.setUserToken(SecurityUtils.getSubject().getSession().getId().toString());
                     userData.setUserPerm(agileUserDetailsService.getUserPerm(userData));
                     userData.setUserRole(agileUserDetailsService.getUserRole(userData));
-                    HttpServletRequest httpServletRequest = SpringServletUtil.getHttpServletRequest();
+                    HttpServletRequest httpServletRequest = AgileServletUtil.getHttpServletRequest();
                     if (httpServletRequest != null) {
-                        UserAgent userAgent = UserAgentUtil.getUserAgent(httpServletRequest);
-                        userData.setLoginIp(UserAgentUtil.getUserIp(httpServletRequest));
+                        UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
+                        userData.setLoginIp(AgileAgentUtil.getUserIp(httpServletRequest));
                         userData.setLoginAddress(AgileNetUtil.getAddressByIp(userData.getLoginIp()));
                         userData.setOsName(userAgent.getOperatingSystem().getName());
                         userData.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
@@ -86,7 +86,7 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
         try {
             AgileBaseUser userData = (AgileBaseUser) principalCollection.getPrimaryPrincipal();
 
-            if (userData == null || StringUtil.isEmpty(userData.getUserId())) {
+            if (userData == null || AgileStringUtil.isEmpty(userData.getUserId())) {
                 throw new AgileAuthException(AgileResultCode.FAIL_USER_INFO);
             }
             SimpleAuthorizationInfo authenticationInfo = new SimpleAuthorizationInfo();

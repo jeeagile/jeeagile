@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @description Spring工具类
  */
 @Component
-public class SpringContextUtil implements ApplicationContextAware {
+public class AgileSpringUtil implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 

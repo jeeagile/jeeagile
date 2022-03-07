@@ -14,7 +14,7 @@ import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.springsecurity.userdetails.AgileUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
@@ -49,7 +49,7 @@ public class AgileSpringSecurity implements IAgileSecurity {
             UsernamePasswordAuthenticationToken passwordAuthenticationToken = new UsernamePasswordAuthenticationToken(agileLoginUser.getUserName(), agileLoginUser.getPassword());
             Authentication authentication = authenticationManager.authenticate(passwordAuthenticationToken);
             AgileUserDetails agileUserDetails = (AgileUserDetails) authentication.getPrincipal();
-            if (agileUserDetails != null && StringUtil.isNotEmpty(agileUserDetails.getUsername())) {
+            if (agileUserDetails != null && AgileStringUtil.isNotEmpty(agileUserDetails.getUsername())) {
                 String userToken = agileUserDetails.getUserData().getUserToken();
                 AgileCacheUtil.put(AgileCacheConstants.AGILE_CACHE_SESSION_NAME, userToken, agileUserDetails);
                 sessionRegistry.registerNewSession(userToken, userToken);
@@ -72,7 +72,7 @@ public class AgileSpringSecurity implements IAgileSecurity {
     @Override
     public void userLogout() {
         AgileBaseUser userData = getUserData();
-        if (userData != null && StringUtil.isNotEmpty(userData.getUserId())) {
+        if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
             AgileCacheUtil.evict(AgileCacheConstants.AGILE_CACHE_SESSION_NAME, userData.getUserToken());
             sessionRegistry.removeSessionInformation(userData.getUserToken());
         }
@@ -92,7 +92,7 @@ public class AgileSpringSecurity implements IAgileSecurity {
     public void checkUser() {
         try {
             AgileBaseUser userData = getUserData();
-            if (userData == null || StringUtil.isEmpty(userData.getUserId())) {
+            if (userData == null || AgileStringUtil.isEmpty(userData.getUserId())) {
                 throw new AgileAuthException(AgileResultCode.FAIL_USER_PERMS);
             }
         } catch (AgileBaseException ex) {
@@ -215,7 +215,7 @@ public class AgileSpringSecurity implements IAgileSecurity {
         List<Object> sessionIdList = sessionRegistry.getAllPrincipals();
         for (Object sessionId : sessionIdList) {
             AgileUserDetails agileUserDetails = (AgileUserDetails) AgileCacheUtil.get(AgileCacheConstants.AGILE_CACHE_SESSION_NAME, sessionId.toString());
-            if (agileUserDetails == null || StringUtil.isEmpty(agileUserDetails.getUsername())) {
+            if (agileUserDetails == null || AgileStringUtil.isEmpty(agileUserDetails.getUsername())) {
                 sessionRegistry.removeSessionInformation(sessionId.toString());
                 continue;
             }

@@ -1,7 +1,7 @@
 package com.jeeagile.shiro.session;
 
 import com.jeeagile.core.constants.AgileConstants;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.util.WebUtils;
@@ -23,11 +23,11 @@ public class AgileWebSessionManager extends DefaultWebSessionManager {
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
         Serializable sessionId = super.getSessionId(request, response);
-        if (sessionId != null && StringUtil.isNotEmpty(sessionId.toString())) {
+        if (sessionId != null && AgileStringUtil.isNotEmpty(sessionId.toString())) {
             return sessionId;
         } else {
             String userToken = WebUtils.toHttp(request).getHeader(AgileConstants.AGILE_TOKEN);
-            if (StringUtil.isEmpty(userToken)) {
+            if (AgileStringUtil.isEmpty(userToken)) {
                 userToken = request.getParameter(AgileConstants.AGILE_TOKEN);
             }
             request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID, userToken);

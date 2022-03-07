@@ -1,7 +1,7 @@
 package com.jeeagile.redis.serializer;
 
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -44,7 +44,7 @@ public class AgileStringRedisSerializer implements RedisSerializer<String> {
     public String deserialize(@Nullable byte[] bytes) {
         String keyPrefix = getKeyPrefix();
         String saveKey = new String(bytes, this.charset);
-        if (StringUtil.isNotEmpty(saveKey) && saveKey.startsWith(keyPrefix)) {
+        if (AgileStringUtil.isNotEmpty(saveKey) && saveKey.startsWith(keyPrefix)) {
             saveKey = saveKey.substring(keyPrefix.length());
         }
         return (saveKey.getBytes() == null ? null : saveKey);
@@ -74,7 +74,7 @@ public class AgileStringRedisSerializer implements RedisSerializer<String> {
      */
     private String getKeyPrefix() {
         String keyPrefix;
-        if (cacheProperties != null && StringUtil.isNotEmpty(cacheProperties.getRedis().getKeyPrefix())) {
+        if (cacheProperties != null && AgileStringUtil.isNotEmpty(cacheProperties.getRedis().getKeyPrefix())) {
             keyPrefix = cacheProperties.getRedis().getKeyPrefix();
         } else {
             keyPrefix = AgileCacheConstants.AGILE_CACHE_PREFIX;

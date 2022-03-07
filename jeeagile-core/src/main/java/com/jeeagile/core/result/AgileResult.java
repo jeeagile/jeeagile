@@ -1,7 +1,7 @@
 package com.jeeagile.core.result;
 
 import com.jeeagile.core.exception.AgileBaseException;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +55,7 @@ public class AgileResult<T> implements Serializable {
     public AgileResult(IAgileResultCode agileResultCode, String message) {
         this.code = agileResultCode.getCode();
         this.message = agileResultCode.getMessage();
-        if (StringUtil.hasLength(message)) {
+        if (AgileStringUtil.hasLength(message)) {
             this.message = message;
         } else {
             this.message = getMessage(agileResultCode);
@@ -84,7 +84,7 @@ public class AgileResult<T> implements Serializable {
     public AgileResult(IAgileResultCode agileResultCode, String message, T data) {
         this.code = agileResultCode.getCode();
         this.message = agileResultCode.getMessage();
-        if (StringUtil.hasLength(message)) {
+        if (AgileStringUtil.hasLength(message)) {
             this.message = message;
         } else {
             this.message = getMessage(agileResultCode);
@@ -93,7 +93,7 @@ public class AgileResult<T> implements Serializable {
     }
 
     private String getMessage(IAgileResultCode agileResultCode) {
-        if (StringUtil.hasLength(agileResultCode.getMessage())) {
+        if (AgileStringUtil.hasLength(agileResultCode.getMessage())) {
             return agileResultCode.getMessage();
         } else {
             return "未知错误操作信息！";
@@ -229,7 +229,7 @@ public class AgileResult<T> implements Serializable {
      */
     public static <T> AgileResult<T> error(IAgileResultCode agileResultCode, Exception ex, String defaultMsg) {
         String message = AgileResult.handlerExceptionMessage(ex);
-        if (StringUtil.isEmpty(message)) {
+        if (AgileStringUtil.isEmpty(message)) {
             message = defaultMsg;
         }
         return new AgileResult<>(agileResultCode, message);
@@ -249,7 +249,7 @@ public class AgileResult<T> implements Serializable {
             agileResultCode = ((AgileBaseException) ex).getAgileResultCode();
         }
         String message = AgileResult.handlerExceptionMessage(ex);
-        if (StringUtil.isEmpty(message)) {
+        if (AgileStringUtil.isEmpty(message)) {
             message = defaultMsg;
         }
         return new AgileResult<>(agileResultCode, message);

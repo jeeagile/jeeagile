@@ -2,7 +2,7 @@ package com.jeeagile.frame.entity;
 
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -22,7 +22,7 @@ public abstract class AgileModel<T extends AgileModel<T>> extends Model<T> {
      * @return
      */
     public boolean isNotEmptyPk() {
-        return StringUtil.isNotEmpty(this.pkVal());
+        return AgileStringUtil.isNotEmpty(this.pkVal());
     }
 
     /**
@@ -31,6 +31,6 @@ public abstract class AgileModel<T extends AgileModel<T>> extends Model<T> {
      * @return
      */
     public boolean isEmptyPk() {
-        return StringUtil.isEmpty(this.pkVal());
+        return AgileStringUtil.isEmpty(this.pkVal());
     }
 }

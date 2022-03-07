@@ -10,8 +10,8 @@ import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
 import com.jeeagile.core.util.AgileUtil;
-import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.spring.SpringContextUtil;
+import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.spring.AgileSpringUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.util.DigestUtils;
 
@@ -36,7 +36,7 @@ public class AgileSecurityUtil {
     public static void userLogin(AgileLoginUser agileLoginUser) {
         if (AgileUtil.isCaptchaEnabled()) {
             String code = (String) AgileCacheUtil.get(AgileCacheConstants.AGILE_CACHE_KAPTCHA_NAME, agileLoginUser.getUuid());
-            if (StringUtil.isEmpty(code)) {
+            if (AgileStringUtil.isEmpty(code)) {
                 throw new AgileFrameException(AgileResultCode.FAIL_KCAPTCHA_EXPIRE, "验证码已失效！");
             }
             if (!code.equals(agileLoginUser.getCaptchaCode())) {
@@ -115,7 +115,7 @@ public class AgileSecurityUtil {
     public static IAgileSecurity getAgileSecurity() {
         IAgileSecurity agileSecurity;
         try {
-            agileSecurity = (IAgileSecurity) SpringContextUtil.getBean("AgileSecurity");
+            agileSecurity = (IAgileSecurity) AgileSpringUtil.getBean("AgileSecurity");
         } catch (BeansException ex) {
             throw new AgileAuthException("请检查安全接口实现类《IAgileSecurity》是否配置正确！");
         }

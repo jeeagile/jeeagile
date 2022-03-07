@@ -2,7 +2,7 @@ package com.jeeagile.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysUserRole;
 import com.jeeagile.system.mapper.AgileSysUserRoleMapper;
@@ -28,7 +28,7 @@ public class AgileSysUserRoleServiceImpl extends AgileBaseServiceImpl<AgileSysUs
     @Override
     public boolean deleteByUserId(String userId) {
         QueryWrapper<AgileSysUserRole> whereWrapper = new QueryWrapper<>();
-        if (StringUtil.isNotEmpty(userId)) {
+        if (AgileStringUtil.isNotEmpty(userId)) {
             whereWrapper.lambda().eq(AgileSysUserRole::getUserId, userId);
             return this.remove(whereWrapper);
         } else {
@@ -39,7 +39,7 @@ public class AgileSysUserRoleServiceImpl extends AgileBaseServiceImpl<AgileSysUs
     @Override
     public boolean deleteByRoleId(String roleId) {
         QueryWrapper<AgileSysUserRole> whereWrapper = new QueryWrapper<>();
-        if (StringUtil.isNotEmpty(roleId)) {
+        if (AgileStringUtil.isNotEmpty(roleId)) {
             whereWrapper.lambda().eq(AgileSysUserRole::getRoleId, roleId);
             return this.remove(whereWrapper);
         } else {

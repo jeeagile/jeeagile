@@ -4,9 +4,9 @@ import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.util.AgileArrayUtil;
-import com.jeeagile.core.util.CharUtil;
-import com.jeeagile.core.util.DateUtil;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileCharUtil;
+import com.jeeagile.core.util.AgileDateUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.generator.constants.AgileGeneratorConstants;
 import com.jeeagile.generator.entity.AgileGeneratorTable;
 import com.jeeagile.generator.entity.AgileGeneratorTableColumn;
@@ -55,7 +55,7 @@ public class AgileGeneratorUtil {
         agileGeneratorTableColumn.setTableId(agileGeneratorTable.getId());
         String columnName = agileGeneratorTableColumn.getColumnName();
         // 设置java字段名
-        agileGeneratorTableColumn.setJavaField(StringUtil.toCamelCase(columnName));
+        agileGeneratorTableColumn.setJavaField(AgileStringUtil.toCamelCase(columnName));
         String dataType = getDbColumnType(agileGeneratorTableColumn.getColumnType());
         if (AgileArrayUtil.contains(AgileGeneratorConstants.DB_COLUMN_TYPE_STR, dataType)) {
             agileGeneratorTableColumn.setJavaType(AgileGeneratorConstants.JAVA_TYPE_STRING);
@@ -176,8 +176,8 @@ public class AgileGeneratorUtil {
      * @return 类名
      */
     public static String getClassName(String tableName) {
-        String className = StringUtil.toCamelCase(tableName);
-        return StringUtil.upperFirst(className.replace("agile" , ""));
+        String className = AgileStringUtil.toCamelCase(tableName);
+        return AgileStringUtil.upperFirst(className.replace("agile" , ""));
     }
 
     @SuppressWarnings("all")
@@ -187,7 +187,7 @@ public class AgileGeneratorUtil {
 
     public static String getModuleName() {
         String packageName = getPackageName();
-        int lastIndex = packageName.lastIndexOf(CharUtil.DOT);
+        int lastIndex = packageName.lastIndexOf(AgileCharUtil.DOT);
         int nameLength = packageName.length();
         return StringUtils.substring(packageName, lastIndex + 1, nameLength);
     }
@@ -291,30 +291,30 @@ public class AgileGeneratorUtil {
         String packagePath = org.apache.commons.lang.StringUtils.replace(packageName, "." , "/");
         if (template.contains("entity.java.vm")) {
             String javaPath = projectName + "-model/src/main/java/" + packagePath;
-            fileName = StringUtil.format("{}/entity/{}/{}.java" , javaPath, moduleName, className);
+            fileName = AgileStringUtil.format("{}/entity/{}/{}.java" , javaPath, moduleName, className);
         } else if (template.contains("service.java.vm")) {
             String javaPath = projectName + "-api/src/main/java/" + packagePath;
-            fileName = StringUtil.format("{}/service/{}/I{}Service.java" , javaPath, moduleName, className);
+            fileName = AgileStringUtil.format("{}/service/{}/I{}Service.java" , javaPath, moduleName, className);
         } else if (template.contains("mapper.java.vm")) {
             String javaPath = projectName + "-service/src/main/java/" + packagePath;
-            fileName = StringUtil.format("{}/mapper/{}/{}Mapper.java" , javaPath, moduleName, className);
+            fileName = AgileStringUtil.format("{}/mapper/{}/{}Mapper.java" , javaPath, moduleName, className);
         } else if (template.contains("serviceImpl.java.vm")) {
             String javaPath = projectName + "-service/src/main/java/" + packagePath;
-            fileName = StringUtil.format("{}/service/{}/{}ServiceImpl.java" , javaPath, moduleName, className);
+            fileName = AgileStringUtil.format("{}/service/{}/{}ServiceImpl.java" , javaPath, moduleName, className);
         } else if (template.contains("controller.java.vm")) {
             String javaPath = projectName + "-web/src/main/java/" + packagePath;
-            fileName = StringUtil.format("{}/controller/{}/{}Controller.java" , javaPath, moduleName, className);
+            fileName = AgileStringUtil.format("{}/controller/{}/{}Controller.java" , javaPath, moduleName, className);
         } else if (template.contains("mapper.xml.vm")) {
             String mapperXmlPath = projectName + "-service/src/main/resources/mapper/" + moduleName;
-            fileName = StringUtil.format("{}/{}Mapper.xml" , mapperXmlPath, className);
+            fileName = AgileStringUtil.format("{}/{}Mapper.xml" , mapperXmlPath, className);
         } else if (template.contains("sql.vm")) {
             fileName = businessName + "Menu.sql";
         } else if (template.contains("api.js.vm")) {
-            fileName = StringUtil.format("{}/api/{}/{}.js" , vuePath, moduleName, businessName);
+            fileName = AgileStringUtil.format("{}/api/{}/{}.js" , vuePath, moduleName, businessName);
         } else if (template.contains("index.vue.vm")) {
-            fileName = StringUtil.format("{}/views/{}/{}/index.vue" , vuePath, moduleName, businessName);
+            fileName = AgileStringUtil.format("{}/views/{}/{}/index.vue" , vuePath, moduleName, businessName);
         } else if (template.contains("index-tree.vue.vm")) {
-            fileName = StringUtil.format("{}/views/{}/{}/index.vue" , vuePath, moduleName, businessName);
+            fileName = AgileStringUtil.format("{}/views/{}/{}/index.vue" , vuePath, moduleName, businessName);
         }
         return fileName;
     }
@@ -366,13 +366,13 @@ public class AgileGeneratorUtil {
         velocityContext.put("basePackage" , getPackagePrefix(packageName));
         velocityContext.put("packageName" , packageName);
         velocityContext.put("author" , agileGeneratorTableInfo.getFunctionAuthor());
-        velocityContext.put("datetime" , DateUtil.getDateNow());
+        velocityContext.put("datetime" , AgileDateUtil.getDateNow());
         velocityContext.put("pkColumn" , tablePkColumn);
         velocityContext.put("importList" , getJavaImportList(agileGeneratorTableInfo.getAgileGeneratorTableColumnList()));
         velocityContext.put("permissionPrefix" , getPermissionPrefix(moduleName, businessName));
         velocityContext.put("columnList" , agileGeneratorTableInfo.getAgileGeneratorTableColumnList());
         velocityContext.put("table" , agileGeneratorTableInfo);
-        velocityContext.put("StringUtil" , StringUtil.class);
+        velocityContext.put("StringUtil" , AgileStringUtil.class);
         setMenuVelocityContext(velocityContext, agileGeneratorTableInfo);
         if (AgileGeneratorConstants.TABLE_TYPE_TREE.equals(tableType)) {
             setTreeVelocityContext(velocityContext, agileGeneratorTableInfo);
@@ -426,7 +426,7 @@ public class AgileGeneratorUtil {
      * @return 返回权限前缀
      */
     public static String getPermissionPrefix(String moduleName, String businessName) {
-        return StringUtil.format("{}:{}" , moduleName, businessName);
+        return AgileStringUtil.format("{}:{}" , moduleName, businessName);
     }
 
     /**
@@ -434,7 +434,7 @@ public class AgileGeneratorUtil {
      */
     public static void setMenuVelocityContext(VelocityContext velocityContext, AgileGeneratorTableInfo agileGeneratorTableInfo) {
         String parentMenuId = agileGeneratorTableInfo.getParentMenuId();
-        String menuId = StringUtil.getUuid();
+        String menuId = AgileStringUtil.getUuid();
         velocityContext.put("menuId" , menuId);
         velocityContext.put("parentMenuId" , parentMenuId);
     }
@@ -443,8 +443,8 @@ public class AgileGeneratorUtil {
      * 设置树形结构表
      */
     public static void setTreeVelocityContext(VelocityContext velocityContext, AgileGeneratorTableInfo agileGeneratorTableInfo) {
-        velocityContext.put("treeCode" , StringUtil.toCamelCase(agileGeneratorTableInfo.getTreeCode()));
-        velocityContext.put("treeParentCode" , StringUtil.toCamelCase(agileGeneratorTableInfo.getTreeParentCode()));
-        velocityContext.put("treeName" , StringUtil.toCamelCase(agileGeneratorTableInfo.getTreeName()));
+        velocityContext.put("treeCode" , AgileStringUtil.toCamelCase(agileGeneratorTableInfo.getTreeCode()));
+        velocityContext.put("treeParentCode" , AgileStringUtil.toCamelCase(agileGeneratorTableInfo.getTreeParentCode()));
+        velocityContext.put("treeName" , AgileStringUtil.toCamelCase(agileGeneratorTableInfo.getTreeName()));
     }
 }

@@ -50,7 +50,7 @@ public class AgileCharsetUtil {
      * @return Charset
      */
     public static Charset charset(String charsetName) {
-        return StringUtil.isEmpty(charsetName) ? Charset.defaultCharset() : Charset.forName(charsetName);
+        return AgileStringUtil.isEmpty(charsetName) ? Charset.defaultCharset() : Charset.forName(charsetName);
     }
 
 }

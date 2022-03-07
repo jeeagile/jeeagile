@@ -2,7 +2,7 @@ package com.jeeagile.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
@@ -138,15 +138,15 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
         QueryWrapper<AgileSysRole> queryWrapper = new QueryWrapper<>();
         if (agileSysRole != null) {
             //角色名称
-            if (StringUtil.isNotEmpty(agileSysRole.getRoleName())) {
+            if (AgileStringUtil.isNotEmpty(agileSysRole.getRoleName())) {
                 queryWrapper.lambda().like(AgileSysRole::getRoleName, agileSysRole.getRoleName());
             }
             //角色编码
-            if (StringUtil.isNotEmpty(agileSysRole.getRoleCode())) {
+            if (AgileStringUtil.isNotEmpty(agileSysRole.getRoleCode())) {
                 queryWrapper.lambda().like(AgileSysRole::getRoleCode, agileSysRole.getRoleCode());
             }
             //角色状态
-            if (StringUtil.isNotEmpty(agileSysRole.getRoleStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileSysRole.getRoleStatus())) {
                 queryWrapper.lambda().eq(AgileSysRole::getRoleStatus, agileSysRole.getRoleStatus());
             }
         }

@@ -2,7 +2,7 @@ package com.jeeagile.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysUserPost;
 import com.jeeagile.system.mapper.AgileSysUserPostMapper;
@@ -26,7 +26,7 @@ public class AgileSysUserPostServiceImpl extends AgileBaseServiceImpl<AgileSysUs
 
     @Override
     public boolean deleteByUserId(String userId) {
-        if (StringUtil.isNotEmpty(userId)) {
+        if (AgileStringUtil.isNotEmpty(userId)) {
             QueryWrapper<AgileSysUserPost> whereWrapper = new QueryWrapper<>();
             whereWrapper.lambda().eq(AgileSysUserPost::getUserId, userId);
             return this.remove(whereWrapper);
@@ -37,7 +37,7 @@ public class AgileSysUserPostServiceImpl extends AgileBaseServiceImpl<AgileSysUs
 
     @Override
     public boolean deleteByPostId(String postId) {
-        if (StringUtil.isNotEmpty(postId)) {
+        if (AgileStringUtil.isNotEmpty(postId)) {
             QueryWrapper<AgileSysUserPost> whereWrapper = new QueryWrapper<>();
             whereWrapper.lambda().eq(AgileSysUserPost::getPostId, postId);
             return this.remove(whereWrapper);

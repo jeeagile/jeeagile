@@ -1,7 +1,7 @@
 package com.jeeagile.springsecurity.access;
 
 import com.jeeagile.core.security.user.AgileBaseUser;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.springsecurity.userdetails.AgileUserDetails;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
@@ -31,7 +31,7 @@ public class AgilePermissionEvaluator implements PermissionEvaluator {
     }
 
     private boolean checkPermission(Authentication authentication, Object permission) {
-        if (StringUtil.isEmpty(permission)) {
+        if (AgileStringUtil.isEmpty(permission)) {
             return false;
         }
         AgileUserDetails agileUserDetails = (AgileUserDetails) authentication.getPrincipal();
@@ -40,7 +40,7 @@ public class AgilePermissionEvaluator implements PermissionEvaluator {
             userData = agileUserDetails.getUserData();
         }
 
-        if (StringUtil.isEmpty(userData) || CollectionUtils.isEmpty(userData.getUserPerm())) {
+        if (AgileStringUtil.isEmpty(userData) || CollectionUtils.isEmpty(userData.getUserPerm())) {
             return false;
         }
 

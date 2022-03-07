@@ -7,7 +7,7 @@ import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.system.mapper.AgileSysPersonMapper;
 import com.jeeagile.system.vo.AgilePersonInfo;
 import com.jeeagile.system.vo.AgileUpdatePerson;
@@ -36,7 +36,7 @@ public class AgileSysPersonServiceImpl implements IAgileSysPersonService {
         AgilePersonInfo agilePersonInfo = new AgilePersonInfo();
         AgileBaseUser userData = getCurrentUserData();
         AgileSysUser agileSysUser = agileSysUserService.getById(userData.getUserId());
-        if (agileSysUser != null && StringUtil.isNotEmpty(agileSysUser.getId())) {
+        if (agileSysUser != null && AgileStringUtil.isNotEmpty(agileSysUser.getId())) {
             BeanUtils.copyProperties(agileSysUser, agilePersonInfo);
             agilePersonInfo.setDeptName(userData.getDeptName());
             List<String> roleNameList = agileSysPersonMapper.getRoleNameByUserId(agileSysUser.getId());

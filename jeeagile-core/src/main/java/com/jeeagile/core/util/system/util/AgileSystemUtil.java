@@ -1,8 +1,8 @@
 package com.jeeagile.core.util.system.util;
 
-import com.jeeagile.core.util.DateUtil;
-import com.jeeagile.core.util.FormatUtil;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileDateUtil;
+import com.jeeagile.core.util.AgileFormatUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.system.info.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,13 +18,13 @@ import java.util.Properties;
  * @description
  */
 @Slf4j
-public class SystemUtil {
+public class AgileSystemUtil {
     /**
      * 取得系统属性
      */
     public static String get(String name, String defaultValue) {
         String value = get(name);
-        if (StringUtil.isNotEmpty(value)) {
+        if (AgileStringUtil.isNotEmpty(value)) {
             return value;
         } else {
             return defaultValue;
@@ -152,13 +152,13 @@ public class SystemUtil {
         javaInfo.setVendor(get("java.vendor"));
         javaInfo.setVendorUrl(get("java.vendor.url"));
 
-        javaInfo.setRuntimeName(SystemUtil.get("java.runtime.name"));
+        javaInfo.setRuntimeName(AgileSystemUtil.get("java.runtime.name"));
         javaInfo.setRuntimeVersion(get("java.runtime.version"));
-        javaInfo.setHomeDir(SystemUtil.get("java.home"));
-        javaInfo.setExtDirs(SystemUtil.get("java.ext.dirs"));
-        javaInfo.setClassPath(SystemUtil.get("java.class.path"));
-        javaInfo.setClassVersion(SystemUtil.get("java.class.version"));
-        javaInfo.setLibraryPath(SystemUtil.get("java.library.path"));
+        javaInfo.setHomeDir(AgileSystemUtil.get("java.home"));
+        javaInfo.setExtDirs(AgileSystemUtil.get("java.ext.dirs"));
+        javaInfo.setClassPath(AgileSystemUtil.get("java.class.path"));
+        javaInfo.setClassVersion(AgileSystemUtil.get("java.class.version"));
+        javaInfo.setLibraryPath(AgileSystemUtil.get("java.library.path"));
 
         return javaInfo;
     }
@@ -169,13 +169,13 @@ public class SystemUtil {
     public static JvmInfo getJvmInfo() {
         JvmInfo jvmInfo = new JvmInfo();
         jvmInfo.setName(get("java.vm.name"));
-        jvmInfo.setVersion(SystemUtil.get("java.vm.version"));
-        jvmInfo.setVendor(SystemUtil.get("java.vm.vendor"));
-        jvmInfo.setInfo(SystemUtil.get("java.vm.info"));
+        jvmInfo.setVersion(AgileSystemUtil.get("java.vm.version"));
+        jvmInfo.setVendor(AgileSystemUtil.get("java.vm.vendor"));
+        jvmInfo.setInfo(AgileSystemUtil.get("java.vm.info"));
         RuntimeMXBean runtimeMXBean = getRuntimeMXBean();
         jvmInfo.setStartArgs(runtimeMXBean.getInputArguments().toString());
-        jvmInfo.setStartTime(DateUtil.formatDate(runtimeMXBean.getStartTime()));
-        jvmInfo.setRunTime(DateUtil.formatDateAgo(runtimeMXBean.getUptime()));
+        jvmInfo.setStartTime(AgileDateUtil.formatDate(runtimeMXBean.getStartTime()));
+        jvmInfo.setRunTime(AgileDateUtil.formatDateAgo(runtimeMXBean.getUptime()));
         return jvmInfo;
     }
 
@@ -184,12 +184,12 @@ public class SystemUtil {
      */
     public static OsInfo getOsInfo() {
         OsInfo osInfo = new OsInfo();
-        osInfo.setArch(SystemUtil.get("os.arch"));
-        osInfo.setName(SystemUtil.get("os.name"));
-        osInfo.setVersion(SystemUtil.get("os.version"));
-        osInfo.setFileSeparator(SystemUtil.get("file.separator"));
-        osInfo.setLineSeparator(SystemUtil.get("line.separator"));
-        osInfo.setPathSeparator(SystemUtil.get("path.separator"));
+        osInfo.setArch(AgileSystemUtil.get("os.arch"));
+        osInfo.setName(AgileSystemUtil.get("os.name"));
+        osInfo.setVersion(AgileSystemUtil.get("os.version"));
+        osInfo.setFileSeparator(AgileSystemUtil.get("file.separator"));
+        osInfo.setLineSeparator(AgileSystemUtil.get("line.separator"));
+        osInfo.setPathSeparator(AgileSystemUtil.get("path.separator"));
         return osInfo;
     }
 
@@ -216,10 +216,10 @@ public class SystemUtil {
     public static RuntimeInfo getRuntimeInfo() {
         Runtime runtime = Runtime.getRuntime();
         RuntimeInfo runtimeInfo = new RuntimeInfo();
-        runtimeInfo.setMaxMemory(FormatUtil.formatBytes(runtime.maxMemory()));
-        runtimeInfo.setFreeMemory(FormatUtil.formatBytes(runtime.freeMemory()));
-        runtimeInfo.setTotalMemory(FormatUtil.formatBytes(runtime.totalMemory()));
-        runtimeInfo.setUsableMemory(FormatUtil.formatBytes(runtime.maxMemory() - runtime.totalMemory() + runtime.freeMemory()));
+        runtimeInfo.setMaxMemory(AgileFormatUtil.formatBytes(runtime.maxMemory()));
+        runtimeInfo.setFreeMemory(AgileFormatUtil.formatBytes(runtime.freeMemory()));
+        runtimeInfo.setTotalMemory(AgileFormatUtil.formatBytes(runtime.totalMemory()));
+        runtimeInfo.setUsableMemory(AgileFormatUtil.formatBytes(runtime.maxMemory() - runtime.totalMemory() + runtime.freeMemory()));
         return runtimeInfo;
     }
 
@@ -228,10 +228,10 @@ public class SystemUtil {
      */
     public static UserInfo getUserInfo() {
         UserInfo userInfo = new UserInfo();
-        userInfo.setName(SystemUtil.get("user.name"));
-        userInfo.setHomeDir(SystemUtil.get("user.home"));
-        userInfo.setUserDir(SystemUtil.get("user.dir"));
-        userInfo.setLanguage(SystemUtil.get("user.language"));
+        userInfo.setName(AgileSystemUtil.get("user.name"));
+        userInfo.setHomeDir(AgileSystemUtil.get("user.home"));
+        userInfo.setUserDir(AgileSystemUtil.get("user.dir"));
+        userInfo.setLanguage(AgileSystemUtil.get("user.language"));
         return userInfo;
     }
 

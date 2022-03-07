@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
-import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.UserAgentUtil;
-import com.jeeagile.core.util.system.util.SystemUtil;
+import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.AgileAgentUtil;
+import com.jeeagile.core.util.system.util.AgileSystemUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.core.enums.AgileCommonStatus;
 import com.jeeagile.frame.enums.AgileLoggerType;
@@ -97,7 +97,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
             AgileLogger agileLogger = method.getAnnotation(AgileLogger.class);
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
-            if (agileLogger != null && StringUtil.isNotEmpty(agileLogger.title()) && servletRequestAttributes != null) {
+            if (agileLogger != null && AgileStringUtil.isNotEmpty(agileLogger.title()) && servletRequestAttributes != null) {
                 HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
                 if (agileLogger.type() == AgileLoggerType.LOGIN) {
                     AgileLoginUser agileLoginUser = null;
@@ -168,11 +168,11 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
         AgileLoggerLogin agileLoggerLogin = new AgileLoggerLogin();
         agileLoggerLogin.setStatus(AgileCommonStatus.SUCCESS.getCode());
         agileLoggerLogin.setLoginTime(new Date());
-        agileLoggerLogin.setRemoteIp(UserAgentUtil.getUserIp(httpServletRequest));
-        String serverAddress = SystemUtil.getHostInfo().getAddress() + ":" + serverPort;
+        agileLoggerLogin.setRemoteIp(AgileAgentUtil.getUserIp(httpServletRequest));
+        String serverAddress = AgileSystemUtil.getHostInfo().getAddress() + ":" + serverPort;
         agileLoggerLogin.setServerAddress(serverAddress);
 
-        UserAgent userAgent = UserAgentUtil.getUserAgent(httpServletRequest);
+        UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
         agileLoggerLogin.setOsName(userAgent.getOperatingSystem().getName());
         agileLoggerLogin.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
         agileLoggerLogin.setBrowserName(userAgent.getBrowser().getName());
@@ -208,11 +208,11 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
         }
         agileLoggerOperate.setReqUri(httpServletRequest.getRequestURI());
         agileLoggerOperate.setReqMethod(httpServletRequest.getMethod());
-        agileLoggerOperate.setRemoteIp(UserAgentUtil.getUserIp(httpServletRequest));
-        String serverAddress = SystemUtil.getHostInfo().getAddress() + ":" + this.serverPort;
+        agileLoggerOperate.setRemoteIp(AgileAgentUtil.getUserIp(httpServletRequest));
+        String serverAddress = AgileSystemUtil.getHostInfo().getAddress() + ":" + this.serverPort;
         agileLoggerOperate.setServerAddress(serverAddress);
 
-        UserAgent userAgent = UserAgentUtil.getUserAgent(httpServletRequest);
+        UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
         agileLoggerOperate.setOsName(userAgent.getOperatingSystem().getName());
         agileLoggerOperate.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
         agileLoggerOperate.setBrowserName(userAgent.getBrowser().getName());

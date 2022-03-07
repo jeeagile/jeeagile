@@ -2,8 +2,8 @@ package com.jeeagile.core.kaptcha;
 
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.util.AgileUtil;
-import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.spring.SpringContextUtil;
+import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.spring.AgileSpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.FastByteArrayOutputStream;
@@ -27,7 +27,7 @@ public class AgileKaptchaUtil {
      */
     public static AgileKaptchaProducer getAgileKaptchaProducer(AgileKaptchaType agileKaptchaType) {
         String kaptchaBeanName = agileKaptchaType.name() + "CaptchaProducer";
-        AgileKaptchaProducer agileKaptchaProducer = SpringContextUtil.getBean(kaptchaBeanName, AgileKaptchaProducer.class);
+        AgileKaptchaProducer agileKaptchaProducer = AgileSpringUtil.getBean(kaptchaBeanName, AgileKaptchaProducer.class);
         if (agileKaptchaProducer == null) {
             log.error("验证码类型配置有误，请检查！");
         }
@@ -50,7 +50,7 @@ public class AgileKaptchaUtil {
         switch (agileKaptchaProducer.getAgileKaptchaType()) {
             case arithmetic:
                 agileKaptchaInfo = new AgileKaptchaInfo();
-                agileKaptchaInfo.setUuid(StringUtil.getUuid());
+                agileKaptchaInfo.setUuid(AgileStringUtil.getUuid());
                 String capText = agileKaptchaProducer.createText();
                 String capStr = capText.substring(0, capText.lastIndexOf("@"));
                 agileKaptchaInfo.setCode(capText.substring(capText.lastIndexOf("@") + 1));

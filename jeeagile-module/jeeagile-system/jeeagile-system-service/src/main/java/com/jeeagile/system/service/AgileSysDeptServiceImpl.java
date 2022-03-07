@@ -3,7 +3,7 @@ package com.jeeagile.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysDept;
@@ -35,7 +35,7 @@ public class AgileSysDeptServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDe
 
     @Override
     public String getDeptNameById(String deptId) {
-        if (StringUtil.isNotEmpty(deptId)) {
+        if (AgileStringUtil.isNotEmpty(deptId)) {
             AgileSysDept agileSysDept = this.getById(deptId);
             if (agileSysDept != null) {
                 return agileSysDept.getDeptName();
@@ -75,13 +75,13 @@ public class AgileSysDeptServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDe
     private QueryWrapper<AgileSysDept> getSysDeptQueryWrapper(AgileSysDept agileSysDept) {
         QueryWrapper<AgileSysDept> queryWrapper = new QueryWrapper<>();
         if (agileSysDept != null) {
-            if (StringUtil.isNotEmpty(agileSysDept.getDeptCode())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDept.getDeptCode())) {
                 queryWrapper.lambda().eq(AgileSysDept::getDeptCode, agileSysDept.getDeptCode());
             }
-            if (StringUtil.isNotEmpty(agileSysDept.getDeptName())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDept.getDeptName())) {
                 queryWrapper.lambda().like(AgileSysDept::getDeptName, agileSysDept.getDeptName());
             }
-            if (StringUtil.isNotEmpty(agileSysDept.getDeptStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDept.getDeptStatus())) {
                 queryWrapper.lambda().eq(AgileSysDept::getDeptStatus, agileSysDept.getDeptStatus());
             }
         }

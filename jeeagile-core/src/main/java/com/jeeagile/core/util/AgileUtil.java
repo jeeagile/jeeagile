@@ -100,7 +100,7 @@ public class AgileUtil {
      * 判断用户是否未超管用户
      */
     public static boolean isSuperAdmin(String userName) {
-        if (StringUtil.isNotEmpty(userName) && userName.equals(getAgileProperties().getSuperAdmin())) {
+        if (AgileStringUtil.isNotEmpty(userName) && userName.equals(getAgileProperties().getSuperAdmin())) {
             return true;
         } else {
             return false;

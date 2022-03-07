@@ -7,7 +7,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresUser;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.enums.AgileLoggerType;
@@ -37,10 +37,10 @@ public class AgileSysLoginController extends AgileBaseController {
     @ApiOperation(value = "用户登录", notes = "用户登录")
     @AgileLogger(title = "用户登录", type = AgileLoggerType.LOGIN)
     public AgileResult<AgileUserData> login(@RequestBody AgileLoginUser agileLoginUser) {
-        if (StringUtil.isEmpty(agileLoginUser.getUserName())) {
+        if (AgileStringUtil.isEmpty(agileLoginUser.getUserName())) {
             return this.rtnError(AgileResultCode.FAIL_AUTH, "登录名不能为空!");
         }
-        if (StringUtil.isEmpty(agileLoginUser.getPassword())) {
+        if (AgileStringUtil.isEmpty(agileLoginUser.getPassword())) {
             return this.rtnError(AgileResultCode.FAIL_AUTH, "登录密码不能为空!");
         }
         AgileSecurityUtil.userLogin(agileLoginUser);

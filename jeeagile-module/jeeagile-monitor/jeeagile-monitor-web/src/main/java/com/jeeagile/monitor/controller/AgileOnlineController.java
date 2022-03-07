@@ -5,7 +5,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileOnlineUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.page.AgilePage;
@@ -72,19 +72,19 @@ public class AgileOnlineController extends AgileBaseController {
         List<AgileOnlineUser> onlineUserAllList = AgileSecurityUtil.getOnlineUserList();
         List<AgileOnlineUser> onlineUserList = new ArrayList<>();
         for (AgileOnlineUser agileOnlineUser : onlineUserAllList) {
-            if (StringUtil.isEmpty(agileOnlineUser.getUserToken())
+            if (AgileStringUtil.isEmpty(agileOnlineUser.getUserToken())
                     || agileOnlineUser.getUserToken().equals(AgileSecurityContext.getCurrentUserToken())) {
                 agileOnlineUser.setUserName(agileOnlineUser.getUserName() + "(当前用户)");
             }
-            if (StringUtil.isNotEmpty(loginIp) && StringUtil.isNotEmpty(userName)) {
+            if (AgileStringUtil.isNotEmpty(loginIp) && AgileStringUtil.isNotEmpty(userName)) {
                 if (loginIp.equals(agileOnlineUser.getLoginIp()) && userName.equals(agileOnlineUser.getUserName())) {
                     onlineUserList.add(agileOnlineUser);
                 }
-            } else if (StringUtil.isNotEmpty(loginIp)) {
+            } else if (AgileStringUtil.isNotEmpty(loginIp)) {
                 if (loginIp.equals(agileOnlineUser.getLoginIp())) {
                     onlineUserList.add(agileOnlineUser);
                 }
-            } else if (StringUtil.isNotEmpty(userName)) {
+            } else if (AgileStringUtil.isNotEmpty(userName)) {
                 if (userName.equals(agileOnlineUser.getUserName())) {
                     onlineUserList.add(agileOnlineUser);
                 }

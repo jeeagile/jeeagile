@@ -1,8 +1,8 @@
 package com.jeeagile.core.util.system;
 
-import com.jeeagile.core.util.DateUtil;
-import com.jeeagile.core.util.system.util.OshiUtil;
-import com.jeeagile.core.util.system.util.SystemUtil;
+import com.jeeagile.core.util.AgileDateUtil;
+import com.jeeagile.core.util.system.util.AgileOshiUtil;
+import com.jeeagile.core.util.system.util.AgileSystemUtil;
 
 import java.util.Date;
 
@@ -18,19 +18,19 @@ public class AgileServerUtil {
     public static AgileServerInfo getAgileServerInfo() {
         AgileServerInfo agileServerInfo = new AgileServerInfo();
 
-        agileServerInfo.setTime(DateUtil.formatDate(new Date(), "HH:mm:ss"));
-        agileServerInfo.setHostInfo(SystemUtil.getHostInfo());
-        agileServerInfo.setOsInfo(SystemUtil.getOsInfo());
-        agileServerInfo.setJavaInfo(SystemUtil.getJavaInfo());
-        agileServerInfo.setJvmInfo(SystemUtil.getJvmInfo());
-        agileServerInfo.setRuntimeInfo(SystemUtil.getRuntimeInfo());
-        agileServerInfo.setUserInfo(SystemUtil.getUserInfo());
+        agileServerInfo.setTime(AgileDateUtil.formatDate(new Date(), "HH:mm:ss"));
+        agileServerInfo.setHostInfo(AgileSystemUtil.getHostInfo());
+        agileServerInfo.setOsInfo(AgileSystemUtil.getOsInfo());
+        agileServerInfo.setJavaInfo(AgileSystemUtil.getJavaInfo());
+        agileServerInfo.setJvmInfo(AgileSystemUtil.getJvmInfo());
+        agileServerInfo.setRuntimeInfo(AgileSystemUtil.getRuntimeInfo());
+        agileServerInfo.setUserInfo(AgileSystemUtil.getUserInfo());
 
-        agileServerInfo.setCpuInfo(OshiUtil.getCpuInfo());
-        agileServerInfo.setDiskInfo(OshiUtil.getDiskInfo());
-        agileServerInfo.setDiskInfoList(OshiUtil.getDiskInfoList());
-        agileServerInfo.setMemoryInfo(OshiUtil.getMemoryInfo());
-        agileServerInfo.setSwapInfo(OshiUtil.getSwapInfo());
+        agileServerInfo.setCpuInfo(AgileOshiUtil.getCpuInfo());
+        agileServerInfo.setDiskInfo(AgileOshiUtil.getDiskInfo());
+        agileServerInfo.setDiskInfoList(AgileOshiUtil.getDiskInfoList());
+        agileServerInfo.setMemoryInfo(AgileOshiUtil.getMemoryInfo());
+        agileServerInfo.setSwapInfo(AgileOshiUtil.getSwapInfo());
         return agileServerInfo;
     }
 }

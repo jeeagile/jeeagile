@@ -2,7 +2,7 @@ package com.jeeagile.logger.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileServiceImpl;
@@ -40,10 +40,10 @@ public class AgileLoggerLoginServiceImpl extends AgileServiceImpl<AgileLoggerLog
     private QueryWrapper<AgileLoggerLogin> getLoggerLoginQueryWrapper(AgileLoggerLogin agileLoggerLogin) {
         QueryWrapper<AgileLoggerLogin> queryWrapper = new QueryWrapper<>();
         if (agileLoggerLogin != null) {
-            if (StringUtil.isNotEmpty(agileLoggerLogin.getLoginName())) {
+            if (AgileStringUtil.isNotEmpty(agileLoggerLogin.getLoginName())) {
                 queryWrapper.lambda().eq(AgileLoggerLogin::getLoginName, agileLoggerLogin.getLoginName());
             }
-            if (StringUtil.isNotEmpty(agileLoggerLogin.getStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileLoggerLogin.getStatus())) {
                 queryWrapper.lambda().eq(AgileLoggerLogin::getStatus, agileLoggerLogin.getStatus());
             }
         }

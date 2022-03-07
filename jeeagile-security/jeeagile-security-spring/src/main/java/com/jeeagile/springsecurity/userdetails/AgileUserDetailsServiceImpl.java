@@ -7,9 +7,9 @@ import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileBaseUser;
-import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.UserAgentUtil;
-import com.jeeagile.core.util.spring.SpringServletUtil;
+import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.AgileAgentUtil;
+import com.jeeagile.core.util.spring.AgileServletUtil;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,14 +38,14 @@ public class AgileUserDetailsServiceImpl implements UserDetailsService {
                 throw new AgileFrameException(AgileResultCode.FAIL_SERVER_EXCEPTION, "请设置用户验证接口实现类！");
             }
             AgileBaseUser userData = agileUserDetailsService.getUserDataByLoginName(loginName);
-            if (userData != null && StringUtil.isNotEmpty(userData.getUserId())) {
-                userData.setUserToken(StringUtil.getUuid());
+            if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
+                userData.setUserToken(AgileStringUtil.getUuid());
                 userData.setUserPerm(agileUserDetailsService.getUserPerm(userData));
                 userData.setUserRole(agileUserDetailsService.getUserRole(userData));
-                HttpServletRequest httpServletRequest = SpringServletUtil.getHttpServletRequest();
+                HttpServletRequest httpServletRequest = AgileServletUtil.getHttpServletRequest();
                 if (httpServletRequest != null) {
-                    UserAgent userAgent = UserAgentUtil.getUserAgent(httpServletRequest);
-                    userData.setLoginIp(UserAgentUtil.getUserIp(httpServletRequest));
+                    UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
+                    userData.setLoginIp(AgileAgentUtil.getUserIp(httpServletRequest));
                     userData.setOsName(userAgent.getOperatingSystem().getName());
                     userData.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
                     userData.setBrowserName(userAgent.getBrowser().getName());

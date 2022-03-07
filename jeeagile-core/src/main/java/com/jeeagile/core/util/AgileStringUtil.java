@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
  * @date 2021-03-21
  * @description 字符集工具类
  */
-public class StringUtil {
+public class AgileStringUtil {
 
-    private StringUtil() {
+    private AgileStringUtil() {
     }
 
     /**
@@ -102,7 +102,7 @@ public class StringUtil {
      * @return 转换后下划线方式命名的字符串
      */
     public static String toUnderlineCase(String str) {
-        return toSymbolCase(str, CharUtil.UNDERLINE);
+        return toSymbolCase(str, AgileCharUtil.UNDERLINE);
     }
 
     /**
@@ -151,13 +151,13 @@ public class StringUtil {
             return null;
         }
         final String nameTemp = name;
-        if (nameTemp.contains(CharUtil.UNDERLINE + "")) {
+        if (nameTemp.contains(AgileCharUtil.UNDERLINE + "")) {
             final int length = nameTemp.length();
             final StringBuilder sb = new StringBuilder(length);
             boolean upperCase = false;
             for (int i = 0; i < length; i++) {
                 char c = nameTemp.charAt(i);
-                if (c == CharUtil.UNDERLINE) {
+                if (c == AgileCharUtil.UNDERLINE) {
                     upperCase = true;
                 } else if (upperCase) {
                     sb.append(Character.toUpperCase(c));
@@ -193,7 +193,7 @@ public class StringUtil {
      * 格式化字符串 将占位符 {} 按照顺序替换为参数
      */
     public static String format(final String strPattern, final String... argArray) {
-        if (StringUtil.isEmpty(strPattern) || argArray == null || argArray.length < 1) {
+        if (AgileStringUtil.isEmpty(strPattern) || argArray == null || argArray.length < 1) {
             return strPattern;
         }
         final int strPatternLength = strPattern.length();
@@ -212,8 +212,8 @@ public class StringUtil {
                 return stringBuilder.toString();
             }
             // 转义符
-            if (placeholderIndex > 0 && strPattern.charAt(placeholderIndex - 1) == CharUtil.BACKSLASH) {// 转义符
-                if (placeholderIndex > 1 && strPattern.charAt(placeholderIndex - 2) == CharUtil.BACKSLASH) {// 双转义符
+            if (placeholderIndex > 0 && strPattern.charAt(placeholderIndex - 1) == AgileCharUtil.BACKSLASH) {// 转义符
+                if (placeholderIndex > 1 && strPattern.charAt(placeholderIndex - 2) == AgileCharUtil.BACKSLASH) {// 双转义符
                     // 转义符之前还有一个转义符，占位符依旧有效
                     stringBuilder.append(strPattern, handledPosition, placeholderIndex - 1);
                     stringBuilder.append(argArray[argIndex]);
@@ -222,7 +222,7 @@ public class StringUtil {
                     // 占位符被转义
                     argIndex--;
                     stringBuilder.append(strPattern, handledPosition, placeholderIndex - 1);
-                    stringBuilder.append(CharUtil.DELIM_START);
+                    stringBuilder.append(AgileCharUtil.DELIM_START);
                     handledPosition = placeholderIndex + 1;
                 }
             } else {// 正常占位符

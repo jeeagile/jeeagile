@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.jeeagile.core.exception.AgileFrameException;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -45,7 +45,7 @@ public class SingleRequestBodyResolver implements HandlerMethodArgumentResolver 
         final String httpRequestBody = getHttpRequestBody(nativeWebRequest);
         Assert.state(httpRequestBody != null, "Unresolvable httpRequestBody");
         JSONObject jsonObject = getJsonObjectByHttpRequestBody(httpRequestBody);
-        String parameterName = StringUtil.isEmpty(singleRequestBody.name()) ? methodParameter.getParameterName() : singleRequestBody.name();
+        String parameterName = AgileStringUtil.isEmpty(singleRequestBody.name()) ? methodParameter.getParameterName() : singleRequestBody.name();
         Assert.state(parameterName != null, "Unresolvable parameter name");
         Class<?> parameterType = methodParameter.getParameterType();
         Object object = null;
@@ -135,7 +135,7 @@ public class SingleRequestBodyResolver implements HandlerMethodArgumentResolver 
     private JSONObject getJsonObjectByHttpRequestBody(String httpRequestBody) {
         JSONObject jsonObject = null;
         try {
-            if (StringUtil.isNotEmpty(httpRequestBody) && httpRequestBody.contains("{") && httpRequestBody.contains("}")) {
+            if (AgileStringUtil.isNotEmpty(httpRequestBody) && httpRequestBody.contains("{") && httpRequestBody.contains("}")) {
                 jsonObject = JSON.parseObject(httpRequestBody);
             }
         } catch (JSONException e) {

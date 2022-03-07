@@ -7,8 +7,8 @@ import java.text.DecimalFormat;
  * @date 2021-03-21
  * @description
  */
-public class FormatUtil {
-    private FormatUtil() {
+public class AgileFormatUtil {
+    private AgileFormatUtil() {
     }
 
     protected static final String[] DATA_UNIT_NAMES = new String[]{"B", "kB", "MB", "GB", "TB", "EB"};

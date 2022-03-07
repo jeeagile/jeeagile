@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * 日期处理工具类
  */
-public class DateUtil {
+public class AgileDateUtil {
 
     /**
      * 日期类型 yyyy-MM-dd
@@ -50,7 +50,7 @@ public class DateUtil {
             Long minute = (millisecond - day * dd - hour * hh) / mi;
             Long second = (millisecond - day * dd - hour * hh - minute * mi) / ss;
             if (day > 365) {
-                return DateUtil.formatDate(new Date(millisecond), "yyyy年MM月dd日 HH时mm分ss秒");
+                return AgileDateUtil.formatDate(new Date(millisecond), "yyyy年MM月dd日 HH时mm分ss秒");
             }
             if (day > 0) {
                 sb.append(day).append("天");
@@ -80,7 +80,7 @@ public class DateUtil {
         if (date == null) {
             return null;
         } else {
-            if (StringUtil.isNotEmpty(formatType)) {
+            if (AgileStringUtil.isNotEmpty(formatType)) {
                 SimpleDateFormat format = new SimpleDateFormat(formatType);
                 return format.format(date);
             } else {

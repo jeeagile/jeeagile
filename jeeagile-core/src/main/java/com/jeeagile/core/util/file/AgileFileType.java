@@ -5,7 +5,7 @@ package com.jeeagile.core.util.file;
  * 
  * @author ruoyi
  */
-public class FileTypeUtil
+public class AgileFileType
 {
     public static final String IMAGE_PNG = "image/png";
 

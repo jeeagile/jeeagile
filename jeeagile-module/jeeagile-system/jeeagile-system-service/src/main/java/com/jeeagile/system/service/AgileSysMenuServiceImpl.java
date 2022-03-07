@@ -4,7 +4,7 @@ package com.jeeagile.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysMenu;
@@ -79,10 +79,10 @@ public class AgileSysMenuServiceImpl extends AgileBaseTreeServiceImpl<AgileSysMe
     private QueryWrapper<AgileSysMenu> getSysMenuQueryWrapper(AgileSysMenu agileSysMenu) {
         QueryWrapper<AgileSysMenu> queryWrapper = new QueryWrapper<>();
         if (agileSysMenu != null) {
-            if (StringUtil.isNotEmpty(agileSysMenu.getMenuName())) {
+            if (AgileStringUtil.isNotEmpty(agileSysMenu.getMenuName())) {
                 queryWrapper.lambda().like(AgileSysMenu::getMenuName, agileSysMenu.getMenuName());
             }
-            if (StringUtil.isNotEmpty(agileSysMenu.getMenuStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileSysMenu.getMenuStatus())) {
                 queryWrapper.lambda().eq(AgileSysMenu::getMenuStatus, agileSysMenu.getMenuStatus());
             }
         }

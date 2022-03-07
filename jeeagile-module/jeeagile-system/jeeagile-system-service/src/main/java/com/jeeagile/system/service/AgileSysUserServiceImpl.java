@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
@@ -49,22 +49,22 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     private QueryWrapper<AgileSysUser> getSysUserQueryWrapper(AgileSysUser agileSysUser) {
         QueryWrapper<AgileSysUser> queryWrapper = new QueryWrapper<>();
         if (agileSysUser != null) {
-            if (StringUtil.isNotEmpty(agileSysUser.getUserName())) {
+            if (AgileStringUtil.isNotEmpty(agileSysUser.getUserName())) {
                 queryWrapper.lambda().eq(AgileSysUser::getUserName, agileSysUser.getUserName());
             }
-            if (StringUtil.isNotEmpty(agileSysUser.getNickName())) {
+            if (AgileStringUtil.isNotEmpty(agileSysUser.getNickName())) {
                 queryWrapper.lambda().like(AgileSysUser::getNickName, agileSysUser.getNickName());
             }
-            if (StringUtil.isNotEmpty(agileSysUser.getUserEmail())) {
+            if (AgileStringUtil.isNotEmpty(agileSysUser.getUserEmail())) {
                 queryWrapper.lambda().like(AgileSysUser::getUserEmail, agileSysUser.getUserEmail());
             }
-            if (StringUtil.isNotEmpty(agileSysUser.getUserPhone())) {
+            if (AgileStringUtil.isNotEmpty(agileSysUser.getUserPhone())) {
                 queryWrapper.lambda().like(AgileSysUser::getUserPhone, agileSysUser.getUserPhone());
             }
-            if (StringUtil.isNotEmpty(agileSysUser.getDeptId())) {
+            if (AgileStringUtil.isNotEmpty(agileSysUser.getDeptId())) {
                 queryWrapper.lambda().eq(AgileSysUser::getDeptId, agileSysUser.getDeptId());
             }
-            if (StringUtil.isNotEmpty(agileSysUser.getUserStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileSysUser.getUserStatus())) {
                 queryWrapper.lambda().eq(AgileSysUser::getUserStatus, agileSysUser.getUserStatus());
             }
         }
@@ -92,7 +92,7 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     @Override
     public AgileSysUserInfo saveUser(AgileSysUserInfo agileSysUserInfo) {
         String userPwd = agileSysUserInfo.getUserPwd();
-        if (StringUtil.isEmpty(userPwd)) {
+        if (AgileStringUtil.isEmpty(userPwd)) {
             userPwd = agileSysConfigService.getDefaultPwd();
         }
         agileSysUserInfo.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
@@ -108,7 +108,7 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     @Override
     public boolean updateUserById(AgileSysUserInfo agileSysUserInfo) {
         String userPwd = agileSysUserInfo.getUserPwd();
-        if (StringUtil.isNotEmpty(userPwd)) {
+        if (AgileStringUtil.isNotEmpty(userPwd)) {
             agileSysUserInfo.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
         }
         //校验业务数据
@@ -131,7 +131,7 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     @Override
     public boolean resetUserPwd(AgileUpdatePwd agileUpdatePwd) {
         String userPwd = agileUpdatePwd.getNewPwd();
-        if (StringUtil.isEmpty(userPwd)) {
+        if (AgileStringUtil.isEmpty(userPwd)) {
             userPwd = agileSysConfigService.getDefaultPwd();
         }
         userPwd = AgileSecurityUtil.encryptPassword(userPwd);

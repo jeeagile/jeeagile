@@ -7,7 +7,7 @@ import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.properties.AgileProperties;
 import com.jeeagile.core.security.properties.AgileSecurityProperties;
 import com.jeeagile.core.util.AgileUtil;
-import com.jeeagile.core.util.file.FileUtil;
+import com.jeeagile.core.util.file.AgileFileUtil;
 import com.jeeagile.frame.support.interceptor.AgileSecurityInterceptor;
 import com.jeeagile.frame.support.resolver.SingleRequestBodyResolver;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -45,7 +45,7 @@ public class AgileWebAutoConfigure implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 本地文件上传路径
-        registry.addResourceHandler(AgileConstants.AGILE_RESOURCE_PREFIX + "/**").addResourceLocations("file:" + AgileUtil.getUploadPath() + FileUtil.getFileSeparator());
+        registry.addResourceHandler(AgileConstants.AGILE_RESOURCE_PREFIX + "/**").addResourceLocations("file:" + AgileUtil.getUploadPath() + AgileFileUtil.getFileSeparator());
     }
 
     @Override

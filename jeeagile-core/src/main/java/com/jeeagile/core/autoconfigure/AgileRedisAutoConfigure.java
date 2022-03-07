@@ -1,7 +1,7 @@
 package com.jeeagile.core.autoconfigure;
 
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
@@ -76,7 +76,7 @@ public class AgileRedisAutoConfigure {
             redisCacheConfiguration = redisCacheConfiguration.entryTtl(Duration.ofDays(7));
         }
 
-        if (StringUtil.isNotEmpty(redisProperties.getKeyPrefix())) {
+        if (AgileStringUtil.isNotEmpty(redisProperties.getKeyPrefix())) {
             redisCacheConfiguration = redisCacheConfiguration.prefixCacheNameWith(redisProperties.getKeyPrefix());
         } else {
             redisCacheConfiguration = redisCacheConfiguration.prefixCacheNameWith(AgileCacheConstants.AGILE_CACHE_PREFIX);

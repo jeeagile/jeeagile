@@ -1,7 +1,7 @@
 package com.jeeagile.core.util.spring;
 
 import com.jeeagile.core.constants.AgileConstants;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2021-03-21
  * @description Spring工具类
  */
-public class SpringServletUtil {
-    private SpringServletUtil() {
+public class AgileServletUtil {
+    private AgileServletUtil() {
     }
 
     /**
@@ -74,10 +74,10 @@ public class SpringServletUtil {
      */
     public static String getUserToken(HttpServletRequest httpServletRequest) {
         String userToken = httpServletRequest.getHeader(AgileConstants.AGILE_TOKEN);
-        if (StringUtil.isEmpty(userToken)) {
+        if (AgileStringUtil.isEmpty(userToken)) {
             userToken = httpServletRequest.getParameter(AgileConstants.AGILE_TOKEN);
         }
-        if (StringUtil.isEmpty(userToken)) {
+        if (AgileStringUtil.isEmpty(userToken)) {
             userToken = getCookieValue(httpServletRequest, AgileConstants.AGILE_TOKEN);
         }
         return userToken;

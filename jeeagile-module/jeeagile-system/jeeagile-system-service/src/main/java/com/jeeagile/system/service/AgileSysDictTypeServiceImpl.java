@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
@@ -87,15 +87,15 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
         QueryWrapper<AgileSysDictType> queryWrapper = new QueryWrapper<>();
         if (agileSysDictType != null) {
             //字典名称模糊查询
-            if (StringUtil.isNotEmpty(agileSysDictType.getDictName())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDictType.getDictName())) {
                 queryWrapper.lambda().like(AgileSysDictType::getDictName, agileSysDictType.getDictName());
             }
             //字典类型模糊查询
-            if (StringUtil.isNotEmpty(agileSysDictType.getDictType())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDictType.getDictType())) {
                 queryWrapper.lambda().like(AgileSysDictType::getDictType, agileSysDictType.getDictType());
             }
             //状态
-            if (StringUtil.isNotEmpty(agileSysDictType.getDictStatus())) {
+            if (AgileStringUtil.isNotEmpty(agileSysDictType.getDictStatus())) {
                 queryWrapper.lambda().eq(AgileSysDictType::getDictStatus, agileSysDictType.getDictStatus());
             }
         }

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -14,7 +14,6 @@ import com.jeeagile.generator.mapper.AgileGeneratorTableMapper;
 import com.jeeagile.generator.util.AgileGeneratorUtil;
 import com.jeeagile.generator.vo.AgileGeneratorTableInfo;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -51,7 +50,7 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
     public boolean importTable(List<String> tableNameList) {
         for (String tableName : tableNameList) {
             AgileGeneratorTable agileGeneratorTable = this.getBaseMapper().selectDbTableByTableName(tableName);
-            if (agileGeneratorTable == null || StringUtil.isEmpty(agileGeneratorTable.getTableName())) {
+            if (agileGeneratorTable == null || AgileStringUtil.isEmpty(agileGeneratorTable.getTableName())) {
                 throw new AgileValidateException("表(" + tableName + ")不存在！");
             }
             AgileGeneratorUtil.initGeneratorTable(agileGeneratorTable);
@@ -72,7 +71,7 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
         AgileGeneratorTableInfo agileGeneratorTableInfo = new AgileGeneratorTableInfo();
         AgileGeneratorTable agileGeneratorTable = this.getById(agileGeneratorTableId);
         BeanUtils.copyProperties(agileGeneratorTable, agileGeneratorTableInfo);
-        if (agileGeneratorTable != null && !StringUtil.isEmpty(agileGeneratorTable.getId())) {
+        if (agileGeneratorTable != null && !AgileStringUtil.isEmpty(agileGeneratorTable.getId())) {
             agileGeneratorTableInfo.setAgileGeneratorTableColumnList(agileGeneratorTableColumnService.selectListByTableId(agileGeneratorTableId));
         }
         return agileGeneratorTableInfo;
@@ -125,7 +124,7 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
     public Map<String, String> previewCode(String agileGeneratorTableId) {
         // 查询表信息
         AgileGeneratorTableInfo agileGeneratorTableInfo = this.selectTableInfoById(agileGeneratorTableId);
-        if (agileGeneratorTableInfo != null && StringUtil.isNotEmpty(agileGeneratorTableInfo.getId())) {
+        if (agileGeneratorTableInfo != null && AgileStringUtil.isNotEmpty(agileGeneratorTableInfo.getId())) {
             return AgileGeneratorUtil.generatorCode(agileGeneratorTableInfo);
         } else {
             throw new AgileFrameException("生成表信息已不存在无法生成预览文件！");
@@ -139,7 +138,7 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
             ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
             for (String agileGeneratorTableId : agileGeneratorTableIdList) {
                 AgileGeneratorTableInfo agileGeneratorTableInfo = this.selectTableInfoById(agileGeneratorTableId);
-                if (agileGeneratorTableInfo != null && StringUtil.isNotEmpty(agileGeneratorTableInfo.getId())) {
+                if (agileGeneratorTableInfo != null && AgileStringUtil.isNotEmpty(agileGeneratorTableInfo.getId())) {
                     AgileGeneratorUtil.generatorCode(agileGeneratorTableInfo, zipOutputStream);
                 }
             }
@@ -153,10 +152,10 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
     private QueryWrapper<AgileGeneratorTable> getGeneratorTableQueryWrapper(AgileGeneratorTable agileGeneratorTable) {
         QueryWrapper<AgileGeneratorTable> queryWrapper = new QueryWrapper<>();
         if (agileGeneratorTable != null) {
-            if (StringUtil.isNotEmpty(agileGeneratorTable.getTableName())) {
+            if (AgileStringUtil.isNotEmpty(agileGeneratorTable.getTableName())) {
                 queryWrapper.lambda().like(AgileGeneratorTable::getTableName, agileGeneratorTable.getTableName());
             }
-            if (StringUtil.isNotEmpty(agileGeneratorTable.getTableComment())) {
+            if (AgileStringUtil.isNotEmpty(agileGeneratorTable.getTableComment())) {
                 queryWrapper.lambda().like(AgileGeneratorTable::getTableComment, agileGeneratorTable.getTableComment());
             }
         }

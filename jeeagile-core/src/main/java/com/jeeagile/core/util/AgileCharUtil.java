@@ -5,8 +5,8 @@ package com.jeeagile.core.util;
  * @date 2021-03-21
  * @description 字符工具类
  */
-public class CharUtil {
-    private CharUtil() {
+public class AgileCharUtil {
+    private AgileCharUtil() {
     }
 
     /**

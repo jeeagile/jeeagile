@@ -9,7 +9,7 @@ import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgileRequiresUser;
 import com.jeeagile.core.util.AgileUtil;
-import com.jeeagile.core.util.file.FileUtil;
+import com.jeeagile.core.util.file.AgileFileUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.enums.AgileLoggerType;
@@ -65,11 +65,11 @@ public class AgileSysPersonController extends AgileBaseController {
     @ApiOperation(value = "上传头像", notes = "上传头像")
     @AgileLogger(title = "上传头像", type = AgileLoggerType.UPDATE)
     public AgileResult<String> uploadAvatar(@RequestParam("userAvatar") MultipartFile multipartFile) {
-        String userAvatarBasePath = AgileUtil.getUploadPath() + FileUtil.getFileSeparator() + "avatar";
-        String userAvatarFilePath = FileUtil.upload(multipartFile, userAvatarBasePath);
+        String userAvatarBasePath = AgileUtil.getUploadPath() + AgileFileUtil.getFileSeparator() + "avatar";
+        String userAvatarFilePath = AgileFileUtil.upload(multipartFile, userAvatarBasePath);
         //置换为资源路径
         String userAvatar = userAvatarFilePath.replace(AgileUtil.getUploadPath(), AgileConstants.AGILE_RESOURCE_PREFIX);
-        userAvatar = userAvatar.replace(FileUtil.getFileSeparator(), "/");
+        userAvatar = userAvatar.replace(AgileFileUtil.getFileSeparator(), "/");
         agilePersonService.updateUserAvatar(userAvatar);
         return this.rtnSuccess((Object) userAvatar);
     }

@@ -11,7 +11,7 @@ import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
@@ -166,7 +166,7 @@ public class AgileShiroSecurity implements IAgileSecurity {
             Object pc = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
             if (pc instanceof PrincipalCollection) {
                 AgileBaseUser userData = (AgileBaseUser) ((PrincipalCollection) pc).getPrimaryPrincipal();
-                if (userData == null || StringUtil.isEmpty(userData.getUserName())) {
+                if (userData == null || AgileStringUtil.isEmpty(userData.getUserName())) {
                     continue;
                 }
                 AgileOnlineUser agileOnlineUser = new AgileOnlineUser();

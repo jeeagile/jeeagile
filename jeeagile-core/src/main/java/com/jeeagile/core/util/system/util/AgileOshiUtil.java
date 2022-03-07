@@ -1,6 +1,6 @@
 package com.jeeagile.core.util.system.util;
 
-import com.jeeagile.core.util.FormatUtil;
+import com.jeeagile.core.util.AgileFormatUtil;
 import com.jeeagile.core.util.system.info.oshi.CpuInfo;
 import com.jeeagile.core.util.system.info.oshi.DiskInfo;
 import com.jeeagile.core.util.system.info.oshi.MemoryInfo;
@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2021-03-21
  * @description
  */
-public class OshiUtil {
+public class AgileOshiUtil {
     private static final SystemInfo systemInfo;
     /**
      * 硬件信息
@@ -106,21 +106,21 @@ public class OshiUtil {
      * 获取系统CPU 系统使用率、用户使用率、利用率等等 相关信息
      */
     public static CpuInfo getCpuInfo(long waitingTime) {
-        return getCpuInfo(OshiUtil.getProcessor(), waitingTime);
+        return getCpuInfo(AgileOshiUtil.getProcessor(), waitingTime);
     }
 
     /**
      * 获取交换区使用信息
      */
     public static SwapInfo getSwapInfo() {
-        return getSwapInfo(OshiUtil.getMemory());
+        return getSwapInfo(AgileOshiUtil.getMemory());
     }
 
     /**
      * 获取内存使用信息
      */
     public static MemoryInfo getMemoryInfo() {
-        return getMemoryInfo(OshiUtil.getMemory());
+        return getMemoryInfo(AgileOshiUtil.getMemory());
     }
 
     /**
@@ -129,7 +129,7 @@ public class OshiUtil {
      * @return
      */
     public static DiskInfo getDiskInfo() {
-        return getDiskInfo(OshiUtil.getOs());
+        return getDiskInfo(AgileOshiUtil.getOs());
     }
 
     /**
@@ -138,7 +138,7 @@ public class OshiUtil {
      * @return
      */
     public static List<DiskInfo> getDiskInfoList() {
-        return getDiskInfoList(OshiUtil.getOs());
+        return getDiskInfoList(AgileOshiUtil.getOs());
     }
 
     /**
@@ -186,9 +186,9 @@ public class OshiUtil {
         VirtualMemory virtualMemory = memory.getVirtualMemory();
         long total = virtualMemory.getSwapTotal();
         long used = virtualMemory.getSwapUsed();
-        swapInfo.setTotal(FormatUtil.formatBytes(total));
-        swapInfo.setUsed(FormatUtil.formatBytes(used));
-        swapInfo.setAvailable(FormatUtil.formatBytes(total - used));
+        swapInfo.setTotal(AgileFormatUtil.formatBytes(total));
+        swapInfo.setUsed(AgileFormatUtil.formatBytes(used));
+        swapInfo.setAvailable(AgileFormatUtil.formatBytes(total - used));
         if (used == 0) {
             swapInfo.setUsageRate("0");
         } else {
@@ -203,9 +203,9 @@ public class OshiUtil {
      */
     private static MemoryInfo getMemoryInfo(GlobalMemory memory) {
         MemoryInfo memoryInfo = new MemoryInfo();
-        memoryInfo.setTotal(FormatUtil.formatBytes(memory.getTotal()));
-        memoryInfo.setAvailable(FormatUtil.formatBytes(memory.getAvailable()));
-        memoryInfo.setUsed(FormatUtil.formatBytes(memory.getTotal() - memory.getAvailable()));
+        memoryInfo.setTotal(AgileFormatUtil.formatBytes(memory.getTotal()));
+        memoryInfo.setAvailable(AgileFormatUtil.formatBytes(memory.getAvailable()));
+        memoryInfo.setUsed(AgileFormatUtil.formatBytes(memory.getTotal() - memory.getAvailable()));
         DecimalFormat df = new DecimalFormat("0.00");
         memoryInfo.setUsageRate(df.format((memory.getTotal() - memory.getAvailable()) / (double) memory.getTotal() * 100));
         return memoryInfo;
@@ -224,9 +224,9 @@ public class OshiUtil {
             total += fileStore.getTotalSpace();
             available += fileStore.getUsableSpace();
         }
-        diskInfo.setTotal(total > 0 ? FormatUtil.formatBytes(total) : "?");
-        diskInfo.setAvailable(FormatUtil.formatBytes(available));
-        diskInfo.setUsed(FormatUtil.formatBytes(total - available));
+        diskInfo.setTotal(total > 0 ? AgileFormatUtil.formatBytes(total) : "?");
+        diskInfo.setAvailable(AgileFormatUtil.formatBytes(available));
+        diskInfo.setUsed(AgileFormatUtil.formatBytes(total - available));
         DecimalFormat df = new DecimalFormat("0.00");
         diskInfo.setUsageRate(df.format((total - available) / (double) total * 100));
         return diskInfo;
@@ -244,9 +244,9 @@ public class OshiUtil {
             diskInfo.setFileMount(fileStore.getMount().replaceAll("\\\\", ""));
             diskInfo.setFileType(fileStore.getType());
             diskInfo.setFileDesc(fileStore.getDescription());
-            diskInfo.setTotal(fileStore.getTotalSpace() > 0 ? FormatUtil.formatBytes(fileStore.getTotalSpace()) : "?");
-            diskInfo.setAvailable(FormatUtil.formatBytes(fileStore.getUsableSpace()));
-            diskInfo.setUsed(FormatUtil.formatBytes(fileStore.getTotalSpace() - fileStore.getUsableSpace()));
+            diskInfo.setTotal(fileStore.getTotalSpace() > 0 ? AgileFormatUtil.formatBytes(fileStore.getTotalSpace()) : "?");
+            diskInfo.setAvailable(AgileFormatUtil.formatBytes(fileStore.getUsableSpace()));
+            diskInfo.setUsed(AgileFormatUtil.formatBytes(fileStore.getTotalSpace() - fileStore.getUsableSpace()));
             DecimalFormat df = new DecimalFormat("0.00");
             diskInfo.setUsageRate(df.format((fileStore.getTotalSpace() - fileStore.getUsableSpace()) / (double) fileStore.getTotalSpace() * 100));
             diskInfoList.add(diskInfo);

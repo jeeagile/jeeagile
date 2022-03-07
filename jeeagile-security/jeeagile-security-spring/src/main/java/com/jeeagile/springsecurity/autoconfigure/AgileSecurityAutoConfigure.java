@@ -2,8 +2,6 @@ package com.jeeagile.springsecurity.autoconfigure;
 
 
 import com.jeeagile.core.security.properties.AgileSecurityProperties;
-import com.jeeagile.core.security.user.AgileBaseUser;
-import com.jeeagile.core.util.StringUtil;
 import com.jeeagile.springsecurity.access.AgileAccessDeniedHandler;
 import com.jeeagile.springsecurity.access.AgileAuthenticationEntryPoint;
 import com.jeeagile.springsecurity.crypto.AgilePasswordEncoder;
@@ -27,9 +25,6 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
 

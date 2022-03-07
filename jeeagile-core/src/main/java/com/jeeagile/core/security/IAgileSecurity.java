@@ -6,7 +6,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresRoles;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 
 import java.util.List;
 
@@ -92,7 +92,7 @@ public interface IAgileSecurity {
     default String[] getPermissions(AgilePermissionsPrefix agilePermissionsPrefix, AgileRequiresPermissions agileRequiresPermissions) {
         String prefix = agilePermissionsPrefix.value();
         String[] perms = agileRequiresPermissions.value();
-        if (StringUtil.isNotEmpty(prefix)) {
+        if (AgileStringUtil.isNotEmpty(prefix)) {
             String[] newPerms = new String[perms.length];
             for (int i = 0; i < perms.length; i++) {
                 newPerms[i] = prefix + ":" + perms[i];

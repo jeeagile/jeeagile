@@ -5,7 +5,7 @@ import com.jeeagile.core.cache.code.annotation.AgileOptionName;
 import com.jeeagile.core.cache.util.AgileCacheUtil;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.util.AgileArrayUtil;
-import com.jeeagile.core.util.StringUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -162,7 +162,7 @@ public class AgileCodeCacheConfig {
         for (Object object : codeDataList) {
             String optionCodeValue = getOptionCodeByObject(object);
             String optionNameValue = getOptionNameByObject(object);
-            if (StringUtil.isEmpty(optionCodeValue) || StringUtil.isEmpty(optionNameValue)) {
+            if (AgileStringUtil.isEmpty(optionCodeValue) || AgileStringUtil.isEmpty(optionNameValue)) {
                 log.error("OptionCode和OptionName字段值获取为空，请进行检查！");
                 throw new AgileFrameException("请检查OptionCode和OptionName字段值配置是否正确！");
             }
