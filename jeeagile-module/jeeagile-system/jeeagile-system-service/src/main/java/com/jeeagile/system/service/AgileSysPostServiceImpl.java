@@ -3,7 +3,7 @@ package com.jeeagile.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.validate.ValidateUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -43,7 +43,7 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
     @Override
     public AgileSysPost savePost(AgileSysPost agileSysPost) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysPost);
+        AgileValidateUtil.validateObject(agileSysPost);
         this.save(agileSysPost);
         return agileSysPost;
     }
@@ -51,7 +51,7 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
     @Override
     public boolean updatePostById(AgileSysPost agileSysPost) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysPost);
+        AgileValidateUtil.validateObject(agileSysPost);
         return this.updateById(agileSysPost);
     }
 

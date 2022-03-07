@@ -10,10 +10,10 @@ import java.util.Set;
 /**
  * @author JeeAgile
  * @date 2021-03-21
- * @description 数组工具类
+ * @description 数据验证工具类
  */
-public class ValidateUtil {
-    private ValidateUtil() {
+public class AgileValidateUtil {
+    private AgileValidateUtil() {
     }
 
     //初始化验证参数的框架

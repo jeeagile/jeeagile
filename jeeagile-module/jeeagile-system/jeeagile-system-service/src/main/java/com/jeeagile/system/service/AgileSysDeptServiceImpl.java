@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.validate.ValidateUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysDept;
 import com.jeeagile.system.mapper.AgileSysDeptMapper;
@@ -47,7 +47,7 @@ public class AgileSysDeptServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDe
     @Override
     public AgileSysDept saveDept(AgileSysDept agileSysDept) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysDept);
+        AgileValidateUtil.validateObject(agileSysDept);
         //保存部门信息
         this.save(agileSysDept);
         return agileSysDept;
@@ -56,7 +56,7 @@ public class AgileSysDeptServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDe
     @Override
     public boolean updateDeptById(AgileSysDept agileSysDept) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysDept);
+        AgileValidateUtil.validateObject(agileSysDept);
         return this.updateById(agileSysDept);
     }
 

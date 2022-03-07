@@ -8,7 +8,7 @@ import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.validate.ValidateUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -49,7 +49,7 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
     @Override
     public AgileSysDictType saveDictType(AgileSysDictType agileSysDictType) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysDictType);
+        AgileValidateUtil.validateObject(agileSysDictType);
         validateSysDictType(agileSysDictType);
         this.save(agileSysDictType);
         return agileSysDictType;
@@ -58,7 +58,7 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
     @Override
     public boolean updateDictTypeById(AgileSysDictType agileSysDictType) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysDictType);
+        AgileValidateUtil.validateObject(agileSysDictType);
         validateSysDictType(agileSysDictType);
         AgileSysDictType oldAgileSysDictType = this.getById(agileSysDictType.getId());
         if (oldAgileSysDictType.getDictType() != agileSysDictType.getDictType()) {

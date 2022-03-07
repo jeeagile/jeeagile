@@ -8,7 +8,7 @@ import com.jeeagile.core.enums.AgileStatusEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.validate.ValidateUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
@@ -54,7 +54,7 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
 
     @Override
     public AgileSysDictData saveDictData(AgileSysDictData agileSysDictData) {
-        ValidateUtil.validateObject(agileSysDictData);
+        AgileValidateUtil.validateObject(agileSysDictData);
         validateSysDictData(agileSysDictData);
         this.save(agileSysDictData);
         return agileSysDictData;
@@ -62,7 +62,7 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
 
     @Override
     public boolean updateDictDataById(AgileSysDictData agileSysDictData) {
-        ValidateUtil.validateObject(agileSysDictData);
+        AgileValidateUtil.validateObject(agileSysDictData);
         validateSysDictData(agileSysDictData);
         return this.updateById(agileSysDictData);
     }

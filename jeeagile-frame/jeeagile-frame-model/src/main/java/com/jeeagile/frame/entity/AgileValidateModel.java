@@ -1,6 +1,6 @@
 package com.jeeagile.frame.entity;
 
-import com.jeeagile.core.util.validate.ValidateUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 
 /**
  * @author JeeAgile
@@ -16,7 +16,7 @@ public interface AgileValidateModel {
      * @return 当前对象
      */
     default <T extends AgileValidateModel> T validate(Class... group) {
-        ValidateUtil.validateObject(this, group);
+        AgileValidateUtil.validateObject(this, group);
         return (T) this;
     }
 }

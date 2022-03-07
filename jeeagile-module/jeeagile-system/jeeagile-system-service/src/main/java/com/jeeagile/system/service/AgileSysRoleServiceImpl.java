@@ -3,7 +3,7 @@ package com.jeeagile.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.validate.ValidateUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -82,7 +82,7 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     @Override
     public AgileSysRole saveRole(AgileSysRoleInfo agileSysRoleInfo) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysRoleInfo);
+        AgileValidateUtil.validateObject(agileSysRoleInfo);
         this.save(agileSysRoleInfo);
         this.saveRoleMenu(agileSysRoleInfo.getId(), agileSysRoleInfo.getMenuIdList());
         return agileSysRoleInfo;
@@ -91,7 +91,7 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     @Override
     public boolean updateRoleById(AgileSysRoleInfo agileSysRoleInfo) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysRoleInfo);
+        AgileValidateUtil.validateObject(agileSysRoleInfo);
         //保存角色信息
         this.updateById(agileSysRoleInfo);
         agileSysRoleMenuService.deleteByRoleId(agileSysRoleInfo.getId());

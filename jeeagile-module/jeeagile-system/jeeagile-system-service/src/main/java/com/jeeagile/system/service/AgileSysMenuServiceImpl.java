@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.validate.ValidateUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysMenu;
 import com.jeeagile.system.mapper.AgileSysMenuMapper;
@@ -39,7 +39,7 @@ public class AgileSysMenuServiceImpl extends AgileBaseTreeServiceImpl<AgileSysMe
     @Override
     public AgileSysMenu saveMenu(AgileSysMenu agileSysMenu) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysMenu);
+        AgileValidateUtil.validateObject(agileSysMenu);
         //保存菜单信息
         this.save(agileSysMenu);
         return agileSysMenu;
@@ -48,7 +48,7 @@ public class AgileSysMenuServiceImpl extends AgileBaseTreeServiceImpl<AgileSysMe
     @Override
     public boolean updateMenuById(AgileSysMenu agileSysMenu) {
         //校验业务数据
-        ValidateUtil.validateObject(agileSysMenu);
+        AgileValidateUtil.validateObject(agileSysMenu);
         return this.updateById(agileSysMenu);
     }
 

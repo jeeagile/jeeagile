@@ -6,7 +6,7 @@ import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.StringUtil;
-import com.jeeagile.core.util.validate.ValidateUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -97,7 +97,7 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
         }
         agileSysUserInfo.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
         //校验业务数据
-        ValidateUtil.validateObject(agileSysUserInfo);
+        AgileValidateUtil.validateObject(agileSysUserInfo);
         this.validateSysUser(agileSysUserInfo);
         this.save(agileSysUserInfo);
         this.saveUserRole(agileSysUserInfo.getId(), agileSysUserInfo.getRoleIdList());
@@ -112,7 +112,7 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
             agileSysUserInfo.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
         }
         //校验业务数据
-        ValidateUtil.validateObject(agileSysUserInfo);
+        AgileValidateUtil.validateObject(agileSysUserInfo);
         this.validateSysUser(agileSysUserInfo);
         this.updateById(agileSysUserInfo);
         agileSysUserPostService.deleteByUserId(agileSysUserInfo.getId());
