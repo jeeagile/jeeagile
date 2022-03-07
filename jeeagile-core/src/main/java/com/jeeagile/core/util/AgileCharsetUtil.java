@@ -9,8 +9,8 @@ import java.nio.charset.UnsupportedCharsetException;
  * @date 2021-03-21
  * @description 字符集工具类
  */
-public class CharsetUtil {
-    private CharsetUtil() {
+public class AgileCharsetUtil {
+    private AgileCharsetUtil() {
     }
 
     /**

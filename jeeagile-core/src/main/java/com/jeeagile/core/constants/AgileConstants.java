@@ -1,6 +1,6 @@
 package com.jeeagile.core.constants;
 
-import com.jeeagile.core.util.CharsetUtil;
+import com.jeeagile.core.util.AgileCharsetUtil;
 
 /**
  * @author JeeAgile
@@ -11,7 +11,7 @@ public class AgileConstants {
     private AgileConstants() {
     }
 
-    public static final String UTF8 = CharsetUtil.UTF_8;
+    public static final String UTF8 = AgileCharsetUtil.UTF_8;
 
     public static final String AGILE_SECURITY = "agile.security";
     public static final String AGILE_PROTOCOL = "agile.protocol";
