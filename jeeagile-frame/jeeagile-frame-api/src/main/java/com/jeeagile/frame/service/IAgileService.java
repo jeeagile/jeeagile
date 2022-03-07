@@ -19,105 +19,140 @@ import java.util.List;
  * @description
  */
 public interface IAgileService<T extends AgileModel> extends IService<T> {
+
+    /**
+     * 分页查询
+     *
+     * @param agilePageable
+     * @param queryWrapper
+     * @return
+     */
     default AgilePage<T> page(AgilePageable<?> agilePageable, Wrapper<T> queryWrapper) {
         AgilePage<T> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         return this.page(agilePage, queryWrapper);
     }
 
+    /**
+     * 分页查询
+     *
+     * @param agilePageable
+     * @return
+     */
     default AgilePage<T> selectPage(AgilePageable<?> agilePageable) {
         AgilePage<T> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         return this.page(agilePage, getQueryWrapper((T) agilePageable.getQueryCond()));
     }
 
-    default List<T> selectList(T entity) {
-        return this.list(getQueryWrapper(entity));
+    /**
+     * 查询列表
+     *
+     * @param agileModel
+     * @return
+     */
+    default List<T> selectList(T agileModel) {
+        return this.list(getQueryWrapper(agileModel));
     }
 
-    default QueryWrapper<T> getQueryWrapper(T entity) {
-        QueryWrapper<T> queryWrapper = new QueryWrapper<>(entity);
+    /**
+     * 提取查询条件
+     *
+     * @param agileModel
+     * @return
+     */
+    default QueryWrapper<T> getQueryWrapper(T agileModel) {
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>(agileModel);
         return queryWrapper;
     }
 
-    default T saveEntity(T entity) {
-        this.saveBefore(entity);
-        if (this.save(entity)) {
-            this.saveAfter(entity);
-        } else {
+    /**
+     * 根据主键查询
+     *
+     * @param id
+     * @return
+     */
+    default T selectModel(Serializable id) {
+        return this.getById(id);
+    }
+
+    /**
+     * 保存
+     *
+     * @param agileModel
+     * @return
+     */
+    default T saveModel(T agileModel) {
+        this.validateModel(agileModel);
+        this.saveModelValidate(agileModel);
+        if (!this.save(agileModel)) {
             throw new AgileFrameException("保存数据失败！");
         }
-        return entity;
-    }
-
-    default void validateEntity(T entity) {
-        if (entity instanceof AgileValidateModel) {
-            ((AgileValidateModel) entity).validate();
-        }
+        return agileModel;
     }
 
     /**
-     * 保存前操作
+     * 保存校验
      *
-     * @param entity
+     * @param agileModel
      */
-    default void saveBefore(T entity) {
-        this.validateEntity(entity);
-    }
-
-
-    /**
-     * 保存后操作
-     */
-    default void saveAfter(T entity) {
+    default void saveModelValidate(T agileModel) {
         // default method ignored
     }
 
-    default boolean updateEntity(T entity) {
-        this.updateBefore(entity);
-        if (this.updateById(entity)) {
-            this.updateAfter(entity);
+    /**
+     * 校验数据
+     *
+     * @param agileModel
+     */
+    default void validateModel(T agileModel) {
+        if (agileModel instanceof AgileValidateModel) {
+            ((AgileValidateModel) agileModel).validate();
+        }
+    }
+
+
+    /**
+     * 更新
+     *
+     * @param agileModel
+     * @return
+     */
+    default boolean updateModel(T agileModel) {
+        this.validateModel(agileModel);
+        this.updateModelValidate(agileModel);
+        if (this.updateById(agileModel)) {
             return true;
         }
         return false;
     }
 
-
     /**
-     * 更新前操作
+     * 更新校验
      *
-     * @param entity
+     * @param agileModel
      */
-    default void updateBefore(T entity) {
-        this.validateEntity(entity);
-    }
-
-    /**
-     * 更新后操作
-     */
-    default void updateAfter(T entity) {
+    default void updateModelValidate(T agileModel) {
         // default method ignored
     }
 
-    default boolean deleteById(Serializable id) {
-        this.deleteBefore(id);
+    /**
+     * 删除
+     *
+     * @param id
+     * @return
+     */
+    default boolean deleteModel(Serializable id) {
+        this.deleteModelValidate(id);
         this.removeById(id);
-        this.deleteAfter(id);
         return true;
     }
 
     /**
-     * 删除前操作
+     * 删除校验
      *
      * @param id
+     * @return
      */
-    default void deleteBefore(Serializable id) {
+    default void deleteModelValidate(Serializable id) {
         // default method ignored
     }
-
-    /**
-     * 删除后操作
-     */
-    default void deleteAfter(Serializable id) {
-        // default method ignored
-    }
-
 }
