@@ -11,9 +11,9 @@ import java.lang.reflect.Type;
  * @date 2021-03-21
  * @description 数组工具类
  */
-public class ArrayUtil {
+public class AgileArrayUtil {
 
-    private ArrayUtil() {
+    private AgileArrayUtil() {
     }
 
     public static final boolean[] EMPTY_BOOLEAN_ARRAY = new boolean[0];

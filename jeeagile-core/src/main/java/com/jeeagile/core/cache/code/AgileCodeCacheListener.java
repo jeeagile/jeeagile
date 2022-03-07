@@ -1,7 +1,7 @@
 package com.jeeagile.core.cache.code;
 
 import com.jeeagile.core.cache.code.annotation.AgileCodeCache;
-import com.jeeagile.core.util.ArrayUtil;
+import com.jeeagile.core.util.AgileArrayUtil;
 import com.jeeagile.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,7 +146,7 @@ public class AgileCodeCacheListener implements ApplicationListener<ContextRefres
      */
     private void loadCodeOptionField(AgileCodeCacheConfig agileCodeCacheConfig, AgileCodeCache agileCodeCache) {
         //加载代码值字段
-        if (ArrayUtil.isNotEmpty(agileCodeCache.optionCodeField())) {
+        if (AgileArrayUtil.isNotEmpty(agileCodeCache.optionCodeField())) {
             for (String fieldName : agileCodeCache.optionCodeField()) {
                 agileCodeCacheConfig.getOptionCodeField().add(fieldName);
             }
@@ -154,7 +154,7 @@ public class AgileCodeCacheListener implements ApplicationListener<ContextRefres
             agileCodeCacheConfig.getOptionCodeField().add("optionCode");
         }
         //加载代码名称字段
-        if (ArrayUtil.isNotEmpty(agileCodeCache.optionNameField())) {
+        if (AgileArrayUtil.isNotEmpty(agileCodeCache.optionNameField())) {
             for (String fieldName : agileCodeCache.optionNameField()) {
                 agileCodeCacheConfig.getOptionNameField().add(fieldName);
             }
@@ -173,10 +173,10 @@ public class AgileCodeCacheListener implements ApplicationListener<ContextRefres
     private void loadCodeBeanOptionField(ResolvableType codeObject, AgileCodeCacheConfig agileCodeCacheConfig, AgileCodeCache agileCodeCache) {
         for (Field field : codeObject.resolve().getDeclaredFields()) {
             String fieldName = field.getName();
-            if (ArrayUtil.contains(agileCodeCache.optionCodeField(), fieldName)) {
+            if (AgileArrayUtil.contains(agileCodeCache.optionCodeField(), fieldName)) {
                 agileCodeCacheConfig.getObjectOptionCodeField().add(field);
             }
-            if (ArrayUtil.contains(agileCodeCache.optionNameField(), fieldName)) {
+            if (AgileArrayUtil.contains(agileCodeCache.optionNameField(), fieldName)) {
                 agileCodeCacheConfig.getObjectOptionNameField().add(field);
             }
             Annotation codeAnnotation = field.getAnnotation(AgileCodeCache.class);

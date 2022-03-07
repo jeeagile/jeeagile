@@ -3,7 +3,7 @@ package com.jeeagile.generator.util;
 import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileFrameException;
-import com.jeeagile.core.util.ArrayUtil;
+import com.jeeagile.core.util.AgileArrayUtil;
 import com.jeeagile.core.util.CharUtil;
 import com.jeeagile.core.util.DateUtil;
 import com.jeeagile.core.util.StringUtil;
@@ -57,16 +57,16 @@ public class AgileGeneratorUtil {
         // 设置java字段名
         agileGeneratorTableColumn.setJavaField(StringUtil.toCamelCase(columnName));
         String dataType = getDbColumnType(agileGeneratorTableColumn.getColumnType());
-        if (ArrayUtil.contains(AgileGeneratorConstants.DB_COLUMN_TYPE_STR, dataType)) {
+        if (AgileArrayUtil.contains(AgileGeneratorConstants.DB_COLUMN_TYPE_STR, dataType)) {
             agileGeneratorTableColumn.setJavaType(AgileGeneratorConstants.JAVA_TYPE_STRING);
             // 字符串长度超过500设置为文本域
             Integer columnLength = getColumnLength(agileGeneratorTableColumn.getColumnType());
             String htmlType = columnLength >= 200 ? AgileGeneratorConstants.HTML_TYPE_TEXTAREA : AgileGeneratorConstants.HTML_TYPE_INPUT;
             agileGeneratorTableColumn.setHtmlType(htmlType);
-        } else if (ArrayUtil.contains(AgileGeneratorConstants.DB_COLUMN_TYPE_TIME, dataType)) {
+        } else if (AgileArrayUtil.contains(AgileGeneratorConstants.DB_COLUMN_TYPE_TIME, dataType)) {
             agileGeneratorTableColumn.setJavaType(AgileGeneratorConstants.JAVA_TYPE_DATE);
             agileGeneratorTableColumn.setHtmlType(AgileGeneratorConstants.HTML_TYPE_DATETIME);
-        } else if (ArrayUtil.contains(AgileGeneratorConstants.DB_COLUMN_TYPE_NUMBER, dataType)) {
+        } else if (AgileArrayUtil.contains(AgileGeneratorConstants.DB_COLUMN_TYPE_NUMBER, dataType)) {
             agileGeneratorTableColumn.setHtmlType(AgileGeneratorConstants.HTML_TYPE_INPUT);
             // 如果是浮点型 统一用BigDecimal
             String[] str = StringUtils.split(StringUtils.substringBetween(agileGeneratorTableColumn.getColumnType(), "(" , ")"), ",");
@@ -90,18 +90,18 @@ public class AgileGeneratorUtil {
 
         if (!agileGeneratorTableColumn.getPkFlag().equals(AgileFlagEnum.YES.getCode())) {
             // 编辑字段
-            if (!ArrayUtil.contains(AgileGeneratorConstants.COLUMN_NAME_NOT_EDIT, columnName)) {
+            if (!AgileArrayUtil.contains(AgileGeneratorConstants.COLUMN_NAME_NOT_EDIT, columnName)) {
                 agileGeneratorTableColumn.setEditFlag(AgileFlagEnum.YES.getCode());
             }
             // 列表字段
-            if (!ArrayUtil.contains(AgileGeneratorConstants.COLUMN_NAME_NOT_LIST, columnName)) {
+            if (!AgileArrayUtil.contains(AgileGeneratorConstants.COLUMN_NAME_NOT_LIST, columnName)) {
                 agileGeneratorTableColumn.setListFlag(AgileFlagEnum.YES.getCode());
                 if (StringUtils.startsWithIgnoreCase(columnName, "parent")) {
                     agileGeneratorTableColumn.setListFlag(AgileFlagEnum.NO.getCode());
                 }
             }
             // 查询字段
-            if (!ArrayUtil.contains(AgileGeneratorConstants.COLUMN_NAME_NOT_QUERY, columnName)) {
+            if (!AgileArrayUtil.contains(AgileGeneratorConstants.COLUMN_NAME_NOT_QUERY, columnName)) {
                 agileGeneratorTableColumn.setQueryFlag(AgileFlagEnum.YES.getCode());
                 if (StringUtils.endsWithIgnoreCase(columnName, "sort")) {
                     agileGeneratorTableColumn.setQueryFlag(AgileFlagEnum.NO.getCode());
@@ -406,7 +406,7 @@ public class AgileGeneratorUtil {
     public static Set<String> getJavaImportList(List<AgileGeneratorTableColumn> agileGeneratorTableColumnList) {
         HashSet<String> importJavaList = new HashSet<>();
         for (AgileGeneratorTableColumn agileGeneratorTableColumn : agileGeneratorTableColumnList) {
-            if (ArrayUtil.contains(AgileGeneratorConstants.BASE_COLUMN_NAME, agileGeneratorTableColumn.getColumnName())) {
+            if (AgileArrayUtil.contains(AgileGeneratorConstants.BASE_COLUMN_NAME, agileGeneratorTableColumn.getColumnName())) {
                 continue;
             }
             if (AgileGeneratorConstants.JAVA_TYPE_DATE.equals(agileGeneratorTableColumn.getJavaType())) {

@@ -4,7 +4,7 @@ import com.jeeagile.core.cache.code.annotation.AgileOptionCode;
 import com.jeeagile.core.cache.code.annotation.AgileOptionName;
 import com.jeeagile.core.cache.util.AgileCacheUtil;
 import com.jeeagile.core.exception.AgileFrameException;
-import com.jeeagile.core.util.ArrayUtil;
+import com.jeeagile.core.util.AgileArrayUtil;
 import com.jeeagile.core.util.StringUtil;
 import lombok.Data;
 import lombok.Getter;
@@ -179,10 +179,10 @@ public class AgileCodeCacheConfig {
         if (this.objectOptionCodeField.isEmpty() || this.objectOptionNameField.isEmpty()) {
             for (Field field : object.getClass().getFields()) {
                 String fieldName = field.getName();
-                if (ArrayUtil.contains(this.optionCodeField.toArray(), fieldName)) {
+                if (AgileArrayUtil.contains(this.optionCodeField.toArray(), fieldName)) {
                     this.objectOptionCodeField.add(field);
                 }
-                if (ArrayUtil.contains(this.optionCodeField.toArray(), fieldName)) {
+                if (AgileArrayUtil.contains(this.optionCodeField.toArray(), fieldName)) {
                     this.objectOptionNameField.add(field);
                 }
                 Annotation codeAnnotation = field.getAnnotation(AgileOptionCode.class);
