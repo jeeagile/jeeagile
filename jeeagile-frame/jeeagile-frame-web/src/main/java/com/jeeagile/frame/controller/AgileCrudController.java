@@ -14,6 +14,7 @@ import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.IAgileService;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import io.swagger.annotations.ApiOperation;
+import lombok.Getter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -26,6 +27,8 @@ import java.util.List;
  * @description
  */
 public abstract class AgileCrudController<I extends IAgileService<T>, T extends AgileModel> extends AgileBaseController {
+
+    @Getter
     @AgileReference
     private I agileService;
 
@@ -50,7 +53,6 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(title = "导入数据", type = AgileLoggerType.IMPORT)
     @AgileRequiresPermissions("import")
     public AgileResult importExcel(T agileModel) {
-        List<T> list = agileService.selectList(agileModel);
         return this.rtnSuccess();
     }
 
@@ -59,7 +61,6 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(title = "导出数据", type = AgileLoggerType.EXPORT)
     @AgileRequiresPermissions("export")
     public AgileResult exportExcel(T agileModel) {
-        List<T> list = agileService.selectList(agileModel);
         return this.rtnSuccess();
     }
 
