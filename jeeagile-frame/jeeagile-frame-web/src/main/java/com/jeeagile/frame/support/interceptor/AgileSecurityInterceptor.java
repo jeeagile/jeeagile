@@ -92,7 +92,7 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             AgilePermissionsPrefix agilePermissionsPrefix = handlerMethod.getBeanType().getAnnotation(AgilePermissionsPrefix.class);
             AgileRequiresPermissions agileRequiresPermissions = handlerMethod.getMethodAnnotation(AgileRequiresPermissions.class);
             if (agileRequiresPermissions != null) {
-                if (agileRequiresPermissions.prefix() && agilePermissionsPrefix != null) {
+                if (agilePermissionsPrefix != null) {
                     agileSecurity.checkPermission(agilePermissionsPrefix, agileRequiresPermissions);
                 } else {
                     agileSecurity.checkPermission(agileRequiresPermissions);
