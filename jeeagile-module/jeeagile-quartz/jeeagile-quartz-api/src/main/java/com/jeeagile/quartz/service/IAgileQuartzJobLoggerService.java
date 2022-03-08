@@ -11,20 +11,20 @@ import com.jeeagile.quartz.entity.AgileQuartzJobLogger;
  * @description
  */
 public interface IAgileQuartzJobLoggerService extends IAgileService<AgileQuartzJobLogger> {
-    /**
-     * 分页查询任务日志
-     */
-    AgilePage<AgileQuartzJobLogger> selectQuartzJobLoggerPage(AgilePageable<AgileQuartzJobLogger> agilePageable);
+//    /**
+//     * 分页查询任务日志
+//     */
+//    AgilePage<AgileQuartzJobLogger> selectQuartzJobLoggerPage(AgilePageable<AgileQuartzJobLogger> agilePageable);
+//
+//    /**
+//     * 查看任务日志详细信息
+//     */
+//    AgileQuartzJobLogger selectQuartzJobLoggerById(String quartzLogId);
 
-    /**
-     * 查看任务日志详细信息
-     */
-    AgileQuartzJobLogger selectQuartzJobLoggerById(String quartzLogId);
-
-    /**
-     * 删除任务执行日志
-     */
-    boolean deleteQuartzJobLogger(String quartzLogId);
+//    /**
+//     * 删除任务执行日志
+//     */
+//    boolean deleteQuartzJobLogger(String quartzLogId);
 
     /**
      * 清空任务执行日志

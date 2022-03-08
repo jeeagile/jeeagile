@@ -65,7 +65,7 @@ public class AgileQuartzJob extends AgileBaseModel<AgileQuartzJob> {
      * 菜单状态（0正常 1停用）
      */
     @NotEmpty(message = "任务状态不能为空!")
-    private String jobStatus = "0";
+    private String jobStatus;
 
     /**
      * 初始策略（0:默认 1:立即触发执行 2:触发一次执行 3:不触发立即执行）

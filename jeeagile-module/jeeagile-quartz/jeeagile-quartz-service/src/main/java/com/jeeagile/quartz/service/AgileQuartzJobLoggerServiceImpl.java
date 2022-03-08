@@ -1,5 +1,6 @@
 package com.jeeagile.quartz.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -18,46 +19,45 @@ import com.jeeagile.quartz.mapper.AgileQuartzJobLoggerMapper;
 public class AgileQuartzJobLoggerServiceImpl extends AgileServiceImpl<AgileQuartzJobLoggerMapper, AgileQuartzJobLogger> implements IAgileQuartzJobLoggerService {
 
     @Override
-    public AgilePage<AgileQuartzJobLogger> selectQuartzJobLoggerPage(AgilePageable<AgileQuartzJobLogger> agilePageable) {
-        return this.page(agilePageable, getQuartzJobLoggerQueryWrapper(agilePageable.getQueryCond()));
+    public LambdaQueryWrapper<AgileQuartzJobLogger> queryWrapper(AgileQuartzJobLogger agileQuartzJobLogger) {
+        LambdaQueryWrapper<AgileQuartzJobLogger> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (agileQuartzJobLogger != null) {
+            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getJobCode())) {
+                lambdaQueryWrapper.eq(AgileQuartzJobLogger::getJobCode, agileQuartzJobLogger.getJobCode());
+            }
+            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getJobName())) {
+                lambdaQueryWrapper.like(AgileQuartzJobLogger::getJobName, agileQuartzJobLogger.getJobName());
+            }
+            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getJobGroup())) {
+                lambdaQueryWrapper.like(AgileQuartzJobLogger::getJobGroup, agileQuartzJobLogger.getJobGroup());
+            }
+            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getStatus())) {
+                lambdaQueryWrapper.eq(AgileQuartzJobLogger::getStatus, agileQuartzJobLogger.getStatus());
+            }
+        }
+        lambdaQueryWrapper.orderByDesc(AgileQuartzJobLogger::getStartTime);
+        return lambdaQueryWrapper;
     }
 
-    @Override
-    public AgileQuartzJobLogger selectQuartzJobLoggerById(String quartzLogId) {
-        return this.getById(quartzLogId);
-    }
+//    @Override
+//    public AgilePage<AgileQuartzJobLogger> selectQuartzJobLoggerPage(AgilePageable<AgileQuartzJobLogger> agilePageable) {
+//        return this.page(agilePageable, getQuartzJobLoggerQueryWrapper(agilePageable.getQueryCond()));
+//    }
 
-    @Override
-    public boolean deleteQuartzJobLogger(String quartzLogId) {
-        return this.removeById(quartzLogId);
-    }
+//    @Override
+//    public AgileQuartzJobLogger selectQuartzJobLoggerById(String quartzLogId) {
+//        return this.getById(quartzLogId);
+//    }
+
+//    @Override
+//    public boolean deleteQuartzJobLogger(String quartzLogId) {
+//        return this.removeById(quartzLogId);
+//    }
 
     @Override
     public boolean clearQuartzJobLogger() {
         return this.remove(new QueryWrapper<>());
     }
 
-    /**
-     * 拼装查询条件
-     */
-    private QueryWrapper<AgileQuartzJobLogger> getQuartzJobLoggerQueryWrapper(AgileQuartzJobLogger agileQuartzJobLogger) {
-        QueryWrapper<AgileQuartzJobLogger> queryWrapper = new QueryWrapper<>();
-        if (agileQuartzJobLogger != null) {
-            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getJobCode())) {
-                queryWrapper.lambda().eq(AgileQuartzJobLogger::getJobCode, agileQuartzJobLogger.getJobCode());
-            }
-            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getJobName())) {
-                queryWrapper.lambda().like(AgileQuartzJobLogger::getJobName, agileQuartzJobLogger.getJobName());
-            }
-            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getJobGroup())) {
-                queryWrapper.lambda().like(AgileQuartzJobLogger::getJobGroup, agileQuartzJobLogger.getJobGroup());
-            }
-            if (AgileStringUtil.isNotEmpty(agileQuartzJobLogger.getStatus())) {
-                queryWrapper.lambda().eq(AgileQuartzJobLogger::getStatus, agileQuartzJobLogger.getStatus());
-            }
-        }
-        queryWrapper.lambda().orderByDesc(AgileQuartzJobLogger::getStartTime);
-        return queryWrapper;
-    }
 
 }

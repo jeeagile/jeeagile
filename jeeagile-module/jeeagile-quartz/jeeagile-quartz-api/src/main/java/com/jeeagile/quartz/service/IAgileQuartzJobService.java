@@ -12,30 +12,30 @@ import com.jeeagile.quartz.vo.AgileUpdateStatus;
  * @description
  */
 public interface IAgileQuartzJobService extends IAgileBaseService<AgileQuartzJob> {
-    /**
-     * 分页查询任务列表
-     */
-    AgilePage<AgileQuartzJob> selectQuartzJobPage(AgilePageable<AgileQuartzJob> agilePageable);
-
-    /**
-     * 查看任务详细信息
-     */
-    AgileQuartzJob selectQuartzJobById(String quartzJobId);
-
-    /**
-     * 新增任务
-     */
-    AgileQuartzJob saveQuartzJob(AgileQuartzJob agileQuartzJob);
-
-    /**
-     * 更新任务
-     */
-    boolean updateQuartzJobById(AgileQuartzJob agileQuartzJob);
-
-    /**
-     * 删除任务
-     */
-    boolean deleteQuartzJobById(String quartzJobId);
+//    /**
+//     * 分页查询任务列表
+//     */
+//    AgilePage<AgileQuartzJob> selectQuartzJobPage(AgilePageable<AgileQuartzJob> agilePageable);
+//
+//    /**
+//     * 查看任务详细信息
+//     */
+//    AgileQuartzJob selectQuartzJobById(String quartzJobId);
+//
+//    /**
+//     * 新增任务
+//     */
+//    AgileQuartzJob saveQuartzJob(AgileQuartzJob agileQuartzJob);
+//
+//    /**
+//     * 更新任务
+//     */
+//    boolean updateQuartzJobById(AgileQuartzJob agileQuartzJob);
+//
+//    /**
+//     * 删除任务
+//     */
+//    boolean deleteQuartzJobById(String quartzJobId);
 
     /**
      * 更新状态
