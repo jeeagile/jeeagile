@@ -1,14 +1,14 @@
-import {postApi} from '@/utils/axios'
+import { postApi } from '@/utils/axios'
 
 /**
  * 分页查询岗位列表
  */
-export const selectPostPage = data => postApi('/system/post/selectPage', data)
+export const selectPostPage = data => postApi('/system/post/page', data)
 
 /**
  * 查询岗位列表
  */
-export const selectPostList = data => postApi('/system/post/selectList', data)
+export const selectPostList = data => postApi('/system/post/list', data)
 
 /**
  * 新增岗位配置

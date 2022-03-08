@@ -1,17 +1,15 @@
 package com.jeeagile.system.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.util.validate.AgileValidateUtil;
-import com.jeeagile.frame.page.AgilePage;
-import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysPost;
 import com.jeeagile.system.mapper.AgileSysPostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.io.Serializable;
 
 
 /**
@@ -26,60 +24,55 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
     private IAgileSysUserPostService agileSysUserPostService;
 
     @Override
-    public AgilePage<AgileSysPost> selectPostPage(AgilePageable<AgileSysPost> agilePageable) {
-        return this.page(agilePageable, getSysPostQueryWrapper(agilePageable.getQueryCond()));
-    }
-
-    @Override
-    public List<AgileSysPost> selectPostList(AgileSysPost agileSysPost) {
-        return this.list(getSysPostQueryWrapper(agileSysPost));
-    }
-
-    @Override
-    public AgileSysPost selectPostById(String postId) {
-        return this.getById(postId);
-    }
-
-    @Override
-    public AgileSysPost savePost(AgileSysPost agileSysPost) {
-        //校验业务数据
-        AgileValidateUtil.validateObject(agileSysPost);
-        this.save(agileSysPost);
-        return agileSysPost;
-    }
-
-    @Override
-    public boolean updatePostById(AgileSysPost agileSysPost) {
-        //校验业务数据
-        AgileValidateUtil.validateObject(agileSysPost);
-        return this.updateById(agileSysPost);
-    }
-
-    @Override
-    public boolean deletePostById(String postId) {
-        agileSysUserPostService.deleteByPostId(postId);
-        return this.removeById(postId);
-    }
-
-    /**
-     * 拼装查询条件
-     */
-    private QueryWrapper<AgileSysPost> getSysPostQueryWrapper(AgileSysPost agileSysPost) {
-        QueryWrapper<AgileSysPost> queryWrapper = new QueryWrapper<>();
+    public LambdaQueryWrapper<AgileSysPost> queryWrapper(AgileSysPost agileSysPost) {
+        LambdaQueryWrapper<AgileSysPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (agileSysPost != null) {
             //岗位名称
             if (AgileStringUtil.isNotEmpty(agileSysPost.getPostName())) {
-                queryWrapper.lambda().like(AgileSysPost::getPostName, agileSysPost.getPostName());
+                lambdaQueryWrapper.like(AgileSysPost::getPostName, agileSysPost.getPostName());
             }
             //岗位编码
             if (AgileStringUtil.isNotEmpty(agileSysPost.getPostCode())) {
-                queryWrapper.lambda().like(AgileSysPost::getPostCode, agileSysPost.getPostCode());
+                lambdaQueryWrapper.like(AgileSysPost::getPostCode, agileSysPost.getPostCode());
             }
             //岗位状态
             if (AgileStringUtil.isNotEmpty(agileSysPost.getPostStatus())) {
-                queryWrapper.lambda().eq(AgileSysPost::getPostStatus, agileSysPost.getPostStatus());
+                lambdaQueryWrapper.eq(AgileSysPost::getPostStatus, agileSysPost.getPostStatus());
             }
         }
-        return queryWrapper;
+        return lambdaQueryWrapper;
+    }
+
+
+    @Override
+    public void saveModelValidate(AgileSysPost agileSysPost) {
+        this.validateData(agileSysPost);
+    }
+
+    @Override
+    public void updateModelValidate(AgileSysPost agileSysPost) {
+        this.validateData(agileSysPost);
+    }
+
+    @Override
+    public boolean deleteModel(Serializable id) {
+        agileSysUserPostService.deleteModel(id);
+        return super.deleteModel(id);
+    }
+
+    /**
+     * 校验岗位编码、岗位名称是否存在
+     */
+    private void validateData(AgileSysPost agileSysPost) {
+        LambdaQueryWrapper<AgileSysPost> queryWrapper = new LambdaQueryWrapper<>();
+        if (agileSysPost.getId() != null) {
+            queryWrapper.ne(AgileSysPost::getId, agileSysPost.getId());
+        }
+        queryWrapper.and(wrapper ->
+                wrapper.eq(AgileSysPost::getPostCode, agileSysPost.getPostCode()).or().eq(AgileSysPost::getPostName, agileSysPost.getPostName())
+        );
+        if (this.count(queryWrapper) > 0) {
+            throw new AgileValidateException("岗位编码或岗位名称已存在！");
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.jeeagile.system.entity;
 
 import com.jeeagile.frame.entity.AgileBaseModel;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -34,7 +35,7 @@ public class AgileSysPost extends AgileBaseModel<AgileSysPost> {
     /**
      * 岗位排序
      */
-    @NotEmpty(message = "岗位排序不能为空！")
+    @NotNull(message = "岗位排序不能为空！")
     private Integer postSort;
 
     /**
