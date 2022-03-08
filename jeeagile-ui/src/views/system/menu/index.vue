@@ -22,23 +22,26 @@
         <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPerm="['system:menu:add']">
           新增
         </el-button>
-        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleUpdateSort" v-hasPerm="['system:menu:sort']">
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleUpdateSort"
+                   v-hasPerm="['system:menu:sort']">
           保存排序
         </el-button>
       </el-col>
       <right-toolbar :show-search.sync="showSearch" @queryTable="getMenuList"/>
     </el-row>
 
-    <el-table v-loading="loading" :data="menuTreeList" row-key="id" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+    <el-table v-loading="loading" :data="menuTreeList" row-key="id"
+              :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="150"/>
       <el-table-column prop="menuIcon" label="图标" align="center" width="100">
         <template slot-scope="scope">
           <svg-icon :icon-class="scope.row.menuIcon"/>
         </template>
       </el-table-column>
-      <el-table-column label="排序" prop="menuSort" align="center" >
+      <el-table-column label="排序" prop="menuSort" align="center">
         <template slot-scope="scope">
-          <el-input-number v-model="scope.row.menuSort" size="mini" controls-position="right" :min="0" @change="changeMenuSort(scope.row)" />
+          <el-input-number v-model="scope.row.menuSort" size="mini" controls-position="right" :min="0"
+                           @change="changeMenuSort(scope.row)"/>
         </template>
       </el-table-column>
       <el-table-column label="类型" prop="menuType" align="center">
@@ -54,13 +57,16 @@
       <el-table-column prop="menuVisible" label="显示状态" :formatter="menuVisibleFormat" align="center" width="80"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)" v-hasPerm="['system:menu:add']">
+          <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)"
+                     v-hasPerm="['system:menu:add']">
             新增
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPerm="['system:menu:update']">
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                     v-hasPerm="['system:menu:update']">
             修改
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPerm="['system:menu:delete']">
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                     v-hasPerm="['system:menu:delete']">
             删除
           </el-button>
         </template>
@@ -73,7 +79,8 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="上级菜单">
-              <tree-select v-model="form.parentId" :options="menuTreeOptionList" :normalizer="normalizer" :show-count="true" placeholder="选择上级菜单"/>
+              <tree-select v-model="form.parentId" :options="menuTreeOptionList" :normalizer="normalizer"
+                           :show-count="true" placeholder="选择上级菜单"/>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -133,7 +140,8 @@
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="显示状态">
               <el-radio-group v-model="form.menuVisible">
-                <el-radio v-for="menuVisibleOption in menuVisibleOptionList" :key="menuVisibleOption.dictValue" :label="menuVisibleOption.dictValue">
+                <el-radio v-for="menuVisibleOption in menuVisibleOptionList" :key="menuVisibleOption.dictValue"
+                          :label="menuVisibleOption.dictValue">
                   {{ menuVisibleOption.dictLabel }}
                 </el-radio>
               </el-radio-group>
@@ -326,7 +334,7 @@
       handleUpdate(row) {
         this.reset()
         this.getMenuTreeSelect()
-        detailMenu({ menuId: row.id }).then(response => {
+        detailMenu(row.id).then(response => {
           this.form = response.data
           this.openDialog = true
           this.dialogTitle = '修改菜单'
@@ -368,7 +376,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return deleteMenu({ menuId: row.id })
+          return deleteMenu(row.id)
         }).then(() => {
           this.getMenuList()
           this.messageSuccess('删除成功')

@@ -3,7 +3,7 @@ import {postApi} from '@/utils/axios'
 /**
  * 查询菜单列表
  */
-export const selectMenuList = data => postApi('/system/menu/selectList', data)
+export const selectMenuList = data => postApi('/system/menu/list', data)
 
 /**
  * 新增菜单
@@ -23,11 +23,11 @@ export const updateMenu = data => postApi('/system/menu/update', data)
 /**
  * 删除菜单信息
  */
-export const updateMenuSort = data => postApi('/system/menu/updateSort', data)
+export const deleteMenu = data => postApi('/system/menu/delete', data)
 
 /**
- * 删除菜单信息
+ * 修改菜单排序
  */
-export const deleteMenu = data => postApi('/system/menu/delete', data)
+export const updateMenuSort = data => postApi('/system/menu/updateSort', data)
 
 
