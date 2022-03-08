@@ -1,9 +1,9 @@
-import {postApi} from '@/utils/axios'
+import { postApi } from '@/utils/axios'
 
 /**
  * 查询部门列表
  */
-export const selectDeptList = data => postApi('/system/dept/selectList', data)
+export const selectDeptList = data => postApi('/system/dept/list', data)
 
 /**
  * 新增部门

@@ -2,11 +2,13 @@
   <div class="app-container">
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch">
       <el-form-item label="部门名称" prop="deptName">
-        <el-input v-model="queryParam.deptName" placeholder="请输入部门名称" clearable size="small" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.deptName" placeholder="请输入部门名称" clearable size="small"
+                  @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParam.deptStatus" placeholder="部门状态" clearable size="small">
-          <el-option v-for="deptStatusOption in deptStatusOptionList" :key="deptStatusOption.dictValue" :label="deptStatusOption.dictLabel" :value="deptStatusOption.dictValue"/>
+          <el-option v-for="deptStatusOption in deptStatusOptionList" :key="deptStatusOption.dictValue"
+                     :label="deptStatusOption.dictLabel" :value="deptStatusOption.dictValue"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -24,20 +26,24 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getDeptTreeList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="deptTreeList" row-key="id" DEFAULT-EXPAND-ALL :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+    <el-table v-loading="loading" :data="deptTreeList" row-key="id" DEFAULT-EXPAND-ALL
+              :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
       <el-table-column prop="deptCode" label="部门编码" width="260"></el-table-column>
       <el-table-column prop="deptSort" label="排序" width="200"></el-table-column>
       <el-table-column prop="deptStatus" label="状态" :formatter="deptStatusFormat" width="100"></el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)" v-hasPerm="['system:dept:add']">
+          <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)"
+                     v-hasPerm="['system:dept:add']">
             新增
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPerm="['system:dept:update']">
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                     v-hasPerm="['system:dept:update']">
             修改
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPerm="['system:dept:delete']">
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                     v-hasPerm="['system:dept:delete']">
             删除
           </el-button>
         </template>
@@ -50,7 +56,8 @@
         <el-row>
           <el-col :span="24" v-if="form.parentId !== 0">
             <el-form-item label="上级部门" prop="parentId">
-              <tree-select v-model="form.parentId" :options="deptTreeList" :normalizer="normalizer" placeholder="选择上级部门"/>
+              <tree-select v-model="form.parentId" :options="deptTreeList" :normalizer="normalizer"
+                           placeholder="选择上级部门"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -71,7 +78,8 @@
           <el-col :span="12">
             <el-form-item label="部门状态">
               <el-radio-group v-model="form.deptStatus">
-                <el-radio v-for="deptStatusOption in deptStatusOptionList" :key="deptStatusOption.dictValue" :label="deptStatusOption.dictValue">
+                <el-radio v-for="deptStatusOption in deptStatusOptionList" :key="deptStatusOption.dictValue"
+                          :label="deptStatusOption.dictValue">
                   {{ deptStatusOption.dictLabel }}
                 </el-radio>
               </el-radio-group>
@@ -198,7 +206,7 @@
       /** 修改按钮操作 */
       handleUpdate(row) {
         this.reset()
-        detailDept({ deptId: row.id }).then(response => {
+        detailDept(row.id).then(response => {
           this.form = response.data
           this.openDialog = true
           this.dialogTitle = '修改部门'
@@ -235,7 +243,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return deleteDept({ deptId: row.id })
+          return deleteDept(row.id)
         }).then(() => {
           this.getDeptTreeList()
           this.messageSuccess('删除成功')

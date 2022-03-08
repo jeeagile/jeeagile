@@ -46,12 +46,12 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
 
     @Override
     public void saveModelValidate(AgileSysConfig agileSysConfig) {
-        this.validateSysConfig(agileSysConfig);
+        this.validateData(agileSysConfig);
     }
 
     @Override
     public void updateModelValidate(AgileSysConfig agileSysConfig) {
-        this.validateSysConfig(agileSysConfig);
+        this.validateData(agileSysConfig);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     /**
      * 校验参数名称或参数键名不能与已存在的数据重复
      */
-    private void validateSysConfig(AgileSysConfig agileSysConfig) {
+    private void validateData(AgileSysConfig agileSysConfig) {
         LambdaQueryWrapper<AgileSysConfig> queryWrapper = new LambdaQueryWrapper<>();
         if (agileSysConfig.getId() != null) {
             queryWrapper.ne(AgileSysConfig::getId, agileSysConfig.getId());
