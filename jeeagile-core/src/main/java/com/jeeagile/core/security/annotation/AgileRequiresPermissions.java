@@ -15,12 +15,21 @@ import java.lang.annotation.Target;
 public @interface AgileRequiresPermissions {
     /**
      * 权限值
+     *
      * @return
      */
     String[] value();
 
     /**
+     * 是否启用获取前缀
+     *
+     * @return
+     */
+    boolean prefix() default true;
+
+    /**
      * 逻辑关系
+     *
      * @return
      */
     AgileLogical logical() default AgileLogical.AND;
