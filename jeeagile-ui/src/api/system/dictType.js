@@ -3,12 +3,12 @@ import {postApi} from '@/utils/axios'
 /**
  * 分页查询字典类型列表
  */
-export const selectDictTypePage = data => postApi('/system/dict/type/selectPage', data)
+export const selectDictTypePage = data => postApi('/system/dict/type/page', data)
 
 /**
  * 查询字典类型列表
  */
-export const selectDictTypeList = data => postApi('/system/dict/type/selectList', data)
+export const selectDictTypeList = data => postApi('/system/dict/type/list', data)
 
 /**
  * 查看字典类型

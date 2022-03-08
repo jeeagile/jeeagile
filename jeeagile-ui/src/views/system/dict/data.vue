@@ -3,15 +3,18 @@
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="字典名称" prop="dictType">
         <el-select v-model="queryParam.queryCond.dictType" size="small">
-          <el-option v-for="dictTypeOption in dictTypeOptionList" :key="dictTypeOption.dictId" :label="dictTypeOption.dictName" :value="dictTypeOption.dictType"/>
+          <el-option v-for="dictTypeOption in dictTypeOptionList" :key="dictTypeOption.dictId"
+                     :label="dictTypeOption.dictName" :value="dictTypeOption.dictType"/>
         </el-select>
       </el-form-item>
       <el-form-item label="字典标签" prop="dictLabel">
-        <el-input v-model="queryParam.queryCond.dictLabel" placeholder="请输入字典标签" clearable size="small" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.queryCond.dictLabel" placeholder="请输入字典标签" clearable size="small"
+                  @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="状态" prop="dictStatus">
         <el-select v-model="queryParam.queryCond.dictStatus" placeholder="数据状态" clearable size="small">
-          <el-option v-for="dictStatusOption in dictStatusOptionList" :key="dictStatusOption.dictValue" :label="dictStatusOption.dictLabel" :value="dictStatusOption.dictValue"/>
+          <el-option v-for="dictStatusOption in dictStatusOptionList" :key="dictStatusOption.dictValue"
+                     :label="dictStatusOption.dictLabel" :value="dictStatusOption.dictValue"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -22,17 +25,20 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPerm="['system:dict:data:add']">
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd"
+                   v-hasPerm="['system:dict:data:add']">
           新增
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPerm="['system:dict:data:update']">
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+                   v-hasPerm="['system:dict:data:update']">
           修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPerm="['system:dict:data:delete']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+                   v-hasPerm="['system:dict:data:delete']">
           删除
         </el-button>
       </el-col>
@@ -48,17 +54,21 @@
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPerm="['system:dict:data:update']">
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                     v-hasPerm="['system:dict:data:update']">
             修改
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPerm="['system:dict:data:delete']">
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                     v-hasPerm="['system:dict:data:delete']">
             删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal" :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getDictDataList"/>
+    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
+                @pagination="getDictDataList"/>
 
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="500px" append-to-body>
@@ -77,7 +87,8 @@
         </el-form-item>
         <el-form-item label="状态" prop="dictStatus">
           <el-radio-group v-model="form.dictStatus">
-            <el-radio v-for="dictStatusOption in dictStatusOptionList" :key="dictStatusOption.dictValue" :label="dictStatusOption.dictValue">
+            <el-radio v-for="dictStatusOption in dictStatusOptionList" :key="dictStatusOption.dictValue"
+                      :label="dictStatusOption.dictValue">
               {{ dictStatusOption.dictLabel }}
             </el-radio>
           </el-radio-group>
@@ -95,7 +106,13 @@
 </template>
 
 <script>
-  import { selectDictDataPage, addDictData, detailDictData, deleteDictData, updateDictData } from '@/api/system/dictData'
+  import {
+    selectDictDataPage,
+    addDictData,
+    detailDictData,
+    deleteDictData,
+    updateDictData
+  } from '@/api/system/dictData'
   import { selectDictTypeList, detailDictType } from '@/api/system/dictType'
 
   export default {
@@ -164,7 +181,7 @@
     methods: {
       /** 查询字典类型详细 */
       detailDictType(dictTypeId) {
-        detailDictType({ dictTypeId: dictTypeId }).then(response => {
+        detailDictType(dictTypeId).then(response => {
           this.queryParam.queryCond.dictType = response.data.dictType
           this.defaultDictType = response.data.dictType
           this.getDictDataList()
@@ -189,7 +206,7 @@
       dictStatusFormat(row) {
         return this.handleDictLabel(this.dictStatusOptionList, row.dictStatus)
       },
-       /**  取消按钮 */
+      /**  取消按钮 */
       cancel() {
         this.openDialog = false
         this.reset()
@@ -234,7 +251,7 @@
       handleUpdate(row) {
         this.reset()
         row = undefined === row.id ? this.selectRowList[0] : row
-        detailDictData({ dictDataId: row.id }).then(response => {
+        detailDictData(row.id).then(response => {
           this.form = response.data
           this.openDialog = true
           this.dialogTitle = '修改字典数据'
@@ -268,7 +285,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return deleteDictData({ dictDataId: row.id })
+          return deleteDictData(row.id)
         }).then(() => {
           this.getDictDataList()
           this.messageSuccess('删除成功')

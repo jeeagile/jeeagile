@@ -8,13 +8,11 @@ import com.jeeagile.core.enums.AgileStatusEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.util.validate.AgileValidateUtil;
-import com.jeeagile.frame.page.AgilePage;
-import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysDictData;
 import com.jeeagile.system.mapper.AgileSysDictDataMapper;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,16 +24,27 @@ import java.util.List;
 public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDictDataMapper, AgileSysDictData> implements IAgileSysDictDataService {
 
     @Override
-    public AgilePage<AgileSysDictData> selectDictDataPage(AgilePageable<AgileSysDictData> agilePageable) {
-        return this.page(agilePageable, getSysDictDataQueryWrapper(agilePageable.getQueryCond()));
-    }
-
-    @Override
-    public List<AgileSysDictData> selectDictDataList(AgileSysDictData agileSysDictData) {
-        if (agileSysDictData == null || AgileStringUtil.isEmpty(agileSysDictData.getDictType())) {
-            throw new AgileValidateException("字典类型不能为空！");
+    public LambdaQueryWrapper<AgileSysDictData> queryWrapper(AgileSysDictData agileSysDictData) {
+        LambdaQueryWrapper<AgileSysDictData> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (agileSysDictData != null) {
+            lambdaQueryWrapper.eq(AgileSysDictData::getDictType, agileSysDictData.getDictType());
+            //添加字典标签查询条件
+            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictLabel())) {
+                lambdaQueryWrapper.like(AgileSysDictData::getDictLabel, agileSysDictData.getDictLabel());
+            }
+            //添加字典键值查询条件
+            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictValue())) {
+                lambdaQueryWrapper.like(AgileSysDictData::getDictValue, agileSysDictData.getDictValue());
+            }
+            //添加状态查询条件
+            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictStatus())) {
+                lambdaQueryWrapper.like(AgileSysDictData::getDictStatus, agileSysDictData.getDictStatus());
+            }
+        } else {
+            lambdaQueryWrapper.eq(AgileSysDictData::getDictType, null);
         }
-        return this.list(getSysDictDataQueryWrapper(agileSysDictData));
+        lambdaQueryWrapper.orderByAsc(AgileSysDictData::getDictSort);
+        return lambdaQueryWrapper;
     }
 
     @Override
@@ -48,32 +57,22 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
     }
 
     @Override
-    public AgileSysDictData selectDictDataById(String dictDataId) {
-        return this.getById(dictDataId);
+    public void saveModelValidate(AgileSysDictData agileSysDictData) {
+        this.validateData(agileSysDictData);
     }
 
     @Override
-    public AgileSysDictData saveDictData(AgileSysDictData agileSysDictData) {
-        AgileValidateUtil.validateObject(agileSysDictData);
-        validateSysDictData(agileSysDictData);
-        this.save(agileSysDictData);
-        return agileSysDictData;
+    public void updateModelValidate(AgileSysDictData agileSysDictData) {
+        this.validateData(agileSysDictData);
     }
 
     @Override
-    public boolean updateDictDataById(AgileSysDictData agileSysDictData) {
-        AgileValidateUtil.validateObject(agileSysDictData);
-        validateSysDictData(agileSysDictData);
-        return this.updateById(agileSysDictData);
-    }
-
-    @Override
-    public boolean deleteDictDataById(String dictDataId) {
-        AgileSysDictData agileSysDictData = this.getById(dictDataId);
+    public boolean deleteModel(Serializable id) {
+        AgileSysDictData agileSysDictData = this.getById(id);
         if (agileSysDictData.getSystemFlag().equals(AgileFlagEnum.YES.getCode())) {
             throw new AgileValidateException("系统内置，不能删除！");
         }
-        return this.removeById(dictDataId);
+        return this.removeById(id);
     }
 
     @Override
@@ -87,47 +86,19 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
     }
 
     /**
-     * 校验字典标签与字典键值不能与已存在的数据重复
+     * 校验字典标签与字典键值是否存在
      */
-    private void validateSysDictData(AgileSysDictData agileSysDictData) {
-        LambdaQueryWrapper<AgileSysDictData> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(AgileSysDictData::getDictType, agileSysDictData.getDictType());
+    private void validateData(AgileSysDictData agileSysDictData) {
+        LambdaQueryWrapper<AgileSysDictData> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysDictData::getDictType, agileSysDictData.getDictType());
         if (agileSysDictData.getId() != null) {
-            queryWrapper.ne(AgileSysDictData::getId, agileSysDictData.getId());
+            lambdaQueryWrapper.ne(AgileSysDictData::getId, agileSysDictData.getId());
         }
-        queryWrapper.and(wrapper ->
-                wrapper.eq(AgileSysDictData::getDictLabel, agileSysDictData.getDictLabel()).or().eq(AgileSysDictData::getDictValue, agileSysDictData.getDictValue())
+        lambdaQueryWrapper.and(queryWrapper ->
+                queryWrapper.eq(AgileSysDictData::getDictLabel, agileSysDictData.getDictLabel()).or().eq(AgileSysDictData::getDictValue, agileSysDictData.getDictValue())
         );
-        if (this.count(queryWrapper) > 0) {
+        if (this.count(lambdaQueryWrapper) > 0) {
             throw new AgileValidateException("字典标签或字典键值已存在，请核实！");
         }
     }
-
-    /**
-     * 拼装查询条件
-     */
-    private QueryWrapper<AgileSysDictData> getSysDictDataQueryWrapper(AgileSysDictData agileSysDictData) {
-        QueryWrapper<AgileSysDictData> queryWrapper = new QueryWrapper<>();
-        if (agileSysDictData != null) {
-            //添加字典类型查询条件
-            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictType())) {
-                queryWrapper.lambda().eq(AgileSysDictData::getDictType, agileSysDictData.getDictType());
-            }
-            //添加字典标签查询条件
-            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictLabel())) {
-                queryWrapper.lambda().like(AgileSysDictData::getDictLabel, agileSysDictData.getDictLabel());
-            }
-            //添加字典键值查询条件
-            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictValue())) {
-                queryWrapper.lambda().like(AgileSysDictData::getDictValue, agileSysDictData.getDictValue());
-            }
-            //添加状态查询条件
-            if (AgileStringUtil.isNotEmpty(agileSysDictData.getDictStatus())) {
-                queryWrapper.lambda().like(AgileSysDictData::getDictStatus, agileSysDictData.getDictStatus());
-            }
-        }
-        queryWrapper.lambda().orderByAsc(AgileSysDictData::getDictSort);
-        return queryWrapper;
-    }
-
 }

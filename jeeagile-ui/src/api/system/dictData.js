@@ -3,12 +3,12 @@ import {postApi} from '@/utils/axios'
 /**
  * 查询字典数据列表
  */
-export const selectDictDataPage = data => postApi('/system/dict/data/selectPage', data)
+export const selectDictDataPage = data => postApi('/system/dict/data/page', data)
 
 /**
  * 查询字典数据列表
  */
-export const selectDictDataList = data => postApi('/system/dict/data/selectList', data)
+export const selectDictDataList = data => postApi('/system/dict/data/list', data)
 
 /**
  * 查看字典数据
