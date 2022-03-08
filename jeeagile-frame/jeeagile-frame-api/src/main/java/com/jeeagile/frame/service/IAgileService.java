@@ -1,5 +1,6 @@
 package com.jeeagile.frame.service;
 
+import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -40,7 +41,7 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
      */
     default AgilePage<T> selectPage(AgilePageable<?> agilePageable) {
         AgilePage<T> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
-        return this.page(agilePage, getQueryWrapper((T) agilePageable.getQueryCond()));
+        return this.page(agilePage, queryWrapper((T) agilePageable.getQueryCond()));
     }
 
     /**
@@ -50,7 +51,7 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
      * @return
      */
     default List<T> selectList(T agileModel) {
-        return this.list(getQueryWrapper(agileModel));
+        return this.list(queryWrapper(agileModel));
     }
 
     /**
@@ -59,7 +60,7 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
      * @param agileModel
      * @return
      */
-    default QueryWrapper<T> getQueryWrapper(T agileModel) {
+    default AbstractWrapper queryWrapper(T agileModel) {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>(agileModel);
         return queryWrapper;
     }

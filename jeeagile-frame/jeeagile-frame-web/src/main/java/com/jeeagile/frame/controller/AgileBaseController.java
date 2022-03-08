@@ -14,7 +14,7 @@ public abstract class AgileBaseController {
      *
      * @return
      */
-    protected <T> AgileResult<T> rtnSuccess() {
+    protected <T> AgileResult<T> success() {
         return AgileResult.success();
     }
 
@@ -24,7 +24,7 @@ public abstract class AgileBaseController {
      * @param message 指定返回消息
      * @return
      */
-    protected <T> AgileResult<T> rtnSuccess(String message) {
+    protected <T> AgileResult<T> success(String message) {
         return AgileResult.success(message);
     }
 
@@ -34,7 +34,7 @@ public abstract class AgileBaseController {
      * @param data 返回的数据结果集
      * @return
      */
-    protected <T> AgileResult<T> rtnSuccess(Object data) {
+    protected <T> AgileResult<T> success(Object data) {
         return AgileResult.success(data);
     }
 
@@ -45,7 +45,7 @@ public abstract class AgileBaseController {
      * @param data    返回的数据结果集
      * @return
      */
-    protected <T> AgileResult<T> rtnSuccess(Object data, String message) {
+    protected <T> AgileResult<T> success(Object data, String message) {
         return AgileResult.success(data, message);
     }
 
@@ -88,7 +88,7 @@ public abstract class AgileBaseController {
      * @param agileResultCode
      * @return
      */
-    protected <T> AgileResult<T> rtnError(IAgileResultCode agileResultCode) {
+    protected <T> AgileResult<T> error(IAgileResultCode agileResultCode) {
         return AgileResult.error(agileResultCode);
     }
 
@@ -99,7 +99,7 @@ public abstract class AgileBaseController {
      * @param message
      * @return
      */
-    protected <T> AgileResult<T> rtnError(IAgileResultCode agileResultCode, String message) {
+    protected <T> AgileResult<T> error(IAgileResultCode agileResultCode, String message) {
         return AgileResult.error(agileResultCode, message);
     }
 
@@ -110,7 +110,7 @@ public abstract class AgileBaseController {
      * @param ex
      * @return
      */
-    protected <T> AgileResult<T> rtnError(IAgileResultCode agileResultCode, Exception ex) {
+    protected <T> AgileResult<T> error(IAgileResultCode agileResultCode, Exception ex) {
         return AgileResult.error(agileResultCode, ex);
     }
 
@@ -122,7 +122,7 @@ public abstract class AgileBaseController {
      * @param defaultMessage  默认信息
      * @return
      */
-    protected <T> AgileResult<T> rtnError(IAgileResultCode agileResultCode, Exception ex, String defaultMessage) {
+    protected <T> AgileResult<T> error(IAgileResultCode agileResultCode, Exception ex, String defaultMessage) {
         return AgileResult.error(agileResultCode, ex, defaultMessage);
     }
 
@@ -133,7 +133,7 @@ public abstract class AgileBaseController {
      * @param defaultMessage 默认信息
      * @return
      */
-    protected <T> AgileResult<T> rtnError(Exception ex, String defaultMessage) {
+    protected <T> AgileResult<T> error(Exception ex, String defaultMessage) {
         return AgileResult.error(ex, defaultMessage);
     }
 }

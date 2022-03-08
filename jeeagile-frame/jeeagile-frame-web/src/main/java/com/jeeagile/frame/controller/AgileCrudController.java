@@ -15,8 +15,7 @@ import com.jeeagile.frame.service.IAgileService;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import io.swagger.annotations.ApiOperation;
 import lombok.Getter;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -37,7 +36,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(title = "分页查询", type = AgileLoggerType.SELECT)
     @AgileRequiresPermissions("page")
     public AgileResult<AgilePage<T>> selectPage(@RequestBody AgilePageable<T> agilePageable) {
-        return this.rtnSuccess(agileService.selectPage(agilePageable));
+        return AgileResult.success(agileService.selectPage(agilePageable));
     }
 
     @PostMapping(value = "/list")
@@ -45,7 +44,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(title = "查询列表", type = AgileLoggerType.SELECT)
     @AgileRequiresPermissions("list")
     public AgileResult<List<T>> selectList(@RequestBody T agileModel) {
-        return this.rtnSuccess(agileService.selectList(agileModel));
+        return AgileResult.success(agileService.selectList(agileModel));
     }
 
     @PostMapping(value = "/import")
@@ -53,7 +52,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(title = "导入数据", type = AgileLoggerType.IMPORT)
     @AgileRequiresPermissions("import")
     public AgileResult importExcel(T agileModel) {
-        return this.rtnSuccess();
+        return AgileResult.success();
     }
 
     @PostMapping(value = "/export")
@@ -61,7 +60,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(title = "导出数据", type = AgileLoggerType.EXPORT)
     @AgileRequiresPermissions("export")
     public AgileResult exportExcel(T agileModel) {
-        return this.rtnSuccess();
+        return AgileResult.success();
     }
 
     @PostMapping("/detail")
@@ -69,17 +68,25 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(title = "查看明细", type = AgileLoggerType.DETAIL)
     @AgileRequiresPermissions("detail")
     public AgileResult<T> detail(@SingleRequestBody String id) {
-        return this.rtnSuccess(agileService.selectModel(id));
+        return AgileResult.success(agileService.selectModel(id));
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "查看明细", notes = "查看明细")
+    @AgileLogger(title = "查看明细", type = AgileLoggerType.DETAIL)
+    @AgileRequiresPermissions("detail")
+    public AgileResult<T> info(@PathVariable String id) {
+        return AgileResult.success(agileService.selectModel(id));
     }
 
     @AgileDemo
-    @PostMapping("/add")
+    @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.PUT})
     @ApiOperation(value = "新增数据", notes = "新增数据")
     @AgileLogger(title = "新增数据", type = AgileLoggerType.ADD)
     @AgileRequiresPermissions("add")
     public AgileResult<T> add(@RequestBody T agileModel) {
         this.validateModel(agileModel);
-        return this.rtnSuccess(agileService.saveModel(agileModel));
+        return AgileResult.success(agileService.saveModel(agileModel));
     }
 
     @AgileDemo
@@ -90,9 +97,9 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     public AgileResult update(@RequestBody T agileModel) {
         this.validateModel(agileModel);
         if (agileService.updateModel(agileModel)) {
-            return this.rtnSuccess("数据更新成功！");
+            return AgileResult.success("数据更新成功！");
         } else {
-            return this.rtnError(AgileResultCode.FAIL_OPS_UPDATE, "数据更新失败！");
+            return AgileResult.error(AgileResultCode.FAIL_OPS_UPDATE, "数据更新失败！");
         }
     }
 
@@ -103,9 +110,22 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileRequiresPermissions("delete")
     public AgileResult delete(@SingleRequestBody Serializable id) {
         if (agileService.deleteModel(id)) {
-            return this.rtnSuccess("数据删除成功！");
+            return AgileResult.success("数据删除成功！");
         } else {
-            return this.rtnError(AgileResultCode.FAIL_OPS_DELETE, "数据删除失败！");
+            return AgileResult.error(AgileResultCode.FAIL_OPS_DELETE, "数据删除失败！");
+        }
+    }
+
+    @AgileDemo
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "删除数据", notes = "删除数据")
+    @AgileLogger(title = "删除数据", type = AgileLoggerType.DELETE)
+    @AgileRequiresPermissions("delete")
+    public AgileResult deleteInfo(@PathVariable Serializable id) {
+        if (agileService.deleteModel(id)) {
+            return AgileResult.success("数据删除成功！");
+        } else {
+            return AgileResult.error(AgileResultCode.FAIL_OPS_DELETE, "数据删除失败！");
         }
     }
 

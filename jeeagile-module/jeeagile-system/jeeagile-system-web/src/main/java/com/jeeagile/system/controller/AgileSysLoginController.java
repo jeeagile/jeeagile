@@ -38,16 +38,16 @@ public class AgileSysLoginController extends AgileBaseController {
     @AgileLogger(title = "用户登录", type = AgileLoggerType.LOGIN)
     public AgileResult<AgileUserData> login(@RequestBody AgileLoginUser agileLoginUser) {
         if (AgileStringUtil.isEmpty(agileLoginUser.getUserName())) {
-            return this.rtnError(AgileResultCode.FAIL_AUTH, "登录名不能为空!");
+            return this.error(AgileResultCode.FAIL_AUTH, "登录名不能为空!");
         }
         if (AgileStringUtil.isEmpty(agileLoginUser.getPassword())) {
-            return this.rtnError(AgileResultCode.FAIL_AUTH, "登录密码不能为空!");
+            return this.error(AgileResultCode.FAIL_AUTH, "登录密码不能为空!");
         }
         AgileSecurityUtil.userLogin(agileLoginUser);
         if (AgileSecurityUtil.checkAuthenticated()) {
-            return this.rtnSuccess(AgileSecurityUtil.getUserData());
+            return this.success(AgileSecurityUtil.getUserData());
         } else {
-            return this.rtnError(AgileResultCode.FAIL_AUTH);
+            return this.error(AgileResultCode.FAIL_AUTH);
         }
     }
 
@@ -55,14 +55,14 @@ public class AgileSysLoginController extends AgileBaseController {
     @ApiOperation(value = "用户退出", notes = "用户退出")
     public AgileResult userLogout() {
         AgileSecurityUtil.userLogout();
-        return this.rtnSuccess();
+        return this.success();
     }
 
     @AgileRequiresUser
     @PostMapping("/getInfo")
     @ApiOperation(value = "获取当前登录用户信息", notes = "获取当前登录用户信息")
     public AgileResult<AgileUserData> getUserInfo() {
-        return this.rtnSuccess(AgileSecurityUtil.getUserData());
+        return this.success(AgileSecurityUtil.getUserData());
     }
 
     @AgileRequiresUser
@@ -70,9 +70,9 @@ public class AgileSysLoginController extends AgileBaseController {
     @ApiOperation(value = "获取用户分配菜单", notes = "获取用户分配菜单")
     public AgileResult<AgileSysMenu> getUserMenu() {
         try {
-            return this.rtnSuccess(agileUserDetailsService.getUserMenu(AgileSecurityUtil.getUserData()));
+            return this.success(agileUserDetailsService.getUserMenu(AgileSecurityUtil.getUserData()));
         } catch (Exception ex) {
-            return this.rtnError(ex, "获取用户菜单异常！");
+            return this.error(ex, "获取用户菜单异常！");
         }
     }
 }

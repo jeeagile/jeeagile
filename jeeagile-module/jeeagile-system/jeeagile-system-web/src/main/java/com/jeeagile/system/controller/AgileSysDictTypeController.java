@@ -37,21 +37,21 @@ public class AgileSysDictTypeController extends AgileBaseController {
     @ApiOperation(value = "分页查询字典类型列表", notes = "分页查询字典类型列表")
     @AgileLogger(title = "查询字典类型", type = AgileLoggerType.SELECT)
     public AgileResult<AgilePage<AgileSysDictType>> selectDictTypePage(@RequestBody AgilePageable<AgileSysDictType> agilePageable) {
-        return this.rtnSuccess(agileSysDictTypeService.selectDictTypePage(agilePageable));
+        return this.success(agileSysDictTypeService.selectDictTypePage(agilePageable));
     }
 
     @PostMapping(value = "/selectList")
     @ApiOperation(value = "查询字典类型列表", notes = "查询字典类型列表")
     @AgileLogger(title = "查询字典类型", type = AgileLoggerType.SELECT)
     public AgileResult<List<AgileSysDictType>> selectDictTypeList(@RequestBody AgileSysDictType agileSysDictType) {
-        return this.rtnSuccess(agileSysDictTypeService.selectDictTypeList(agileSysDictType));
+        return this.success(agileSysDictTypeService.selectDictTypeList(agileSysDictType));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据字典类型ID获取字典类型详细信息", notes = "根据字典类型ID获取字典类型详细信息")
     @AgileLogger(title = "查看字典类型", type = AgileLoggerType.DETAIL)
     public AgileResult<AgileSysDictType> detail(@SingleRequestBody String dictTypeId) {
-        return this.rtnSuccess(agileSysDictTypeService.selectDictTypeById(dictTypeId));
+        return this.success(agileSysDictTypeService.selectDictTypeById(dictTypeId));
     }
 
     @AgileDemo
@@ -60,7 +60,7 @@ public class AgileSysDictTypeController extends AgileBaseController {
     @AgileLogger(title = "新增字典类型", type = AgileLoggerType.ADD)
     @AgileRequiresPermissions("system:dict:add")
     public AgileResult<AgileSysDictType> add(@RequestBody AgileSysDictType agileSysDictType) {
-        return this.rtnSuccess(agileSysDictTypeService.saveDictType(agileSysDictType));
+        return this.success(agileSysDictTypeService.saveDictType(agileSysDictType));
     }
 
     @AgileDemo
@@ -70,7 +70,7 @@ public class AgileSysDictTypeController extends AgileBaseController {
     @AgileRequiresPermissions("system:dict:update")
     public AgileResult<String> update(@RequestBody AgileSysDictType agileSysDictType) {
         agileSysDictTypeService.updateDictTypeById(agileSysDictType);
-        return this.rtnSuccess("字典类型信息更新成功");
+        return this.success("字典类型信息更新成功");
     }
 
     @AgileDemo
@@ -80,6 +80,6 @@ public class AgileSysDictTypeController extends AgileBaseController {
     @AgileRequiresPermissions("system:dict:delete")
     public AgileResult<String> delete(@SingleRequestBody String dictTypeId) {
         agileSysDictTypeService.deleteDictTypeById(dictTypeId);
-        return this.rtnSuccess("字典类型信息删除成功");
+        return this.success("字典类型信息删除成功");
     }
 }

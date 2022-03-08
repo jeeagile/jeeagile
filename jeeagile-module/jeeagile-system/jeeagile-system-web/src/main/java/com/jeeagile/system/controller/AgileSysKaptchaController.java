@@ -27,7 +27,7 @@ public class AgileSysKaptchaController extends AgileBaseController {
     public AgileResult<AgileUserData> image() {
         AgileKaptchaInfo agileKaptchaInfo = AgileKaptchaUtil.createImage();
         if (agileKaptchaInfo == null || AgileStringUtil.isEmpty(agileKaptchaInfo.getImage())) {
-            return this.rtnError(AgileResultCode.FAIL_KCAPTCHA_EXCEPTION, "验证码生成错误！");
+            return this.error(AgileResultCode.FAIL_KCAPTCHA_EXCEPTION, "验证码生成错误！");
         }
         //放入缓存
         AgileCacheUtil.put(AgileCacheConstants.AGILE_CACHE_KAPTCHA_NAME, agileKaptchaInfo.getUuid(), agileKaptchaInfo.getCode());
@@ -42,11 +42,11 @@ public class AgileSysKaptchaController extends AgileBaseController {
     public AgileResult valid(@RequestBody AgileKaptchaInfo agileKaptchaInfo) {
         String code = (String) AgileCacheUtil.get(AgileCacheConstants.AGILE_CACHE_KAPTCHA_NAME, agileKaptchaInfo.getUuid());
         if (AgileStringUtil.isEmpty(code)) {
-            return this.rtnError(AgileResultCode.FAIL_KCAPTCHA_EXPIRE, "验证码已失效！");
+            return this.error(AgileResultCode.FAIL_KCAPTCHA_EXPIRE, "验证码已失效！");
         }
         if(!code.equals(agileKaptchaInfo.getCode())){
-            return this.rtnError(AgileResultCode.FAIL_KCAPTCHA_ERROR, "验证码错误！");
+            return this.error(AgileResultCode.FAIL_KCAPTCHA_ERROR, "验证码错误！");
         }
-        return this.rtnSuccess();
+        return this.success();
     }
 }

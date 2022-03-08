@@ -36,7 +36,7 @@ public class AgileSysPersonController extends AgileBaseController {
     @PostMapping("/getInfo")
     @ApiOperation(value = "获取个人信息", notes = "获取个人信息")
     public AgileResult<AgilePersonInfo> getInfo() {
-        return this.rtnSuccess(agilePersonService.getPersonInfo());
+        return this.success(agilePersonService.getPersonInfo());
     }
 
     @AgileDemo
@@ -46,7 +46,7 @@ public class AgileSysPersonController extends AgileBaseController {
     @AgileLogger(title = "更新个人信息", type = AgileLoggerType.UPDATE)
     public AgileResult<Object> updateInfo(@RequestBody AgileUpdatePerson agileUpdatePerson) {
         agilePersonService.updatePersonInfo(agileUpdatePerson);
-        return this.rtnSuccess("个人信息更新成功！");
+        return this.success("个人信息更新成功！");
     }
 
     @AgileDemo
@@ -56,7 +56,7 @@ public class AgileSysPersonController extends AgileBaseController {
     @AgileLogger(title = "更新个人密码", type = AgileLoggerType.UPDATE)
     public AgileResult<Object> updatePwd(@RequestBody AgileUpdatePwd agileUpdatePwd) {
         agilePersonService.updatePersonPwd(agileUpdatePwd);
-        return this.rtnSuccess("个人密码修改成功！");
+        return this.success("个人密码修改成功！");
     }
 
 
@@ -71,7 +71,7 @@ public class AgileSysPersonController extends AgileBaseController {
         String userAvatar = userAvatarFilePath.replace(AgileUtil.getUploadPath(), AgileConstants.AGILE_RESOURCE_PREFIX);
         userAvatar = userAvatar.replace(AgileFileUtil.getFileSeparator(), "/");
         agilePersonService.updateUserAvatar(userAvatar);
-        return this.rtnSuccess((Object) userAvatar);
+        return this.success((Object) userAvatar);
     }
 
 }

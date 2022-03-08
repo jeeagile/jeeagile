@@ -36,14 +36,14 @@ public class AgileSysDeptController extends AgileBaseController {
     @ApiOperation(value = "查询部门列表", notes = "查询部门列表")
     @AgileLogger(title = "查询部门列表", type = AgileLoggerType.SELECT)
     public AgileResult<List<AgileSysDept>> selectList(@RequestBody AgileSysDept agileSysDept) {
-        return this.rtnSuccess(agileSysDeptService.selectDeptList(agileSysDept));
+        return this.success(agileSysDeptService.selectDeptList(agileSysDept));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据部门ID查询部门详细信息", notes = "根据部门ID查询部门详细信息")
     @AgileLogger(title = "查看部门信息", type = AgileLoggerType.DETAIL)
     public AgileResult<AgileSysDept> detail(@SingleRequestBody String deptId) {
-        return this.rtnSuccess(agileSysDeptService.selectDeptById(deptId));
+        return this.success(agileSysDeptService.selectDeptById(deptId));
     }
 
     @AgileDemo
@@ -52,7 +52,7 @@ public class AgileSysDeptController extends AgileBaseController {
     @AgileLogger(title = "新增部门", type = AgileLoggerType.ADD)
     @AgileRequiresPermissions("system:dept:add")
     public AgileResult<AgileSysDept> add(@RequestBody AgileSysDept agileSysDept) {
-        return this.rtnSuccess(agileSysDeptService.saveDept(agileSysDept));
+        return this.success(agileSysDeptService.saveDept(agileSysDept));
     }
 
     @AgileDemo
@@ -62,7 +62,7 @@ public class AgileSysDeptController extends AgileBaseController {
     @AgileRequiresPermissions("system:dept:update")
     public <T> AgileResult<T> update(@RequestBody AgileSysDept agileSysDept) {
         agileSysDeptService.updateDeptById(agileSysDept);
-        return this.rtnSuccess();
+        return this.success();
     }
 
     @AgileDemo
@@ -72,7 +72,7 @@ public class AgileSysDeptController extends AgileBaseController {
     @AgileRequiresPermissions("system:dept:delete")
     public AgileResult<AgileSysDept> delete(@SingleRequestBody String deptId) {
         agileSysDeptService.deleteDeptById(deptId);
-        return this.rtnSuccess();
+        return this.success();
     }
 
 }

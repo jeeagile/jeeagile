@@ -1,8 +1,10 @@
 package com.jeeagile.frame.entity;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.jeeagile.core.util.AgileStringUtil;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -21,6 +23,8 @@ public abstract class AgileModel<T extends AgileModel<T>> extends Model<T> {
      *
      * @return
      */
+    @JSONField(serialize = false)
+    @ApiModelProperty(hidden = true)
     public boolean isNotEmptyPk() {
         return AgileStringUtil.isNotEmpty(this.pkVal());
     }
@@ -30,6 +34,8 @@ public abstract class AgileModel<T extends AgileModel<T>> extends Model<T> {
      *
      * @return
      */
+    @JSONField(serialize = false)
+    @ApiModelProperty(hidden = true)
     public boolean isEmptyPk() {
         return AgileStringUtil.isEmpty(this.pkVal());
     }

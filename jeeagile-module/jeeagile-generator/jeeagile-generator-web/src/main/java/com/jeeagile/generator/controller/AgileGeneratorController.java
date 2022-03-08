@@ -39,13 +39,13 @@ public class AgileGeneratorController extends AgileBaseController {
     @PostMapping(value = "/selectTablePage")
     @ApiOperation(value = "分页查询代码生成列表", notes = "分页查询代码生成列表")
     public AgileResult<AgilePage<AgileGeneratorTable>> selectTablePage(@RequestBody AgilePageable<AgileGeneratorTable> agilePageable) {
-        return this.rtnSuccess(agileGeneratorTableService.selectTablePage(agilePageable));
+        return this.success(agileGeneratorTableService.selectTablePage(agilePageable));
     }
 
     @PostMapping(value = "/selectDbTablePage")
     @ApiOperation(value = "分页查询数据库表列表", notes = "分页查询数据库表列表")
     public AgileResult<AgilePage<AgileGeneratorTable>> selectDbTablePage(@RequestBody AgilePageable<AgileGeneratorTable> agilePageable) {
-        return this.rtnSuccess(agileGeneratorTableService.selectDbTablePage(agilePageable));
+        return this.success(agileGeneratorTableService.selectDbTablePage(agilePageable));
     }
 
     @PostMapping("/importTable")
@@ -53,13 +53,13 @@ public class AgileGeneratorController extends AgileBaseController {
     @AgileLogger(title = "导入代码生成",type = AgileLoggerType.IMPORT)
     public AgileResult<Object> importTable(@RequestBody List<String> tableNameList) {
         agileGeneratorTableService.importTable(tableNameList);
-        return this.rtnSuccess("数据库表导入成功！");
+        return this.success("数据库表导入成功！");
     }
 
     @PostMapping("/detailTable")
     @ApiOperation(value = "查看代码生成表信息", notes = "查看代码生成表信息")
     public AgileResult<AgileGeneratorTableInfo> detailTable(@SingleRequestBody String agileGeneratorTableId) {
-        return this.rtnSuccess(agileGeneratorTableService.selectTableInfoById(agileGeneratorTableId));
+        return this.success(agileGeneratorTableService.selectTableInfoById(agileGeneratorTableId));
     }
 
     @PostMapping("/updateTable")
@@ -67,7 +67,7 @@ public class AgileGeneratorController extends AgileBaseController {
     @AgileLogger(title = "修改代码生成表信息",type = AgileLoggerType.UPDATE)
     public AgileResult<Object> updateTable(@RequestBody AgileGeneratorTableInfo agileGeneratorTableInfo) {
         agileGeneratorTableService.updateTableInfoById(agileGeneratorTableInfo);
-        return this.rtnSuccess("代码生成表信息修改成功！");
+        return this.success("代码生成表信息修改成功！");
     }
 
     @PostMapping("/deleteTable")
@@ -75,7 +75,7 @@ public class AgileGeneratorController extends AgileBaseController {
     @AgileLogger(title = "删除代码生成表信息",type = AgileLoggerType.DELETE)
     public AgileResult<Object> deleteTable(@SingleRequestBody String agileGeneratorTableId) {
         agileGeneratorTableService.deleteTableById(agileGeneratorTableId);
-        return this.rtnSuccess("代码生成表信息删除成功！");
+        return this.success("代码生成表信息删除成功！");
     }
 
     @PostMapping("/syncTable")
@@ -83,14 +83,14 @@ public class AgileGeneratorController extends AgileBaseController {
     @AgileLogger(title = "同步代码生成表信息",type = AgileLoggerType.UPDATE)
     public AgileResult<Object> syncTable(@SingleRequestBody String agileGeneratorTableId) {
         agileGeneratorTableService.syncTableById(agileGeneratorTableId);
-        return this.rtnSuccess("代码生成表信息同步成功！");
+        return this.success("代码生成表信息同步成功！");
     }
 
     @PostMapping("/previewCode")
     @ApiOperation(value = "预览生成代码", notes = "预览生成代码")
     @AgileLogger(title = "预览生成代码",type = AgileLoggerType.GENERATOR)
     public AgileResult<Map<String,String>> previewCode(@SingleRequestBody String agileGeneratorTableId) {
-        return this.rtnSuccess(agileGeneratorTableService.previewCode(agileGeneratorTableId));
+        return this.success(agileGeneratorTableService.previewCode(agileGeneratorTableId));
     }
 
     @PostMapping("/downloadCode")
@@ -108,7 +108,7 @@ public class AgileGeneratorController extends AgileBaseController {
             IOUtils.write(dataByte, response.getOutputStream());
             return null;
         } catch (Exception ex) {
-            return this.rtnError(ex, "下载代码发生异常！");
+            return this.error(ex, "下载代码发生异常！");
         }
     }
 }

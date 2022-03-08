@@ -36,14 +36,14 @@ public class AgileQuartzJobController extends AgileBaseController {
     @ApiOperation(value = "分页查询定时任务列表", notes = "分页查询定时任务列表")
     @AgileLogger(title = "分页查询定时任务", type = AgileLoggerType.SELECT)
     public AgileResult<AgilePage<AgileQuartzJob>> selectPage(@RequestBody AgilePageable<AgileQuartzJob> agilePageable) {
-        return this.rtnSuccess(agileQuartzJobService.selectQuartzJobPage(agilePageable));
+        return this.success(agileQuartzJobService.selectQuartzJobPage(agilePageable));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据任务ID查询定时任务详细信息", notes = "根据任务ID查询定时任务详细信息")
     @AgileLogger(title = "查看定时任务信息", type = AgileLoggerType.DETAIL)
     public AgileResult<AgileQuartzJob> detail(@SingleRequestBody String quartzJobId) {
-        return this.rtnSuccess(agileQuartzJobService.selectQuartzJobById(quartzJobId));
+        return this.success(agileQuartzJobService.selectQuartzJobById(quartzJobId));
     }
 
     @AgileDemo
@@ -52,7 +52,7 @@ public class AgileQuartzJobController extends AgileBaseController {
     @AgileLogger(title = "新增定时任务", type = AgileLoggerType.ADD)
     @AgileRequiresPermissions("quartz:job:add")
     public AgileResult<AgileQuartzJob> save(@RequestBody AgileQuartzJob agileQuartzJob) {
-        return this.rtnSuccess(agileQuartzJobService.saveQuartzJob(agileQuartzJob));
+        return this.success(agileQuartzJobService.saveQuartzJob(agileQuartzJob));
     }
 
     @AgileDemo
@@ -62,7 +62,7 @@ public class AgileQuartzJobController extends AgileBaseController {
     @AgileRequiresPermissions("quartz:job:update")
     public AgileResult update(@RequestBody AgileQuartzJob agileQuartzJob) {
         agileQuartzJobService.updateQuartzJobById(agileQuartzJob);
-        return this.rtnSuccess("定时任务信息更新成功！");
+        return this.success("定时任务信息更新成功！");
     }
 
     @AgileDemo
@@ -72,7 +72,7 @@ public class AgileQuartzJobController extends AgileBaseController {
     @AgileRequiresPermissions("quartz:job:delete")
     public AgileResult delete(@SingleRequestBody String quartzJobId) {
         agileQuartzJobService.deleteQuartzJobById(quartzJobId);
-        return this.rtnSuccess("定时任务信息删除成功！");
+        return this.success("定时任务信息删除成功！");
     }
 
     @AgileDemo
@@ -81,7 +81,7 @@ public class AgileQuartzJobController extends AgileBaseController {
     @AgileLogger(title = "更新任务状态", type = AgileLoggerType.UPDATE)
     public AgileResult<String> changeJobStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
         agileQuartzJobService.changeQuartzJobStatus(agileUpdateStatus);
-        return this.rtnSuccess();
+        return this.success();
     }
 
     @PostMapping("/execute")
@@ -90,6 +90,6 @@ public class AgileQuartzJobController extends AgileBaseController {
     @AgileRequiresPermissions("quartz:job:execute")
     public AgileResult execute(@SingleRequestBody String quartzJobId) {
         agileQuartzJobService.executeQuartzJobById(quartzJobId);
-        return this.rtnSuccess("执行任务成功！");
+        return this.success("执行任务成功！");
     }
 }

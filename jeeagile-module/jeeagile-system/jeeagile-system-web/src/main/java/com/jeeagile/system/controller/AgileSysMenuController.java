@@ -37,14 +37,14 @@ public class AgileSysMenuController extends AgileBaseController {
     @ApiOperation(value = "获取菜单列表", notes = "获取菜单列表")
     @AgileLogger(title = "查询菜单列表", type = AgileLoggerType.SELECT)
     public AgileResult<List<AgileSysMenu>> selectList(@RequestBody AgileSysMenu agileSysMenu) {
-        return this.rtnSuccess(agileSysMenuService.selectMenuList(agileSysMenu));
+        return this.success(agileSysMenuService.selectMenuList(agileSysMenu));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据菜单ID获取菜单详细信息", notes = "根据菜单ID获取菜单详细信息")
     @AgileLogger(title = "查看菜单信息", type = AgileLoggerType.DETAIL)
     public AgileResult<AgileSysMenu> detail(@SingleRequestBody String menuId) {
-        return this.rtnSuccess(agileSysMenuService.selectMenuById(menuId));
+        return this.success(agileSysMenuService.selectMenuById(menuId));
     }
 
     @AgileDemo
@@ -53,7 +53,7 @@ public class AgileSysMenuController extends AgileBaseController {
     @AgileLogger(title = "新增菜单", type = AgileLoggerType.ADD)
     @AgileRequiresPermissions("system:menu:add")
     public AgileResult<AgileSysMenu> add(@RequestBody AgileSysMenu agileSysMenu) {
-        return this.rtnSuccess(agileSysMenuService.saveMenu(agileSysMenu));
+        return this.success(agileSysMenuService.saveMenu(agileSysMenu));
     }
 
     @AgileDemo
@@ -63,7 +63,7 @@ public class AgileSysMenuController extends AgileBaseController {
     @AgileRequiresPermissions("system:menu:update")
     public AgileResult<String> update(@RequestBody AgileSysMenu agileSysMenu) {
         agileSysMenuService.updateMenuById(agileSysMenu);
-        return this.rtnSuccess("菜单信息修改成功！");
+        return this.success("菜单信息修改成功！");
     }
 
     @AgileDemo
@@ -73,7 +73,7 @@ public class AgileSysMenuController extends AgileBaseController {
     @AgileRequiresPermissions("system:menu:sort")
     public AgileResult<String> updateSort(@RequestBody List<AgileUpdateSort> agileSortList) {
         agileSysMenuService.updateMenuSort(agileSortList);
-        return this.rtnSuccess("菜单排序修改成功！");
+        return this.success("菜单排序修改成功！");
     }
 
     @AgileDemo
@@ -83,7 +83,7 @@ public class AgileSysMenuController extends AgileBaseController {
     @AgileRequiresPermissions("system:menu:delete")
     public AgileResult<String> delete(@SingleRequestBody String menuId) {
         agileSysMenuService.deleteMenuById(menuId);
-        return this.rtnSuccess("菜单信息删除成功");
+        return this.success("菜单信息删除成功");
     }
 }
 

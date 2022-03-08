@@ -34,14 +34,14 @@ public class AgileQuartzJobLoggerController extends AgileBaseController {
     @ApiOperation(value = "分页查询任务执行日志列表", notes = "分页查询任务执行日志列表")
     @AgileLogger(title = "分页查询任务执行日志列表", type = AgileLoggerType.SELECT)
     public AgileResult<AgilePage<AgileQuartzJobLogger>> selectPage(@RequestBody AgilePageable<AgileQuartzJobLogger> agilePageable) {
-        return this.rtnSuccess(agileQuartzLoggerService.selectQuartzJobLoggerPage(agilePageable));
+        return this.success(agileQuartzLoggerService.selectQuartzJobLoggerPage(agilePageable));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据日志执行ID获取执行详细信息", notes = "根据日志执行ID获取执行详细信息")
     @AgileLogger(title = "查看任务执行详细信息", type = AgileLoggerType.DETAIL)
     public AgileResult<AgileQuartzJobLogger> detail(@SingleRequestBody String quartzLogId) {
-        return this.rtnSuccess(agileQuartzLoggerService.selectQuartzJobLoggerById(quartzLogId));
+        return this.success(agileQuartzLoggerService.selectQuartzJobLoggerById(quartzLogId));
     }
 
     @AgileDemo
@@ -50,7 +50,7 @@ public class AgileQuartzJobLoggerController extends AgileBaseController {
     @AgileLogger(title = "删除日志记录", type = AgileLoggerType.DELETE)
     public AgileResult<String> delete(@SingleRequestBody String quartzLogId) {
         agileQuartzLoggerService.deleteQuartzJobLogger(quartzLogId);
-        return this.rtnSuccess("日志记录删除成功！");
+        return this.success("日志记录删除成功！");
     }
 
     @AgileDemo
@@ -59,6 +59,6 @@ public class AgileQuartzJobLoggerController extends AgileBaseController {
     @AgileLogger(title = "清空日志记录", type = AgileLoggerType.CLEAR)
     public AgileResult clear() {
         agileQuartzLoggerService.clearQuartzJobLogger();
-        return this.rtnSuccess("日志记录清空成功！");
+        return this.success("日志记录清空成功！");
     }
 }

@@ -36,7 +36,7 @@ public class AgileOnlineController extends AgileBaseController {
     @ApiOperation(value = "在线用户列表", notes = "在线用户列表")
     @AgileRequiresPermissions("monitor:online:list")
     public AgileResult<AgilePage<AgileOnlineUser>> onlineUser(AgilePageable<Map> agilePageable) {
-        return this.rtnSuccess(getOnlineUserList(agilePageable));
+        return this.success(getOnlineUserList(agilePageable));
     }
 
     @AgileDemo
@@ -45,7 +45,7 @@ public class AgileOnlineController extends AgileBaseController {
     @AgileRequiresPermissions("monitor:online:forceLogout")
     public AgileResult<String> forceLogout(@SingleRequestBody String userToken) {
         AgileSecurityUtil.forceLogout(userToken);
-        return this.rtnSuccess();
+        return this.success();
     }
 
     @AgileDemo
@@ -56,7 +56,7 @@ public class AgileOnlineController extends AgileBaseController {
         for (String userToken : userTokenList) {
             AgileSecurityUtil.forceLogout(userToken);
         }
-        return this.rtnSuccess();
+        return this.success();
     }
 
     /**

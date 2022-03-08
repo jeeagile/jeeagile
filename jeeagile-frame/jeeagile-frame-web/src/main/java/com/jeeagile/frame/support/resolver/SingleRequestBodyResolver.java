@@ -19,6 +19,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashSet;
 import java.util.List;
@@ -82,6 +83,8 @@ public class SingleRequestBodyResolver implements HandlerMethodArgumentResolver 
         if (isBasicDataTypes(parameterType)) {// 基本类型包装类
             object = parseBasicTypeWrapper(parameterType, requestBody);
         } else if (parameterType == String.class) { // 字符串类型
+            object = requestBody;
+        } else if (parameterType == Serializable.class) { // 字符串类型
             object = requestBody;
         } else {
             throw new AgileFrameException("SingleRequestBody注解请求参数必须为JSON格式数据！“" + requestBody + "”Can not cast to JSONObject！");

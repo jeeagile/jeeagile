@@ -45,6 +45,6 @@ public class AgileServerController extends AgileBaseController {
         agileServerInfo.setServerName(environment.getProperty("spring.application.name"));
         agileServerInfo.setServerIp(agileServerInfo.getHostInfo().getAddress());
         agileServerInfo.setServerPort(environment.getProperty("server.port"));
-        return this.rtnSuccess(agileServerInfo);
+        return this.success(agileServerInfo);
     }
 }

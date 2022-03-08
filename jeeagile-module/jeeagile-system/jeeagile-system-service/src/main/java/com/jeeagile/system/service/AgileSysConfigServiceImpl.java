@@ -6,13 +6,11 @@ import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.frame.page.AgilePage;
-import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysConfig;
 import com.jeeagile.system.mapper.AgileSysConfigMapper;
 
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * @author JeeAgile
@@ -23,18 +21,20 @@ import java.util.List;
 public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConfigMapper, AgileSysConfig> implements IAgileSysConfigService {
 
     @Override
-    public AgilePage<AgileSysConfig> selectConfigPage(AgilePageable<AgileSysConfig> agilePageable) {
-        return this.page(agilePageable, getSysConfigQueryWrapper(agilePageable.getQueryCond()));
-    }
-
-    @Override
-    public List<AgileSysConfig> selectConfigList(AgileSysConfig agileSysConfig) {
-        return this.list(getSysConfigQueryWrapper(agileSysConfig));
-    }
-
-    @Override
-    public AgileSysConfig selectConfigById(String configId) {
-        return this.getById(configId);
+    public LambdaQueryWrapper<AgileSysConfig> queryWrapper(AgileSysConfig agileSysConfig) {
+        LambdaQueryWrapper<AgileSysConfig> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (agileSysConfig != null) {
+            if (AgileStringUtil.isNotEmpty(agileSysConfig.getConfigName())) {
+                lambdaQueryWrapper.like(AgileSysConfig::getConfigName, agileSysConfig.getConfigName());
+            }
+            if (AgileStringUtil.isNotEmpty(agileSysConfig.getConfigKey())) {
+                lambdaQueryWrapper.eq(AgileSysConfig::getConfigKey, agileSysConfig.getConfigKey());
+            }
+            if (AgileStringUtil.isNotEmpty(agileSysConfig.getSystemFlag())) {
+                lambdaQueryWrapper.eq(AgileSysConfig::getSystemFlag, agileSysConfig.getSystemFlag());
+            }
+        }
+        return lambdaQueryWrapper;
     }
 
     @Override
@@ -45,30 +45,23 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     }
 
     @Override
-    public AgileSysConfig saveConfig(AgileSysConfig agileSysConfig) {
-        //校验业务数据
-        agileSysConfig.validate();
-        validateSysConfig(agileSysConfig);
-        this.save(agileSysConfig);
-        return agileSysConfig;
+    public void saveModelValidate(AgileSysConfig agileSysConfig) {
+        this.validateSysConfig(agileSysConfig);
     }
 
     @Override
-    public boolean updateConfigById(AgileSysConfig agileSysConfig) {
-        //校验业务数据
-        agileSysConfig.validate();
-        validateSysConfig(agileSysConfig);
-        return this.updateById(agileSysConfig);
+    public void updateModelValidate(AgileSysConfig agileSysConfig) {
+        this.validateSysConfig(agileSysConfig);
     }
 
     @Override
-    public boolean deleteConfigById(String configId) {
-        AgileSysConfig agileSysConfig = this.getById(configId);
+    public void deleteModelValidate(Serializable id) {
+        AgileSysConfig agileSysConfig = this.getById(id);
         if (agileSysConfig.getSystemFlag().equals(AgileFlagEnum.YES.getCode())) {
             throw new AgileValidateException("系统内置类型为‘是’的，不能删除！");
         }
-        return this.removeById(configId);
     }
+
 
     @Override
     public String getConfigValueByKey(String configKey) {
@@ -86,25 +79,6 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
             defaultPwd = "888888";
         }
         return defaultPwd;
-    }
-
-    /**
-     * 拼装查询条件
-     */
-    private QueryWrapper<AgileSysConfig> getSysConfigQueryWrapper(AgileSysConfig agileSysConfig) {
-        QueryWrapper<AgileSysConfig> queryWrapper = new QueryWrapper<>();
-        if (agileSysConfig != null) {
-            if (AgileStringUtil.isNotEmpty(agileSysConfig.getConfigName())) {
-                queryWrapper.lambda().like(AgileSysConfig::getConfigName, agileSysConfig.getConfigName());
-            }
-            if (AgileStringUtil.isNotEmpty(agileSysConfig.getConfigKey())) {
-                queryWrapper.lambda().like(AgileSysConfig::getConfigKey, agileSysConfig.getConfigKey());
-            }
-            if (AgileStringUtil.isNotEmpty(agileSysConfig.getSystemFlag())) {
-                queryWrapper.lambda().like(AgileSysConfig::getSystemFlag, agileSysConfig.getSystemFlag());
-            }
-        }
-        return queryWrapper;
     }
 
     /**

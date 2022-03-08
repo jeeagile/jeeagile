@@ -41,14 +41,14 @@ public class AgileSysUserController extends AgileBaseController {
     @ApiOperation(value = "分页查询用户列表", notes = "分页查询用户列表")
     @AgileLogger(title = "查询用户列表", type = AgileLoggerType.SELECT)
     public AgileResult<AgilePage<AgileSysUser>> selectUserPage(@RequestBody AgilePageable<AgileSysUser> agilePageable) {
-        return this.rtnSuccess(agileSysUserService.selectUserPage(agilePageable));
+        return this.success(agileSysUserService.selectUserPage(agilePageable));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据用户ID获取用户详细信息", notes = "根据用户ID获取用户详细信息")
     @AgileLogger(title = "查看用户信息", type = AgileLoggerType.DETAIL)
     public AgileResult<AgileSysUser> detailUser(@SingleRequestBody String userId) {
-        return this.rtnSuccess(agileSysUserService.selectUserById(userId));
+        return this.success(agileSysUserService.selectUserById(userId));
     }
 
     @AgileDemo
@@ -57,7 +57,7 @@ public class AgileSysUserController extends AgileBaseController {
     @AgileLogger(title = "新增用户", type = AgileLoggerType.ADD)
     @AgileRequiresPermissions("system:user:add")
     public AgileResult<AgileSysUser> addUser(@RequestBody AgileSysUserInfo agileSysUserInfo) {
-        return this.rtnSuccess(agileSysUserService.saveUser(agileSysUserInfo));
+        return this.success(agileSysUserService.saveUser(agileSysUserInfo));
     }
 
     @AgileDemo
@@ -67,7 +67,7 @@ public class AgileSysUserController extends AgileBaseController {
     @AgileRequiresPermissions("system:user:update")
     public AgileResult<Object> updateUser(@RequestBody AgileSysUserInfo agileSysUserInfo) {
         agileSysUserService.updateUserById(agileSysUserInfo);
-        return this.rtnSuccess("用户信息修改成功！");
+        return this.success("用户信息修改成功！");
     }
 
     @AgileDemo
@@ -77,7 +77,7 @@ public class AgileSysUserController extends AgileBaseController {
     @AgileRequiresPermissions("system:user:delete")
     public AgileResult<Object> delete(@SingleRequestBody String userId) {
         agileSysUserService.deleteUserById(userId);
-        return this.rtnSuccess("用户信息删除成功！");
+        return this.success("用户信息删除成功！");
     }
 
     @AgileDemo
@@ -88,7 +88,7 @@ public class AgileSysUserController extends AgileBaseController {
     public AgileResult<Object> resetUserPassword(@RequestBody AgileUpdatePwd agileUpdatePwd) {
         agileSysUserService.resetUserPwd(agileUpdatePwd);
         AgileCacheUtil.evict(AgileCacheConstants.AGILE_CACHE_AUTHENTICATION_NAME,"test");
-        return this.rtnSuccess();
+        return this.success();
     }
 
     @AgileDemo
@@ -97,7 +97,7 @@ public class AgileSysUserController extends AgileBaseController {
     @AgileLogger(title = "更新用户状态", type = AgileLoggerType.UPDATE)
     public AgileResult<Object> changeUserStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
         agileSysUserService.changeUserStatus(agileUpdateStatus);
-        return this.rtnSuccess();
+        return this.success();
     }
 
 }

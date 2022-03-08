@@ -40,21 +40,21 @@ public class AgileSysRoleController extends AgileBaseController {
     @ApiOperation(value = "分页查询角色列表", notes = "分页查询角色列表")
     @AgileLogger(title = "查询角色列表", type = AgileLoggerType.SELECT)
     public AgileResult<AgilePage<AgileSysRole>> selectRolePage(@RequestBody AgilePageable<AgileSysRole> agilePageable) {
-        return this.rtnSuccess(agileSysRoleService.selectRolePage(agilePageable));
+        return this.success(agileSysRoleService.selectRolePage(agilePageable));
     }
 
     @PostMapping("/selectList")
     @ApiOperation(value = "查询角色列表", notes = "查询角色列表")
     @AgileLogger(title = "查询角色列表", type = AgileLoggerType.SELECT)
     public AgileResult<List<AgileSysRole>> selectRoleList(@RequestBody AgileSysRole agileSysRole) {
-        return this.rtnSuccess(agileSysRoleService.selectRoleList(agileSysRole));
+        return this.success(agileSysRoleService.selectRoleList(agileSysRole));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据角色ID获取角色详细信息", notes = "根据角色ID获取角色详细信息")
     @AgileLogger(title = "查看角色信息", type = AgileLoggerType.DETAIL)
     public AgileResult<AgileSysRoleInfo> detailRole(@SingleRequestBody String roleId) {
-        return this.rtnSuccess(agileSysRoleService.selectRoleById(roleId));
+        return this.success(agileSysRoleService.selectRoleById(roleId));
     }
 
     @AgileDemo
@@ -63,7 +63,7 @@ public class AgileSysRoleController extends AgileBaseController {
     @AgileLogger(title = "新增角色", type = AgileLoggerType.ADD)
     @AgileRequiresPermissions("system:role:add")
     public AgileResult<AgileSysRoleInfo> addRole(@RequestBody AgileSysRoleInfo agileSysRoleInfo) {
-        return this.rtnSuccess(agileSysRoleService.saveRole(agileSysRoleInfo));
+        return this.success(agileSysRoleService.saveRole(agileSysRoleInfo));
     }
 
     @AgileDemo
@@ -73,7 +73,7 @@ public class AgileSysRoleController extends AgileBaseController {
     @AgileRequiresPermissions("system:role:update")
     public AgileResult<String> updateRole(@RequestBody AgileSysRoleInfo agileSysRoleInfo) {
         agileSysRoleService.updateRoleById(agileSysRoleInfo);
-        return this.rtnSuccess();
+        return this.success();
     }
 
     @AgileDemo
@@ -83,7 +83,7 @@ public class AgileSysRoleController extends AgileBaseController {
     @AgileRequiresPermissions("system:role:delete")
     public AgileResult<AgileSysRole> deleteRole(@SingleRequestBody String roleId) {
         agileSysRoleService.deleteRoleById(roleId);
-        return this.rtnSuccess();
+        return this.success();
     }
 
     @AgileDemo
@@ -92,7 +92,7 @@ public class AgileSysRoleController extends AgileBaseController {
     @AgileLogger(title = "更新角色状态", type = AgileLoggerType.UPDATE)
     public AgileResult<String> changeRoleStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
         agileSysRoleService.changeRoleStatus(agileUpdateStatus);
-        return this.rtnSuccess();
+        return this.success();
     }
 
     @AgileDemo
@@ -101,7 +101,7 @@ public class AgileSysRoleController extends AgileBaseController {
     @AgileLogger(title = "更新角色权限范围", type = AgileLoggerType.UPDATE)
     public AgileResult<String> dataScope(@RequestBody AgileSysRoleInfo agileSysRoleInfo) {
         agileSysRoleService.updateRoleDataScope(agileSysRoleInfo);
-        return this.rtnSuccess();
+        return this.success();
     }
 }
 

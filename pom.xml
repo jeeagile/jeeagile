@@ -44,7 +44,6 @@
         <swagger-annotations.version>1.6.2</swagger-annotations.version>
         <knife4j.version>3.0.3</knife4j.version>
 
-
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
         <shiro-spring.version>1.8.0</shiro-spring.version>
 
@@ -355,7 +354,6 @@
                 <artifactId>jeeagile-quartz-web</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
-
 
             <dependency>
                 <groupId>com.jeeagile</groupId>

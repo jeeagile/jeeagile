@@ -38,21 +38,21 @@ public class AgileSysPostController extends AgileBaseController {
     @ApiOperation(value = "分页查询岗位管理列表", notes = "分页查询岗位管理列表")
     @AgileLogger(title = "查询岗位列表", type = AgileLoggerType.SELECT)
     public AgileResult<AgilePage<AgileSysPost>> selectPostPage(@RequestBody AgilePageable<AgileSysPost> agilePageable) {
-        return this.rtnSuccess(agileSysPostService.selectPostPage(agilePageable));
+        return this.success(agileSysPostService.selectPostPage(agilePageable));
     }
 
     @PostMapping(value = "/selectList")
     @ApiOperation(value = "查询岗位列表", notes = "查询岗位列表")
     @AgileLogger(title = "查看岗位列表", type = AgileLoggerType.SELECT)
     public AgileResult<List<AgileSysPost>> selectPostList(@RequestBody AgileSysPost agileSysPost) {
-        return this.rtnSuccess(agileSysPostService.selectPostList(agileSysPost));
+        return this.success(agileSysPostService.selectPostList(agileSysPost));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据岗位ID获取岗位详细信息", notes = "根据岗位ID获取岗位详细信息")
     @AgileLogger(title = "查看岗位信息", type = AgileLoggerType.DETAIL)
     public AgileResult<AgileSysPost> detail(@SingleRequestBody String postId) {
-        return this.rtnSuccess(agileSysPostService.selectPostById(postId));
+        return this.success(agileSysPostService.selectPostById(postId));
     }
 
     @AgileDemo
@@ -61,7 +61,7 @@ public class AgileSysPostController extends AgileBaseController {
     @AgileLogger(title = "新增岗位", type = AgileLoggerType.ADD)
     @AgileRequiresPermissions("system:post:add")
     public AgileResult<AgileSysPost> add(@RequestBody AgileSysPost agileSysPost) {
-        return this.rtnSuccess(agileSysPostService.savePost(agileSysPost));
+        return this.success(agileSysPostService.savePost(agileSysPost));
     }
 
     @AgileDemo
@@ -71,7 +71,7 @@ public class AgileSysPostController extends AgileBaseController {
     @AgileRequiresPermissions("system:post:update")
     public AgileResult<String> update(@RequestBody AgileSysPost agileSysPost) {
         agileSysPostService.updatePostById(agileSysPost);
-        return this.rtnSuccess("岗位信息更新成功！");
+        return this.success("岗位信息更新成功！");
     }
 
     @AgileDemo
@@ -81,6 +81,6 @@ public class AgileSysPostController extends AgileBaseController {
     @AgileRequiresPermissions("system:post:delete")
     public AgileResult<String> delete(@SingleRequestBody String postId) {
         agileSysPostService.deletePostById(postId);
-        return this.rtnSuccess("岗位信息删除成功！");
+        return this.success("岗位信息删除成功！");
     }
 }

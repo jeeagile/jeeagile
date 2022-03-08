@@ -37,27 +37,27 @@ public class AgileSysDictDataController extends AgileBaseController {
     @ApiOperation(value = "分页查询字典数据列表", notes = "分页查询字典数据列表")
     @AgileLogger(title = "查询字典数据", type = AgileLoggerType.SELECT)
     public AgileResult<AgilePage<AgileSysDictData>> selectPage(@RequestBody AgilePageable<AgileSysDictData> agilePageable) {
-        return this.rtnSuccess(agileSysDictDataService.selectDictDataPage(agilePageable));
+        return this.success(agileSysDictDataService.selectDictDataPage(agilePageable));
     }
 
     @PostMapping(value = "/selectList")
     @ApiOperation(value = "查询字典数据列表", notes = "查询字典数据列表")
     @AgileLogger(title = "查询字典数据", type = AgileLoggerType.SELECT)
     public AgileResult<List<AgileSysDictData>> selectList(@RequestBody AgileSysDictData agileSysDictData) {
-        return this.rtnSuccess(agileSysDictDataService.selectDictDataList(agileSysDictData));
+        return this.success(agileSysDictDataService.selectDictDataList(agileSysDictData));
     }
 
     @PostMapping("/getDictDataByDictType")
     @ApiOperation(value = "根据字典类型查询字典数据列表", notes = "根据字典类型查询字典数据列表")
     public AgileResult<AgileSysDictData> getByDictType(@SingleRequestBody String dictType) {
-        return this.rtnSuccess(agileSysDictDataService.selectDictDataByDictType(dictType));
+        return this.success(agileSysDictDataService.selectDictDataByDictType(dictType));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据字典数据ID查询字典数据详细信息", notes = "根据字典数据ID查询字典数据详细信息")
     @AgileLogger(title = "查看字典数据", type = AgileLoggerType.DETAIL)
     public AgileResult<AgileSysDictData> detail(@SingleRequestBody String dictDataId) {
-        return this.rtnSuccess(agileSysDictDataService.selectDictDataById(dictDataId));
+        return this.success(agileSysDictDataService.selectDictDataById(dictDataId));
     }
 
     @AgileDemo
@@ -65,7 +65,7 @@ public class AgileSysDictDataController extends AgileBaseController {
     @ApiOperation(value = "新增字典数据", notes = "新增字典数据")
     @AgileLogger(title = "新增字典数据", type = AgileLoggerType.ADD)
     public AgileResult<AgileSysDictData> add(@RequestBody AgileSysDictData agileSysDictData) {
-        return this.rtnSuccess(agileSysDictDataService.saveDictData(agileSysDictData));
+        return this.success(agileSysDictDataService.saveDictData(agileSysDictData));
     }
 
     @AgileDemo
@@ -74,7 +74,7 @@ public class AgileSysDictDataController extends AgileBaseController {
     @AgileLogger(title = "更新字典数据", type = AgileLoggerType.UPDATE)
     public AgileResult<String> update(@RequestBody AgileSysDictData agileSysDictData) {
         agileSysDictDataService.updateDictDataById(agileSysDictData);
-        return this.rtnSuccess("字典数据信息更新成功！");
+        return this.success("字典数据信息更新成功！");
     }
 
     @AgileDemo
@@ -83,7 +83,7 @@ public class AgileSysDictDataController extends AgileBaseController {
     @AgileLogger(title = "删除字典数据", type = AgileLoggerType.DELETE)
     public AgileResult<String> delete(@SingleRequestBody String dictDataId) {
         agileSysDictDataService.deleteDictDataById(dictDataId);
-        return this.rtnSuccess("字典数据信息删除成功！");
+        return this.success("字典数据信息删除成功！");
     }
 
 }

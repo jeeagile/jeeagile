@@ -35,20 +35,20 @@ public class ${ClassName}Controller extends AgileBaseController {
     @PostMapping(value = "/page")
     @ApiOperation(value = "分页查询${functionName}列表", notes = "分页查询${functionName}列表")
     public AgileResult<AgilePage<${ClassName}>> selectPage(@RequestBody AgilePageable<${ClassName}> agilePageable) {
-        return this.rtnSuccess(${className}Service.selectPage(agilePageable));
+        return this.success(${className}Service.selectPage(agilePageable));
     }
 #end
 
     @PostMapping(value = "/list")
     @ApiOperation(value = "查询${functionName}列表", notes = "查询${functionName}列表")
     public AgileResult<List<${ClassName}>> selectList(@RequestBody ${ClassName} ${className}) {
-        return this.rtnSuccess(${className}Service.selectList(${className}));
+        return this.success(${className}Service.selectList(${className}));
     }
 
     @PostMapping("/detail")
     @ApiOperation(value = "根据主键查询${functionName}详细信息", notes = "根据ID主键查询${functionName}详细信息")
     public AgileResult<${ClassName}> detail(@SingleRequestBody String ${className}Id) {
-        return this.rtnSuccess(${className}Service.selectById(${className}Id));
+        return this.success(${className}Service.selectById(${className}Id));
     }
 
     @PostMapping("/add")
@@ -57,7 +57,7 @@ public class ${ClassName}Controller extends AgileBaseController {
     @AgileLogger(title = "新增${functionName}", type = AgileLoggerType.ADD)
     public AgileResult<Object> add(@RequestBody ${ClassName} ${className}) {
         ${className}Service.save(${className});
-        return this.rtnSuccess("${functionName}保存成功！");
+        return this.success("${functionName}保存成功！");
     }
 
 
@@ -67,7 +67,7 @@ public class ${ClassName}Controller extends AgileBaseController {
     @AgileLogger(title = "修改${functionName}", type = AgileLoggerType.UPDATE)
     public AgileResult<Object> update(@RequestBody ${ClassName} ${className}) {
         ${className}Service.updateById(${className});
-        return this.rtnSuccess("${functionName}修改成功！");
+        return this.success("${functionName}修改成功！");
     }
 
     @PostMapping("/delete")
@@ -76,6 +76,6 @@ public class ${ClassName}Controller extends AgileBaseController {
     @AgileLogger(title = "删除${functionName}", type = AgileLoggerType.DELETE)
     public AgileResult<Object> delete(@SingleRequestBody String ${className}Id) {
         ${className}Service.deleteById(${className}Id);
-        return this.rtnSuccess("${functionName}删除成功！");
+        return this.success("${functionName}删除成功！");
     }
 }
