@@ -16,13 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class AgileAuthenticationEntryPoint implements AuthenticationEntryPoint
-{
+public class AgileAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException
-    {
-        AgileResult resultData = new AgileResult<>(AgileResultCode.FAIL_USER_INFO);
+    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
+        AgileResult resultData = AgileResult.agileResult(AgileResultCode.FAIL_USER_INFO);
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json");
         httpServletResponse.getWriter().write(JSON.toJSONString(resultData));

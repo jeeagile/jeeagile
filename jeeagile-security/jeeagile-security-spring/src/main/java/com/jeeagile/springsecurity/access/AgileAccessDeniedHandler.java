@@ -16,7 +16,7 @@ import java.io.IOException;
 public class AgileAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-        AgileResult resultData = new AgileResult<>(AgileResultCode.FAIL_USER_PERMS);
+        AgileResult resultData = AgileResult.agileResult(AgileResultCode.FAIL_USER_PERMS);
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json");
         httpServletResponse.getWriter().write(JSON.toJSONString(resultData));
