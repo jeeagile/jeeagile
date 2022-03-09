@@ -97,6 +97,14 @@ public class AgileUtil {
     }
 
     /**
+     * 获取超管用户
+     * @return
+     */
+    public static String getSuperAdmin() {
+        return getAgileProperties().getSuperAdmin();
+    }
+
+    /**
      * 判断用户是否未超管用户
      */
     public static boolean isSuperAdmin(String userName) {
