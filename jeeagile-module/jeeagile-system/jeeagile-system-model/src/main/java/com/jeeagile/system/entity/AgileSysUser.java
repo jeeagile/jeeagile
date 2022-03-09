@@ -108,15 +108,15 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     @Size(max = 150, message = "备注长度最大值为150！")
     private String remark;
     /**
-     * 用户分配角色
+     * 用户已分配角色
      */
-    @ApiModelProperty(value = "用户分配角色", position = 13)
+    @ApiModelProperty(value = "用户已分配角色", position = 13)
     @TableField(exist = false)
     private List<String> roleIdList = new ArrayList<>();
     /**
-     * 用户分配岗位
+     * 用户已分配岗位
      */
-    @ApiModelProperty(value = "用户分配岗位", position = 14)
+    @ApiModelProperty(value = "用户已分配岗位", position = 14)
     @TableField(exist = false)
     private List<String> postIdList = new ArrayList<>();
 }

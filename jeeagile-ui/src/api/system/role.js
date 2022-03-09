@@ -4,12 +4,12 @@ import {postApi} from '@/utils/axios'
 /**
  * 分页查询角色列表
  */
-export const selectRolePage = data => postApi('/system/role/selectPage', data)
+export const selectRolePage = data => postApi('/system/role/page', data)
 
 /**
  * 查询角色列表
  */
-export const selectRoleList = data => postApi('/system/role/selectList', data)
+export const selectRoleList = data => postApi('/system/role/list', data)
 
 /**
  * 新增角色
