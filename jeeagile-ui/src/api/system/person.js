@@ -3,7 +3,7 @@ import {postApi} from '@/utils/axios'
 /**
  * 获取个人信息
  */
-export const getPersonInfo = () => postApi('/system/person/getInfo')
+export const getPersonInfo = () => postApi('/system/person/getPersonInfo')
 
 /**
  * 更新个人信息

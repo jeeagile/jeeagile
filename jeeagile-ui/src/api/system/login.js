@@ -13,9 +13,9 @@ export const logout = () => postApi('/system/user/logout')
 /**
  * 获取登录用户信息
  */
-export const getUserInfo = () => postApi('/system/user/getInfo')
+export const getUserInfo = () => postApi('/system/user/getUserInfo')
 
 /**
  * 获取登录用户菜单
  */
-export const getUserMenu = () => postApi('/system/user/getMenu')
+export const getUserMenu = () => postApi('/system/user/getUserMenu')

@@ -44,7 +44,7 @@ public class AgileSysKaptchaController extends AgileBaseController {
         if (AgileStringUtil.isEmpty(code)) {
             return this.error(AgileResultCode.FAIL_KCAPTCHA_EXPIRE, "验证码已失效！");
         }
-        if(!code.equals(agileKaptchaInfo.getCode())){
+        if (!code.equals(agileKaptchaInfo.getCode())) {
             return this.error(AgileResultCode.FAIL_KCAPTCHA_ERROR, "验证码错误！");
         }
         return this.success();

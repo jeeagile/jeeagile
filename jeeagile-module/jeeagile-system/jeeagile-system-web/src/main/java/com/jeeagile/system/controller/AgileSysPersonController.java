@@ -33,9 +33,9 @@ public class AgileSysPersonController extends AgileBaseController {
 
 
     @AgileRequiresUser
-    @PostMapping("/getInfo")
+    @PostMapping("/getPersonInfo")
     @ApiOperation(value = "获取个人信息", notes = "获取个人信息")
-    public AgileResult<AgilePersonInfo> getInfo() {
+    public AgileResult<AgilePersonInfo> getPersonInfo() {
         return this.success(agilePersonService.getPersonInfo());
     }
 

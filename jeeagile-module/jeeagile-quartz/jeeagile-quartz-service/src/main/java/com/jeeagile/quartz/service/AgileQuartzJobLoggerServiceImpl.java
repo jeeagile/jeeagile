@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.frame.page.AgilePage;
-import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileServiceImpl;
 import com.jeeagile.quartz.entity.AgileQuartzJobLogger;
 import com.jeeagile.quartz.mapper.AgileQuartzJobLoggerMapper;
@@ -39,25 +37,8 @@ public class AgileQuartzJobLoggerServiceImpl extends AgileServiceImpl<AgileQuart
         return lambdaQueryWrapper;
     }
 
-//    @Override
-//    public AgilePage<AgileQuartzJobLogger> selectQuartzJobLoggerPage(AgilePageable<AgileQuartzJobLogger> agilePageable) {
-//        return this.page(agilePageable, getQuartzJobLoggerQueryWrapper(agilePageable.getQueryCond()));
-//    }
-
-//    @Override
-//    public AgileQuartzJobLogger selectQuartzJobLoggerById(String quartzLogId) {
-//        return this.getById(quartzLogId);
-//    }
-
-//    @Override
-//    public boolean deleteQuartzJobLogger(String quartzLogId) {
-//        return this.removeById(quartzLogId);
-//    }
-
     @Override
-    public boolean clearQuartzJobLogger() {
+    public boolean clearRecord() {
         return this.remove(new QueryWrapper<>());
     }
-
-
 }

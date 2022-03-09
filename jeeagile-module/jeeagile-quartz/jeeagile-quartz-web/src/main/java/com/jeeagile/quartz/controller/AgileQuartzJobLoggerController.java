@@ -58,7 +58,7 @@ public class AgileQuartzJobLoggerController extends AgileBaseController {
     @ApiOperation(value = "清空日志记录", notes = "清空日志记录")
     @AgileLogger(title = "清空日志记录", type = AgileLoggerType.CLEAR)
     public AgileResult clear() {
-        agileQuartzLoggerService.clearQuartzJobLogger();
+        agileQuartzLoggerService.clearRecord();
         return this.success("日志记录清空成功！");
     }
 }
