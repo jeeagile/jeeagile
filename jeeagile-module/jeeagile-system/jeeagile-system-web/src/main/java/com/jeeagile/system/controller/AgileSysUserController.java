@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
  * @author JeeAgile
  * @date 2021-03-21
@@ -28,11 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 @AgilePermissionsPrefix("system:user")
 @Api(value = "用户管理", tags = "用户管理")
 public class AgileSysUserController extends AgileCrudController<IAgileSysUserService, AgileSysUser> {
+
     @AgileDemo
     @PostMapping(value = "/resetPwd")
     @ApiOperation(value = "重置用户密码", notes = "重置用户密码")
     @AgileLogger(title = "重置用户密码", type = AgileLoggerType.UPDATE)
-    @AgileRequiresPermissions("system:user:resetPwd")
+    @AgileRequiresPermissions("resetPwd")
     public AgileResult<Object> resetUserPassword(@RequestBody AgileUpdatePwd agileUpdatePwd) {
         this.getAgileService().resetUserPwd(agileUpdatePwd);
         return this.success();

@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.jeeagile.core.constants.AgileConstants.AGILE_DATA_SCOPE_05;
 
@@ -39,6 +41,14 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
 
     @Autowired
     private IAgileSysRoleDeptService agileSysRoleDeptService;
+
+    @Override
+    public Object initData() {
+        Map initData = new HashMap();
+        initData.put("deptList", agileSysDeptService.selectList());
+        initData.put("menuList", agileSysMenuService.selectList());
+        return initData;
+    }
 
     @Override
     public LambdaQueryWrapper<AgileSysRole> queryWrapper(AgileSysRole agileSysRole) {

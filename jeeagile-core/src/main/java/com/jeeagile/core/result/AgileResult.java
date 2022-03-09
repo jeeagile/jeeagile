@@ -40,7 +40,7 @@ public class AgileResult<T> implements Serializable {
      *
      * @param agileResultCode
      */
-    public AgileResult(IAgileResultCode agileResultCode) {
+    private AgileResult(IAgileResultCode agileResultCode) {
         this.code = agileResultCode.getCode();
         this.message = getMessage(agileResultCode);
     }
@@ -52,7 +52,7 @@ public class AgileResult<T> implements Serializable {
      * @param agileResultCode
      * @param message
      */
-    public AgileResult(IAgileResultCode agileResultCode, String message) {
+    private AgileResult(IAgileResultCode agileResultCode, String message) {
         this.code = agileResultCode.getCode();
         this.message = agileResultCode.getMessage();
         if (AgileStringUtil.hasLength(message)) {
@@ -68,7 +68,7 @@ public class AgileResult<T> implements Serializable {
      * @param agileResultCode
      * @param data
      */
-    public AgileResult(IAgileResultCode agileResultCode, T data) {
+    private AgileResult(IAgileResultCode agileResultCode, T data) {
         this.code = agileResultCode.getCode();
         this.message = getMessage(agileResultCode);
         this.data = data;
@@ -81,7 +81,7 @@ public class AgileResult<T> implements Serializable {
      * @param message
      * @param data
      */
-    public AgileResult(IAgileResultCode agileResultCode, String message, T data) {
+    private AgileResult(IAgileResultCode agileResultCode, String message, T data) {
         this.code = agileResultCode.getCode();
         this.message = agileResultCode.getMessage();
         if (AgileStringUtil.hasLength(message)) {
@@ -96,7 +96,31 @@ public class AgileResult<T> implements Serializable {
         if (AgileStringUtil.hasLength(agileResultCode.getMessage())) {
             return agileResultCode.getMessage();
         } else {
-            return "未知错误操作信息！";
+            return "未知信息提示！";
+        }
+    }
+
+    /**
+     * 设置返回编码
+     *
+     * @param agileResultCode
+     */
+    public void setAgileResultCode(IAgileResultCode agileResultCode) {
+        this.code = agileResultCode.getCode();
+        this.message = getMessage(agileResultCode);
+    }
+
+    /**
+     * 设置返回编码
+     *
+     * @param agileResultCode
+     */
+    public void setAgileResultCode(IAgileResultCode agileResultCode, String message) {
+        this.code = agileResultCode.getCode();
+        if (AgileStringUtil.hasLength(message)) {
+            this.message = message;
+        } else {
+            this.message = getMessage(agileResultCode);
         }
     }
 

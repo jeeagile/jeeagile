@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author JeeAgile
@@ -28,11 +30,26 @@ import java.util.List;
 public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMapper, AgileSysUser> implements IAgileSysUserService {
 
     @Autowired
+    private IAgileSysDeptService agileSysDeptService;
+    @Autowired
+    private IAgileSysPostService agileSysPostService;
+    @Autowired
+    private IAgileSysRoleService agileSysRoleService;
+    @Autowired
     private IAgileSysUserRoleService agileSysUserRoleService;
     @Autowired
     private IAgileSysUserPostService agileSysUserPostService;
     @Autowired
     private IAgileSysConfigService agileSysConfigService;
+
+    @Override
+    public Object initData() {
+        Map initData = new HashMap();
+        initData.put("deptList", agileSysDeptService.selectList());
+        initData.put("postList", agileSysPostService.selectList());
+        initData.put("roleList", agileSysRoleService.selectList());
+        return initData;
+    }
 
     @Override
     public LambdaQueryWrapper<AgileSysUser> queryWrapper(AgileSysUser agileSysUser) {

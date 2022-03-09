@@ -25,7 +25,7 @@ public class AgileAuthenticationFilter extends FormAuthenticationFilter {
         } else if (requestURI.equals("/") || requestURI.equals("/index.html")) {
             return true;
         } else {
-            AgileResult<?> agileResult = new AgileResult<>(AgileResultCode.FAIL_USER_INFO);
+            AgileResult<?> agileResult = AgileResult.agileResult(AgileResultCode.FAIL_USER_INFO);
             //设置响应头
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");

@@ -117,7 +117,7 @@
           <el-col :span="12">
             <el-form-item label="归属部门" prop="deptId">
               <tree-select v-model="form.deptId" :options="deptTreeOptionList" :show-count="true"
-                           :normalizer="deptNormalizer" placeholder="请选择归属部门"/>
+                           :normalizer="deptNormalizer" placeholder="请选择归属部门" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -163,18 +163,18 @@
           <el-col :span="12">
             <el-form-item label="岗位">
               <el-select v-model="form.postIdList" multiple placeholder="请选择">
-                <el-option v-for="postIdOption in postIdOptionList" :key="postIdOption.id"
-                           :label="postIdOption.postName" :value="postIdOption.id"
-                           :disabled="postIdOption.postStatus == 1"/>
+                <el-option v-for="postOption in postList" :key="postOption.id"
+                           :label="postOption.postName" :value="postOption.id"
+                           :disabled="postOption.postStatus == 1"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="角色">
               <el-select v-model="form.roleIdList" multiple placeholder="请选择">
-                <el-option v-for="roleIdOption in roleIdOptionList" :key="roleIdOption.id"
-                           :label="roleIdOption.roleName" :value="roleIdOption.id"
-                           :disabled="roleIdOption.roleStatus == 1"/>
+                <el-option v-for="roleOption in roleList" :key="roleOption.id"
+                           :label="roleOption.roleName" :value="roleOption.id"
+                           :disabled="roleOption.roleStatus == 1"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -198,6 +198,7 @@
 
 <script>
   import {
+    initData,
     selectUserPage,
     detailUser,
     deleteUser,
@@ -206,9 +207,6 @@
     resetUserPwd,
     changeUserStatus
   } from '@/api/system/user'
-  import { selectDeptList } from '@/api/system/dept'
-  import { selectPostList } from '@/api/system/post'
-  import { selectRoleList } from '@/api/system/role'
 
   export default {
     name: 'User',
@@ -245,9 +243,9 @@
         // 性别状态字典
         userSexOptionList: [],
         // 岗位选项
-        postIdOptionList: [],
+        postList: [],
         // 角色选项
-        roleIdOptionList: [],
+        roleList: [],
         // 表单参数
         form: {},
         deptTreeProps: {
@@ -306,7 +304,7 @@
       }
     },
     created() {
-      this.getDeptList()
+      this.initData()
       this.getUserList()
       this.getDictDataByDictType('sys_normal_disable').then(response => {
         this.userStatusOptionList = response.data
@@ -319,6 +317,15 @@
       })
     },
     methods: {
+      /** 初始化页面数据 */
+      initData() {
+        initData().then(response => {
+          this.deptList = response.data.deptList
+          this.postList = response.data.postList
+          this.roleList = response.data.roleList
+          this.deptTreeOptionList = this.handleTree(this.deptList)
+        })
+      },
       /** 查询用户列表 */
       getUserList() {
         this.loading = true
@@ -328,13 +335,6 @@
             this.loading = false
           }
         )
-      },
-      /** 查询部门下拉树结构 */
-      getDeptList() {
-        selectDeptList().then(response => {
-          this.deptList = response.data
-          this.deptTreeOptionList = this.handleTree(response.data)
-        })
       },
       /** 部门名称翻译 */
       deptNameFormat(row) {
@@ -355,18 +355,6 @@
           label: node.deptName,
           children: node.children
         }
-      },
-      /** 查询岗位 */
-      getPostList() {
-        selectPostList().then(response => {
-          this.postIdOptionList = response.data
-        })
-      },
-      /** 查询角色 */
-      getRoleList() {
-        selectRoleList().then(response => {
-          this.roleIdOptionList = response.data
-        })
       },
       /** 筛选节点 */
       filterDeptNode(value, data) {
@@ -438,9 +426,6 @@
       /** 新增按钮操作 */
       handleAdd() {
         this.reset()
-        this.getDeptList()
-        this.getPostList()
-        this.getRoleList()
         this.openDialog = true
         this.dialogTitle = '添加用户'
         this.form.userPwd = this.defaultPwd
@@ -448,9 +433,6 @@
       /** 修改按钮操作 */
       handleUpdate(row) {
         this.reset()
-        this.getDeptList()
-        this.getPostList()
-        this.getRoleList()
         row = undefined === row.id ? this.selectRowList[0] : row
         detailUser(row.id).then(response => {
           this.form = response.data

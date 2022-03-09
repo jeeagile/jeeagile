@@ -1,4 +1,9 @@
-import {postApi} from '@/utils/axios'
+import { postApi } from '@/utils/axios'
+
+/**
+ * 初始化数据接口
+ */
+export const initData = data => postApi('/system/user/init', data)
 
 /**
  * 分页查询用户列表

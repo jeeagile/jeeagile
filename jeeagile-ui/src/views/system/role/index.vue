@@ -2,14 +2,18 @@
   <div class="app-container">
     <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true">
       <el-form-item label="角色名称" prop="roleName">
-        <el-input v-model="queryParam.queryCond.roleName" placeholder="请输入角色名称" clearable size="small" style="width: 240px" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.queryCond.roleName" placeholder="请输入角色名称" clearable size="small"
+                  style="width: 240px" @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="角色编码" prop="roleCode">
-        <el-input v-model="queryParam.queryCond.roleCode" placeholder="请输入角色编码" clearable size="small" style="width: 240px" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.queryCond.roleCode" placeholder="请输入角色编码" clearable size="small"
+                  style="width: 240px" @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="状态" prop="roleStatus">
-        <el-select v-model="queryParam.queryCond.roleStatus" placeholder="角色状态" clearable size="small" style="width: 240px">
-          <el-option v-for="roleStatusOption in roleStatusOptionList" :key="roleStatusOption.dictValue" :label="roleStatusOption.dictLabel" :value="roleStatusOption.dictValue"/>
+        <el-select v-model="queryParam.queryCond.roleStatus" placeholder="角色状态" clearable size="small"
+                   style="width: 240px">
+          <el-option v-for="roleStatusOption in roleStatusOptionList" :key="roleStatusOption.dictValue"
+                     :label="roleStatusOption.dictLabel" :value="roleStatusOption.dictValue"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -25,12 +29,14 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPerm="['system:role:update']">
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+                   v-hasPerm="['system:role:update']">
           修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPerm="['system:role:delete']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+                   v-hasPerm="['system:role:delete']">
           删除
         </el-button>
       </el-col>
@@ -44,25 +50,31 @@
       <el-table-column label="显示顺序" prop="roleSort" width="100"/>
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.roleStatus" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"/>
+          <el-switch v-model="scope.row.roleStatus" active-value="0" inactive-value="1"
+                     @change="handleStatusChange(scope.row)"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPerm="['system:role:update']">
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                     v-hasPerm="['system:role:update']">
             修改
           </el-button>
-          <el-button ize="mini" type="text" icon="el-icon-circle-check" @click="handleDataScope(scope.row)" v-hasPerm="['system:role:dataScope']">
+          <el-button ize="mini" type="text" icon="el-icon-circle-check" @click="handleDataScope(scope.row)"
+                     v-hasPerm="['system:role:dataScope']">
             数据权限
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPerm="['system:role:delete']">
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                     v-hasPerm="['system:role:delete']">
             删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal" :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getRoleList"/>
+    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
+                @pagination="getRoleList"/>
 
     <!-- 添加或修改角色配置对话框 -->
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="500px" append-to-body>
@@ -78,7 +90,8 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.roleStatus">
-            <el-radio v-for="roleStatusOption in roleStatusOptionList" :key="roleStatusOption.dictValue" :label="roleStatusOption.dictValue">
+            <el-radio v-for="roleStatusOption in roleStatusOptionList" :key="roleStatusOption.dictValue"
+                      :label="roleStatusOption.dictValue">
               {{ roleStatusOption.dictLabel }}
             </el-radio>
           </el-radio-group>
@@ -86,7 +99,8 @@
         <el-form-item label="菜单权限">
           <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, 'menu')">展开/折叠</el-checkbox>
           <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event, 'menu')">全选/全不选</el-checkbox>
-          <el-tree ref="menu" class="tree-border" :data="menuTreeOptionList" show-checkbox node-key="id" empty-text="加载中，请稍后" :props="menuTreeProps"/>
+          <el-tree ref="menu" class="tree-border" :data="menuTreeOptionList" show-checkbox node-key="id"
+                   empty-text="加载中，请稍后" :props="menuTreeProps"/>
         </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
@@ -110,13 +124,15 @@
         </el-form-item>
         <el-form-item label="数据范围">
           <el-select v-model="form.dataScope">
-            <el-option v-for="dataScopeOption in dataScopeOptionList" :key="dataScopeOption.dictValue" :label="dataScopeOption.dictLabel" :value="dataScopeOption.dictValue"/>
+            <el-option v-for="dataScopeOption in dataScopeOptionList" :key="dataScopeOption.dictValue"
+                       :label="dataScopeOption.dictLabel" :value="dataScopeOption.dictValue"/>
           </el-select>
         </el-form-item>
         <el-form-item v-show="form.dataScope == '05'" label="数据权限">
           <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand($event, 'dept')">展开/折叠</el-checkbox>
           <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">全选/全不选</el-checkbox>
-          <el-tree ref="dept" class="tree-border" :data="deptTreeOptionList" show-checkbox default-expand-all node-key="id" empty-text="加载中，请稍后" :props="deptTreeProps"/>
+          <el-tree ref="dept" class="tree-border" :data="deptTreeOptionList" show-checkbox default-expand-all
+                   node-key="id" empty-text="加载中，请稍后" :props="deptTreeProps"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -129,7 +145,16 @@
 </template>
 
 <script>
-  import { selectRolePage, detailRole, deleteRole, addRole, updateRole, changeRoleStatus, updateDataScope } from '@/api/system/role'
+  import {
+    initData,
+    selectRolePage,
+    detailRole,
+    deleteRole,
+    addRole,
+    updateRole,
+    changeRoleStatus,
+    updateDataScope
+  } from '@/api/system/role'
   import { selectMenuList } from '@/api/system/menu'
   import { selectDeptList } from '@/api/system/dept'
 
@@ -205,9 +230,8 @@
       }
     },
     created() {
+      this.initData()
       this.getRoleList()
-      this.getMenuList()
-      this.getDeptList()
       this.getDictDataByDictType('sys_normal_disable').then(response => {
         this.roleStatusOptionList = response.data
       })
@@ -216,6 +240,13 @@
       })
     },
     methods: {
+      /** 初始化数据 */
+      initData() {
+        initData().then(response => {
+          this.menuTreeOptionList = this.handleTree(response.data.menuList)
+          this.deptTreeOptionList = this.handleTree(response.data.deptList)
+        })
+      },
       /** 查询角色列表 */
       getRoleList() {
         this.loading = true
@@ -225,18 +256,6 @@
             this.loading = false
           }
         )
-      },
-      /** 查询所有菜单 */
-      getMenuList() {
-        selectMenuList().then(response => {
-          this.menuTreeOptionList = this.handleTree(response.data)
-        })
-      },
-      /** 查询所有菜单 */
-      getDeptList() {
-        selectDeptList().then(response => {
-          this.deptTreeOptionList = this.handleTree(response.data)
-        })
       },
       /** 所有菜单节点数据 */
       getMenuAllCheckedKeys() {
@@ -287,21 +306,21 @@
         if (this.$refs.menu != undefined) {
           this.$refs.menu.setCheckedKeys([])
         }
-        this.menuExpand = false,
-          this.menuNodeAll = false,
-          this.deptExpand = true,
-          this.deptNodeAll = false,
-          this.form = {
-            id: undefined,
-            roleName: undefined,
-            roleCode: undefined,
-            roleSort: 0,
-            roleStatus: '0',
-            dataScope: undefined,
-            menuIdList: [],
-            deptIdList: [],
-            remark: undefined
-          }
+        this.menuExpand = false
+        this.menuNodeAll = false
+        this.deptExpand = true
+        this.deptNodeAll = false
+        this.form = {
+          id: undefined,
+          roleName: undefined,
+          roleCode: undefined,
+          roleSort: 0,
+          roleStatus: '0',
+          dataScope: undefined,
+          menuIdList: [],
+          deptIdList: [],
+          remark: undefined
+        }
         this.resetForm('form')
       },
       /** 搜索按钮操作 */
@@ -346,14 +365,12 @@
       /** 新增按钮操作 */
       handleAdd() {
         this.reset()
-        this.getMenuList()
         this.openDialog = true
         this.dialogTitle = '添加角色'
       },
       /** 修改按钮操作 */
       handleUpdate(row) {
         this.reset()
-        this.getMenuList()
         row = undefined === row.id ? this.selectRowList[0] : row
         detailRole(row.id).then(response => {
           this.form = response.data

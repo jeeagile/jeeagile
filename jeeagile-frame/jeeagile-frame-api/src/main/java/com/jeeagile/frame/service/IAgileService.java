@@ -22,6 +22,14 @@ import java.util.List;
 public interface IAgileService<T extends AgileModel> extends IService<T> {
 
     /**
+     * 初始化数据
+     * @return
+     */
+    default Object initData() {
+        return null;
+    }
+
+    /**
      * 分页查询
      *
      * @param agilePageable
@@ -42,6 +50,15 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
     default AgilePage<T> selectPage(AgilePageable<?> agilePageable) {
         AgilePage<T> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         return this.page(agilePage, queryWrapper((T) agilePageable.getQueryCond()));
+    }
+
+    /**
+     * 查询列表
+     *
+     * @return
+     */
+    default List<T> selectList() {
+        return this.list(queryWrapper(null));
     }
 
     /**
