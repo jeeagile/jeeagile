@@ -1,25 +1,21 @@
 package com.jeeagile.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.util.validate.AgileValidateUtil;
-import com.jeeagile.frame.page.AgilePage;
-import com.jeeagile.frame.page.AgilePageable;
+import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysUser;
 import com.jeeagile.system.entity.AgileSysUserPost;
 import com.jeeagile.system.entity.AgileSysUserRole;
 import com.jeeagile.system.mapper.AgileSysUserMapper;
-import com.jeeagile.system.vo.AgileSysUserInfo;
 import com.jeeagile.system.vo.AgileUpdatePwd;
 import com.jeeagile.system.vo.AgileUpdateStatus;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,92 +35,79 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     private IAgileSysConfigService agileSysConfigService;
 
     @Override
-    public AgilePage<AgileSysUser> selectUserPage(AgilePageable<AgileSysUser> agilePageable) {
-        return this.page(agilePageable, getSysUserQueryWrapper(agilePageable.getQueryCond()));
-    }
-
-    /**
-     * 拼装查询条件
-     */
-    private QueryWrapper<AgileSysUser> getSysUserQueryWrapper(AgileSysUser agileSysUser) {
-        QueryWrapper<AgileSysUser> queryWrapper = new QueryWrapper<>();
+    public LambdaQueryWrapper<AgileSysUser> queryWrapper(AgileSysUser agileSysUser) {
+        LambdaQueryWrapper<AgileSysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (agileSysUser != null) {
             if (AgileStringUtil.isNotEmpty(agileSysUser.getUserName())) {
-                queryWrapper.lambda().eq(AgileSysUser::getUserName, agileSysUser.getUserName());
+                lambdaQueryWrapper.eq(AgileSysUser::getUserName, agileSysUser.getUserName());
             }
             if (AgileStringUtil.isNotEmpty(agileSysUser.getNickName())) {
-                queryWrapper.lambda().like(AgileSysUser::getNickName, agileSysUser.getNickName());
+                lambdaQueryWrapper.like(AgileSysUser::getNickName, agileSysUser.getNickName());
             }
             if (AgileStringUtil.isNotEmpty(agileSysUser.getUserEmail())) {
-                queryWrapper.lambda().like(AgileSysUser::getUserEmail, agileSysUser.getUserEmail());
+                lambdaQueryWrapper.like(AgileSysUser::getUserEmail, agileSysUser.getUserEmail());
             }
             if (AgileStringUtil.isNotEmpty(agileSysUser.getUserPhone())) {
-                queryWrapper.lambda().like(AgileSysUser::getUserPhone, agileSysUser.getUserPhone());
+                lambdaQueryWrapper.like(AgileSysUser::getUserPhone, agileSysUser.getUserPhone());
             }
             if (AgileStringUtil.isNotEmpty(agileSysUser.getDeptId())) {
-                queryWrapper.lambda().eq(AgileSysUser::getDeptId, agileSysUser.getDeptId());
+                lambdaQueryWrapper.eq(AgileSysUser::getDeptId, agileSysUser.getDeptId());
             }
             if (AgileStringUtil.isNotEmpty(agileSysUser.getUserStatus())) {
-                queryWrapper.lambda().eq(AgileSysUser::getUserStatus, agileSysUser.getUserStatus());
+                lambdaQueryWrapper.eq(AgileSysUser::getUserStatus, agileSysUser.getUserStatus());
             }
         }
-        queryWrapper.lambda().ne(AgileSysUser::getUserName, "admin");
-        queryWrapper.lambda().orderByAsc(AgileSysUser::getUserSort);
-        return queryWrapper;
+        lambdaQueryWrapper.ne(AgileSysUser::getUserName, AgileUtil.getSuperAdmin());
+        lambdaQueryWrapper.orderByAsc(AgileSysUser::getUserSort);
+        return lambdaQueryWrapper;
     }
 
     @Override
-    public AgileSysUserInfo selectUserById(String userId) {
-        AgileSysUserInfo agileSysUserInfo = new AgileSysUserInfo();
+    public AgileSysUser selectModel(Serializable userId) {
         AgileSysUser agileSysUser = this.getById(userId);
-        BeanUtils.copyProperties(agileSysUser, agileSysUserInfo);
-        List<AgileSysUserRole> sysUserRoleList = agileSysUserRoleService.selectListByUserId(userId);
+        List<AgileSysUserRole> sysUserRoleList = agileSysUserRoleService.selectListByUserId((String) userId);
         sysUserRoleList.forEach(sysUserRole ->
-                agileSysUserInfo.getRoleIdList().add(sysUserRole.getRoleId())
+                agileSysUser.getRoleIdList().add(sysUserRole.getRoleId())
         );
-        List<AgileSysUserPost> sysUserPostList = agileSysUserPostService.selectListByUserId(userId);
+        List<AgileSysUserPost> sysUserPostList = agileSysUserPostService.selectListByUserId((String) userId);
         sysUserPostList.forEach(sysUserPost ->
-                agileSysUserInfo.getPostIdList().add(sysUserPost.getPostId())
+                agileSysUser.getPostIdList().add(sysUserPost.getPostId())
         );
-        return agileSysUserInfo;
+        return agileSysUser;
     }
 
     @Override
-    public AgileSysUserInfo saveUser(AgileSysUserInfo agileSysUserInfo) {
-        String userPwd = agileSysUserInfo.getUserPwd();
+    public AgileSysUser saveModel(AgileSysUser agileSysUser) {
+        String userPwd = agileSysUser.getUserPwd();
         if (AgileStringUtil.isEmpty(userPwd)) {
             userPwd = agileSysConfigService.getDefaultPwd();
         }
-        agileSysUserInfo.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
-        //校验业务数据
-        AgileValidateUtil.validateObject(agileSysUserInfo);
-        this.validateSysUser(agileSysUserInfo);
-        this.save(agileSysUserInfo);
-        this.saveUserRole(agileSysUserInfo.getId(), agileSysUserInfo.getRoleIdList());
-        this.saveUserPost(agileSysUserInfo.getId(), agileSysUserInfo.getPostIdList());
-        return agileSysUserInfo;
+        agileSysUser.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
+        this.validateData(agileSysUser);
+        this.save(agileSysUser);
+        this.saveUserRole(agileSysUser.getId(), agileSysUser.getRoleIdList());
+        this.saveUserPost(agileSysUser.getId(), agileSysUser.getPostIdList());
+        return agileSysUser;
     }
 
     @Override
-    public boolean updateUserById(AgileSysUserInfo agileSysUserInfo) {
-        String userPwd = agileSysUserInfo.getUserPwd();
+    public boolean updateModel(AgileSysUser agileSysUser) {
+        String userPwd = agileSysUser.getUserPwd();
         if (AgileStringUtil.isNotEmpty(userPwd)) {
-            agileSysUserInfo.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
+            agileSysUser.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
         }
-        //校验业务数据
-        AgileValidateUtil.validateObject(agileSysUserInfo);
-        this.validateSysUser(agileSysUserInfo);
-        this.updateById(agileSysUserInfo);
-        agileSysUserPostService.deleteByUserId(agileSysUserInfo.getId());
-        agileSysUserRoleService.deleteByUserId(agileSysUserInfo.getId());
-        this.saveUserRole(agileSysUserInfo.getId(), agileSysUserInfo.getRoleIdList());
-        return this.saveUserPost(agileSysUserInfo.getId(), agileSysUserInfo.getPostIdList());
+        this.validateData(agileSysUser);
+        this.updateById(agileSysUser);
+        agileSysUserPostService.deleteByUserId(agileSysUser.getId());
+        agileSysUserRoleService.deleteByUserId(agileSysUser.getId());
+        this.saveUserRole(agileSysUser.getId(), agileSysUser.getRoleIdList());
+        return this.saveUserPost(agileSysUser.getId(), agileSysUser.getPostIdList());
     }
 
     @Override
-    public boolean deleteUserById(String userId) {
-        agileSysUserPostService.deleteByUserId(userId);
-        agileSysUserRoleService.deleteByUserId(userId);
+    public boolean deleteModel(Serializable userId) {
+        agileSysUserPostService.deleteByUserId((String) userId);
+        agileSysUserRoleService.deleteByUserId((String) userId);
         return this.removeById(userId);
     }
 
@@ -152,15 +135,15 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     /**
      * 用户名不能与已存在的数据重复
      */
-    private void validateSysUser(AgileSysUser agileSysUser) {
-        LambdaQueryWrapper<AgileSysUser> queryWrapper = new LambdaQueryWrapper<>();
+    private void validateData(AgileSysUser agileSysUser) {
+        LambdaQueryWrapper<AgileSysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (agileSysUser.getId() != null) {
-            queryWrapper.ne(AgileSysUser::getId, agileSysUser.getId());
+            lambdaQueryWrapper.ne(AgileSysUser::getId, agileSysUser.getId());
         }
-        queryWrapper.and(wrapper ->
-                wrapper.eq(AgileSysUser::getUserName, agileSysUser.getUserName())
+        lambdaQueryWrapper.and(queryWrapper ->
+                queryWrapper.eq(AgileSysUser::getUserName, agileSysUser.getUserName())
         );
-        if (this.count(queryWrapper) > 0) {
+        if (this.count(lambdaQueryWrapper) > 0) {
             throw new AgileValidateException("用户名不能与已存在的数据重复！");
         }
     }

@@ -32,7 +32,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     private I agileService;
 
     @PostMapping(value = "/page")
-    @ApiOperation(value = "分页查询", notes = "分页查询")
+    @ApiOperation(value = "分页查询", notes = "根据条件分页查询数据")
     @AgileLogger(title = "分页查询", type = AgileLoggerType.SELECT)
     @AgileRequiresPermissions("page")
     public AgileResult<AgilePage<T>> selectPage(@RequestBody AgilePageable<T> agilePageable) {
@@ -40,7 +40,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     }
 
     @PostMapping(value = "/list")
-    @ApiOperation(value = "查询列表", notes = "查询列表")
+    @ApiOperation(value = "查询列表", notes = "根据条件查询数据")
     @AgileLogger(title = "查询列表", type = AgileLoggerType.SELECT)
     @AgileRequiresPermissions("list")
     public AgileResult<List<T>> selectList(@RequestBody T agileModel) {
@@ -64,7 +64,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     }
 
     @PostMapping("/detail")
-    @ApiOperation(value = "查看明细", notes = "查看明细")
+    @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     @AgileLogger(title = "查看明细", type = AgileLoggerType.DETAIL)
     @AgileRequiresPermissions("detail")
     public AgileResult<T> detail(@SingleRequestBody String id) {
@@ -72,10 +72,10 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "查看明细", notes = "查看明细")
+    @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     @AgileLogger(title = "查看明细", type = AgileLoggerType.DETAIL)
     @AgileRequiresPermissions("detail")
-    public AgileResult<T> info(@PathVariable String id) {
+    public AgileResult<T> info(@PathVariable Serializable id) {
         return AgileResult.success(agileService.selectModel(id));
     }
 
@@ -91,7 +91,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
 
     @AgileDemo
     @PostMapping("/update")
-    @ApiOperation(value = "更新数据", notes = "更新数据")
+    @ApiOperation(value = "更新数据", notes = "根据主键更新数据")
     @AgileLogger(title = "更新数据", type = AgileLoggerType.UPDATE)
     @AgileRequiresPermissions("update")
     public AgileResult update(@RequestBody T agileModel) {
@@ -105,7 +105,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
 
     @AgileDemo
     @PostMapping("/delete")
-    @ApiOperation(value = "删除数据", notes = "删除数据")
+    @ApiOperation(value = "删除数据", notes = "根据主键删除数据")
     @AgileLogger(title = "删除数据", type = AgileLoggerType.DELETE)
     @AgileRequiresPermissions("delete")
     public AgileResult delete(@SingleRequestBody Serializable id) {
@@ -118,7 +118,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
 
     @AgileDemo
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "删除数据", notes = "删除数据")
+    @ApiOperation(value = "删除数据", notes = "根据主键删除数据")
     @AgileLogger(title = "删除数据", type = AgileLoggerType.DELETE)
     @AgileRequiresPermissions("delete")
     public AgileResult deleteInfo(@PathVariable Serializable id) {

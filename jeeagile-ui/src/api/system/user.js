@@ -3,12 +3,12 @@ import {postApi} from '@/utils/axios'
 /**
  * 分页查询用户列表
  */
-export const selectUserPage = data => postApi('/system/user/selectPage', data)
+export const selectUserPage = data => postApi('/system/user/page', data)
 
 /**
  * 查询用户列表
  */
-export const selectUserList = data => postApi('/system/user/selectList', data)
+export const selectUserList = data => postApi('/system/user/list', data)
 
 /**
  * 新增用户

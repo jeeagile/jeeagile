@@ -1,20 +1,14 @@
 package com.jeeagile.system.controller;
 
-import com.jeeagile.core.cache.constants.AgileCacheConstants;
-import com.jeeagile.core.cache.util.AgileCacheUtil;
-import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
+import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
-import com.jeeagile.frame.controller.AgileBaseController;
+import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.enums.AgileLoggerType;
-import com.jeeagile.frame.page.AgilePage;
-import com.jeeagile.frame.page.AgilePageable;
-import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.system.entity.AgileSysUser;
 import com.jeeagile.system.service.IAgileSysUserService;
-import com.jeeagile.system.vo.AgileSysUserInfo;
 import com.jeeagile.system.vo.AgileUpdatePwd;
 import com.jeeagile.system.vo.AgileUpdateStatus;
 import io.swagger.annotations.Api;
@@ -31,63 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/system/user")
+@AgilePermissionsPrefix("system:user")
 @Api(value = "用户管理", tags = "用户管理")
-public class AgileSysUserController extends AgileBaseController {
-
-    @AgileReference
-    private IAgileSysUserService agileSysUserService;
-
-    @PostMapping(value = "/selectPage")
-    @ApiOperation(value = "分页查询用户列表", notes = "分页查询用户列表")
-    @AgileLogger(title = "查询用户列表", type = AgileLoggerType.SELECT)
-    public AgileResult<AgilePage<AgileSysUser>> selectUserPage(@RequestBody AgilePageable<AgileSysUser> agilePageable) {
-        return this.success(agileSysUserService.selectUserPage(agilePageable));
-    }
-
-    @PostMapping("/detail")
-    @ApiOperation(value = "根据用户ID获取用户详细信息", notes = "根据用户ID获取用户详细信息")
-    @AgileLogger(title = "查看用户信息", type = AgileLoggerType.DETAIL)
-    public AgileResult<AgileSysUser> detailUser(@SingleRequestBody String userId) {
-        return this.success(agileSysUserService.selectUserById(userId));
-    }
-
-    @AgileDemo
-    @PostMapping("/add")
-    @ApiOperation(value = "新增用户", notes = "新增用户")
-    @AgileLogger(title = "新增用户", type = AgileLoggerType.ADD)
-    @AgileRequiresPermissions("system:user:add")
-    public AgileResult<AgileSysUser> addUser(@RequestBody AgileSysUserInfo agileSysUserInfo) {
-        return this.success(agileSysUserService.saveUser(agileSysUserInfo));
-    }
-
-    @AgileDemo
-    @PostMapping("/update")
-    @ApiOperation(value = "修改用户信息", notes = "修改用户信息")
-    @AgileLogger(title = "修改用户信息", type = AgileLoggerType.UPDATE)
-    @AgileRequiresPermissions("system:user:update")
-    public AgileResult<Object> updateUser(@RequestBody AgileSysUserInfo agileSysUserInfo) {
-        agileSysUserService.updateUserById(agileSysUserInfo);
-        return this.success("用户信息修改成功！");
-    }
-
-    @AgileDemo
-    @PostMapping("/delete")
-    @ApiOperation(value = "删除用户信息", notes = "删除用户信息")
-    @AgileLogger(title = "删除用户信息", type = AgileLoggerType.DELETE)
-    @AgileRequiresPermissions("system:user:delete")
-    public AgileResult<Object> delete(@SingleRequestBody String userId) {
-        agileSysUserService.deleteUserById(userId);
-        return this.success("用户信息删除成功！");
-    }
-
+public class AgileSysUserController extends AgileCrudController<IAgileSysUserService, AgileSysUser> {
     @AgileDemo
     @PostMapping(value = "/resetPwd")
     @ApiOperation(value = "重置用户密码", notes = "重置用户密码")
     @AgileLogger(title = "重置用户密码", type = AgileLoggerType.UPDATE)
     @AgileRequiresPermissions("system:user:resetPwd")
     public AgileResult<Object> resetUserPassword(@RequestBody AgileUpdatePwd agileUpdatePwd) {
-        agileSysUserService.resetUserPwd(agileUpdatePwd);
-        AgileCacheUtil.evict(AgileCacheConstants.AGILE_CACHE_AUTHENTICATION_NAME,"test");
+        this.getAgileService().resetUserPwd(agileUpdatePwd);
         return this.success();
     }
 
@@ -96,8 +43,7 @@ public class AgileSysUserController extends AgileBaseController {
     @ApiOperation(value = "更新用户状态", notes = "更新用户状态")
     @AgileLogger(title = "更新用户状态", type = AgileLoggerType.UPDATE)
     public AgileResult<Object> changeUserStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
-        agileSysUserService.changeUserStatus(agileUpdateStatus);
+        this.getAgileService().changeUserStatus(agileUpdateStatus);
         return this.success();
     }
-
 }

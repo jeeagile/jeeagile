@@ -4,24 +4,30 @@
       <!--部门数据-->
       <el-col :span="4" :xs="24">
         <div class="head-container">
-          <el-input v-model="deptName" placeholder="请输入部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom: 20px"/>
+          <el-input v-model="deptName" placeholder="请输入部门名称" clearable size="small" prefix-icon="el-icon-search"
+                    style="margin-bottom: 20px"/>
         </div>
         <div class="head-container">
-          <el-tree ref="deptTree" :data="deptTreeOptionList" :props="deptTreeProps" :expand-on-click-node="false" :filter-node-method="filterDeptNode" default-expand-all @node-click="handleDeptNodeClick"/>
+          <el-tree ref="deptTree" :data="deptTreeOptionList" :props="deptTreeProps" :expand-on-click-node="false"
+                   :filter-node-method="filterDeptNode" default-expand-all @node-click="handleDeptNodeClick"/>
         </div>
       </el-col>
       <!--用户数据-->
       <el-col :span="20" :xs="24">
         <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
           <el-form-item label="用户名称" prop="userName">
-            <el-input v-model="queryParam.queryCond.userName" placeholder="请输入用户名称" clearable size="small" style="width: 240px" @keyup.enter.native="handleQuery"/>
+            <el-input v-model="queryParam.queryCond.userName" placeholder="请输入用户名称" clearable size="small"
+                      style="width: 240px" @keyup.enter.native="handleQuery"/>
           </el-form-item>
           <el-form-item label="手机号码" prop="userPhone">
-            <el-input v-model="queryParam.queryCond.userPhone" placeholder="请输入手机号码" clearable size="small" style="width: 240px" @keyup.enter.native="handleQuery"/>
+            <el-input v-model="queryParam.queryCond.userPhone" placeholder="请输入手机号码" clearable size="small"
+                      style="width: 240px" @keyup.enter.native="handleQuery"/>
           </el-form-item>
           <el-form-item label="状态" prop="userStatus">
-            <el-select v-model="queryParam.queryCond.userStatus" placeholder="用户状态" clearable size="small" style="width: 240px">
-              <el-option v-for="userStatusOption in userStatusOptionList" :key="userStatusOption.dictValue" :label="userStatusOption.dictLabel" :value="userStatusOption.dictValue"/>
+            <el-select v-model="queryParam.queryCond.userStatus" placeholder="用户状态" clearable size="small"
+                       style="width: 240px">
+              <el-option v-for="userStatusOption in userStatusOptionList" :key="userStatusOption.dictValue"
+                         :label="userStatusOption.dictLabel" :value="userStatusOption.dictValue"/>
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -32,17 +38,20 @@
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPerm="['system:user:add']">
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd"
+                       v-hasPerm="['system:user:add']">
               新增
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPerm="['system:user:update']">
+            <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+                       v-hasPerm="['system:user:update']">
               修改
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPerm="['system:user:delete']">
+            <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+                       v-hasPerm="['system:user:delete']">
               删除
             </el-button>
           </el-col>
@@ -53,22 +62,27 @@
           <el-table-column type="selection" width="50" align="center"/>
           <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true"/>
           <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true"/>
-          <el-table-column label="部门" align="center" prop="deptName" :show-overflow-tooltip="true" :formatter="deptNameFormat"/>
+          <el-table-column label="部门" align="center" prop="deptName" :show-overflow-tooltip="true"
+                           :formatter="deptNameFormat"/>
           <el-table-column label="手机号码" align="center" prop="userPhone"/>
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.userStatus" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"/>
+              <el-switch v-model="scope.row.userStatus" active-value="0" inactive-value="1"
+                         @change="handleStatusChange(scope.row)"/>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center"  lass-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" lass-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button  size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPerm="['system:user:update']">
+              <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                         v-hasPerm="['system:user:update']">
                 修改
               </el-button>
-              <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPerm="['system:user:delete']">
+              <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                         v-hasPerm="['system:user:delete']">
                 删除
               </el-button>
-              <el-button size="mini" type="text" icon="el-icon-key" @click="handleResetPwd(scope.row)" v-hasPerm="['system:user:resetPwd']">
+              <el-button size="mini" type="text" icon="el-icon-key" @click="handleResetPwd(scope.row)"
+                         v-hasPerm="['system:user:resetPwd']">
                 重置
               </el-button>
             </template>
@@ -76,7 +90,9 @@
         </el-table>
 
         <!-- 分页 -->
-        <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal" :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getUserList"/>
+        <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                    :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
+                    @pagination="getUserList"/>
 
       </el-col>
     </el-row>
@@ -100,7 +116,8 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="归属部门" prop="deptId">
-              <tree-select v-model="form.deptId" :options="deptTreeOptionList" :show-count="true" :normalizer="deptNormalizer" placeholder="请选择归属部门"/>
+              <tree-select v-model="form.deptId" :options="deptTreeOptionList" :show-count="true"
+                           :normalizer="deptNormalizer" placeholder="请选择归属部门"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -126,14 +143,16 @@
           <el-col :span="12">
             <el-form-item label="用户性别">
               <el-select v-model="form.userSex" placeholder="请选择">
-                <el-option v-for="userSexOption in userSexOptionList" :key="userSexOption.dictValue" :label="userSexOption.dictLabel" :value="userSexOption.dictValue"/>
+                <el-option v-for="userSexOption in userSexOptionList" :key="userSexOption.dictValue"
+                           :label="userSexOption.dictLabel" :value="userSexOption.dictValue"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.userStatus">
-                <el-radio v-for="userStatusOption in userStatusOptionList" :key="userStatusOption.dictValue" :label="userStatusOption.dictValue">
+                <el-radio v-for="userStatusOption in userStatusOptionList" :key="userStatusOption.dictValue"
+                          :label="userStatusOption.dictValue">
                   {{ userStatusOption.dictLabel }}
                 </el-radio>
               </el-radio-group>
@@ -144,14 +163,18 @@
           <el-col :span="12">
             <el-form-item label="岗位">
               <el-select v-model="form.postIdList" multiple placeholder="请选择">
-                <el-option v-for="postIdOption in postIdOptionList" :key="postIdOption.id" :label="postIdOption.postName" :value="postIdOption.id" :disabled="postIdOption.postStatus == 1"/>
+                <el-option v-for="postIdOption in postIdOptionList" :key="postIdOption.id"
+                           :label="postIdOption.postName" :value="postIdOption.id"
+                           :disabled="postIdOption.postStatus == 1"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="角色">
               <el-select v-model="form.roleIdList" multiple placeholder="请选择">
-                <el-option v-for="roleIdOption in roleIdOptionList" :key="roleIdOption.id" :label="roleIdOption.roleName" :value="roleIdOption.id" :disabled="roleIdOption.roleStatus == 1"/>
+                <el-option v-for="roleIdOption in roleIdOptionList" :key="roleIdOption.id"
+                           :label="roleIdOption.roleName" :value="roleIdOption.id"
+                           :disabled="roleIdOption.roleStatus == 1"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -174,7 +197,15 @@
 </template>
 
 <script>
-  import { selectUserPage, detailUser, deleteUser, addUser, updateUser, resetUserPwd, changeUserStatus } from '@/api/system/user'
+  import {
+    selectUserPage,
+    detailUser,
+    deleteUser,
+    addUser,
+    updateUser,
+    resetUserPwd,
+    changeUserStatus
+  } from '@/api/system/user'
   import { selectDeptList } from '@/api/system/dept'
   import { selectPostList } from '@/api/system/post'
   import { selectRoleList } from '@/api/system/role'
@@ -469,7 +500,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return deleteUser({ userId: row.id })
+          return deleteUser(row.id)
         }).then(() => {
           this.getUserList()
           this.messageSuccess('删除成功')
