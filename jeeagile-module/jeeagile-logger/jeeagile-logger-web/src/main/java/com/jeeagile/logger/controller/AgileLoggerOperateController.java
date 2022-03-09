@@ -33,7 +33,7 @@ public class AgileLoggerOperateController extends AgileBaseController {
     @PostMapping(value = "/page")
     @ApiOperation(value = "分页查询操作日志", notes = "分页查询操作日志")
     public AgileResult<AgilePage<AgileLoggerOperate>> selectPage(@RequestBody AgilePageable<AgileLoggerOperate> agilePageable) {
-        return this.success(agileLoggerOperateService.selectLoggerPage(agilePageable));
+        return this.success(agileLoggerOperateService.selectPage(agilePageable));
     }
 
     @AgileDemo
@@ -41,7 +41,7 @@ public class AgileLoggerOperateController extends AgileBaseController {
     @ApiOperation(value = "删除操作日志记录", notes = "删除操作日志记录")
     @AgileLogger(title = "删除操作日志记录", type = AgileLoggerType.DELETE)
     public AgileResult<String> delete(@SingleRequestBody String configId) {
-        agileLoggerOperateService.deleteLoggerOperate(configId);
+        agileLoggerOperateService.deleteModel(configId);
         return this.success("操作日志记录删除成功！");
     }
 
@@ -50,7 +50,7 @@ public class AgileLoggerOperateController extends AgileBaseController {
     @ApiOperation(value = "清空操作日志记录", notes = "清空操作日志记录")
     @AgileLogger(title = "清空操作日志记录", type = AgileLoggerType.CLEAR)
     public AgileResult clear() {
-        agileLoggerOperateService.clearLoggerOperate();
+        agileLoggerOperateService.clearRecord();
         return this.success("操作日志记录清空成功！");
     }
 }
