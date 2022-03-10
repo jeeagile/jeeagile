@@ -4,6 +4,7 @@ import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgileRequiresUser;
+import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
@@ -70,7 +71,8 @@ public class AgileSysLoginController extends AgileBaseController {
     @ApiOperation(value = "获取用户分配菜单", notes = "获取用户分配菜单")
     public AgileResult<AgileSysMenu> getUserMenu() {
         try {
-            return this.success(agileUserDetailsService.getUserMenu(AgileSecurityUtil.getUserData()));
+            AgileBaseUser userData = AgileSecurityUtil.getUserData();
+            return this.success(agileUserDetailsService.getUserMenu(userData));
         } catch (Exception ex) {
             return this.error(ex, "获取用户菜单异常！");
         }

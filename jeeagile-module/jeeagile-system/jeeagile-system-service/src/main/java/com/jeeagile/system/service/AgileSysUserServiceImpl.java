@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
+import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -82,14 +83,8 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     @Override
     public AgileSysUser selectModel(Serializable userId) {
         AgileSysUser agileSysUser = this.getById(userId);
-        List<AgileSysUserRole> sysUserRoleList = agileSysUserRoleService.selectListByUserId((String) userId);
-        sysUserRoleList.forEach(sysUserRole ->
-                agileSysUser.getRoleIdList().add(sysUserRole.getRoleId())
-        );
-        List<AgileSysUserPost> sysUserPostList = agileSysUserPostService.selectListByUserId((String) userId);
-        sysUserPostList.forEach(sysUserPost ->
-                agileSysUser.getPostIdList().add(sysUserPost.getPostId())
-        );
+        agileSysUser.setRoleIdList(this.selectUserRoleIdList(userId));
+        agileSysUser.setPostIdList(this.selectUserPostIdList(userId));
         return agileSysUser;
     }
 
@@ -102,8 +97,8 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
         agileSysUser.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
         this.validateData(agileSysUser);
         this.save(agileSysUser);
-        this.saveUserRole(agileSysUser.getId(), agileSysUser.getRoleIdList());
-        this.saveUserPost(agileSysUser.getId(), agileSysUser.getPostIdList());
+        this.saveUserRole(agileSysUser);
+        this.saveUserPost(agileSysUser);
         return agileSysUser;
     }
 
@@ -115,16 +110,16 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
         }
         this.validateData(agileSysUser);
         this.updateById(agileSysUser);
-        agileSysUserPostService.deleteByUserId(agileSysUser.getId());
-        agileSysUserRoleService.deleteByUserId(agileSysUser.getId());
-        this.saveUserRole(agileSysUser.getId(), agileSysUser.getRoleIdList());
-        return this.saveUserPost(agileSysUser.getId(), agileSysUser.getPostIdList());
+        this.deleteUserPost(agileSysUser.getId());
+        this.deleteUserRole(agileSysUser.getId());
+        this.saveUserRole(agileSysUser);
+        return this.saveUserPost(agileSysUser);
     }
 
     @Override
     public boolean deleteModel(Serializable userId) {
-        agileSysUserPostService.deleteByUserId((String) userId);
-        agileSysUserRoleService.deleteByUserId((String) userId);
+        this.deleteUserPost(userId);
+        this.deleteUserRole(userId);
         return this.removeById(userId);
     }
 
@@ -150,6 +145,70 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     }
 
     /**
+     * 查询用户已分配角色ID
+     *
+     * @param userId
+     * @return
+     */
+    private List<String> selectUserRoleIdList(Serializable userId) {
+        LambdaQueryWrapper<AgileSysUserRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysUserRole::getUserId, userId);
+        lambdaQueryWrapper.select(AgileSysUserRole::getRoleId);
+        List<AgileSysUserRole> userRoleList = agileSysUserRoleService.list(lambdaQueryWrapper);
+        List<String> userRoleIdList = new ArrayList<>();
+        userRoleList.forEach(sysUserRole -> userRoleIdList.add(sysUserRole.getRoleId()));
+        return userRoleIdList;
+    }
+
+    /**
+     * 查询用户已分配岗位ID
+     *
+     * @param userId
+     * @return
+     */
+    private List<String> selectUserPostIdList(Serializable userId) {
+        LambdaQueryWrapper<AgileSysUserPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysUserPost::getUserId, userId);
+        lambdaQueryWrapper.select(AgileSysUserPost::getPostId);
+        List<AgileSysUserPost> userPostList = agileSysUserPostService.list(lambdaQueryWrapper);
+        List<String> userPostIdList = new ArrayList<>();
+        userPostList.forEach(sysUserRole -> userPostIdList.add(sysUserRole.getPostId()));
+        return userPostIdList;
+    }
+
+    /**
+     * 删除用户已分配岗位
+     *
+     * @param userId
+     * @return
+     */
+    private boolean deleteUserPost(Serializable userId) {
+        if (AgileStringUtil.isNotEmpty(userId)) {
+            LambdaQueryWrapper<AgileSysUserPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysUserPost::getUserId, userId);
+            return agileSysUserPostService.remove(lambdaQueryWrapper);
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * 删除用户已分配角色
+     *
+     * @param userId
+     * @return
+     */
+    private boolean deleteUserRole(Serializable userId) {
+        if (AgileStringUtil.isNotEmpty(userId)) {
+            LambdaQueryWrapper<AgileSysUserRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysUserRole::getUserId, userId);
+            return agileSysUserRoleService.remove(lambdaQueryWrapper);
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * 用户名不能与已存在的数据重复
      */
     private void validateData(AgileSysUser agileSysUser) {
@@ -169,16 +228,15 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     /**
      * 保存用户岗位
      *
-     * @param userId
-     * @param postIdList
+     * @param agileSysUser
      * @return
      */
-    private boolean saveUserPost(String userId, List<String> postIdList) {
-        if (postIdList != null && !postIdList.isEmpty()) {
+    private boolean saveUserPost(AgileSysUser agileSysUser) {
+        if (AgileCollectionUtil.isNotEmpty(agileSysUser.getPostIdList())) {
             List<AgileSysUserPost> agileSysUserPostList = new ArrayList<>();
-            for (String postId : postIdList) {
+            for (String postId : agileSysUser.getPostIdList()) {
                 AgileSysUserPost agileSysUserPost = new AgileSysUserPost();
-                agileSysUserPost.setUserId(userId);
+                agileSysUserPost.setUserId(agileSysUser.getId());
                 agileSysUserPost.setPostId(postId);
                 agileSysUserPostList.add(agileSysUserPost);
             }
@@ -192,12 +250,12 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     /**
      * 保存用户已分配的角色
      */
-    private boolean saveUserRole(String userId, List<String> roleIdList) {
-        if (roleIdList != null && !roleIdList.isEmpty()) {
+    private boolean saveUserRole(AgileSysUser agileSysUser) {
+        if (AgileCollectionUtil.isNotEmpty(agileSysUser.getRoleIdList())) {
             List<AgileSysUserRole> agileSysUserRoleList = new ArrayList<>();
-            for (String roleId : roleIdList) {
+            for (String roleId : agileSysUser.getRoleIdList()) {
                 AgileSysUserRole agileSysUserRole = new AgileSysUserRole();
-                agileSysUserRole.setUserId(userId);
+                agileSysUserRole.setUserId(agileSysUser.getId());
                 agileSysUserRole.setRoleId(roleId);
                 agileSysUserRoleList.add(agileSysUserRole);
             }

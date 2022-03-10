@@ -1,8 +1,4 @@
-package com.jeeagile.springsecurity.access;/**
- * @author JeeAgile
- * @date 2021-07-11
- * @description
- */
+package com.jeeagile.springsecurity.access;
 
 import com.alibaba.fastjson.JSON;
 import com.jeeagile.core.result.AgileResult;
@@ -15,6 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @author JeeAgile
+ * @date 2021-07-11
+ * @description
+ */
 @Component
 public class AgileAuthenticationEntryPoint implements AuthenticationEntryPoint {
 

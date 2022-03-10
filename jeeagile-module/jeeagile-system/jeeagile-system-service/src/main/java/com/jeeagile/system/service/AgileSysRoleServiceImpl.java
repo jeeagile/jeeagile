@@ -2,11 +2,13 @@ package com.jeeagile.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
+import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysRole;
 import com.jeeagile.system.entity.AgileSysRoleDept;
 import com.jeeagile.system.entity.AgileSysRoleMenu;
+import com.jeeagile.system.entity.AgileSysUserRole;
 import com.jeeagile.system.mapper.AgileSysRoleMapper;
 import com.jeeagile.system.vo.AgileUpdateStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,15 +56,12 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     public LambdaQueryWrapper<AgileSysRole> queryWrapper(AgileSysRole agileSysRole) {
         LambdaQueryWrapper<AgileSysRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (agileSysRole != null) {
-            //角色名称
             if (AgileStringUtil.isNotEmpty(agileSysRole.getRoleName())) {
                 lambdaQueryWrapper.like(AgileSysRole::getRoleName, agileSysRole.getRoleName());
             }
-            //角色编码
             if (AgileStringUtil.isNotEmpty(agileSysRole.getRoleCode())) {
                 lambdaQueryWrapper.like(AgileSysRole::getRoleCode, agileSysRole.getRoleCode());
             }
-            //角色状态
             if (AgileStringUtil.isNotEmpty(agileSysRole.getRoleStatus())) {
                 lambdaQueryWrapper.eq(AgileSysRole::getRoleStatus, agileSysRole.getRoleStatus());
             }
@@ -70,52 +69,15 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
         lambdaQueryWrapper.orderByAsc(AgileSysRole::getRoleSort);
         return lambdaQueryWrapper;
     }
+
     @Override
     public AgileSysRole selectModel(Serializable roleId) {
         AgileSysRole agileSysRole = this.getById(roleId);
-        List<AgileSysRoleMenu> sysRoleMenuList = agileSysRoleMenuService.selectListByRoleId((String) roleId);
-        for (AgileSysRoleMenu sysRoleMenu : sysRoleMenuList) {
-            //只取叶子节点
-            if (agileSysMenuService.countChild(sysRoleMenu.getMenuId()) < 1) {
-                agileSysRole.getMenuIdList().add(sysRoleMenu.getMenuId());
-            }
-        }
+        agileSysRole.setMenuIdList(this.selectRoleMenuIdList(roleId));
         if (AGILE_DATA_SCOPE_05.equals(agileSysRole.getDataScope())) {
-            List<AgileSysRoleDept> sysRoleDeptList = agileSysRoleDeptService.selectListByRoleId((String) roleId);
-            for (AgileSysRoleDept sysRoleDept : sysRoleDeptList) {
-                //只取叶子节点
-                if (agileSysDeptService.countChild(sysRoleDept.getDeptId()) < 1) {
-                    agileSysRole.getDeptIdList().add(sysRoleDept.getDeptId());
-                }
-            }
+            agileSysRole.setDeptIdList(this.selectRoleDeptIdList(roleId));
         }
         return agileSysRole;
-    }
-
-    @Override
-    public AgileSysRole saveModel(AgileSysRole agileSysRole) {
-        this.save(agileSysRole);
-        this.saveRoleMenu(agileSysRole.getId(), agileSysRole.getMenuIdList());
-        return agileSysRole;
-    }
-
-    @Override
-    public boolean updateModel(AgileSysRole agileSysRole) {
-        this.updateById(agileSysRole);
-        agileSysRoleMenuService.deleteByRoleId(agileSysRole.getId());
-        this.saveRoleMenu(agileSysRole.getId(), agileSysRole.getMenuIdList());
-        return true;
-    }
-
-    @Override
-    public boolean deleteModel(Serializable roleId) {
-        //删除角色已分配菜单
-        agileSysRoleMenuService.deleteByRoleId((String) roleId);
-        //删除数据权限
-        agileSysRoleDeptService.deleteByRoleId((String) roleId);
-        //删除角色相关用户
-        agileSysUserRoleService.deleteByRoleId((String) roleId);
-        return this.removeById(roleId);
     }
 
     @Override
@@ -131,56 +93,161 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
         agileSysRole.setId(agileSysRole.getId());
         agileSysRole.setDataScope(agileSysRole.getDataScope());
         this.updateById(agileSysRole);
-        agileSysRoleDeptService.deleteByRoleId(agileSysRole.getId());
+        this.deleteRoleDept(agileSysRole.getId());
         if (AGILE_DATA_SCOPE_05.equals(agileSysRole.getDataScope())) {
-            this.saveRoleDept(agileSysRole.getId(), agileSysRole.getDeptIdList());
+            this.saveRoleDept(agileSysRole);
         }
         return true;
     }
 
     /**
-     * 拼装查询条件
+     * 查询角色已分配菜单
+     *
+     * @param roleId
+     * @return
      */
+    private List<String> selectRoleMenuIdList(Serializable roleId) {
+        LambdaQueryWrapper<AgileSysRoleMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysRoleMenu::getRoleId, roleId);
+        List<AgileSysRoleMenu> roleMenuList = agileSysRoleMenuService.list(lambdaQueryWrapper);
+        List<String> roleMenuIdList = new ArrayList<>();
+        for (AgileSysRoleMenu sysRoleMenu : roleMenuList) {
+            if (agileSysDeptService.countChild(sysRoleMenu.getMenuId()) < 1) {
+                roleMenuIdList.add(sysRoleMenu.getMenuId());
+            }
+        }
+        return roleMenuIdList;
+    }
+
+    /**
+     * 查询角色已分配数据权限
+     *
+     * @param roleId
+     * @return
+     */
+    private List<String> selectRoleDeptIdList(Serializable roleId) {
+        LambdaQueryWrapper<AgileSysRoleDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysRoleDept::getRoleId, roleId);
+        List<AgileSysRoleDept> roleDeptList = agileSysRoleDeptService.list(lambdaQueryWrapper);
+        List<String> roleDeptIdList = new ArrayList<>();
+        for (AgileSysRoleDept sysRoleDept : roleDeptList) {
+            if (agileSysDeptService.countChild(sysRoleDept.getDeptId()) < 1) {
+                roleDeptIdList.add(sysRoleDept.getDeptId());
+            }
+        }
+        return roleDeptIdList;
+    }
+
+    @Override
+    public AgileSysRole saveModel(AgileSysRole agileSysRole) {
+        this.save(agileSysRole);
+        this.saveRoleMenu(agileSysRole);
+        return agileSysRole;
+    }
+
+    @Override
+    public boolean updateModel(AgileSysRole agileSysRole) {
+        this.updateById(agileSysRole);
+        this.deleteRoleMenu(agileSysRole.getId());
+        this.saveRoleMenu(agileSysRole);
+        return true;
+    }
+
+    @Override
+    public boolean deleteModel(Serializable roleId) {
+        this.deleteRoleMenu(roleId);
+        this.deleteRoleDept(roleId);
+        this.deleteUserRole(roleId);
+        return this.removeById(roleId);
+    }
+
+    /**
+     * 删除角色已分配菜单
+     *
+     * @param roleId
+     * @return
+     */
+    private boolean deleteRoleMenu(Serializable roleId) {
+        if (AgileStringUtil.isNotEmpty(roleId)) {
+            LambdaQueryWrapper<AgileSysRoleMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysRoleMenu::getRoleId, roleId);
+            return agileSysRoleMenuService.remove(lambdaQueryWrapper);
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * 删除用户已分配角色
+     *
+     * @param roleId
+     * @return
+     */
+    private boolean deleteUserRole(Serializable roleId) {
+        if (AgileStringUtil.isNotEmpty(roleId)) {
+            LambdaQueryWrapper<AgileSysUserRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysUserRole::getRoleId, roleId);
+            return agileSysUserRoleService.remove(lambdaQueryWrapper);
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * 删除角色已分配部门数据权限
+     *
+     * @param roleId
+     * @return
+     */
+    private boolean deleteRoleDept(Serializable roleId) {
+        if (AgileStringUtil.isNotEmpty(roleId)) {
+            LambdaQueryWrapper<AgileSysRoleDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysRoleDept::getRoleId, roleId);
+            return agileSysRoleDeptService.remove(lambdaQueryWrapper);
+        } else {
+            return true;
+        }
+    }
 
     /**
      * 保存角色菜单数据
      *
-     * @param roleId
-     * @param menuIdList
+     * @param agileSysRole
      * @return
      */
-    private boolean saveRoleMenu(String roleId, List<String> menuIdList) {
-        if (menuIdList != null && !menuIdList.isEmpty()) {
+    private boolean saveRoleMenu(AgileSysRole agileSysRole) {
+        if (AgileCollectionUtil.isNotEmpty(agileSysRole.getMenuIdList())) {
             List<AgileSysRoleMenu> agileSysRoleMenuList = new ArrayList<>();
-            for (String menuId : menuIdList) {
+            for (String menuId : agileSysRole.getMenuIdList()) {
                 AgileSysRoleMenu agileSysRoleMenu = new AgileSysRoleMenu();
-                agileSysRoleMenu.setRoleId(roleId);
+                agileSysRoleMenu.setRoleId(agileSysRole.getId());
                 agileSysRoleMenu.setMenuId(menuId);
                 agileSysRoleMenuList.add(agileSysRoleMenu);
             }
             return agileSysRoleMenuService.saveBatch(agileSysRoleMenuList);
+        } else {
+            return true;
         }
-        return true;
     }
 
     /**
      * 保存角色部门数据
      *
-     * @param roleId
-     * @param deptIdList
+     * @param agileSysRole
      * @return
      */
-    private boolean saveRoleDept(String roleId, List<String> deptIdList) {
-        if (deptIdList != null && !deptIdList.isEmpty()) {
+    private boolean saveRoleDept(AgileSysRole agileSysRole) {
+        if (AgileCollectionUtil.isNotEmpty(agileSysRole.getDeptIdList())) {
             List<AgileSysRoleDept> agileSysRoleDeptList = new ArrayList<>();
-            for (String deptId : deptIdList) {
+            for (String deptId : agileSysRole.getDeptIdList()) {
                 AgileSysRoleDept agileSysRoleDept = new AgileSysRoleDept();
-                agileSysRoleDept.setRoleId(roleId);
+                agileSysRoleDept.setRoleId(agileSysRole.getId());
                 agileSysRoleDept.setDeptId(deptId);
                 agileSysRoleDeptList.add(agileSysRoleDept);
             }
             return agileSysRoleDeptService.saveBatch(agileSysRoleDeptList);
+        } else {
+            return true;
         }
-        return true;
     }
 }

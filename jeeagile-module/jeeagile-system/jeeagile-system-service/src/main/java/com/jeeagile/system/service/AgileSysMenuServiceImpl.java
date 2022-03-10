@@ -1,12 +1,12 @@
 package com.jeeagile.system.service;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysMenu;
+import com.jeeagile.system.entity.AgileSysRoleMenu;
 import com.jeeagile.system.mapper.AgileSysMenuMapper;
 import com.jeeagile.system.vo.AgileUpdateSort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,16 +54,32 @@ public class AgileSysMenuServiceImpl extends AgileBaseTreeServiceImpl<AgileSysMe
     }
 
     @Override
-    public boolean deleteModel(Serializable id) {
-        this.deleteModelValidate(id);
-        agileSysRoleMenuService.deleteByMenuId((String) id);
-        return super.deleteModel(id);
+    public boolean deleteModel(Serializable menuId) {
+        this.deleteModelValidate(menuId);
+        this.deleteRoleMenu(menuId);
+        return this.removeById(menuId);
     }
 
     @Override
-    public void deleteModelValidate(Serializable id) {
-        if (this.countChild(id) > 0) {
+    public void deleteModelValidate(Serializable menuId) {
+        if (this.countChild(menuId) > 0) {
             throw new AgileValidateException("该菜单下存在下级菜单不能进行删除操作！");
+        }
+    }
+
+    /**
+     * 删除该菜单从已判定的角色中删除
+     *
+     * @param menuId
+     * @return
+     */
+    private boolean deleteRoleMenu(Serializable menuId) {
+        if (AgileStringUtil.isNotEmpty(menuId)) {
+            LambdaQueryWrapper<AgileSysRoleMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysRoleMenu::getMenuId, menuId);
+            return agileSysRoleMenuService.remove(lambdaQueryWrapper);
+        } else {
+            return true;
         }
     }
 }

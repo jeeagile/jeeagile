@@ -6,7 +6,9 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysDept;
+import com.jeeagile.system.entity.AgileSysRoleDept;
 import com.jeeagile.system.mapper.AgileSysDeptMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 
@@ -17,6 +19,9 @@ import java.io.Serializable;
  */
 @AgileService
 public class AgileSysDeptServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDeptMapper, AgileSysDept> implements IAgileSysDeptService {
+
+    @Autowired
+    private IAgileSysRoleDeptService agileSysRoleDeptService;
 
     @Override
     public LambdaQueryWrapper<AgileSysDept> queryWrapper(AgileSysDept agileSysDept) {
@@ -47,9 +52,32 @@ public class AgileSysDeptServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDe
     }
 
     @Override
-    public void deleteModelValidate(Serializable id) {
-        if (this.countChild(id) > 0) {
+    public boolean deleteModel(Serializable deptId) {
+        this.deleteModelValidate(deptId);
+        this.deleteRoleDept(deptId);
+        return this.removeById(deptId);
+    }
+
+    @Override
+    public void deleteModelValidate(Serializable deptId) {
+        if (this.countChild(deptId) > 0) {
             throw new AgileValidateException("该部门存在下级部门不能进行删除操作！");
+        }
+    }
+
+    /**
+     * 将部门从已判定的角色中删除
+     *
+     * @param deptId
+     * @return
+     */
+    private boolean deleteRoleDept(Serializable deptId) {
+        if (AgileStringUtil.isNotEmpty(deptId)) {
+            LambdaQueryWrapper<AgileSysRoleDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysRoleDept::getDeptId, deptId);
+            return agileSysRoleDeptService.remove(lambdaQueryWrapper);
+        } else {
+            return true;
         }
     }
 

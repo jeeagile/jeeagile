@@ -72,7 +72,7 @@ public class AgileShiroSecurity implements IAgileSecurity {
             return (AgileBaseUser) SecurityUtils.getSubject().getPrincipal();
         } catch (Exception ex) {
             logger.error("SHIRO获取当前登录用户信息异常", ex);
-            throw new AgileAuthException("SHIRO获取当前登录用户信息异常！");
+            throw new AgileAuthException("获取登录用户信息异常！");
         }
     }
 

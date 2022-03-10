@@ -6,6 +6,7 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysPost;
+import com.jeeagile.system.entity.AgileSysUserPost;
 import com.jeeagile.system.mapper.AgileSysPostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,7 +44,6 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
         return lambdaQueryWrapper;
     }
 
-
     @Override
     public void saveModelValidate(AgileSysPost agileSysPost) {
         this.validateData(agileSysPost);
@@ -55,9 +55,24 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
     }
 
     @Override
-    public boolean deleteModel(Serializable id) {
-        agileSysUserPostService.deleteModel(id);
-        return super.deleteModel(id);
+    public boolean deleteModel(Serializable postId) {
+        this.deleteUserPost(postId);
+        return super.deleteModel(postId);
+    }
+
+    /**
+     * 将该岗位从已分配的用户中删除
+     * @param postId
+     * @return
+     */
+    private boolean deleteUserPost(Serializable postId) {
+        if (AgileStringUtil.isNotEmpty(postId)) {
+            LambdaQueryWrapper<AgileSysUserPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysUserPost::getPostId, postId);
+            return agileSysUserPostService.remove(lambdaQueryWrapper);
+        } else {
+            return true;
+        }
     }
 
     /**
