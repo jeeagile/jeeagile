@@ -32,7 +32,7 @@
 
     <el-table v-loading="loading" :data="menuTreeList" row-key="id"
               :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="120px"/>
+      <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true"/>
       <el-table-column prop="menuIcon" label="图标" align="center" style="width: 100px">
         <template slot-scope="scope">
           <svg-icon :icon-class="scope.row.menuIcon"/>
