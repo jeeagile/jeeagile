@@ -1,6 +1,7 @@
 package com.jeeagile.system.controller;
 
 import com.jeeagile.frame.annotation.AgileDemo;
+import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.system.service.IAgileSysPersonService;
 import com.jeeagile.system.vo.AgilePersonInfo;
 import com.jeeagile.system.vo.AgileUpdatePerson;
@@ -10,7 +11,6 @@ import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgileRequiresUser;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.core.util.file.AgileFileUtil;
-import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.enums.AgileLoggerType;
 import com.jeeagile.system.vo.AgileUpdatePwd;
@@ -25,8 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
  * @description
  */
 @RestController
-@Api(value = "个人中心", tags = "个人中心")
+@AgileLogger("个人中心")
 @RequestMapping("/system/person")
+@Api(value = "个人中心", tags = "个人中心")
 public class AgileSysPersonController extends AgileBaseController {
     @AgileReference
     private IAgileSysPersonService agilePersonService;
@@ -43,7 +44,7 @@ public class AgileSysPersonController extends AgileBaseController {
     @AgileRequiresUser
     @PostMapping("/updateInfo")
     @ApiOperation(value = "更新个人信息", notes = "更新个人信息")
-    @AgileLogger(title = "更新个人信息", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新个人信息", type = AgileLoggerType.UPDATE)
     public AgileResult<Object> updateInfo(@RequestBody AgileUpdatePerson agileUpdatePerson) {
         agilePersonService.updatePersonInfo(agileUpdatePerson);
         return this.success("个人信息更新成功！");
@@ -53,7 +54,7 @@ public class AgileSysPersonController extends AgileBaseController {
     @AgileRequiresUser
     @PostMapping("/updatePwd")
     @ApiOperation(value = "更新个人密码", notes = "更新个人密码")
-    @AgileLogger(title = "更新个人密码", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新个人密码", type = AgileLoggerType.UPDATE)
     public AgileResult<Object> updatePwd(@RequestBody AgileUpdatePwd agileUpdatePwd) {
         agilePersonService.updatePersonPwd(agileUpdatePwd);
         return this.success("个人密码修改成功！");
@@ -63,7 +64,7 @@ public class AgileSysPersonController extends AgileBaseController {
     @AgileRequiresUser
     @PostMapping("/uploadAvatar")
     @ApiOperation(value = "上传头像", notes = "上传头像")
-    @AgileLogger(title = "上传头像", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "上传头像", type = AgileLoggerType.UPDATE)
     public AgileResult<String> uploadAvatar(@RequestParam("userAvatar") MultipartFile multipartFile) {
         String userAvatarBasePath = AgileUtil.getUploadPath() + AgileFileUtil.getFileSeparator() + "avatar";
         String userAvatarFilePath = AgileFileUtil.upload(multipartFile, userAvatarBasePath);

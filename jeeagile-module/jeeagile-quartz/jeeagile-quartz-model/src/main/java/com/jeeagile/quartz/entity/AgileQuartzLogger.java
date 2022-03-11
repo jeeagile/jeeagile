@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileQuartzJobLogger extends AgileModel<AgileQuartzJobLogger> {
+public class AgileQuartzLogger extends AgileModel<AgileQuartzLogger> {
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
     /**

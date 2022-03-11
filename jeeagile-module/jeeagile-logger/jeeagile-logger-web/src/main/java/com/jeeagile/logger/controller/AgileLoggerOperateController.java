@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 操作日志管理 前端控制器
  */
 @RestController
+@AgileLogger("操作日志管理")
 @RequestMapping("/logger/operate")
 @Api(value = "操作日志管理", tags = "操作日志管理")
 public class AgileLoggerOperateController extends AgileBaseController {
@@ -39,7 +40,7 @@ public class AgileLoggerOperateController extends AgileBaseController {
     @AgileDemo
     @PostMapping("/delete")
     @ApiOperation(value = "删除操作日志记录", notes = "删除操作日志记录")
-    @AgileLogger(title = "删除操作日志记录", type = AgileLoggerType.DELETE)
+    @AgileLogger(notes = "删除操作日志记录", type = AgileLoggerType.DELETE)
     public AgileResult<String> delete(@SingleRequestBody String configId) {
         agileLoggerOperateService.deleteModel(configId);
         return this.success("操作日志记录删除成功！");
@@ -48,7 +49,7 @@ public class AgileLoggerOperateController extends AgileBaseController {
     @AgileDemo
     @PostMapping("/clear")
     @ApiOperation(value = "清空操作日志记录", notes = "清空操作日志记录")
-    @AgileLogger(title = "清空操作日志记录", type = AgileLoggerType.CLEAR)
+    @AgileLogger(notes = "清空操作日志记录", type = AgileLoggerType.CLEAR)
     public AgileResult clear() {
         agileLoggerOperateService.clearRecord();
         return this.success("操作日志记录清空成功！");

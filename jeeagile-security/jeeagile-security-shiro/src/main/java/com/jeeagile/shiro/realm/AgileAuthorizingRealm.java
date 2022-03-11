@@ -55,7 +55,7 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
                     HttpServletRequest httpServletRequest = AgileServletUtil.getHttpServletRequest();
                     if (httpServletRequest != null) {
                         UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
-                        userData.setLoginIp(AgileAgentUtil.getUserIp(httpServletRequest));
+                        userData.setLoginIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
                         userData.setLoginAddress(AgileNetUtil.getAddressByIp(userData.getLoginIp()));
                         userData.setOsName(userAgent.getOperatingSystem().getName());
                         userData.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());

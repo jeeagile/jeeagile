@@ -25,6 +25,7 @@ import java.util.List;
  * @description 菜单管理 前端控制器
  */
 @RestController
+@AgileLogger("菜单管理")
 @RequestMapping("/system/menu")
 @AgilePermissionsPrefix("system:menu")
 @Api(value = "菜单管理", tags = "菜单管理")
@@ -32,9 +33,9 @@ public class AgileSysMenuController extends AgileCrudController<IAgileSysMenuSer
 
     @AgileDemo
     @PostMapping("/updateSort")
-    @ApiOperation(value = "修改排序", notes = "修改排序")
-    @AgileLogger(title = "修改排序", type = AgileLoggerType.UPDATE)
     @AgileRequiresPermissions("sort")
+    @AgileLogger(notes = "修改菜单排序", type = AgileLoggerType.UPDATE)
+    @ApiOperation(value = "修改菜单排序", notes = "修改菜单排序")
     public AgileResult<String> updateSort(@RequestBody List<AgileUpdateSort> agileSortList) {
         this.getAgileService().updateMenuSort(agileSortList);
         return this.success("菜单排序修改成功！");

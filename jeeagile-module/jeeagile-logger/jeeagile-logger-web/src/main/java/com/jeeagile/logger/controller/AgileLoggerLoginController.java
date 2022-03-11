@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 登录日志管理 前端控制器
  */
 @RestController
+@AgileLogger("登录日志管理")
 @RequestMapping("/logger/login")
 @Api(value = "登录日志管理", tags = "登录日志管理")
 public class AgileLoggerLoginController extends AgileBaseController {
@@ -39,7 +40,7 @@ public class AgileLoggerLoginController extends AgileBaseController {
     @AgileDemo
     @PostMapping("/delete")
     @ApiOperation(value = "删除登录日志记录", notes = "删除登录日志记录")
-    @AgileLogger(title = "删除登录日志记录", type = AgileLoggerType.DELETE)
+    @AgileLogger(notes = "删除登录日志记录", type = AgileLoggerType.DELETE)
     public AgileResult<String> delete(@SingleRequestBody String configId) {
         agileLoggerLoginService.deleteModel(configId);
         return this.success("登录日志记录删除成功！");
@@ -49,7 +50,7 @@ public class AgileLoggerLoginController extends AgileBaseController {
     @AgileDemo
     @PostMapping("/clear")
     @ApiOperation(value = "清空登录日志记录", notes = "清空登录日志记录")
-    @AgileLogger(title = "清空登录日志记录", type = AgileLoggerType.CLEAR)
+    @AgileLogger(notes = "清空登录日志记录", type = AgileLoggerType.CLEAR)
     public AgileResult clear() {
         agileLoggerLoginService.clearRecord();
         return this.success("登录日志记录清空成功！");

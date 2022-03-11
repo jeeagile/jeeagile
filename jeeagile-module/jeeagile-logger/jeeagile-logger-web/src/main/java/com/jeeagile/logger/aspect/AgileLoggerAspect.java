@@ -9,6 +9,7 @@ import com.jeeagile.core.util.AgileAgentUtil;
 import com.jeeagile.core.util.system.util.AgileSystemUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.core.enums.AgileCommonStatus;
+import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.enums.AgileLoggerType;
 import com.jeeagile.logger.entity.AgileLoggerLogin;
 import com.jeeagile.logger.entity.AgileLoggerOperate;
@@ -52,8 +53,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
     /**
      * 定义切点
      */
-    @Pointcut("@annotation(com.jeeagile.frame.annotation.AgileLogger)" +
-            "&& execution(public * com.jeeagile.frame.controller.AgileBaseController+.*(..)))")
+    @Pointcut("@annotation(com.jeeagile.frame.annotation.AgileLogger)")
     public void agileAroundMethod() {
         // default implementation ignored
     }
@@ -92,12 +92,12 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
      */
     private void saveAgileLoggerOperate(ProceedingJoinPoint joinPoint, Throwable throwable, Object rtnObject, long executeTime) {
         try {
+//            AgileLogger agileLogger = joinPoint.getTarget().getClass().getAnnotation(AgileLogger.class);
             MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
             Method method = methodSignature.getMethod();
             AgileLogger agileLogger = method.getAnnotation(AgileLogger.class);
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-
-            if (agileLogger != null && AgileStringUtil.isNotEmpty(agileLogger.title()) && servletRequestAttributes != null) {
+            if (agileLogger != null && servletRequestAttributes != null) {
                 HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
                 if (agileLogger.type() == AgileLoggerType.LOGIN) {
                     AgileLoginUser agileLoginUser = null;
@@ -113,18 +113,18 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                     }
                     AgileLoggerLogin agileLoggerLogin = getAgileLoggerLogin(httpServletRequest, throwable);
                     agileLoggerLogin.setLoginName(agileLoginUser.getUserName());
+                    agileLoggerLogin.setLoginModule(getModuleName(joinPoint, agileLogger));
                     agileLoggerAsyncTask.saveAgileLoggerLogin(agileLoggerLogin);
                 } else {
                     AgileLoggerOperate agileLoggerOperate = getAgileLoggerOperate(httpServletRequest, throwable);
-                    agileLoggerOperate.setTitle(agileLogger.title());
-                    agileLoggerOperate.setType(agileLogger.type().name());
+                    agileLoggerOperate.setOperateModule(getModuleName(joinPoint, agileLogger));
+                    agileLoggerOperate.setOperateNotes(agileLogger.notes());
+                    agileLoggerOperate.setOperateType(agileLogger.type().name());
                     agileLoggerOperate.setExecuteTime(executeTime);
-
                     String className = joinPoint.getTarget().getClass().getName();
                     String methodName = joinPoint.getSignature().getName();
-                    agileLoggerOperate.setHandleMethod(className + ":" + methodName);
-
-                    if (agileLogger.saveParam()) {
+                    agileLoggerOperate.setExecuteMethod(className + ":" + methodName);
+                    if (this.isSaveParam(joinPoint, agileLogger)) {
                         this.putParam(joinPoint, rtnObject, agileLoggerOperate);
                     }
                     agileLoggerAsyncTask.saveAgileLoggerOperate(agileLoggerOperate);
@@ -136,6 +136,49 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
     }
 
     /**
+     * 获取模块名称
+     *
+     * @param joinPoint
+     * @param agileLogger
+     * @return
+     */
+    private String getModuleName(ProceedingJoinPoint joinPoint, AgileLogger agileLogger) {
+        String moduleName = agileLogger.module();
+        if (AgileStringUtil.isEmpty(moduleName)) {
+            moduleName = agileLogger.value();
+        }
+        if (AgileStringUtil.isEmpty(moduleName)) {
+            agileLogger = joinPoint.getTarget().getClass().getAnnotation(AgileLogger.class);
+            moduleName = agileLogger.module();
+            if (AgileStringUtil.isEmpty(moduleName)) {
+                moduleName = agileLogger.value();
+            }
+        }
+        if (AgileStringUtil.isEmpty(moduleName)) {
+            String className = joinPoint.getTarget().getClass().getName();
+            String methodName = joinPoint.getSignature().getName();
+            log.warn("{}:{}未配置操作日志模块！！！", className, methodName);
+            moduleName = "未知操作模块";
+        }
+        return moduleName;
+    }
+
+    /**
+     * 判断是否保存参数
+     *
+     * @return
+     */
+    private boolean isSaveParam(ProceedingJoinPoint joinPoint, AgileLogger agileLogger) {
+        Class<?> targetClass = joinPoint.getTarget().getClass();
+        AgileLogger agileLoggerClass = targetClass.getAnnotation(AgileLogger.class);
+        if (agileLoggerClass != null) {
+            return agileLoggerClass.param();
+        } else {
+            return agileLogger.param();
+        }
+    }
+
+    /**
      * 将请求数据和返回数据转换为json串
      *
      * @param joinPoint
@@ -143,8 +186,8 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
      * @param agileLoggerOperate
      */
     private void putParam(ProceedingJoinPoint joinPoint, Object rtnObject, AgileLoggerOperate agileLoggerOperate) {
-        String reqParam = "";
-        String resParam = "";
+        String requestParam = "";
+        String responseParam = "";
         try {
             List<Object> paramObj = new ArrayList<>();
             for (Object object : joinPoint.getArgs()) {
@@ -153,29 +196,29 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                 }
                 paramObj.add(object);
             }
-            reqParam = JSON.toJSONString(paramObj.toArray(new Object[paramObj.size()]));
+            requestParam = JSON.toJSONString(paramObj.toArray(new Object[paramObj.size()]));
             if (rtnObject != null) {
-                resParam = JSON.toJSONString(rtnObject);
+                responseParam = JSON.toJSONString(rtnObject);
             }
         } catch (Exception ex) {
             log.warn("请求参数转换JSON出现错误：{}", ex.getMessage());
         }
-        agileLoggerOperate.setReqParam(reqParam);
-        agileLoggerOperate.setResParam(resParam);
+        agileLoggerOperate.setRequestParam(requestParam);
+        agileLoggerOperate.setResponseParam(responseParam);
     }
 
     private AgileLoggerLogin getAgileLoggerLogin(HttpServletRequest httpServletRequest, Throwable throwable) {
         AgileLoggerLogin agileLoggerLogin = new AgileLoggerLogin();
         agileLoggerLogin.setStatus(AgileCommonStatus.SUCCESS.getCode());
         agileLoggerLogin.setLoginTime(new Date());
-        agileLoggerLogin.setRemoteIp(AgileAgentUtil.getUserIp(httpServletRequest));
+        agileLoggerLogin.setLoginIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
         String serverAddress = AgileSystemUtil.getHostInfo().getAddress() + ":" + serverPort;
         agileLoggerLogin.setServerAddress(serverAddress);
 
         UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
-        agileLoggerLogin.setOsName(userAgent.getOperatingSystem().getName());
-        agileLoggerLogin.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
-        agileLoggerLogin.setBrowserName(userAgent.getBrowser().getName());
+        agileLoggerLogin.setLoginOs(userAgent.getOperatingSystem().getName());
+        agileLoggerLogin.setLoginDevice(userAgent.getOperatingSystem().getDeviceType().getName());
+        agileLoggerLogin.setLoginBrowser(userAgent.getBrowser().getName());
         if (throwable != null) {
             agileLoggerLogin.setStatus(AgileCommonStatus.FAIL.getCode());
             String excMessage = throwable.getMessage();
@@ -202,21 +245,20 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
         AgileLoggerOperate agileLoggerOperate = new AgileLoggerOperate();
         AgileBaseUser userData = AgileSecurityContext.getCurrentUser();
         if (userData != null) {
-            agileLoggerOperate.setUserName(userData.getUserName());
+            agileLoggerOperate.setOperateUser(userData.getUserName());
             agileLoggerOperate.setCreateUser(userData.getUserId());
             agileLoggerOperate.setUpdateUser(userData.getUserId());
         }
-        agileLoggerOperate.setReqUri(httpServletRequest.getRequestURI());
-        agileLoggerOperate.setReqMethod(httpServletRequest.getMethod());
-        agileLoggerOperate.setRemoteIp(AgileAgentUtil.getUserIp(httpServletRequest));
+        agileLoggerOperate.setRequestUri(httpServletRequest.getRequestURI());
+        agileLoggerOperate.setRequestMethod(httpServletRequest.getMethod());
+        agileLoggerOperate.setOperateIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
         String serverAddress = AgileSystemUtil.getHostInfo().getAddress() + ":" + this.serverPort;
         agileLoggerOperate.setServerAddress(serverAddress);
 
         UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
-        agileLoggerOperate.setOsName(userAgent.getOperatingSystem().getName());
-        agileLoggerOperate.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
-        agileLoggerOperate.setBrowserName(userAgent.getBrowser().getName());
-
+        agileLoggerOperate.setOperateOs(userAgent.getOperatingSystem().getName());
+        agileLoggerOperate.setOperateDevice(userAgent.getOperatingSystem().getDeviceType().getName());
+        agileLoggerOperate.setOperateBrowser(userAgent.getBrowser().getName());
         if (throwable != null) {
             agileLoggerOperate.setStatus(AgileCommonStatus.FAIL.getCode());
             String excMessage = throwable.getMessage();

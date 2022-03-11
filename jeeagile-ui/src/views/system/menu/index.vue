@@ -32,30 +32,30 @@
 
     <el-table v-loading="loading" :data="menuTreeList" row-key="id"
               :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="150"/>
-      <el-table-column prop="menuIcon" label="图标" align="center" width="100">
+      <el-table-column prop="menuName" label="菜单名称" :show-overflow-tooltip="true" width="120px"/>
+      <el-table-column prop="menuIcon" label="图标" align="center" style="width: 100px">
         <template slot-scope="scope">
           <svg-icon :icon-class="scope.row.menuIcon"/>
         </template>
       </el-table-column>
-      <el-table-column label="排序" prop="menuSort" align="center">
+      <el-table-column label="排序" prop="menuSort" align="center" width="100px">
         <template slot-scope="scope">
           <el-input-number v-model="scope.row.menuSort" size="mini" controls-position="right" :min="0"
-                           @change="changeMenuSort(scope.row)"/>
+                           @change="changeMenuSort(scope.row)" style="width: 80px"/>
         </template>
       </el-table-column>
-      <el-table-column label="类型" prop="menuType" align="center">
+      <el-table-column label="类型" prop="menuType" align="center" width="60px">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.menuType === 'M'" size="mini">目录</el-tag>
           <el-tag v-else-if="scope.row.menuType === 'C'" type="success" size="mini">菜单</el-tag>
           <el-tag v-else-if="scope.row.menuType === 'F'" type="info" size="mini">权限</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="menuPerm" label="权限标识" :show-overflow-tooltip="true"/>
-      <el-table-column prop="menuComp" label="组件路径" :show-overflow-tooltip="true"/>
+<!--      <el-table-column prop="menuPerm" label="权限标识" :show-overflow-tooltip="true"/>-->
+      <el-table-column prop="menuComp" align="center" label="组件路径" :show-overflow-tooltip="true"/>
       <el-table-column prop="menuStatus" label="菜单状态" :formatter="menuStatusFormat" align="center" width="80"/>
       <el-table-column prop="menuVisible" label="显示状态" :formatter="menuVisibleFormat" align="center" width="80"/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="250px">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)"
                      v-hasPerm="['system:menu:add']">
@@ -111,7 +111,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="显示排序" prop="menuSort">
-              <el-input-number v-model="form.menuSort" controls-position="right" :min="0"/>
+              <el-input-number v-model="form.menuSort" controls-position="right" :min="0" />
             </el-form-item>
           </el-col>
           <el-col :span="12">

@@ -1,16 +1,17 @@
 <template>
   <div class="app-container">
     <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
-      <el-form-item label="日志标题" prop="title">
-        <el-input v-model="queryParam.queryCond.title" placeholder="请输入日志标题" clearable style="width: 240px;"
+      <el-form-item label="操作模块" prop="operateModule">
+        <el-input v-model="queryParam.queryCond.operateModule" placeholder="请输入操作模块" clearable style="width: 240px;"
                   size="small" @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="操作人员" prop="opsName">
-        <el-input v-model="queryParam.queryCond.userName" placeholder="请输入操作人员" clearable style="width: 240px;"
+      <el-form-item label="操作人员" prop="operateUser">
+        <el-input v-model="queryParam.queryCond.operateUser" placeholder="请输入操作人员" clearable style="width: 240px;"
                   size="small" @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="日志类型" prop="type">
-        <el-select v-model="queryParam.queryCond.type" placeholder="操作类型" clearable size="small" style="width: 240px">
+      <el-form-item label="操作类型" prop="operateType">
+        <el-select v-model="queryParam.queryCond.operateType" placeholder="操作类型" clearable size="small"
+                   style="width: 240px">
           <el-option v-for="dict in typeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
         </el-select>
       </el-form-item>
@@ -32,12 +33,14 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete" v-hasPerm="['logger:operate:delete']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete"
+                   v-hasPerm="['logger:operate:delete']">
           删除
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleClear" v-hasPerm="['logger:operate:clear']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleClear"
+                   v-hasPerm="['logger:operate:clear']">
           清空
         </el-button>
       </el-col>
@@ -46,12 +49,12 @@
 
     <el-table v-loading="loading" :data="loggerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="日志标题" align="center" prop="title"/>
-      <el-table-column label="日志类型" align="center" prop="type" :formatter="typeFormat"/>
-      <el-table-column label="请求方式" align="center" prop="reqMethod"/>
-      <el-table-column label="操作人员" align="center" prop="userName"/>
-      <el-table-column label="主机" align="center" prop="remoteIp" width="130" :show-overflow-tooltip="true"/>
-      <el-table-column label="操作地点" align="center" prop="remoteLocation" :show-overflow-tooltip="true"/>
+      <el-table-column label="操作模块" align="center" prop="operateModule"/>
+      <el-table-column label="操作类型" align="center" prop="operateType" :formatter="typeFormat"/>
+      <el-table-column label="操作人员" align="center" prop="operateUser"/>
+      <el-table-column label="请求方式" align="center" prop="requestMethod"/>
+      <el-table-column label="操作主机" align="center" prop="operateIp" width="130" :show-overflow-tooltip="true"/>
+      <el-table-column label="操作地址" align="center" prop="operateAddress" :show-overflow-tooltip="true"/>
       <el-table-column label="操作状态" align="center" prop="status" :formatter="statusFormat"/>
       <el-table-column label="操作日期" align="center" prop="createTime" width="180"/>
       <el-table-column label="执行时间" align="center" prop="executeTime" :show-overflow-tooltip="true">
@@ -64,43 +67,49 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)" v-hasPerm="['logger:operate:detail']">
+          <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)"
+                     v-hasPerm="['logger:operate:detail']">
             详细
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal" :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getLoggerList"/>
+    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
+                @pagination="getLoggerList"/>
 
     <!-- 操作日志详细 -->
     <el-dialog title="操作日志详细" :visible.sync="openDialog" width="700px" append-to-body>
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="日志标题：">{{ form.title }} / {{ typeFormat(form) }}</el-form-item>
+            <el-form-item label="操作模块：">{{ form.operateModule }} / {{ typeFormat(form) }}</el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="操作描述：">{{ form.operateNotes }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="请求方式：">{{ form.reqMethod }}</el-form-item>
+            <el-form-item label="请求方式：">{{ form.requestMethod }}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="执行时间：">{{ form.executeTime }}ms</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="登录信息：">{{ form.createUserName }} / {{ form.remoteIp }} / {{ form.remoteLocation }}
+            <el-form-item label="登录信息：">{{ form.operateUser }} / {{ form.operateIp }} / {{ form.operateAddress }}
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="服务地址：">{{ form.serverAddress }}{{ form.reqUri }}</el-form-item>
+            <el-form-item label="服务地址：">{{ form.serverAddress }}{{ form.requestUri }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="操作方法：">{{ form.handleMethod }}</el-form-item>
+            <el-form-item label="操作方法：">{{ form.executeMethod }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="请求参数：">{{ form.reqData }}</el-form-item>
+            <el-form-item label="请求参数：">{{ form.requestParam }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="返回参数：">{{ form.resData }}</el-form-item>
+            <el-form-item label="返回参数：">{{ form.responseParam }}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="操作状态：">{{ statusFormat(form) }}</el-form-item>
@@ -109,7 +118,7 @@
             <el-form-item label="操作时间：">{{ form.createTime }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item v-if="form.status === 1" label="异常信息：">{{ form.message }}</el-form-item>
+            <el-form-item v-if="form.status === 1" label="操作信息：">{{ form.message }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -155,10 +164,10 @@
           pageSize: 10,
           currentPage: 1,
           queryCond: {
-            title: undefined,
-            type: undefined,
-            status: undefined,
-            userName: undefined
+            operateModule: undefined,
+            operateType: undefined,
+            operateUser: undefined,
+            status: undefined
           }
         }
       }
@@ -189,7 +198,7 @@
       },
       /** 操作日志类型字典翻译 */
       typeFormat(row) {
-        return this.handleDictLabel(this.typeOptions, row.type)
+        return this.handleDictLabel(this.typeOptions, row.operateType)
       },
       /** 搜索按钮操作 */
       handleQuery() {

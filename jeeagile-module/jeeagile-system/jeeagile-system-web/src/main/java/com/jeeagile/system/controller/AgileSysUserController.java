@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 用户管理 前端控制器
  */
 @RestController
+@AgileLogger("用户管理")
 @RequestMapping("/system/user")
 @AgilePermissionsPrefix("system:user")
 @Api(value = "用户管理", tags = "用户管理")
@@ -33,7 +34,7 @@ public class AgileSysUserController extends AgileCrudController<IAgileSysUserSer
     @AgileDemo
     @PostMapping(value = "/resetPwd")
     @ApiOperation(value = "重置用户密码", notes = "重置用户密码")
-    @AgileLogger(title = "重置用户密码", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "重置用户密码", type = AgileLoggerType.UPDATE)
     @AgileRequiresPermissions("resetPwd")
     public AgileResult<Object> resetUserPassword(@RequestBody AgileUpdatePwd agileUpdatePwd) {
         this.getAgileService().resetUserPwd(agileUpdatePwd);
@@ -43,8 +44,8 @@ public class AgileSysUserController extends AgileCrudController<IAgileSysUserSer
     @AgileDemo
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "更新用户状态", notes = "更新用户状态")
-    @AgileLogger(title = "更新用户状态", type = AgileLoggerType.UPDATE)
-    public AgileResult<Object> changeUserStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
+    @AgileLogger(notes = "更新用户状态", type = AgileLoggerType.UPDATE)
+    public AgileResult<Object> changeStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
         this.getAgileService().changeUserStatus(agileUpdateStatus);
         return this.success();
     }

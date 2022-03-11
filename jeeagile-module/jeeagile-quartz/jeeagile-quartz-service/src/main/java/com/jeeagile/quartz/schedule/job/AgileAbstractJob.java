@@ -6,10 +6,10 @@ import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.spring.AgileSpringUtil;
 import com.jeeagile.quartz.entity.AgileQuartzJob;
-import com.jeeagile.quartz.entity.AgileQuartzJobLogger;
+import com.jeeagile.quartz.entity.AgileQuartzLogger;
 import com.jeeagile.quartz.schedule.AgileScheduleConstants;
 import com.jeeagile.quartz.schedule.AgileScheduleUtil;
-import com.jeeagile.quartz.service.IAgileQuartzJobLoggerService;
+import com.jeeagile.quartz.service.IAgileQuartzLoggerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
@@ -53,21 +53,21 @@ public abstract class AgileAbstractJob implements Job {
      * 记录任务执行日志
      */
     protected void saveJobLog(AgileQuartzJob agileQuartzJob, Date startTime, Throwable throwable) {
-        final AgileQuartzJobLogger agileQuartzJobLogger = new AgileQuartzJobLogger();
-        BeanUtils.copyProperties(agileQuartzJob, agileQuartzJobLogger);
-        agileQuartzJobLogger.setId(null);
-        agileQuartzJobLogger.setStartTime(startTime);
-        agileQuartzJobLogger.setStopTime(new Date());
-        long executeTime = agileQuartzJobLogger.getStopTime().getTime() - agileQuartzJobLogger.getStartTime().getTime();
-        agileQuartzJobLogger.setExecuteTime(executeTime);
+        final AgileQuartzLogger agileQuartzLogger = new AgileQuartzLogger();
+        BeanUtils.copyProperties(agileQuartzJob, agileQuartzLogger);
+        agileQuartzLogger.setId(null);
+        agileQuartzLogger.setStartTime(startTime);
+        agileQuartzLogger.setStopTime(new Date());
+        long executeTime = agileQuartzLogger.getStopTime().getTime() - agileQuartzLogger.getStartTime().getTime();
+        agileQuartzLogger.setExecuteTime(executeTime);
         if (throwable != null) {
-            agileQuartzJobLogger.setStatus(AgileCommonStatus.FAIL.getCode());
+            agileQuartzLogger.setStatus(AgileCommonStatus.FAIL.getCode());
             String errorMsg = StringUtils.substring(throwable.getMessage(), 0, 2000);
-            agileQuartzJobLogger.setMessage(errorMsg);
+            agileQuartzLogger.setMessage(errorMsg);
         } else {
-            agileQuartzJobLogger.setStatus(AgileCommonStatus.SUCCESS.getCode());
+            agileQuartzLogger.setStatus(AgileCommonStatus.SUCCESS.getCode());
         }
-        AgileSpringUtil.getBean(IAgileQuartzJobLoggerService.class).save(agileQuartzJobLogger);
+        AgileSpringUtil.getBean(IAgileQuartzLoggerService.class).save(agileQuartzLogger);
     }
 
     protected void doExecute(JobExecutionContext context, AgileQuartzJob agileQuartzJob) throws Exception {

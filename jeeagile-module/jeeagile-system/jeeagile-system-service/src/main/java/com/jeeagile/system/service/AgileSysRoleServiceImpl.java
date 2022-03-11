@@ -81,6 +81,29 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     }
 
     @Override
+    public AgileSysRole saveModel(AgileSysRole agileSysRole) {
+        this.save(agileSysRole);
+        this.saveRoleMenu(agileSysRole);
+        return agileSysRole;
+    }
+
+    @Override
+    public boolean updateModel(AgileSysRole agileSysRole) {
+        this.updateById(agileSysRole);
+        this.deleteRoleMenu(agileSysRole.getId());
+        this.saveRoleMenu(agileSysRole);
+        return true;
+    }
+
+    @Override
+    public boolean deleteModel(Serializable roleId) {
+        this.deleteRoleMenu(roleId);
+        this.deleteRoleDept(roleId);
+        this.deleteUserRole(roleId);
+        return this.removeById(roleId);
+    }
+
+    @Override
     public boolean changeRoleStatus(AgileUpdateStatus agileUpdateStatus) {
         AgileSysRole agileSysRole = new AgileSysRole();
         agileSysRole.setId(agileUpdateStatus.getId());
@@ -136,29 +159,6 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
             }
         }
         return roleDeptIdList;
-    }
-
-    @Override
-    public AgileSysRole saveModel(AgileSysRole agileSysRole) {
-        this.save(agileSysRole);
-        this.saveRoleMenu(agileSysRole);
-        return agileSysRole;
-    }
-
-    @Override
-    public boolean updateModel(AgileSysRole agileSysRole) {
-        this.updateById(agileSysRole);
-        this.deleteRoleMenu(agileSysRole.getId());
-        this.saveRoleMenu(agileSysRole);
-        return true;
-    }
-
-    @Override
-    public boolean deleteModel(Serializable roleId) {
-        this.deleteRoleMenu(roleId);
-        this.deleteRoleDept(roleId);
-        this.deleteUserRole(roleId);
-        return this.removeById(roleId);
     }
 
     /**

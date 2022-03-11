@@ -1,5 +1,5 @@
 drop table if exists agile_quartz_job;
-drop table if exists agile_quartz_job_logger;
+drop table if exists agile_quartz_logger;
 
 /*==============================================================*/
 /* table: agile_quartz_job 定时任务表                            */
@@ -35,7 +35,7 @@ INSERT INTO agile_quartz_job VALUES ('4','三个参数同名方法（复杂对�
 /*==============================================================*/
 /* table: agile_quartz_job_log 定时任务执行日志表                */
 /*==============================================================*/
-create table agile_quartz_job_logger
+create table agile_quartz_logger
 (
   id                    varchar(32) not null comment '主键',
   job_name              varchar(100) not null comment '任务名称',
@@ -52,7 +52,7 @@ create table agile_quartz_job_logger
   message               longtext comment '异常信息',
   primary key (id)
 );
-alter table agile_quartz_job_logger comment '定时任务执行日志表';
+alter table agile_quartz_logger comment '定时任务执行日志表';
 
 
 /*==============================================================*/

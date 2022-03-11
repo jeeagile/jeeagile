@@ -36,11 +36,11 @@
     <el-table v-loading="loading" :data="loginList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="登录用户名" align="center" prop="loginName"/>
-      <el-table-column label="主机" align="center" prop="remoteIp" width="130" :show-overflow-tooltip="true"/>
-      <el-table-column label="操作地点" align="center" prop="remoteLocation" :show-overflow-tooltip="true"/>
-      <el-table-column label="设备名称" align="center" prop="deviceName" :show-overflow-tooltip="true"/>
-      <el-table-column label="操作系统" align="center" prop="osName" :show-overflow-tooltip="true"/>
-      <el-table-column label="浏览器" align="center" prop="browserName" :show-overflow-tooltip="true"/>
+      <el-table-column label="主机" align="center" prop="loginIp" width="130" :show-overflow-tooltip="true"/>
+      <el-table-column label="操作地点" align="center" prop="loginAddress" :show-overflow-tooltip="true"/>
+      <el-table-column label="设备名称" align="center" prop="loginDevice" :show-overflow-tooltip="true"/>
+      <el-table-column label="操作系统" align="center" prop="loginOs" :show-overflow-tooltip="true"/>
+      <el-table-column label="浏览器" align="center" prop="loginBrowser" :show-overflow-tooltip="true"/>
       <el-table-column label="登录状态" align="center" prop="status" :formatter="statusFormat"/>
       <el-table-column label="登录信息" align="center" prop="message" :show-overflow-tooltip="true"/>
       <el-table-column label="登录日期" align="center" prop="loginTime" width="180"/>

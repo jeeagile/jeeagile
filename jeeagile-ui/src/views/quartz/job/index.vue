@@ -76,7 +76,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="handleView" icon="el-icon-view">任务详细</el-dropdown-item>
-              <el-dropdown-item command="handleJobLogger" icon="el-icon-s-operation" v-hasPerm="['job:logger:query']">
+              <el-dropdown-item command="handleJobLogger" icon="el-icon-s-operation" v-hasPerm="['quartz:logger:page']">
                 执行日志
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -402,7 +402,7 @@
       /** 任务日志列表查询 */
       handleJobLogger(row) {
         const jobCode = row.jobCode || 0
-        this.$router.push({ path: '/job/logger/' + jobCode })
+        this.$router.push({ path: '/quartz/logger/' + jobCode })
       },
       /** 新增按钮操作 */
       handleAdd() {

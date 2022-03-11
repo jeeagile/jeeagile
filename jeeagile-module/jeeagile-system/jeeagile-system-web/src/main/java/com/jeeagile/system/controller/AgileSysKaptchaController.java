@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
  * @description
  */
 @RestController
-@Api(value = "验证码", tags = "验证码")
 @RequestMapping("/system/kaptcha")
+@Api(value = "验证码", tags = "验证码")
 public class AgileSysKaptchaController extends AgileBaseController {
     @PostMapping("/image")
     @ApiOperation(value = "生成验证码", notes = "生成验证码")

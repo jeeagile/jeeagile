@@ -2,7 +2,7 @@ package com.jeeagile.quartz.mapper;
 
 import com.jeeagile.frame.annotation.AgileMapperScan;
 import com.jeeagile.frame.mapper.AgileMapper;
-import com.jeeagile.quartz.entity.AgileQuartzJobLogger;
+import com.jeeagile.quartz.entity.AgileQuartzLogger;
 
 /**
  * @author JeeAgile
@@ -10,6 +10,6 @@ import com.jeeagile.quartz.entity.AgileQuartzJobLogger;
  * @description
  */
 @AgileMapperScan
-public interface AgileQuartzJobLoggerMapper extends AgileMapper<AgileQuartzJobLogger> {
+public interface AgileQuartzLoggerMapper extends AgileMapper<AgileQuartzLogger> {
 
 }

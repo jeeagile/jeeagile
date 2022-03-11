@@ -1,6 +1,7 @@
 package com.jeeagile.system.controller;
 
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
+import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.system.entity.AgileSysDept;
 import com.jeeagile.system.service.IAgileSysDeptService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 部门管理 前端控制器
  */
 @RestController
+@AgileLogger("部门管理")
 @RequestMapping("/system/dept")
 @AgilePermissionsPrefix("system:dept")
 @Api(value = "部门管理", tags = "部门管理")

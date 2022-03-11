@@ -26,9 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2021-03-21
  * @description
  */
+
 @RestController
-@Api(value = "用户登录", tags = "用户登录")
 @RequestMapping("/system/user")
+@Api(value = "用户登录", tags = "用户登录")
 public class AgileSysLoginController extends AgileBaseController {
 
     @AgileReference
@@ -36,7 +37,7 @@ public class AgileSysLoginController extends AgileBaseController {
 
     @PostMapping("/login")
     @ApiOperation(value = "用户登录", notes = "用户登录")
-    @AgileLogger(title = "用户登录", type = AgileLoggerType.LOGIN)
+    @AgileLogger(module = "系统内部用户登录", notes = "用户登录", type = AgileLoggerType.LOGIN)
     public AgileResult<AgileUserData> login(@RequestBody AgileLoginUser agileLoginUser) {
         if (AgileStringUtil.isEmpty(agileLoginUser.getUserName())) {
             return this.error(AgileResultCode.FAIL_AUTH, "登录名不能为空!");

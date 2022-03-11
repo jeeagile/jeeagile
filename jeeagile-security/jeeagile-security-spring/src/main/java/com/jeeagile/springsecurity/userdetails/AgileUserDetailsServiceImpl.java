@@ -45,7 +45,7 @@ public class AgileUserDetailsServiceImpl implements UserDetailsService {
                 HttpServletRequest httpServletRequest = AgileServletUtil.getHttpServletRequest();
                 if (httpServletRequest != null) {
                     UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
-                    userData.setLoginIp(AgileAgentUtil.getUserIp(httpServletRequest));
+                    userData.setLoginIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
                     userData.setOsName(userAgent.getOperatingSystem().getName());
                     userData.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
                     userData.setBrowserName(userAgent.getBrowser().getName());

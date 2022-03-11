@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 角色管理 前端控制器
  */
 @RestController
+@AgileLogger("角色管理")
 @RequestMapping("/system/role")
 @AgilePermissionsPrefix("system:role")
 @Api(value = "角色管理", tags = "角色管理")
@@ -29,7 +30,7 @@ public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleSer
     @AgileDemo
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "更新角色状态", notes = "更新角色状态")
-    @AgileLogger(title = "更新角色状态", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新角色状态", type = AgileLoggerType.UPDATE)
     public AgileResult<String> changeRoleStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
         this.getAgileService().changeRoleStatus(agileUpdateStatus);
         return this.success();
@@ -38,7 +39,7 @@ public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleSer
     @AgileDemo
     @PostMapping(value = "/dataScope")
     @ApiOperation(value = "更新角色权限范围", notes = "更新角色权限范围")
-    @AgileLogger(title = "更新角色权限范围", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新角色权限范围", type = AgileLoggerType.UPDATE)
     public AgileResult<String> dataScope(@RequestBody AgileSysRole agileSysRole) {
         this.getAgileService().updateRoleDataScope(agileSysRole);
         return this.success();

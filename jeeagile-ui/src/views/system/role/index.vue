@@ -155,8 +155,6 @@
     changeRoleStatus,
     updateDataScope
   } from '@/api/system/role'
-  import { selectMenuList } from '@/api/system/menu'
-  import { selectDeptList } from '@/api/system/dept'
 
   export default {
     name: 'Role',

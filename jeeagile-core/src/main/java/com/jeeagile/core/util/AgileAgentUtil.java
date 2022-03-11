@@ -24,7 +24,7 @@ public class AgileAgentUtil {
      * @param httpServletRequest
      * @return
      */
-    public static String getUserIp(HttpServletRequest httpServletRequest) {
+    public static String getUserClientIp(HttpServletRequest httpServletRequest) {
         if (httpServletRequest == null) {
             return UNKNOWN;
         }

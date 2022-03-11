@@ -20,11 +20,11 @@ public class AgileLoggerOperateServiceImpl extends AgileBaseServiceImpl<AgileLog
     public LambdaQueryWrapper<AgileLoggerOperate> queryWrapper(AgileLoggerOperate agileLoggerOperate) {
         LambdaQueryWrapper<AgileLoggerOperate> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (agileLoggerOperate != null) {
-            if (AgileStringUtil.isNotEmpty(agileLoggerOperate.getType())) {
-                lambdaQueryWrapper.eq(AgileLoggerOperate::getType, agileLoggerOperate.getType());
+            if (AgileStringUtil.isNotEmpty(agileLoggerOperate.getOperateModule())) {
+                lambdaQueryWrapper.like(AgileLoggerOperate::getOperateModule, agileLoggerOperate.getOperateModule());
             }
-            if (AgileStringUtil.isNotEmpty(agileLoggerOperate.getTitle())) {
-                lambdaQueryWrapper.like(AgileLoggerOperate::getTitle, agileLoggerOperate.getTitle());
+            if (AgileStringUtil.isNotEmpty(agileLoggerOperate.getOperateType())) {
+                lambdaQueryWrapper.eq(AgileLoggerOperate::getOperateType, agileLoggerOperate.getOperateType());
             }
             if (AgileStringUtil.isNotEmpty(agileLoggerOperate.getStatus())) {
                 lambdaQueryWrapper.eq(AgileLoggerOperate::getStatus, agileLoggerOperate.getStatus());

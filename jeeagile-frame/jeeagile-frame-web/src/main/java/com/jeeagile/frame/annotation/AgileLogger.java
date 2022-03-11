@@ -1,7 +1,7 @@
 package com.jeeagile.frame.annotation;
 
-import com.jeeagile.frame.enums.AgileLoggerType;
 import lombok.NonNull;
+import com.jeeagile.frame.enums.AgileLoggerType;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
@@ -12,32 +12,37 @@ import java.lang.annotation.*;
  * @description
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Documented
 public @interface AgileLogger {
     /**
-     * 日志标题
+     * 模块
      *
      * @return
      */
-    @AliasFor("title")
+    @AliasFor("module")
     String value() default "";
+    /**
+     * 模块
+     *
+     * @return
+     */
+    @AliasFor("value")
+    String module() default "";
 
     /**
-     * 日志标题
+     * 描述
      *
      * @return
      */
-    @NonNull
-    @AliasFor("value")
-    String title() default "";
-
+    String notes() default "";
 
     /**
      * 业务操作类型
      *
      * @return
      */
+    @NonNull
     AgileLoggerType type() default AgileLoggerType.OTHER;
 
     /**
@@ -46,5 +51,5 @@ public @interface AgileLogger {
      *
      * @return
      */
-    boolean saveParam() default false;
+    boolean param() default false;
 }

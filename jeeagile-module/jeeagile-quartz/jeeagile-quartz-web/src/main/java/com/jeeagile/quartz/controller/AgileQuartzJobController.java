@@ -24,14 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
  * @description
  */
 @RestController
+@AgileLogger("定时任务")
 @RequestMapping("/quartz/job")
 @AgilePermissionsPrefix("quartz:job")
-@Api(value = "定时任务管理", tags = "定时任务管理")
-public class AgileQuartzJobController extends AgileCrudController<IAgileQuartzJobService,AgileQuartzJob> {
+@Api(value = "定时任务", tags = "定时任务")
+public class AgileQuartzJobController extends AgileCrudController<IAgileQuartzJobService, AgileQuartzJob> {
     @AgileDemo
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "更新任务状态", notes = "更新任务状态")
-    @AgileLogger(title = "更新任务状态", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新任务状态", type = AgileLoggerType.UPDATE)
     public AgileResult<String> changeJobStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
         this.getAgileService().changeQuartzJobStatus(agileUpdateStatus);
         return this.success();
@@ -39,7 +40,7 @@ public class AgileQuartzJobController extends AgileCrudController<IAgileQuartzJo
 
     @PostMapping("/execute")
     @ApiOperation(value = "执行任务", notes = "执行任务")
-    @AgileLogger(title = "执行任务", type = AgileLoggerType.DELETE)
+    @AgileLogger(notes = "执行任务", type = AgileLoggerType.DELETE)
     @AgileRequiresPermissions("execute")
     public AgileResult execute(@SingleRequestBody String quartzJobId) {
         this.getAgileService().executeQuartzJobById(quartzJobId);

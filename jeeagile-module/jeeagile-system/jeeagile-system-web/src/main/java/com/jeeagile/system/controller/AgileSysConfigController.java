@@ -2,6 +2,7 @@ package com.jeeagile.system.controller;
 
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
+import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.system.entity.AgileSysConfig;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 参数管理 前端控制器
  */
 @RestController
+@AgileLogger("参数管理")
 @RequestMapping("/system/config")
 @AgilePermissionsPrefix("system:config")
 @Api(value = "参数管理", tags = "参数管理")

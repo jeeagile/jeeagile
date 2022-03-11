@@ -28,7 +28,7 @@ class AgileLoggerAsyncTask {
     @Async("AgileLoggerAsyncTask")
     public void saveAgileLoggerOperate(AgileLoggerOperate agileLoggerOperate) {
         try {
-            agileLoggerOperate.setRemoteLocation(AgileNetUtil.getAddressByIp(agileLoggerOperate.getRemoteIp()));
+            agileLoggerOperate.setOperateAddress(AgileNetUtil.getAddressByIp(agileLoggerOperate.getOperateIp()));
             agileLoggerOperateService.saveModel(agileLoggerOperate);
         } catch (Exception ex) {
             log.warn("操作日志记录发生异常!", ex);
@@ -38,7 +38,7 @@ class AgileLoggerAsyncTask {
     @Async("AgileLoggerAsyncTask")
     public void saveAgileLoggerLogin(AgileLoggerLogin agileLoggerLogin) {
         try {
-            agileLoggerLogin.setRemoteLocation(AgileNetUtil.getAddressByIp(agileLoggerLogin.getRemoteIp()));
+            agileLoggerLogin.setLoginAddress(AgileNetUtil.getAddressByIp(agileLoggerLogin.getLoginIp()));
             agileLoggerLoginService.saveModel(agileLoggerLogin);
         } catch (Exception ex) {
             log.warn("登录日志记录发生异常!", ex);

@@ -47,7 +47,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
 
     @PostMapping(value = "/page")
     @AgileRequiresPermissions("page")
-    @AgileLogger(title = "分页查询", type = AgileLoggerType.SELECT)
+    @AgileLogger(notes = "根据条件分页查询数据", type = AgileLoggerType.SELECT)
     @ApiOperation(value = "分页查询", notes = "分页查询数据接口")
     public AgileResult<AgilePage<T>> selectPage(@RequestBody AgilePageable<T> agilePageable) {
         return AgileResult.success(agileService.selectPage(agilePageable));
@@ -55,15 +55,15 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
 
     @PostMapping(value = "/list")
     @AgileRequiresPermissions("list")
-    @AgileLogger(title = "查询列表", type = AgileLoggerType.SELECT)
-    @ApiOperation(value = "查询列表", notes = "根据条件查询数据接口")
+    @AgileLogger(notes = "根据条件查询数据", type = AgileLoggerType.SELECT)
+    @ApiOperation(value = "查询列表", notes = "根据条件查询数据")
     public AgileResult<List<T>> selectList(@RequestBody T agileModel) {
         return AgileResult.success(agileService.selectList(agileModel));
     }
 
     @PostMapping(value = "/import")
     @AgileRequiresPermissions("import")
-    @AgileLogger(title = "导入数据", type = AgileLoggerType.IMPORT)
+    @AgileLogger(notes = "导入数据", type = AgileLoggerType.IMPORT)
     @ApiOperation(value = "导入数据", notes = "导入数据接口")
     public AgileResult importExcel(T agileModel) {
         return AgileResult.success();
@@ -71,7 +71,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
 
     @PostMapping(value = "/export")
     @AgileRequiresPermissions("export")
-    @AgileLogger(title = "导出数据", type = AgileLoggerType.EXPORT)
+    @AgileLogger(notes = "导出数据", type = AgileLoggerType.EXPORT)
     @ApiOperation(value = "导出数据", notes = "导出数据接口")
     public AgileResult exportExcel(T agileModel) {
         return AgileResult.success();
@@ -79,16 +79,16 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
 
     @PostMapping("/detail")
     @AgileRequiresPermissions("detail")
-    @AgileLogger(title = "查看明细", type = AgileLoggerType.DETAIL)
-    @ApiOperation(value = "查看明细", notes = "根据主键查看明细接口")
+    @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
+    @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<T> postDetail(@SingleRequestBody Serializable id) {
         return AgileResult.success(agileService.selectModel(id));
     }
 
     @GetMapping("/{id}")
     @AgileRequiresPermissions("detail")
-    @AgileLogger(title = "查看明细", type = AgileLoggerType.DETAIL)
-    @ApiOperation(value = "查看明细", notes = "根据主键查看明细接口")
+    @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
+    @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<T> getDetail(@PathVariable Serializable id) {
         return AgileResult.success(agileService.selectModel(id));
     }
@@ -96,8 +96,8 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileDemo
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.PUT})
     @AgileRequiresPermissions("add")
-    @AgileLogger(title = "新增数据", type = AgileLoggerType.ADD)
-    @ApiOperation(value = "新增数据", notes = "新增数据接口")
+    @AgileLogger(notes = "新增数据", type = AgileLoggerType.ADD)
+    @ApiOperation(value = "新增数据", notes = "新增数据")
     public AgileResult<T> add(@RequestBody T agileModel) {
         this.saveModelValidate(agileModel);
         agileModel = agileService.saveModel(agileModel);
@@ -107,8 +107,8 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileDemo
     @PostMapping("/update")
     @AgileRequiresPermissions("update")
-    @AgileLogger(title = "更新数据", type = AgileLoggerType.UPDATE)
-    @ApiOperation(value = "更新数据", notes = "根据主键更新数据接口")
+    @AgileLogger(notes = "根据主键更新数据", type = AgileLoggerType.UPDATE)
+    @ApiOperation(value = "更新数据", notes = "根据主键更新数据")
     public AgileResult update(@RequestBody T agileModel) {
         this.updateModelValidate(agileModel);
         if (agileService.updateModel(agileModel)) {
@@ -121,8 +121,8 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileDemo
     @PostMapping("/delete")
     @AgileRequiresPermissions("delete")
-    @AgileLogger(title = "删除数据", type = AgileLoggerType.DELETE)
-    @ApiOperation(value = "删除数据", notes = "根据主键删除数据接口")
+    @AgileLogger(notes = "根据主键删除数据", type = AgileLoggerType.DELETE)
+    @ApiOperation(value = "删除数据", notes = "删除业务数据")
     public AgileResult delete(@SingleRequestBody Serializable id) {
         if (agileService.deleteModel(id)) {
             return AgileResult.success("数据删除成功！");
@@ -134,8 +134,8 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileDemo
     @DeleteMapping("/{id}")
     @AgileRequiresPermissions("delete")
-    @AgileLogger(title = "删除数据", type = AgileLoggerType.DELETE)
-    @ApiOperation(value = "删除数据", notes = "根据主键删除数据接口")
+    @AgileLogger(notes = "根据主键删除数据", type = AgileLoggerType.DELETE)
+    @ApiOperation(value = "删除数据", notes = "根据主键删除数据")
     public AgileResult deleteInfo(@PathVariable Serializable id) {
         if (agileService.deleteModel(id)) {
             return AgileResult.success("数据删除成功！");

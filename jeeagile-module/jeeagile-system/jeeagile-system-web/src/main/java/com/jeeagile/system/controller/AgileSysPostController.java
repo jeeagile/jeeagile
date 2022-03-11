@@ -1,6 +1,7 @@
 package com.jeeagile.system.controller;
 
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
+import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.system.entity.AgileSysPost;
 import com.jeeagile.system.service.IAgileSysPostService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 岗位管理 前端控制器
  */
 @RestController
+@AgileLogger("岗位管理")
 @RequestMapping("/system/post")
 @AgilePermissionsPrefix("system:post")
 @Api(value = "岗位管理", tags = "岗位管理")
