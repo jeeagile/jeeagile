@@ -49,7 +49,7 @@
 
     <el-table v-loading="loading" :data="loggerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="操作模块" align="center" prop="operateModule"/>
+      <el-table-column label="操作模块" align="center" prop="operateModule" :show-overflow-tooltip="true"/>
       <el-table-column label="操作类型" align="center" prop="operateType" :formatter="typeFormat"/>
       <el-table-column label="操作人员" align="center" prop="operateUser"/>
       <el-table-column label="请求方式" align="center" prop="requestMethod"/>

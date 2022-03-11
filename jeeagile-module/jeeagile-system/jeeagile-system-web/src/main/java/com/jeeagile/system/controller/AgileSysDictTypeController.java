@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 字典类型管理 前端控制器
  */
 @RestController
-@AgileLogger("字典类型管理")
+@AgileLogger("字典管理")
 @RequestMapping("/system/dict/type")
 @AgilePermissionsPrefix("system:dict:type")
-@Api(value = "字典类型管理", tags = "字典类型管理")
+@Api(value = "字典类型管理", tags = "字典管理")
 public class AgileSysDictTypeController extends AgileCrudController<IAgileSysDictTypeService, AgileSysDictType> {
 }

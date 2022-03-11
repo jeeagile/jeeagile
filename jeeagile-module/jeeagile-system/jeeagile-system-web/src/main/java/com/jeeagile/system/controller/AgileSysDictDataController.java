@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @description 字典数据管理 前端控制器
  */
 @RestController
-@AgileLogger("字典数据管理")
+@AgileLogger("字典管理")
 @RequestMapping("/system/dict/data")
 @AgilePermissionsPrefix("system:dict:data")
-@Api(value = "字典数据管理", tags = "字典数据管理")
+@Api(value = "字典数据管理", tags = "字典管理")
 public class AgileSysDictDataController extends AgileCrudController<IAgileSysDictDataService, AgileSysDictData> {
     @PostMapping("/getDictDataByDictType")
     @ApiOperation(value = "根据字典类型查询字典数据列表", notes = "根据字典类型查询字典数据列表")
