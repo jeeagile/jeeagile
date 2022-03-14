@@ -135,7 +135,7 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
         List<AgileSysRoleMenu> roleMenuList = agileSysRoleMenuService.list(lambdaQueryWrapper);
         List<String> roleMenuIdList = new ArrayList<>();
         for (AgileSysRoleMenu sysRoleMenu : roleMenuList) {
-            if (agileSysDeptService.countChild(sysRoleMenu.getMenuId()) < 1) {
+            if (agileSysMenuService.countChild(sysRoleMenu.getMenuId()) < 1) {
                 roleMenuIdList.add(sysRoleMenu.getMenuId());
             }
         }
