@@ -7,9 +7,9 @@ go
 
 if exists (select 1
             from  sysobjects
-           where  id = object_id('agile_quartz_job_logger')
+           where  id = object_id('agile_quartz_logger')
             and   type = 'U')
-   drop table agile_quartz_job_logger
+   drop table agile_quartz_logger
 go
 
 /*==============================================================*/
@@ -161,9 +161,9 @@ INSERT INTO agile_quartz_job VALUES ('3','两个参数同名方法','003','task'
 INSERT INTO agile_quartz_job VALUES ('4','三个参数同名方法（复杂对象）','004','task','0/20 * * * * ? *','0','agileTask','task','66&66.88&{code:33,name:\"agile\",group:\"task\"}','1','1',NULL,NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
-/* Table: agile_quartz_job_logger 任务执行日志表                 */
+/* Table: agile_quartz_logger 任务执行日志表                 */
 /*==============================================================*/
-create table agile_quartz_job_logger (
+create table agile_quartz_logger (
    id                   varchar(32)          not null,
    job_name             varchar(100)         not null,
    job_code             varchar(100)         not null,
@@ -177,7 +177,7 @@ create table agile_quartz_job_logger (
    execute_time         decimal(10,0)        not null,
    status               varchar(1)           not null,
    message              text                 null,
-   constraint PK_agile_quartz_job_logger primary key nonclustered (id)
+   constraint PK_agile_quartz_logger primary key nonclustered (id)
 )
 go
 
@@ -185,98 +185,98 @@ declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '任务执行日志表',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '主键',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'id'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'id'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '任务名称',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'job_name'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'job_name'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '任务编码',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'job_code'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'job_code'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '任务分组',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'job_group'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'job_group'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    'cron 表达式',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'job_cron'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'job_cron'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    'bean名称',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'bean_name'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'bean_name'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '执行方法',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'method_name'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'method_name'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '执行参数',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'method_param'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'method_param'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '开始时间',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'start_time'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'start_time'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '结束时间',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'end_time'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'end_time'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '执行时间',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'execute_time'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'execute_time'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '执行状态',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'status'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'status'
 go
 
 declare @CurrentUser sysname
 select @CurrentUser = user_name()
 execute sp_addextendedproperty 'MS_Description',
    '异常信息',
-   'user', @CurrentUser, 'table', 'agile_quartz_job_logger', 'column', 'message'
+   'user', @CurrentUser, 'table', 'agile_quartz_logger', 'column', 'message'
 go
 
 /*==============================================================*/
