@@ -63,7 +63,7 @@ public class AgileSpringSecurity implements IAgileSecurity {
             } else if (ex instanceof BadCredentialsException) {
                 throw new AgileAuthException("用户登录密码错误！");
             } else {
-                log.error("Spring Security用户登录认证出现异常" , ex);
+                log.error("Spring Security用户登录认证出现异常", ex);
                 throw new AgileAuthException("Spring Security用户登录认证出现异常！");
             }
         }
@@ -98,12 +98,14 @@ public class AgileSpringSecurity implements IAgileSecurity {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
-            log.error("用户验证异常" , ex);
+            log.error("用户验证异常", ex);
             throw new AgileAuthException("用户权限验证异常！");
         }
     }
+
     /**
      * 校验用户权限
+     *
      * @param perms
      * @param agileLogical
      */
@@ -139,6 +141,7 @@ public class AgileSpringSecurity implements IAgileSecurity {
             throw new AgileAuthException("用户权限验证异常！");
         }
     }
+
     @Override
     public void checkPermission(AgileRequiresPermissions agileRequiresPermissions) {
         this.checkPermission(agileRequiresPermissions.value(), agileRequiresPermissions.logical());
@@ -180,13 +183,19 @@ public class AgileSpringSecurity implements IAgileSecurity {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
-            log.error("用户角色校验异常" , ex);
+            log.error("用户角色校验异常", ex);
             throw new AgileAuthException("用户权限验证异常！");
         }
     }
 
     private boolean hasPermission(String permission) {
-        return ArrayUtils.contains(this.getUserData().getUserPerm().toArray(), permission);
+        List<String> permissionList = this.getUserData().getUserPerm();
+        for (String userPermission : permissionList) {
+            if (userPermission.contains(permission)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void hasPermissions(String... permissions) {
