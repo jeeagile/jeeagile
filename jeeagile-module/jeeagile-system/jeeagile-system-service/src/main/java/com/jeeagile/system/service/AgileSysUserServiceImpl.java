@@ -104,10 +104,8 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
 
     @Override
     public boolean updateModel(AgileSysUser agileSysUser) {
-        String userPwd = agileSysUser.getUserPwd();
-        if (AgileStringUtil.isNotEmpty(userPwd)) {
-            agileSysUser.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
-        }
+        //防止修改用户信息将用户密码进行修改
+        agileSysUser.setUserPwd(null);
         this.validateData(agileSysUser);
         this.updateById(agileSysUser);
         this.deleteUserPost(agileSysUser.getId());

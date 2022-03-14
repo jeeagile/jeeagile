@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-security-shiro</artifactId>
+            <artifactId>jeeagile-security-spring</artifactId>
         </dependency>
 
         <dependency>
