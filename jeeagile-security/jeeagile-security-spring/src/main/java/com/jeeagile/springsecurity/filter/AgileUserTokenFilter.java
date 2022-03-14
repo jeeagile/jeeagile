@@ -6,6 +6,7 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.spring.AgileServletUtil;
 import com.jeeagile.springsecurity.userdetails.AgileUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ import java.io.IOException;
 
 @Component
 public class AgileUserTokenFilter extends OncePerRequestFilter {
+    @Lazy
     @Autowired
     private SessionRegistry sessionRegistry;
 
