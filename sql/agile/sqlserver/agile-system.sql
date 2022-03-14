@@ -596,7 +596,7 @@ INSERT INTO agile_sys_dict_data VALUES ('97','0',7,'导出','EXPORT','sys_logger
 INSERT INTO agile_sys_dict_data VALUES ('98','0',8,'导入','IMPORT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('99','0',9,'清空','CLEAR','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('910','0',10,'强退','FORCE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('911','0',11,'生成代码','GEN','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('911','0',11,'生成代码','GENERATOR','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('912','0',12,'其他','OTHER','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
@@ -752,42 +752,77 @@ go
 
 INSERT INTO agile_sys_menu VALUES ('1','0','系统管理',1,'','system','system','M','0','0','1','','系统管理目录',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('101','1','用户管理',1,'system/user/index','user','user','C','0','0','1','system:user:list','用户管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10101','101','用户新增',1,'','','#','F','0','0','1','system:user:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10102','101','用户修改',2,'','','#','F','0','0','1','system:user:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10103','101','用户删除',3,'','','#','F','0','0','1','system:user:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10104','101','重置密码',4,'','','#','F','0','0','1','system:user:resetPwd','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('101','1','用户管理',1,'system/user/index','user','user','C','0','0','1','system:user:page','用户管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10101','101','用户明细',1,'','','#','F','0','0','1','system:user:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10102','101','用户新增',2,'','','#','F','0','0','1','system:user:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10103','101','用户修改',3,'','','#','F','0','0','1','system:user:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10104','101','用户删除',4,'','','#','F','0','0','1','system:user:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10105','101','重置密码',5,'','','#','F','0','0','1','system:user:password','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10106','101','用户导入',6,'','','#','F','0','0','1','system:user:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10107','101','用户导出',7,'','','#','F','0','0','1','system:user:export','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('102','1','角色管理',2,'system/role/index','role','role','C','0','0','1','system:role:list','角色管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10201','102','角色新增',1,'','','#','F','0','0','1','system:role:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10202','102','角色修改',2,'','','#','F','0','0','1','system:role:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10203','102','角色删除',3,'','','#','F','0','0','1','system:role:delete','',NULL,NULL,NULL,NULL);
+
+INSERT INTO agile_sys_menu VALUES ('102','1','角色管理',2,'system/role/index','role','role','C','0','0','1','system:role:page','角色管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10201','102','角色明细',1,'','','#','F','0','0','1','system:role:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10202','102','角色新增',2,'','','#','F','0','0','1','system:role:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10203','102','角色修改',3,'','','#','F','0','0','1','system:role:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10204','102','角色删除',4,'','','#','F','0','0','1','system:role:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10205','102','角色导入',5,'','','#','F','0','0','1','system:role:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10206','102','角色导出',6,'','','#','F','0','0','1','system:role:export','',NULL,NULL,NULL,NULL);
 
 INSERT INTO agile_sys_menu VALUES ('103','1','菜单管理',3,'system/menu/index','menu','menu','C','0','0','1','system:menu:list','菜单管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10301','103','菜单新增',1,'','','#','F','0','0','1','system:menu:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10302','103','菜单修改',2,'','','#','F','0','0','1','system:menu:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10303','103','菜单删除',3,'','','#','F','0','0','1','system:menu:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10304','103','菜单排序',4,'','',NULL,'F','0','0','1','system:menu:sort','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10301','103','菜单明细',1,'','','#','F','0','0','1','system:menu:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10302','103','菜单新增',2,'','','#','F','0','0','1','system:menu:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10303','103','菜单修改',3,'','','#','F','0','0','1','system:menu:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10304','103','菜单删除',4,'','','#','F','0','0','1','system:menu:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10305','103','菜单导入',5,'','','#','F','0','0','1','system:menu:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10306','103','菜单导出',6,'','','#','F','0','0','1','system:menu:export','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10307','103','菜单排序',7,'','','#','F','0','0','1','system:menu:sort','',NULL,NULL,NULL,NULL);
 
 INSERT INTO agile_sys_menu VALUES ('104','1','部门管理',4,'system/dept/index','dept','dept','C','0','0','1','system:dept:list','部门管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10401','104','部门新增',1,'','','#','F','0','0','1','system:dept:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10402','104','部门修改',2,'','','#','F','0','0','1','system:dept:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10403','104','部门删除',3,'','','#','F','0','0','1','system:dept:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10401','104','部门明细',1,'','','#','F','0','0','1','system:dept:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10402','104','部门新增',2,'','','#','F','0','0','1','system:dept:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10403','104','部门修改',3,'','','#','F','0','0','1','system:dept:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10404','104','部门删除',4,'','','#','F','0','0','1','system:dept:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10405','104','部门导入',5,'','','#','F','0','0','1','system:dept:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10406','104','部门导出',6,'','','#','F','0','0','1','system:dept:export','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('105','1','岗位管理',5,'system/post/index','post','post','C','0','0','1','system:post:list','岗位管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10501','105','岗位新增',1,'','','#','F','0','0','1','system:post:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10502','105','岗位修改',2,'','','#','F','0','0','1','system:post:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10503','105','岗位删除',3,'','','#','F','0','0','1','system:post:delete','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('106','1','字典管理',6,'system/dict/index','dict','dict','C','0','0','1','system:dict:list','字典管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10601','106','字典新增',1,'','#','#','F','0','0','1','system:dict:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10602','106','字典修改',2,'','#','#','F','0','0','1','system:dict:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10603','106','字典删除',3,'','#','#','F','0','0','1','system:dict:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('105','1','岗位管理',5,'system/post/index','post','post','C','0','0','1','system:post:page','岗位管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10501','105','岗位明细',1,'','','#','F','0','0','1','system:post:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10502','105','岗位新增',2,'','','#','F','0','0','1','system:post:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10503','105','岗位修改',3,'','','#','F','0','0','1','system:post:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10504','105','岗位删除',4,'','','#','F','0','0','1','system:post:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10505','105','岗位导入',5,'','','#','F','0','0','1','system:post:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10506','105','岗位导出',6,'','','#','F','0','0','1','system:post:export','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('107','1','参数设置',7,'system/config/index','config','config','C','0','0','1','system:config:list','参数设置菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10701','107','参数新增',1,'','#','#','F','0','0','1','system:config:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10702','107','参数修改',2,'','#','#','F','0','0','1','system:config:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10703','107','参数删除',3,'','#','#','F','0','0','1','system:config:delete','',NULL,NULL,NULL,NULL);
+
+INSERT INTO agile_sys_menu VALUES ('106','1','字典管理',6,'system/dict/index','dict','dict','C','0','0','1','system:dict:page','字典管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10601','106','字典明细',1,'','','#','F','0','0','1','system:dict:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10602','106','字典新增',2,'','','#','F','0','0','1','system:dict:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10603','106','字典修改',3,'','','#','F','0','0','1','system:dict:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10604','106','字典删除',4,'','','#','F','0','0','1','system:dict:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10605','106','字典导入',5,'','','#','F','0','0','1','system:dict:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10606','106','字典导出',6,'','','#','F','0','0','1','system:dict:export','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10607','106','字典数据列表',7,'','','#','F','0','0','1','system:dict:data:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10608','106','字典数据明细',8,'','','#','F','0','0','1','system:dict:data:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10609','106','字典数据新增',9,'','','#','F','0','0','1','system:dict:data:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10610','106','字典数据修改',10,'','','#','F','0','0','1','system:dict:data:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10611','106','字典数据删除',11,'','','#','F','0','0','1','system:dict:data:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10612','106','字典数据导入',12,'','','#','F','0','0','1','system:dict:data:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10613','106','字典数据导出',13,'','','#','F','0','0','1','system:dict:data:export','',NULL,NULL,NULL,NULL);
+
+
+INSERT INTO agile_sys_menu VALUES ('107','1','参数设置',7,'system/config/index','config','config','C','0','0','1','system:config:page','参数设置菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10701','107','参数明细',1,'','','#','F','0','0','1','system:config:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10702','107','参数新增',2,'','','#','F','0','0','1','system:config:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10703','107','参数修改',3,'','','#','F','0','0','1','system:config:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10704','107','参数删除',4,'','','#','F','0','0','1','system:config:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10705','107','参数导入',5,'','','#','F','0','0','1','system:config:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10706','107','参数导出',6,'','','#','F','0','0','1','system:config:export','',NULL,NULL,NULL,NULL);
+
+
+
 
 INSERT INTO agile_sys_menu VALUES ('2','0','系统监控',2,NULL,'monitor','monitor','M','0','0','1','','系统监控目录',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('201','2','在线用户',1,'monitor/online/index','online','online','C','0','0','1','monitor:online:list','在线用户菜单',NULL,NULL,NULL,NULL);
@@ -802,7 +837,7 @@ INSERT INTO agile_sys_menu VALUES ('3','0','系统工具',3,NULL,'tool','tool','
 
 INSERT INTO agile_sys_menu VALUES ('301','3','表单构建',1,'tool/form/index','form','form','C','0','0','1','tool:form:list','表单构建菜单',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('302','3','代码生成',2,'tool/generator/index','generator','generator','C','0','0','1','tool:gen:list','代码生成菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('302','3','代码生成',2,'tool/generator/index','generator','generator','C','0','0','1','tool:generator:page','代码生成菜单',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('30201','302','生成修改',1,'','#','#','F','0','0','1','tool:generator:update','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('30202','302','生成删除',2,'','#','#','F','0','0','1','tool:generator:delete','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('30203','302','导入代码',3,'','#','#','F','0','0','1','tool:generator:import','',NULL,NULL,NULL,NULL);
@@ -810,31 +845,38 @@ INSERT INTO agile_sys_menu VALUES ('30204','302','同步信息',4,'','#','#','F'
 INSERT INTO agile_sys_menu VALUES ('30205','302','预览代码',5,'','#','#','F','0','0','1','tool:generator:preview','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('30206','302','生成代码',6,'','#','#','F','0','0','1','tool:generator:code','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('303','3','系统接口',3,'tool/swagger/index','swagger','swagger','C','0','0','1','tool:swagger:list','系统接口菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('303','3','系统接口',3,'tool/swagger/index','swagger','swagger','C','0','0','1','tool:swagger:view','系统接口菜单',NULL,NULL,NULL,NULL);
 
 INSERT INTO agile_sys_menu VALUES ('4','0','任务管理',4,'','quartz','job','M','0','0','1','','任务管理目录',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('401','4','定时任务',1,'quartz/job/index','job','job','C','0','0','1','quartz:job:list','定时任务菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40101','401','任务新增',1,'','#','#','F','0','0','1','quartz:job:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40102','401','任务修改',2,'','#','#','F','0','0','1','quartz:job:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40103','401','任务删除',3,'','#','#','F','0','0','1','quartz:job:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40104','401','状态修改',4,'','#','#','F','0','0','1','quartz:job:status','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('401','4','定时任务',1,'quartz/job/index','job','job','C','0','0','1','quartz:job:page','定时任务菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40101','401','任务明细',1,'','','#','F','0','0','1','quartz:job:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40102','401','任务新增',2,'','','#','F','0','0','1','quartz:job:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40103','401','任务修改',3,'','','#','F','0','0','1','quartz:job:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40104','401','任务删除',4,'','','#','F','0','0','1','quartz:job:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40105','401','任务导入',5,'','','#','F','0','0','1','quartz:job:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40106','401','任务导出',6,'','','#','F','0','0','1','quartz:job:export','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40107','401','任务执行',7,'','','#','F','0','0','1','quartz:job:execute','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('402','4','执行日志',1,'quartz/job/logger/index','jobLogger','logger','C','0','0','1','job:logger:query','操作日志菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40201','402','查看',1,'','','','F','0','0','1','job:logger:detail','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40202','402','清空',2,'','','','F','0','0','1','job:logger:clear','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('40203','402','删除',3,'','#','#','F','0','0','1','job:logger:delete','',NULL,NULL,NULL,NULL);
+
+INSERT INTO agile_sys_menu VALUES ('402','4','执行日志',1,'quartz/logger/index','quartzLogger','logger','C','0','0','1','job:logger:page','操作日志菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40201','402','查看',1,'','','','F','0','0','1','quartz:logger:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40202','402','删除',2,'','#','#','F','0','0','1','quartz:logger:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('40203','402','清空',3,'','','','F','0','0','1','quartz:logger:clear','',NULL,NULL,NULL,NULL);
+
+
 
 INSERT INTO agile_sys_menu VALUES ('5','0','日志管理',5,'','logger','logger','M','0','0','1','','日志管理目录',NULL,NULL,NULL,NULL);
 
 INSERT INTO agile_sys_menu VALUES ('501','5','操作日志',1,'logger/operate/index','operate','operate','C','0','0','1','logger:operate:list','操作日志菜单',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50101','501','查看',1,'','','','F','0','0','1','logger:operate:detail','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50102','501','清空',2,'','','','F','0','0','1','logger:operate:clear','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50103','501','删除',3,'','#','#','F','0','0','1','logger:operate:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50102','501','删除',2,'','#','#','F','0','0','1','logger:operate:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50103','501','清空',3,'','','','F','0','0','1','logger:operate:clear','',NULL,NULL,NULL,NULL);
+
 
 INSERT INTO agile_sys_menu VALUES ('502','5','登录日志',2,'logger/login/index','login','login','C','0','0','1','logger:login:list','登录日志菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50201','502','清空',1,'','','','F','0','0','1','logger:login:clear','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50202','502','删除',2,'','#','#','F','0','0','1','logger:login:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50201','502','删除',1,'','#','#','F','0','0','1','logger:login:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50202','502','清空',2,'','','','F','0','0','1','logger:login:clear','',NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
 /* Table: agile_sys_post 岗位信息表                              */
