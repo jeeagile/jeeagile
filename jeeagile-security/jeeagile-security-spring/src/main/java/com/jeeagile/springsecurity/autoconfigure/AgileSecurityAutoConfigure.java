@@ -41,14 +41,7 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
     private AgileAccessDeniedHandler agileAccessDeniedHandler;
     @Autowired
     private AgileAuthenticationEntryPoint agileAuthenticationEntryPoint;
-//    @Autowired
-//    private SwztAuthenticationEntryPoint swztAuthenticationEntryPoint;
-//    @Autowired
-//    private SwztAuthenticationTokenFilter swztAuthenticationTokenFilter;
-//    @Autowired
-//    private SwztLogoutSuccessHandler swztLogoutSuccessHandler;
-//    @Autowired
-//    private SwztAccessDeniedHandler swztAccessDeniedHandler;
+
 
 
 
