@@ -24,7 +24,7 @@ public enum AgileResultCode implements IAgileResultCode {
     FAIL_OPS_UPDATE("2003", "更新操作失败！"),
     FAIL_OPS_SEARCH("2004", "查询操作失败！"),
     FAIL_OPS_IMPORT("2005", "导入操作失败！"),
-
+    FAIL_OPS_EXPORT("2006", "导出操作失败！"),
 
     WARN_OPS("3000", "业务操作警告！"),
     WARN_SEARCH_NO_RESULT("3001", "查询无结果集！"),
