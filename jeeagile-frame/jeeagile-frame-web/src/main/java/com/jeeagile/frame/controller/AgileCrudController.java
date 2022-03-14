@@ -33,7 +33,6 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
 
     @RequestMapping(value = "/init", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "初始化", notes = "提供页面初始化数据接口")
-    @AgileRequiresPermissions("init")
     public AgileResult<Object> init() {
         return AgileResult.success(this.initData());
     }
@@ -59,22 +58,6 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @ApiOperation(value = "查询列表", notes = "根据条件查询数据")
     public AgileResult<List<T>> selectList(@RequestBody T agileModel) {
         return AgileResult.success(agileService.selectList(agileModel));
-    }
-
-    @PostMapping(value = "/import")
-    @AgileRequiresPermissions("import")
-    @AgileLogger(notes = "导入数据", type = AgileLoggerType.IMPORT)
-    @ApiOperation(value = "导入数据", notes = "导入数据接口")
-    public AgileResult importExcel(T agileModel) {
-        return AgileResult.success();
-    }
-
-    @PostMapping(value = "/export")
-    @AgileRequiresPermissions("export")
-    @AgileLogger(notes = "导出数据", type = AgileLoggerType.EXPORT)
-    @ApiOperation(value = "导出数据", notes = "导出数据接口")
-    public AgileResult exportExcel(T agileModel) {
-        return AgileResult.success();
     }
 
     @PostMapping("/detail")
@@ -142,6 +125,22 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
         } else {
             return AgileResult.error(AgileResultCode.FAIL_OPS_DELETE, "数据删除失败！");
         }
+    }
+
+    @PostMapping(value = "/import")
+    @AgileRequiresPermissions("import")
+    @AgileLogger(notes = "导入数据", type = AgileLoggerType.IMPORT)
+    @ApiOperation(value = "导入数据", notes = "导入数据接口")
+    public AgileResult importExcel(T agileModel) {
+        return AgileResult.error(AgileResultCode.FAIL_OPS_IMPORT,"正在紧急建设中，敬请期待!");
+    }
+
+    @PostMapping(value = "/export")
+    @AgileRequiresPermissions("export")
+    @AgileLogger(notes = "导出数据", type = AgileLoggerType.EXPORT)
+    @ApiOperation(value = "导出数据", notes = "导出数据接口")
+    public AgileResult exportExcel(T agileModel) {
+        return AgileResult.error(AgileResultCode.FAIL_OPS_EXPORT,"正在紧急建设中，敬请期待!");
     }
 
     /**
