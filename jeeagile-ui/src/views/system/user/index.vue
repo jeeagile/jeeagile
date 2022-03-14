@@ -81,8 +81,8 @@
                          v-hasPerm="['system:user:delete']">
                 删除
               </el-button>
-              <el-button size="mini" type="text" icon="el-icon-key" @click="handleResetPwd(scope.row)"
-                         v-hasPerm="['system:user:resetPwd']">
+              <el-button size="mini" type="text" icon="el-icon-key" @click="handleResetPassword(scope.row)"
+                         v-hasPerm="['system:user:password']">
                 重置
               </el-button>
             </template>
@@ -204,7 +204,7 @@
     deleteUser,
     addUser,
     updateUser,
-    resetUserPwd,
+    resetPassword,
     changeUserStatus
   } from '@/api/system/user'
 
@@ -443,13 +443,13 @@
         })
       },
       /** 重置密码按钮操作 */
-      handleResetPwd(row) {
+      handleResetPassword(row) {
         this.$prompt('请输入"' + row.userName + '"的新密码', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         }).then(({ value }) => {
           const data = { userId: row.id, newPwd: value }
-          resetUserPwd(data).then(() => {
+          resetPassword(data).then(() => {
             this.messageSuccess('修改成功，新密码是：' + value)
           })
         })

@@ -32,17 +32,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AgileSysUserController extends AgileCrudController<IAgileSysUserService, AgileSysUser> {
 
     @AgileDemo
-    @PostMapping(value = "/resetPwd")
+    @PostMapping(value = "/password")
     @ApiOperation(value = "重置用户密码", notes = "重置用户密码")
     @AgileLogger(notes = "重置用户密码", type = AgileLoggerType.UPDATE)
-    @AgileRequiresPermissions("resetPwd")
+    @AgileRequiresPermissions("password")
     public AgileResult<Object> resetUserPassword(@RequestBody AgileUpdatePwd agileUpdatePwd) {
         this.getAgileService().resetUserPwd(agileUpdatePwd);
         return this.success();
     }
 
     @AgileDemo
-    @PostMapping(value = "/changeStatus")
+    @PostMapping(value = "/status")
     @ApiOperation(value = "更新用户状态", notes = "更新用户状态")
     @AgileLogger(notes = "更新用户状态", type = AgileLoggerType.UPDATE)
     public AgileResult<Object> changeStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {

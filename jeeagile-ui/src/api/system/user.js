@@ -38,10 +38,10 @@ export const deleteUser = data => postApi('/system/user/delete', data)
 /**
  * 重置用户密码
  */
-export const resetUserPwd = data => postApi('/system/user/resetPwd', data)
+export const resetPassword = data => postApi('/system/user/password', data)
 
 /**
  * 修改用户状态
  */
-export const changeUserStatus = data => postApi('/system/user/changeStatus', data)
+export const changeUserStatus = data => postApi('/system/user/status', data)
 
