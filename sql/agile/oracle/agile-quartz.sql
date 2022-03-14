@@ -1,5 +1,5 @@
 drop table agile_quartz_job cascade constraints;
-drop table agile_quartz_job_logger cascade constraints;
+drop table agile_quartz_logger cascade constraints;
 /*==============================================================*/
 /* Table: agile_quartz_job 定时任务表                            */
 /*==============================================================*/
@@ -51,7 +51,7 @@ INSERT INTO agile_quartz_job VALUES ('4','三个参数同名方法（复杂对�
 /*==============================================================*/
 /* table: agile_quartz_job_log 定时任务执行日志表                */
 /*==============================================================*/
-create table agile_quartz_job_logger
+create table agile_quartz_logger
 (
    id                 VARCHAR2(32)         not null,
    job_name           VARCHAR2(100)        not null,
