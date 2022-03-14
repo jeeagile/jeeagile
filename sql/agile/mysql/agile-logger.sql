@@ -15,7 +15,7 @@ create table agile_logger_login
   login_device           varchar(100) not null comment '登录设备名称',
   login_os               varchar(100) not null comment '登录设备操作系统名称',
   login_browser          varchar(100) not null comment '登录浏览器名称',
-  server_address         varchar(50) not null comment '服务器ip地址',
+  server_address         varchar(50) not null comment '服务器地址',
   status                 varchar(1) not null comment '登录状态（0：成功 1：失败）',
   message                longtext comment '登录信息',
   primary key (id)
@@ -38,7 +38,7 @@ create table agile_logger_operate
   request_param         longtext comment '请求参数',
   response_param        longtext comment '返回参数',
   execute_method        varchar(150) default null comment '执行方法',
-  operate_ip            varchar(50) not null comment '操作ip',
+  operate_ip            varchar(50) not null comment '操作IP',
   operate_address       varchar(150) default null comment '操作地址',
   operate_device        varchar(100) not null comment '操作设备名称',
   operate_os            varchar(100) not null comment '操作设备操作系统名称',
