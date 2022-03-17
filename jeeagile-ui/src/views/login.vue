@@ -35,7 +35,7 @@
     </div>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2021-2021 JeeAgile All Rights Reserved.</span>
+      <span>Copyright © 2021-2022 JeeAgile All Rights Reserved.</span>
     </div>
     <vue-particles
       color="#dedede"
