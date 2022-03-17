@@ -8,10 +8,10 @@
         and table_name not in (select table_name from agile_generator_table)
         and table_name not like 'act_%'
         <if test="agileGeneratorTable.tableName != null and agileGeneratorTable.tableName != ''">
-            and table_name = #{swztGenTable.tableName}
+            and table_name like concat('%', #{agileGeneratorTable.tableName}, '%')
         </if>
         <if test="agileGeneratorTable.tableComment != null and agileGeneratorTable.tableComment != ''">
-            and tableComment like concat('%', #{swztGenTable.tableComment}, '%')
+            and tableComment like concat('%', #{agileGeneratorTable.tableComment}, '%')
         </if>
     </select>
 
@@ -23,10 +23,10 @@
         and a.table_name not like 'ACT_%'
         and a.table_name = c.object_name
         <if test="agileGeneratorTable.tableName != null and agileGeneratorTable.tableName != ''">
-            and a.table_name = upper(#{swztGenTable.tableName})
+            and a.table_name = like '%'||#{agileGeneratorTable.tableName}||'%'
         </if>
         <if test="agileGeneratorTable.tableComment != null and agileGeneratorTable.tableComment != ''">
-            and a.tableComment like '%'||#{swztGenTable.tableComment}||'%'
+            and a.tableComment like '%'||#{agileGeneratorTable.tableComment}||'%'
         </if>
     </select>
 
