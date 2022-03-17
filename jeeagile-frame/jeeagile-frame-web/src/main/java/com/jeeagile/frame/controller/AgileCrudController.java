@@ -64,7 +64,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileRequiresPermissions("detail")
     @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
-    public AgileResult<T> postDetail(@SingleRequestBody Serializable id) {
+    public AgileResult<T> detail(@SingleRequestBody Serializable id) {
         return AgileResult.success(agileService.selectModel(id));
     }
 
@@ -72,7 +72,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileRequiresPermissions("detail")
     @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
-    public AgileResult<T> getDetail(@PathVariable Serializable id) {
+    public AgileResult<T> detailInfo(@PathVariable Serializable id) {
         return AgileResult.success(agileService.selectModel(id));
     }
 
