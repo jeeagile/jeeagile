@@ -135,18 +135,18 @@ INSERT INTO agile_sys_dict_data VALUES ('72','0',2,'失败','1','sys_common_stat
 INSERT INTO agile_sys_dict_data VALUES ('81','0',0,'成功','0','sys_logger_status','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('82','0',1,'失败','1','sys_logger_status','0','0',NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_dict_data VALUES ('91','0',1,'查询','SELECT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('92','0',2,'查看','DETAIL','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('93','0',3,'新增','ADD','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('94','0',4,'修改','UPDATE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('95','0',5,'删除','DELETE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('96','0',6,'授权','GRANT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('97','0',7,'导出','EXPORT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('98','0',8,'导入','IMPORT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('99','0',9,'清空','CLEAR','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('910','0',10,'强退','FORCE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('91','0',1,'查询数据','SELECT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('92','0',2,'查看明细','DETAIL','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('93','0',3,'新增数据','ADD','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('94','0',4,'修改数据','UPDATE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('95','0',5,'删除数据','DELETE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('96','0',6,'用户授权','GRANT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('97','0',7,'导出数据','EXPORT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('98','0',8,'导入数据','IMPORT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('99','0',9,'清空数据','CLEAR','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('910','0',10,'用户强退','FORCE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('911','0',11,'代码生成','GENERATOR','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('912','0',12,'其他','OTHER','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('912','0',12,'其他操作','OTHER','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 
 
 

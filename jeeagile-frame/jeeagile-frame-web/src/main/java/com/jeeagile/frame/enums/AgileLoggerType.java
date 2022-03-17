@@ -8,52 +8,52 @@ package com.jeeagile.frame.enums;
  */
 public enum AgileLoggerType {
     /**
-     * 查询
+     * 查询数据
      */
     SELECT,
 
     /**
-     * 查看
+     * 查看明细
      */
     DETAIL,
 
     /**
-     * 新增
+     * 新增数据
      */
     ADD,
 
     /**
-     * 修改
+     * 修改数据
      */
     UPDATE,
 
     /**
-     * 删除
+     * 删除数据
      */
     DELETE,
 
     /**
-     * 清空
+     * 清空数据
      */
     CLEAR,
     /**
-     * 授权
+     * 用户授权
      */
     GRANT,
     /**
-     * 导出
+     * 导出数据
      */
     EXPORT,
     /**
-     * 导入
+     * 导入数据
      */
     IMPORT,
     /**
-     * 登录
+     * 用户登录
      */
     LOGIN,
     /**
-     * 强退
+     * 用户强退
      */
     FORCE,
     /**
@@ -65,7 +65,7 @@ public enum AgileLoggerType {
      */
     CLEAN,
     /**
-     * 其它
+     * 其它操作
      */
     OTHER,
 }
