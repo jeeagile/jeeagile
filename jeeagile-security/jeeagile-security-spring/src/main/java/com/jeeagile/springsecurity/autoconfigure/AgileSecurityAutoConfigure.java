@@ -80,7 +80,6 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
         }
 
         httpSecurity.authorizeRequests().anyRequest().authenticated().and().headers().frameOptions().disable();
-//        httpSecurity.logout().logoutUrl("/logout").logoutSuccessHandler(swztLogoutSuccessHandler);
         httpSecurity.addFilterBefore(agileUserTokenFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity.exceptionHandling().accessDeniedHandler(agileAccessDeniedHandler);
         httpSecurity.exceptionHandling().authenticationEntryPoint(agileAuthenticationEntryPoint);
