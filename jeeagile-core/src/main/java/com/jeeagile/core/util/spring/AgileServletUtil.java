@@ -1,6 +1,7 @@
 package com.jeeagile.core.util.spring;
 
 import com.jeeagile.core.constants.AgileConstants;
+import com.jeeagile.core.util.AgileArrayUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -99,9 +100,11 @@ public class AgileServletUtil {
      * 根据COOKIE名称获取对应得COOKIE值
      */
     public static String getCookieValue(HttpServletRequest httpServletRequest, String cookieName) {
-        for (Cookie cookie : httpServletRequest.getCookies()) {
-            if (cookie.getName().equals(cookieName)) {
-                return cookie.getValue();
+        if (AgileArrayUtil.isNotEmpty(httpServletRequest.getCookies())) {
+            for (Cookie cookie : httpServletRequest.getCookies()) {
+                if (cookie.getName().equals(cookieName)) {
+                    return cookie.getValue();
+                }
             }
         }
         return null;
