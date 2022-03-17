@@ -47,6 +47,7 @@ module.exports = {
     }
   },
   chainWebpack(config) {
+    config.module.rule('bpmnlintrc').test(/\.bpmnlintrc$/).use('bpmnlint-loader').loader('bpmnlint-loader').end()
     config.plugin('preload').tap(() => [
       {
         rel: 'preload',
@@ -59,13 +60,8 @@ module.exports = {
 
     // set svg-sprite-loader
     config.module.rule('svg').exclude.add(resolve('src/assets/icons')).end()
-    config.module
-      .rule('icons')
-      .test(/\.svg$/)
-      .include.add(resolve('src/assets/icons'))
-      .end()
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
+    config.module.rule('icons').test(/\.svg$/).include.add(resolve('src/assets/icons')).end()
+      .use('svg-sprite-loader').loader('svg-sprite-loader')
       .options({
         symbolId: 'icon-[name]'
       })
@@ -83,28 +79,28 @@ module.exports = {
             .end()
           config
             .optimization.splitChunks({
-              chunks: 'all',
-              cacheGroups: {
-                libs: {
-                  name: 'chunk-libs',
-                  test: /[\\/]node_modules[\\/]/,
-                  priority: 10,
-                  chunks: 'initial'
-                },
-                elementUI: {
-                  name: 'chunk-elementUI',
-                  priority: 20,
-                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/
-                },
-                commons: {
-                  name: 'chunk-commons',
-                  test: resolve('src/components'),
-                  minChunks: 3,
-                  priority: 5,
-                  reuseExistingChunk: true
-                }
+            chunks: 'all',
+            cacheGroups: {
+              libs: {
+                name: 'chunk-libs',
+                test: /[\\/]node_modules[\\/]/,
+                priority: 10,
+                chunks: 'initial'
+              },
+              elementUI: {
+                name: 'chunk-elementUI',
+                priority: 20,
+                test: /[\\/]node_modules[\\/]_?element-ui(.*)/
+              },
+              commons: {
+                name: 'chunk-commons',
+                test: resolve('src/components'),
+                minChunks: 3,
+                priority: 5,
+                reuseExistingChunk: true
               }
-            })
+            }
+          })
           config.optimization.runtimeChunk('single')
         }
       )

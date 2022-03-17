@@ -1,0 +1,102 @@
+.process-properties {
+  margin: 0px 5px 0px 5px;
+  overflow-y: auto;
+  height: calc(100vh - 90px);
+
+  .process-properties__fold {
+    .panel-tab__title {
+      padding: 0 8px;
+      line-height: 40px;
+      font-size: 16px;
+
+      i {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .process-properties__unfold {
+    .panel-tab__title {
+      line-height: 40px;
+      font-size: 24px;
+      order: 1;
+      flex: auto;
+      text-align: center;
+
+      span {
+        display: none;
+      }
+    }
+
+    .el-collapse-item__arrow {
+      display: none;
+    }
+
+  }
+
+  .el-collapse-item__header {
+    background-color: #f0f2f5;
+    border-bottom: 1px solid #cccccc;
+    height: 40px;
+  }
+
+  .el-collapse-item__content {
+    padding: 18px 18px 0px 18px;
+
+    .el-form-item__label {
+      width: 100px;
+    }
+  }
+}
+
+.properties-item__content {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0px;
+  text-align: center;
+
+  .button-drawer__line {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-around;
+
+    .el-button {
+      width: 100%;
+    }
+  }
+
+  .el-badge__content.is-fixed {
+    top: 14px;
+  }
+}
+
+.properties-option__content {
+  padding-bottom: 16px;
+}
+
+.filed-config__title {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0;
+
+  span {
+    width: 200px;
+    text-align: left;
+    font-size: 14px;
+  }
+}
+
+.form-property__dialog {
+  .form-item__button {
+    text-align: center;
+
+    .el-badge {
+      margin-top: 10px;
+      margin-right: 20px;
+    }
+  }
+}
