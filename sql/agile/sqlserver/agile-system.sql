@@ -846,7 +846,7 @@ INSERT INTO agile_sys_menu VALUES ('30205','302','预览代码',5,'','#','#','F'
 INSERT INTO agile_sys_menu VALUES ('30206','302','生成代码',6,'','#','#','F','0','0','1','tool:generator:code','',NULL,NULL,NULL,NULL);
 
 INSERT INTO agile_sys_menu VALUES ('303','3','系统接口',3,'tool/swagger/index','swagger','swagger','C','0','0','1','tool:swagger:view','系统接口菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('304','3','流程设计',4,'tool/swagger/process','process','process','C','0','0','1','tool:process:view','系统接口菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('304','3','流程设计',4,'tool/process/index','process','process','C','0','0','1','tool:process:view','系统接口菜单',NULL,NULL,NULL,NULL);
 
 INSERT INTO agile_sys_menu VALUES ('4','0','任务管理',4,'','quartz','job','M','0','0','1','','任务管理目录',NULL,NULL,NULL,NULL);
 
