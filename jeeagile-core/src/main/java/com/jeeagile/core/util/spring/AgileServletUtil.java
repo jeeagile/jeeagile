@@ -87,7 +87,7 @@ public class AgileServletUtil {
     /**
      * 根据COOKIE名称获取对应得COOKIE值
      */
-    public static String getSpringCookieValue(String cookieName) {
+    public static String getCookieValue(String cookieName) {
         HttpServletRequest httpServletRequest = getHttpServletRequest();
         if (httpServletRequest != null) {
             return getCookieValue(httpServletRequest, cookieName);
@@ -100,7 +100,7 @@ public class AgileServletUtil {
      * 根据COOKIE名称获取对应得COOKIE值
      */
     public static String getCookieValue(HttpServletRequest httpServletRequest, String cookieName) {
-        if (AgileArrayUtil.isNotEmpty(httpServletRequest.getCookies())) {
+        if (httpServletRequest != null && AgileArrayUtil.isNotEmpty(httpServletRequest.getCookies())) {
             for (Cookie cookie : httpServletRequest.getCookies()) {
                 if (cookie.getName().equals(cookieName)) {
                     return cookie.getValue();
