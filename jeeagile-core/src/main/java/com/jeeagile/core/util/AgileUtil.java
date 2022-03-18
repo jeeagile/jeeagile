@@ -35,7 +35,8 @@ public class AgileUtil {
      * @return
      */
     public static String getProjectName() {
-        return getAgileProperties().getName();
+        String projectName = getAgileProperties().getName();
+        return AgileStringUtil.isNotEmpty(projectName) ? projectName : "JeeAgile";
     }
 
     /**
@@ -44,7 +45,8 @@ public class AgileUtil {
      * @return
      */
     public static String getProjectVersion() {
-        return getAgileProperties().getVersion();
+        String projectVersion = getAgileProperties().getVersion();
+        return AgileStringUtil.isNotEmpty(projectVersion) ? projectVersion : "0.0.0";
     }
 
     /**
@@ -98,6 +100,7 @@ public class AgileUtil {
 
     /**
      * 获取超管用户
+     *
      * @return
      */
     public static String getSuperAdmin() {
