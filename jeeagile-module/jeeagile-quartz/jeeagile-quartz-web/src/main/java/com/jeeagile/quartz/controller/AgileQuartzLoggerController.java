@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @AgileLogger("任务日志")
-@RequestMapping("/quartz/job/logger")
+@RequestMapping("/quartz/logger")
 @Api(value = "任务日志", tags = "任务日志")
 public class AgileQuartzLoggerController extends AgileBaseController {
     @AgileReference
