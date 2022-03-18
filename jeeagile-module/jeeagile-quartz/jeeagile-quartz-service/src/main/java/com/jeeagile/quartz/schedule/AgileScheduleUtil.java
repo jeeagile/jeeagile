@@ -31,8 +31,8 @@ public class AgileScheduleUtil {
     public static void createScheduleJob(AgileQuartzJob agileQuartzJob) {
         try {
             // 如果任务存在进行移除
-            if (AgileScheduleUtil.checkExists(agileQuartzJob)) {
-                AgileScheduleUtil.deleteJob(agileQuartzJob);
+            if (AgileScheduleUtil.checkJobExists(agileQuartzJob)) {
+                AgileScheduleUtil.deleteScheduleJob(agileQuartzJob);
             }
             Class<? extends Job> jobClass = getAgileJobClass(agileQuartzJob);
             JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(getJobKey(agileQuartzJob)).build();
@@ -101,7 +101,7 @@ public class AgileScheduleUtil {
     /**
      * 检测任务是否存在
      */
-    public static boolean checkExists(AgileQuartzJob agileQuartzJob) {
+    public static boolean checkJobExists(AgileQuartzJob agileQuartzJob) {
         try {
             return agileScheduler.checkExists(getJobKey(agileQuartzJob));
         } catch (SchedulerException ex) {
@@ -113,7 +113,7 @@ public class AgileScheduleUtil {
     /**
      * 删除任务
      */
-    public static boolean deleteJob(AgileQuartzJob agileQuartzJob) {
+    public static boolean deleteScheduleJob(AgileQuartzJob agileQuartzJob) {
         try {
             return agileScheduler.deleteJob(getJobKey(agileQuartzJob));
         } catch (SchedulerException ex) {

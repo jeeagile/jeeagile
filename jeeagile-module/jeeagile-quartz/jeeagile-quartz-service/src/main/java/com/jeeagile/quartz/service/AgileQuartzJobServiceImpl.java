@@ -64,7 +64,10 @@ public class AgileQuartzJobServiceImpl extends AgileBaseServiceImpl<AgileQuartzJ
     @Override
     public boolean updateModel(AgileQuartzJob agileQuartzJob) {
         this.validateData(agileQuartzJob);
+        AgileQuartzJob oldAgileQuartzJob = this.getById(agileQuartzJob.getId());
         if (this.updateById(agileQuartzJob)) {
+            //删除正在执行的任务
+            AgileScheduleUtil.deleteScheduleJob(oldAgileQuartzJob);
             AgileScheduleUtil.createScheduleJob(agileQuartzJob);
             return true;
         }
@@ -96,7 +99,7 @@ public class AgileQuartzJobServiceImpl extends AgileBaseServiceImpl<AgileQuartzJ
     public boolean deleteModel(Serializable id) {
         AgileQuartzJob agileQuartzJob = this.getById(id);
         if (agileQuartzJob != null && this.removeById(agileQuartzJob.getId())) {
-            AgileScheduleUtil.deleteJob(agileQuartzJob);
+            AgileScheduleUtil.deleteScheduleJob(agileQuartzJob);
         }
         return true;
     }
