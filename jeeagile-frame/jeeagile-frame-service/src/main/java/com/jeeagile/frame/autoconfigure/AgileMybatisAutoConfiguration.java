@@ -8,16 +8,19 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.jeeagile.frame.annotation.AgileMapperScan;
+import com.jeeagile.frame.datascope.AgileDataScopeInterceptor;
 import com.jeeagile.frame.handler.AgileMetaObjectHandler;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
+
 /**
  * @author JeeAgile
  * @date 2021-03-21
@@ -30,6 +33,7 @@ import java.util.Properties;
 public class AgileMybatisAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean
     public static MapperScannerConfigurer mapperScannerConfigurer(MybatisPlusProperties mybatisPlusProperties) {
         mybatisPlusProperties.getGlobalConfig().setBanner(false);
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
@@ -40,24 +44,28 @@ public class AgileMybatisAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
+        mybatisPlusInterceptor.addInnerInterceptor(new AgileDataScopeInterceptor());
         mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return mybatisPlusInterceptor;
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public MetaObjectHandler metaObjectHandler() {
         return new AgileMetaObjectHandler();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public DatabaseIdProvider databaseIdProvider() {
         VendorDatabaseIdProvider databaseIdProvider = new VendorDatabaseIdProvider();
         Properties properties = new Properties();
         properties.put("Oracle", "oracle");
         properties.put("MySQL", "mysql");
-        properties.put("SQLServer","sqlServer");
+        properties.put("SQLServer", "sqlServer");
         databaseIdProvider.setProperties(properties);
         return databaseIdProvider;
     }
