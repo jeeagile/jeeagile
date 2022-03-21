@@ -33,7 +33,6 @@ import java.util.Properties;
 public class AgileMybatisAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean
     public static MapperScannerConfigurer mapperScannerConfigurer(MybatisPlusProperties mybatisPlusProperties) {
         mybatisPlusProperties.getGlobalConfig().setBanner(false);
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
