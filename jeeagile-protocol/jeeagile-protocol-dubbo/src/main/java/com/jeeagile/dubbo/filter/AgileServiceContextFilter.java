@@ -17,10 +17,15 @@ import org.apache.dubbo.rpc.*;
 public class AgileServiceContextFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        AgileBaseUser userData = (AgileBaseUser) invocation.getObjectAttachment(AgileConstants.AGILE_USER_DATA);
-        if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
-            AgileSecurityContext.putCurrentUser(userData);
+        try {
+            AgileBaseUser userData = (AgileBaseUser) invocation.getObjectAttachment(AgileConstants.AGILE_USER_DATA);
+            if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
+                AgileSecurityContext.putCurrentUser(userData);
+            }
+            return invoker.invoke(invocation);
+        } finally {
+            AgileSecurityContext.removeCurrentUser();
         }
-        return invoker.invoke(invocation);
+
     }
 }

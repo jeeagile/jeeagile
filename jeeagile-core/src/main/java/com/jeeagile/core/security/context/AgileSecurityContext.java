@@ -111,7 +111,7 @@ public class AgileSecurityContext {
     /**
      * 清除当前线程
      */
-    public void remove() {
+    public static void removeCurrentUser() {
         threadLocal.remove();
     }
 

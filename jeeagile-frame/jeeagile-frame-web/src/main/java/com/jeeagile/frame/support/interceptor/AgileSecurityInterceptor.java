@@ -12,6 +12,7 @@ import com.jeeagile.frame.annotation.AgileDemo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
@@ -104,5 +105,10 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             logger.error("用户权限验证异常", ex);
             throw new AgileAuthException("用户权限验证异常！");
         }
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
+        AgileSecurityContext.removeCurrentUser();
     }
 }
