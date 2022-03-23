@@ -1,4 +1,4 @@
-package com.jeeagile.frame.datascope;
+package com.jeeagile.frame.plugins.datascope;
 
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;

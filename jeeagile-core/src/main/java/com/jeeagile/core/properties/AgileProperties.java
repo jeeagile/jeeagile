@@ -45,7 +45,7 @@ public class AgileProperties implements Serializable {
      */
     private AgileKaptchaType captchaType;
     /**
-     * 高级管理员账号名称
+     * 超管账号
      */
     private String superAdmin = "admin";
 

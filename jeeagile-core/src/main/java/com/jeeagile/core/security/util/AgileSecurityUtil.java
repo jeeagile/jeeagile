@@ -85,6 +85,18 @@ public class AgileSecurityUtil {
     }
 
     /**
+     * 获取用户租户ID
+     */
+    public static String getTenantId() {
+        AgileBaseUser agileBaseUser = getUserData();
+        if (agileBaseUser != null) {
+            return agileBaseUser.getTenantId();
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * 获取在线用户列表
      */
     public static List<AgileOnlineUser> getOnlineUserList() {

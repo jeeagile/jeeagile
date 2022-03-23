@@ -27,8 +27,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
      * 创建人
      */
     @ApiModelProperty(hidden = true)
-    @TableField(fill = FieldFill.INSERT,
-            updateStrategy = FieldStrategy.NEVER)
+    @TableField(fill = FieldFill.INSERT, updateStrategy = FieldStrategy.NEVER)
     @JSONField(serialize = false)
     private String createUser;
 
@@ -51,8 +50,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
      * 更新时间
      */
     @ApiModelProperty(hidden = true)
-    @TableField(fill = FieldFill.INSERT_UPDATE,
-            whereStrategy = FieldStrategy.NEVER)
+    @TableField(fill = FieldFill.INSERT_UPDATE, whereStrategy = FieldStrategy.NEVER)
     private Date updateTime;
 
     @Override

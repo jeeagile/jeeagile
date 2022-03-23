@@ -1,4 +1,4 @@
-package com.jeeagile.frame.datascope;
+package com.jeeagile.frame.plugins.datascope;
 
 import net.sf.jsqlparser.expression.Expression;
 

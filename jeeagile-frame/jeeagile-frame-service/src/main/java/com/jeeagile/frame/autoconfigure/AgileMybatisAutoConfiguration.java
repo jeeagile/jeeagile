@@ -8,8 +8,11 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.jeeagile.frame.annotation.AgileMapperScan;
-import com.jeeagile.frame.datascope.AgileDataScopeInterceptor;
 import com.jeeagile.frame.handler.AgileMetaObjectHandler;
+import com.jeeagile.frame.plugins.datascope.AgileDataScopeInterceptor;
+import com.jeeagile.frame.plugins.tenant.AgileTenantLineHandler;
+import com.jeeagile.frame.plugins.tenant.AgileTenantLineInterceptor;
+import com.jeeagile.frame.properties.AgileTenantProperties;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -27,7 +30,7 @@ import java.util.Properties;
  * @description
  */
 @Configuration
-@EnableConfigurationProperties({MybatisPlusProperties.class})
+@EnableConfigurationProperties({MybatisPlusProperties.class, AgileTenantProperties.class})
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
 @InterceptorIgnore
 public class AgileMybatisAutoConfiguration {
@@ -44,8 +47,12 @@ public class AgileMybatisAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+    public MybatisPlusInterceptor mybatisPlusInterceptor(AgileTenantProperties agileTenantProperties) {
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
+        if (agileTenantProperties.isEnable()) {
+            AgileTenantLineHandler agileTenantLineHandler = new AgileTenantLineHandler(agileTenantProperties);
+            mybatisPlusInterceptor.addInnerInterceptor(new AgileTenantLineInterceptor(agileTenantLineHandler));
+        }
         mybatisPlusInterceptor.addInnerInterceptor(new AgileDataScopeInterceptor());
         mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return mybatisPlusInterceptor;
