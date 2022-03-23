@@ -92,7 +92,13 @@ public abstract class AgileBaseUser implements Serializable {
     private List<String> userRole;
 
     /**
+     * 租户ID
+     */
+    private String tenantId;
+
+    /**
      * 判断用户是否为超管用户
+     *
      * @return
      */
     public boolean isSuperAdmin() {
