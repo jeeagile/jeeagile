@@ -61,17 +61,18 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
                 throw new AgileDemoException();
             }
 
-            //如果为超管用户则不在进行权限校验
-            if (agileSecurity.getUserData().isSuperAdmin()) {
-                return;
-            }
-
             AgileRequiresGuest agileRequiresGuest = handlerMethod.getBeanType().getAnnotation(AgileRequiresGuest.class);
             if (agileRequiresGuest != null) {
                 return;
             }
+
             agileRequiresGuest = handlerMethod.getMethodAnnotation(AgileRequiresGuest.class);
             if (agileRequiresGuest != null) {
+                return;
+            }
+
+            //如果为超管用户则不在进行权限校验
+            if (agileSecurity.getUserData().isSuperAdmin()) {
                 return;
             }
 
