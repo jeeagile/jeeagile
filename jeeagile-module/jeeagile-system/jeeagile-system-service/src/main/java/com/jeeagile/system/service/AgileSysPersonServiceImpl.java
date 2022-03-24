@@ -75,7 +75,7 @@ public class AgileSysPersonServiceImpl implements IAgileSysPersonService {
     @Override
     public boolean updateUserAvatar(String userAvatar) {
         AgileSysUser agileSysUser = new AgileSysUser();
-        agileSysUser.setId(AgileSecurityContext.getCurrentUserId());
+        agileSysUser.setId(AgileSecurityContext.getUserId());
         agileSysUser.setUserAvatar(userAvatar);
         return agileSysUserService.updateById(agileSysUser);
     }
@@ -86,7 +86,7 @@ public class AgileSysPersonServiceImpl implements IAgileSysPersonService {
      * @return
      */
     private AgileBaseUser getCurrentUserData() {
-        AgileBaseUser userData = AgileSecurityContext.getCurrentUser();
+        AgileBaseUser userData = AgileSecurityContext.getUserData();
         if (userData == null) {
             throw new AgileAuthException(AgileResultCode.FAIL_USER_INFO);
         }

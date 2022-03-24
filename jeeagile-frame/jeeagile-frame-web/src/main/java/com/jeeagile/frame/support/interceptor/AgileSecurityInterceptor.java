@@ -53,7 +53,7 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             }
 
             //当前线程存放用户信息
-            AgileSecurityContext.putCurrentUser(agileSecurity.getUserData());
+            AgileSecurityContext.putUserData(agileSecurity.getUserData());
 
             //演示模式拦截
             AgileDemo agileDemo = handlerMethod.getMethodAnnotation(AgileDemo.class);
@@ -109,6 +109,6 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
-        AgileSecurityContext.removeCurrentUser();
+        AgileSecurityContext.remove();
     }
 }

@@ -32,7 +32,7 @@ public class AgileSecurityContext {
      *
      * @param agileBaseUser
      */
-    public static void putCurrentUser(AgileBaseUser agileBaseUser) {
+    public static void putUserData(AgileBaseUser agileBaseUser) {
         threadLocal.set(agileBaseUser);
     }
 
@@ -41,7 +41,7 @@ public class AgileSecurityContext {
      *
      * @return
      */
-    public static AgileBaseUser getCurrentUser() {
+    public static AgileBaseUser getUserData() {
         if (agileProtocolProperties.getType() == AgileProtocolType.LOCAL) {
             return getAgileSecurity();
         } else {
@@ -71,8 +71,8 @@ public class AgileSecurityContext {
      *
      * @return
      */
-    public static String getCurrentUserId() {
-        AgileBaseUser userData = getCurrentUser();
+    public static String getUserId() {
+        AgileBaseUser userData = getUserData();
         if (userData != null) {
             return userData.getUserId();
         } else {
@@ -85,8 +85,8 @@ public class AgileSecurityContext {
      *
      * @return
      */
-    public static String getCurrentUserName() {
-        AgileBaseUser userData = getCurrentUser();
+    public static String getUserName() {
+        AgileBaseUser userData = getUserData();
         if (userData != null) {
             return userData.getUserName();
         } else {
@@ -99,8 +99,8 @@ public class AgileSecurityContext {
      *
      * @return
      */
-    public static String getCurrentUserToken() {
-        AgileBaseUser userData = getCurrentUser();
+    public static String getUserToken() {
+        AgileBaseUser userData = getUserData();
         if (userData != null) {
             return userData.getUserToken();
         } else {
@@ -109,9 +109,9 @@ public class AgileSecurityContext {
     }
 
     /**
-     * 清除当前线程
+     * 移除当前线程
      */
-    public static void removeCurrentUser() {
+    public static void remove() {
         threadLocal.remove();
     }
 

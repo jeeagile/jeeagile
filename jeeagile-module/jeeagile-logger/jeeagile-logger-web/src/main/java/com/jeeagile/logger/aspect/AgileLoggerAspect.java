@@ -243,7 +243,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
      */
     private AgileLoggerOperate getAgileLoggerOperate(HttpServletRequest httpServletRequest, Throwable throwable) {
         AgileLoggerOperate agileLoggerOperate = new AgileLoggerOperate();
-        AgileBaseUser userData = AgileSecurityContext.getCurrentUser();
+        AgileBaseUser userData = AgileSecurityContext.getUserData();
         if (userData != null) {
             agileLoggerOperate.setOperateUser(userData.getUserName());
             agileLoggerOperate.setCreateUser(userData.getUserId());

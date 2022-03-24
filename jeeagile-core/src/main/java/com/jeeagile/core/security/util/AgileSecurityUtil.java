@@ -11,6 +11,7 @@ import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.spring.AgileServletUtil;
 import com.jeeagile.core.util.spring.AgileSpringUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.util.DigestUtils;
@@ -92,7 +93,11 @@ public class AgileSecurityUtil {
         if (agileBaseUser != null) {
             return agileBaseUser.getTenantId();
         } else {
-            return null;
+            String agileTenant = AgileServletUtil.getCookieValue("AGILE_TENANT");
+            if (AgileStringUtil.isNotEmpty(agileTenant)) {
+
+            }
+            return agileTenant;
         }
     }
 

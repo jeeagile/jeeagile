@@ -20,11 +20,11 @@ public class AgileServiceContextFilter implements Filter {
         try {
             AgileBaseUser userData = (AgileBaseUser) invocation.getObjectAttachment(AgileConstants.AGILE_USER_DATA);
             if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
-                AgileSecurityContext.putCurrentUser(userData);
+                AgileSecurityContext.putUserData(userData);
             }
             return invoker.invoke(invocation);
         } finally {
-            AgileSecurityContext.removeCurrentUser();
+            AgileSecurityContext.remove();
         }
 
     }

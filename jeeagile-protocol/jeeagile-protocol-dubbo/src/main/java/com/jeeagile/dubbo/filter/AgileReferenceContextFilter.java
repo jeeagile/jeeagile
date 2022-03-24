@@ -17,7 +17,7 @@ import org.apache.dubbo.rpc.*;
 public class AgileReferenceContextFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        AgileBaseUser userData = AgileSecurityContext.getCurrentUser();
+        AgileBaseUser userData = AgileSecurityContext.getUserData();
         if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
             invocation.setAttachment(AgileConstants.AGILE_USER_DATA, userData);
         }

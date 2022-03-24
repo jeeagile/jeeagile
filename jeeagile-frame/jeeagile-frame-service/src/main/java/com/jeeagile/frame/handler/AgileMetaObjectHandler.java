@@ -20,8 +20,8 @@ public class AgileMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        handlerFieldValByName(CREATE_USER_FIELD_NAME, AgileSecurityContext.getCurrentUserId(), metaObject);
-        handlerFieldValByName(UPDATE_USER_FIELD_NAME, AgileSecurityContext.getCurrentUserId(), metaObject);
+        handlerFieldValByName(CREATE_USER_FIELD_NAME, AgileSecurityContext.getUserId(), metaObject);
+        handlerFieldValByName(UPDATE_USER_FIELD_NAME, AgileSecurityContext.getUserId(), metaObject);
 
         handlerFieldValByName(CREATE_TIME_FIELD_NAME, new Date(), metaObject);
         handlerFieldValByName(UPDATE_TIME_FIELD_NAME, new Date(), metaObject);
@@ -29,7 +29,7 @@ public class AgileMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        handlerFieldValByName(UPDATE_USER_FIELD_NAME, AgileSecurityContext.getCurrentUserId(), metaObject);
+        handlerFieldValByName(UPDATE_USER_FIELD_NAME, AgileSecurityContext.getUserId(), metaObject);
 
         handlerFieldValByName(UPDATE_TIME_FIELD_NAME, new Date(), metaObject);
     }

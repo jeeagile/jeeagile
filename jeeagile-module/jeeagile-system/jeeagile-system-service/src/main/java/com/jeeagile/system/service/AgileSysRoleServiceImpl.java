@@ -33,13 +33,13 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     private IAgileSysMenuService agileSysMenuService;
 
     @Autowired
+    private IAgileSysDeptService agileSysDeptService;
+
+    @Autowired
     private IAgileSysRoleMenuService agileSysRoleMenuService;
 
     @Autowired
     private IAgileSysUserRoleService agileSysUserRoleService;
-
-    @Autowired
-    private IAgileSysDeptService agileSysDeptService;
 
     @Autowired
     private IAgileSysRoleDeptService agileSysRoleDeptService;

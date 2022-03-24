@@ -73,7 +73,7 @@ public class AgileOnlineController extends AgileBaseController {
         List<AgileOnlineUser> onlineUserList = new ArrayList<>();
         for (AgileOnlineUser agileOnlineUser : onlineUserAllList) {
             if (AgileStringUtil.isEmpty(agileOnlineUser.getUserToken())
-                    || agileOnlineUser.getUserToken().equals(AgileSecurityContext.getCurrentUserToken())) {
+                    || agileOnlineUser.getUserToken().equals(AgileSecurityContext.getUserToken())) {
                 agileOnlineUser.setUserName(agileOnlineUser.getUserName() + "(当前用户)");
             }
             if (AgileStringUtil.isNotEmpty(loginIp) && AgileStringUtil.isNotEmpty(userName)) {
