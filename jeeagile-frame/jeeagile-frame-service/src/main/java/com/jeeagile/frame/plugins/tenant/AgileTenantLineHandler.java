@@ -6,8 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.AgileTenantUtil;
 import com.jeeagile.frame.entity.AgileTenantModel;
-import com.jeeagile.frame.properties.AgileTenantProperties;
+import com.jeeagile.core.properties.AgileTenantProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
@@ -18,8 +19,6 @@ import java.util.Set;
 @Slf4j
 @AllArgsConstructor
 public class AgileTenantLineHandler implements TenantLineHandler {
-    private AgileTenantProperties agileTenantProperties;
-
     @Override
     public Expression getTenantId() {
         try {
@@ -40,7 +39,7 @@ public class AgileTenantLineHandler implements TenantLineHandler {
         if (tableInfo != null && AgileTenantModel.class.isAssignableFrom(tableInfo.getEntityType())) {
             return false;
         }
-        Set<String> tenantTables = agileTenantProperties.getTables();
+        Set<String> tenantTables = AgileTenantUtil.getTenantTables();
         if (AgileCollectionUtil.isNotEmpty(tenantTables)) {
             return !tenantTables.stream().anyMatch((i) -> i.equalsIgnoreCase(tableName));
         }

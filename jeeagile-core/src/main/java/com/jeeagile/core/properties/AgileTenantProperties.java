@@ -1,4 +1,4 @@
-package com.jeeagile.frame.properties;
+package com.jeeagile.core.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
