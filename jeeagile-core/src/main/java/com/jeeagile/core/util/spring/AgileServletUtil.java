@@ -85,6 +85,27 @@ public class AgileServletUtil {
     }
 
     /**
+     * 获取请求头信息
+     * @param headerName
+     * @return
+     */
+    public static String getHeaderValue(String headerName) {
+        return getHeaderValue(getHttpServletRequest(), headerName);
+    }
+
+    /**
+     * 获取请求头信息
+     * @param headerName
+     * @return
+     */
+    public static String getHeaderValue(HttpServletRequest httpServletRequest, String headerName) {
+        if (httpServletRequest != null) {
+            return httpServletRequest.getHeader(headerName);
+        }
+        return null;
+    }
+
+    /**
      * 根据COOKIE名称获取对应得COOKIE值
      */
     public static String getCookieValue(String cookieName) {
