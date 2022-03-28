@@ -7,6 +7,9 @@ import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
+import com.jeeagile.core.util.spring.AgileSpringUtil;
+import com.jeeagile.frame.annotation.AgileDataScope;
 import com.jeeagile.frame.annotation.AgileMapperScan;
 import com.jeeagile.frame.handler.AgileMetaObjectHandler;
 import com.jeeagile.frame.plugins.datascope.AgileDataScopeInterceptor;
@@ -16,9 +19,12 @@ import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ContextRefreshedEvent;
 
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -30,7 +36,7 @@ import java.util.Properties;
 @EnableConfigurationProperties({MybatisPlusProperties.class})
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
 @InterceptorIgnore
-public class AgileMybatisAutoConfiguration {
+public class AgileMybatisAutoConfiguration implements ApplicationListener<ContextRefreshedEvent> {
 
     @Bean
     public static MapperScannerConfigurer mapperScannerConfigurer(MybatisPlusProperties mybatisPlusProperties) {
@@ -67,5 +73,13 @@ public class AgileMybatisAutoConfiguration {
         properties.put("SQLServer", "sqlServer");
         databaseIdProvider.setProperties(properties);
         return databaseIdProvider;
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (event.getApplicationContext().getParent() == null) {
+            Map<String, Object> beans = event.getApplicationContext().getBeansWithAnnotation(AgileDataScope.class);
+            System.out.println("");
+        }
     }
 }
