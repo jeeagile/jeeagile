@@ -60,4 +60,18 @@ public interface AgileUserDetailsMapper {
             " from agile_sys_menu m where m.menu_type in ('M', 'C') and m.menu_status = 0" +
             " order by m.parent_id, m.menu_sort")
     List<AgileSysMenu> getSuperAdminMenu();
+
+    @Select(" select distinct r.data_scope" +
+            " from agile_sys_role r" +
+            " left join agile_sys_user_role ur on ur.role_id=r.id" +
+            " where r.role_status = '0'" +
+            " and ur.user_id = #{userId}")
+    List<String> getUserDataScope(@Param("userId") String userId);
+
+
+    @Select(" select distinct rd.dept_id from agile_sys_role_dept rd " +
+            " left join agile_sys_role r on rd.role_id = r.id " +
+            " left join agile_sys_user_role ur on rd.role_id = ur.role_id " +
+            " where r.role_status = '0' and ur.user_id = #{userId}")
+    List<String> getUserCustomDept(@Param("userId") String userId);
 }
