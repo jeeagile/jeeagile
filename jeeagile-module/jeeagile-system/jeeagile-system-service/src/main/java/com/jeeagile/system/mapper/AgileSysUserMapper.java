@@ -1,5 +1,8 @@
 package com.jeeagile.system.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.jeeagile.frame.annotation.AgileDataScope;
 import com.jeeagile.frame.annotation.AgileMapperScan;
 import com.jeeagile.frame.mapper.AgileBaseMapper;
 import com.jeeagile.system.entity.AgileSysUser;
@@ -15,6 +18,9 @@ import java.util.List;
  */
 @AgileMapperScan
 public interface AgileSysUserMapper extends AgileBaseMapper<AgileSysUser> {
+    @AgileDataScope
+    <P extends IPage<AgileSysUser>> P selectPage(P page, @Param("ew") Wrapper<AgileSysUser> queryWrapper);
+
     /**
      * 根据用户ID获取已分配的角色名称
      *
