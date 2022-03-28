@@ -14,13 +14,23 @@ public interface IAgileBaseTreeService<T extends AgileBaseTreeModel> extends IAg
 
     /**
      * 根据父节点获取下级节点
+     *
      * @param parentUuid
      * @return
      */
     List<T> selectChildList(Serializable parentUuid);
 
     /**
+     * 根据父节点获取所有下级节点
+     *
+     * @param parentUuid
+     * @return
+     */
+    List<T> selectAllChildList(Serializable parentUuid);
+
+    /**
      * 根据父节点获取下级节点
+     *
      * @param parentUuid
      * @return
      */
