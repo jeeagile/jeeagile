@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.jeeagile.core.constants.AgileConstants.AGILE_DATA_SCOPE_05;
 
@@ -151,14 +152,9 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     private List<String> selectRoleDeptIdList(Serializable roleId) {
         LambdaQueryWrapper<AgileSysRoleDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(AgileSysRoleDept::getRoleId, roleId);
+        lambdaQueryWrapper.select(AgileSysRoleDept::getDeptId);
         List<AgileSysRoleDept> roleDeptList = agileSysRoleDeptService.list(lambdaQueryWrapper);
-        List<String> roleDeptIdList = new ArrayList<>();
-        for (AgileSysRoleDept sysRoleDept : roleDeptList) {
-            if (agileSysDeptService.countChild(sysRoleDept.getDeptId()) < 1) {
-                roleDeptIdList.add(sysRoleDept.getDeptId());
-            }
-        }
-        return roleDeptIdList;
+        return roleDeptList.stream().map(sysRoleDept -> sysRoleDept.getDeptId()).collect(Collectors.toList());
     }
 
     /**

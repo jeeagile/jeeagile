@@ -132,7 +132,7 @@
           <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand($event, 'dept')">展开/折叠</el-checkbox>
           <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">全选/全不选</el-checkbox>
           <el-tree ref="dept" class="tree-border" :data="deptTreeOptionList" show-checkbox default-expand-all
-                   node-key="id" empty-text="加载中，请稍后" :props="deptTreeProps"/>
+                   node-key="id" empty-text="加载中，请稍后" :props="deptTreeProps" check-strictly="true"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
