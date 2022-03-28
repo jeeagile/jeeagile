@@ -1,6 +1,7 @@
 package com.jeeagile.system.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.enums.AgileStatusEnum;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
@@ -9,16 +10,20 @@ import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
+import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.frame.user.AgileUserData;
+import com.jeeagile.system.entity.AgileSysDept;
 import com.jeeagile.system.entity.AgileSysUser;
 import com.jeeagile.system.mapper.AgileUserDetailsMapper;
+import com.jeeagile.system.service.IAgileSysDeptService;
 import com.jeeagile.system.service.IAgileSysUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author JeeAgile
@@ -28,10 +33,10 @@ import java.util.List;
 @AgileService
 public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
 
-    @Lazy
     @Autowired
     private IAgileSysUserService agileSysUserService;
-
+    @Autowired
+    private IAgileSysDeptService agileSysDeptService;
     @Autowired
     private AgileUserDetailsMapper agileUserDetailsMapper;
 
@@ -165,6 +170,45 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
             throw ex;
         } catch (Exception ex) {
             throw new AgileAuthException("加载用户菜单信息异常！");
+        }
+    }
+
+    @Override
+    @Cacheable
+    public List<String> getUserDataScope(AgileBaseUser agileBaseUser) {
+        try {
+            if (agileBaseUser != null) {
+                return agileUserDetailsMapper.getUserDataScope(agileBaseUser.getUserId());
+            } else {
+                throw new AgileAuthException(AgileResultCode.FAIL_USER_INFO);
+            }
+        } catch (AgileBaseException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AgileAuthException("获取用户权限类型异常！");
+        }
+    }
+
+    @Override
+    public Set<String> getUserDeptList(AgileBaseUser agileBaseUser, String dataScopeType) {
+        try {
+            if (agileBaseUser != null) {
+                Set<String> userDeptList = new HashSet<>();
+                if (AgileConstants.AGILE_DATA_SCOPE_03.equals(dataScopeType)) {
+                    List<AgileSysDept> agileSysDeptList = agileSysDeptService.selectAllChildList(agileBaseUser.getDeptId());
+                    agileSysDeptList.forEach(agileSysDept -> userDeptList.add(agileSysDept.getId()));
+                }
+                if (AgileConstants.AGILE_DATA_SCOPE_05.equals(dataScopeType)) {
+                    userDeptList.addAll(agileUserDetailsMapper.getUserCustomDept(agileBaseUser.getUserId()));
+                }
+                return userDeptList;
+            } else {
+                throw new AgileAuthException(AgileResultCode.FAIL_USER_INFO);
+            }
+        } catch (AgileBaseException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AgileAuthException("获取用户部门权限异常！");
         }
     }
 }
