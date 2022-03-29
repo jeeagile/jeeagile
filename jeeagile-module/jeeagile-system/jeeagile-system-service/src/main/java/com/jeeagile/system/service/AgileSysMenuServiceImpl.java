@@ -8,7 +8,8 @@ import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysMenu;
 import com.jeeagile.system.entity.AgileSysRoleMenu;
 import com.jeeagile.system.mapper.AgileSysMenuMapper;
-import com.jeeagile.system.vo.AgileUpdateSort;
+import com.jeeagile.system.vo.AgileMenuSort;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
@@ -42,12 +43,11 @@ public class AgileSysMenuServiceImpl extends AgileBaseTreeServiceImpl<AgileSysMe
     }
 
     @Override
-    public boolean updateMenuSort(List<AgileUpdateSort> agileSortList) {
+    public boolean updateMenuSort(List<AgileMenuSort> agileMenuSortList) {
         List<AgileSysMenu> agileSysMenuList = new ArrayList<>();
-        for (AgileUpdateSort agileUpdateSort : agileSortList) {
+        for (AgileMenuSort agileMenuSort : agileMenuSortList) {
             AgileSysMenu agileSysMenu = new AgileSysMenu();
-            agileSysMenu.setId(agileUpdateSort.getId());
-            agileSysMenu.setMenuSort(agileUpdateSort.getSort());
+            BeanUtils.copyProperties(agileMenuSort, agileSysMenu);
             agileSysMenuList.add(agileSysMenu);
         }
         return this.updateBatchById(agileSysMenuList);

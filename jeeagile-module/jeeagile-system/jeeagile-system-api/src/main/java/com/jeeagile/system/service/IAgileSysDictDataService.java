@@ -16,10 +16,4 @@ public interface IAgileSysDictDataService extends IAgileBaseTreeService<AgileSys
      * 根据字典类型查询字典数据列表
      */
     List<AgileSysDictData> selectDictDataByDictType(String dictType);
-
-
-    /**
-     * 删除字典数据
-     */
-    boolean deleteDictDataByDictType(String dictType);
 }

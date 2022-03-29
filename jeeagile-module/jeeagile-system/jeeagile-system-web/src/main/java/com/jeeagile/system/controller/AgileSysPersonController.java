@@ -68,7 +68,6 @@ public class AgileSysPersonController extends AgileBaseController {
     public AgileResult<String> uploadAvatar(@RequestParam("userAvatar") MultipartFile multipartFile) {
         String userAvatarBasePath = AgileUtil.getUploadPath() + AgileFileUtil.getFileSeparator() + "avatar";
         String userAvatarFilePath = AgileFileUtil.upload(multipartFile, userAvatarBasePath);
-        //置换为资源路径
         String userAvatar = userAvatarFilePath.replace(AgileUtil.getUploadPath(), AgileConstants.AGILE_RESOURCE_PREFIX);
         userAvatar = userAvatar.replace(AgileFileUtil.getFileSeparator(), "/");
         agilePersonService.updateUserAvatar(userAvatar);

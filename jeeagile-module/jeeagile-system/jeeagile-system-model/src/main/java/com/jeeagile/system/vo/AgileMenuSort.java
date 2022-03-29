@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileUpdateSort extends AgileBaseVo {
+public class AgileMenuSort extends AgileBaseVo {
     private String id;
-    private String sort;
+    private String menuSort;
 }

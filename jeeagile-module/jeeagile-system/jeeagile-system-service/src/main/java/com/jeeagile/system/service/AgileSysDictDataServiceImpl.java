@@ -73,16 +73,6 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
         return this.removeById(id);
     }
 
-    @Override
-    public boolean deleteDictDataByDictType(String dictType) {
-        if (AgileStringUtil.isEmpty(dictType)) {
-            throw new AgileValidateException("字典类型不能为空！");
-        }
-        QueryWrapper<AgileSysDictData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(AgileSysDictData::getDictType, dictType);
-        return this.remove(queryWrapper);
-    }
-
     /**
      * 校验字典标签与字典键值是否存在
      */

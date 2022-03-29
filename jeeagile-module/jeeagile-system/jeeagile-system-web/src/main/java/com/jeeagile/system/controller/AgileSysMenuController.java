@@ -9,7 +9,7 @@ import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.enums.AgileLoggerType;
 import com.jeeagile.system.entity.AgileSysMenu;
 import com.jeeagile.system.service.IAgileSysMenuService;
-import com.jeeagile.system.vo.AgileUpdateSort;
+import com.jeeagile.system.vo.AgileMenuSort;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,8 +36,8 @@ public class AgileSysMenuController extends AgileCrudController<IAgileSysMenuSer
     @AgileRequiresPermissions("sort")
     @AgileLogger(notes = "修改菜单排序", type = AgileLoggerType.UPDATE)
     @ApiOperation(value = "修改菜单排序", notes = "修改菜单排序")
-    public AgileResult<String> updateSort(@RequestBody List<AgileUpdateSort> agileSortList) {
-        this.getAgileService().updateMenuSort(agileSortList);
+    public AgileResult<String> updateSort(@RequestBody List<AgileMenuSort> agileMenuSortList) {
+        this.getAgileService().updateMenuSort(agileMenuSortList);
         return this.success("菜单排序修改成功！");
     }
 }

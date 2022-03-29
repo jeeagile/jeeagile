@@ -139,6 +139,7 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
         AgileSysUser agileSysUser = new AgileSysUser();
         agileSysUser.setId(agileUpdateStatus.getId());
         agileSysUser.setUserStatus(agileUpdateStatus.getStatus());
+
         return this.updateById(agileSysUser);
     }
 

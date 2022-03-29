@@ -2,7 +2,7 @@ package com.jeeagile.system.service;
 
 import com.jeeagile.frame.service.IAgileBaseTreeService;
 import com.jeeagile.system.entity.AgileSysMenu;
-import com.jeeagile.system.vo.AgileUpdateSort;
+import com.jeeagile.system.vo.AgileMenuSort;
 
 import java.util.List;
 
@@ -16,6 +16,6 @@ public interface IAgileSysMenuService extends IAgileBaseTreeService<AgileSysMenu
     /**
      * 修改菜单排序
      */
-    boolean updateMenuSort(List<AgileUpdateSort> agileSortList);
+    boolean updateMenuSort(List<AgileMenuSort> agileMenuSortList);
 
 }
