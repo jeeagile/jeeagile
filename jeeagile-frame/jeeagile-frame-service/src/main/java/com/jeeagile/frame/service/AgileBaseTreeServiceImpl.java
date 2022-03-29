@@ -29,7 +29,7 @@ public class AgileBaseTreeServiceImpl<M extends AgileBaseTreeMapper<T>, T extend
     @Override
     public List<T> selectAllChildList(Serializable parentUuid) {
         List<T> allChildList = new ArrayList<>();
-        List<T> childList  = selectChildList(parentUuid);
+        List<T> childList = selectChildList(parentUuid);
         if (AgileCollectionUtil.isNotEmpty(childList)) {
             allChildList.addAll(childList);
             childList.forEach(t -> {
@@ -47,5 +47,9 @@ public class AgileBaseTreeServiceImpl<M extends AgileBaseTreeMapper<T>, T extend
         }
         wrapper.eq("parent_id", parentId);
         return this.count(wrapper);
+    }
+    @Override
+    public boolean hasChild(Serializable parentId) {
+        return this.countChild(parentId) > 0 ? true : false;
     }
 }
