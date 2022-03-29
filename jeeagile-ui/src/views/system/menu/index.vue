@@ -301,11 +301,11 @@
       changeMenuSort(row) {
         const currentSort = _.find(this.menuSortList, item => item.id === row.id)
         if (currentSort) {
-          currentSort.sort = row.menuSort
+          currentSort.menuSort = row.menuSort
         } else {
           this.menuSortList.push({
             id: row.id,
-            sort: row.menuSort
+            menuSort: row.menuSort
           })
         }
       },
