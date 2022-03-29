@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * @author JeeAgile
  * @date 2021-03-21
- * @description
+ * @description 文件工具类
  */
 @Slf4j
 public class AgileFileUtil {
@@ -56,8 +56,7 @@ public class AgileFileUtil {
      */
     public static final String getFileExtName(MultipartFile file) {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        if (AgileStringUtil.isEmpty(extension))
-        {
+        if (AgileStringUtil.isEmpty(extension)) {
             extension = AgileFileType.getExtension(file.getContentType());
         }
         return extension;
