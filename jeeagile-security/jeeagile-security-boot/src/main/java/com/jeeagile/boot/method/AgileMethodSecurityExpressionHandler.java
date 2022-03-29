@@ -1,8 +1,8 @@
-package com.jeeagile.springsecurity.method;
+package com.jeeagile.boot.method;
 
 
-import com.jeeagile.springsecurity.access.AgilePermissionEvaluator;
-import com.jeeagile.springsecurity.expression.AgileMethodSecurityExpressionRoot;
+import com.jeeagile.boot.access.AgilePermissionEvaluator;
+import com.jeeagile.boot.expression.AgileMethodSecurityExpressionRoot;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;

@@ -1,4 +1,4 @@
-package com.jeeagile.springsecurity.security;
+package com.jeeagile.boot.security;
 
 
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
@@ -15,7 +15,7 @@ import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.springsecurity.userdetails.AgileUserDetails;
+import com.jeeagile.boot.userdetails.AgileUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
@@ -37,7 +37,7 @@ import java.util.List;
  * @description
  */
 @Slf4j
-public class AgileSpringSecurity implements IAgileSecurity {
+public class AgileBootSecurity implements IAgileSecurity {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired

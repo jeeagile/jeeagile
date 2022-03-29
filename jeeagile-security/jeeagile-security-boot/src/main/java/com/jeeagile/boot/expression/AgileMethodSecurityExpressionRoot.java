@@ -1,6 +1,6 @@
-package com.jeeagile.springsecurity.expression;
+package com.jeeagile.boot.expression;
 
-import com.jeeagile.springsecurity.access.AgilePermissionEvaluator;
+import com.jeeagile.boot.access.AgilePermissionEvaluator;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;

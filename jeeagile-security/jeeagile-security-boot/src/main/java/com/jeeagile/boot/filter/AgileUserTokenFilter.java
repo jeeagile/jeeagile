@@ -1,10 +1,10 @@
-package com.jeeagile.springsecurity.filter;
+package com.jeeagile.boot.filter;
 
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
 import com.jeeagile.core.cache.util.AgileCacheUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.spring.AgileServletUtil;
-import com.jeeagile.springsecurity.userdetails.AgileUserDetails;
+import com.jeeagile.boot.userdetails.AgileUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

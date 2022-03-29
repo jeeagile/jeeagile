@@ -1,4 +1,4 @@
-package com.jeeagile.springsecurity.userdetails;
+package com.jeeagile.boot.userdetails;
 
 import com.jeeagile.core.security.user.AgileBaseUser;
 import lombok.Data;

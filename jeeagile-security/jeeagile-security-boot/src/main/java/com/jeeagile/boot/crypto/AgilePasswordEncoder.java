@@ -1,4 +1,4 @@
-package com.jeeagile.springsecurity.crypto;
+package com.jeeagile.boot.crypto;
 
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;

@@ -1,8 +1,8 @@
-package com.jeeagile.springsecurity.access;
+package com.jeeagile.boot.access;
 
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.springsecurity.userdetails.AgileUserDetails;
+import com.jeeagile.boot.userdetails.AgileUserDetails;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.CollectionUtils;

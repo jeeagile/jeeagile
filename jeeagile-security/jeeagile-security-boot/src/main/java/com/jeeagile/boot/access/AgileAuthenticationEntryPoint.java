@@ -1,4 +1,4 @@
-package com.jeeagile.springsecurity.access;
+package com.jeeagile.boot.access;
 
 import com.alibaba.fastjson.JSON;
 import com.jeeagile.core.result.AgileResult;

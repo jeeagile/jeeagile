@@ -1,6 +1,6 @@
-package com.jeeagile.springsecurity.method;
+package com.jeeagile.boot.method;
 
-import com.jeeagile.springsecurity.access.AgilePermissionEvaluator;
+import com.jeeagile.boot.access.AgilePermissionEvaluator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
