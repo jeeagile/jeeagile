@@ -10,7 +10,6 @@ import com.jeeagile.frame.enums.AgileLoggerType;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.quartz.entity.AgileQuartzJob;
 import com.jeeagile.quartz.service.IAgileQuartzJobService;
-import com.jeeagile.quartz.vo.AgileUpdateStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,8 +32,8 @@ public class AgileQuartzJobController extends AgileCrudController<IAgileQuartzJo
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "更新任务状态", notes = "更新任务状态")
     @AgileLogger(notes = "更新任务状态", type = AgileLoggerType.UPDATE)
-    public AgileResult<String> changeJobStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
-        this.getAgileService().changeQuartzJobStatus(agileUpdateStatus);
+    public AgileResult<String> changeJobStatus(@RequestBody AgileQuartzJob agileQuartzJob) {
+        this.getAgileService().changeQuartzJobStatus(agileQuartzJob);
         return this.success();
     }
 
@@ -43,7 +42,7 @@ public class AgileQuartzJobController extends AgileCrudController<IAgileQuartzJo
     @AgileLogger(notes = "执行任务", type = AgileLoggerType.DELETE)
     @AgileRequiresPermissions("execute")
     public AgileResult execute(@SingleRequestBody String quartzJobId) {
-        this.getAgileService().executeQuartzJobById(quartzJobId);
+        this.getAgileService().executeQuartzJob(quartzJobId);
         return this.success("执行任务成功！");
     }
 }

@@ -1,11 +1,14 @@
 package com.jeeagile.quartz.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseModel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.Date;
 
 /**
  * @author JeeAgile
@@ -82,4 +85,11 @@ public class AgileQuartzJob extends AgileBaseModel<AgileQuartzJob> {
      */
     @Size(max = 150, message = "备注信息长度最大长度为150！")
     private String remark;
+
+
+    /**
+     * 下次执行时间
+     */
+    @TableField(exist = false)
+    private Date nextTime;
 }

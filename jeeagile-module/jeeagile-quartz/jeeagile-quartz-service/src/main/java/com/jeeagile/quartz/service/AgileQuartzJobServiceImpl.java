@@ -1,6 +1,7 @@
 package com.jeeagile.quartz.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -10,10 +11,6 @@ import com.jeeagile.quartz.enums.AgileJobStatus;
 import com.jeeagile.quartz.mapper.AgileQuartzJobMapper;
 import com.jeeagile.quartz.schedule.AgileScheduleUtil;
 import com.jeeagile.quartz.util.AgileCronUtil;
-import com.jeeagile.quartz.vo.AgileQuartzJobInfo;
-import com.jeeagile.quartz.vo.AgileUpdateStatus;
-import org.springframework.beans.BeanUtils;
-
 import java.io.Serializable;
 
 /**
@@ -45,12 +42,10 @@ public class AgileQuartzJobServiceImpl extends AgileBaseServiceImpl<AgileQuartzJ
     @Override
     public AgileQuartzJob selectModel(Serializable id) {
         AgileQuartzJob agileQuartzJob = this.getById(id);
-        AgileQuartzJobInfo agileQuartzJobInfo = new AgileQuartzJobInfo();
         if (agileQuartzJob != null && agileQuartzJob.isNotEmptyPk()) {
-            BeanUtils.copyProperties(agileQuartzJob, agileQuartzJobInfo);
-            agileQuartzJobInfo.setNextTime(AgileCronUtil.getNextTime(agileQuartzJob.getJobCron()));
+            agileQuartzJob.setNextTime(AgileCronUtil.getNextTime(agileQuartzJob.getJobCron()));
         }
-        return agileQuartzJobInfo;
+        return agileQuartzJob;
     }
 
     @Override
@@ -105,22 +100,27 @@ public class AgileQuartzJobServiceImpl extends AgileBaseServiceImpl<AgileQuartzJ
     }
 
     @Override
-    public boolean changeQuartzJobStatus(AgileUpdateStatus agileUpdateStatus) {
-        AgileQuartzJob agileQuartzJob = this.getById(agileUpdateStatus.getId());
-        agileQuartzJob.setJobStatus(agileUpdateStatus.getStatus());
-        boolean updateFlag = this.updateById(agileQuartzJob);
-        if (updateFlag) {
-            if (AgileJobStatus.NORMAL.getCode().equals(agileUpdateStatus.getStatus())) {
-                AgileScheduleUtil.resumeJob(agileQuartzJob);
-            } else {
-                AgileScheduleUtil.pauseJob(agileQuartzJob);
+    public boolean changeQuartzJobStatus(AgileQuartzJob agileQuartzJob) {
+        String jobStatus = agileQuartzJob.getJobStatus();
+        agileQuartzJob = this.getById(agileQuartzJob.getId());
+        if (agileQuartzJob != null && agileQuartzJob.isNotEmptyPk()) {
+            agileQuartzJob.setJobStatus(jobStatus);
+            boolean updateFlag = this.updateById(agileQuartzJob);
+            if (updateFlag) {
+                if (AgileJobStatus.NORMAL.getCode().equals(jobStatus)) {
+                    AgileScheduleUtil.resumeJob(agileQuartzJob);
+                } else {
+                    AgileScheduleUtil.pauseJob(agileQuartzJob);
+                }
             }
+        } else {
+            throw new AgileFrameException("任务已不存在或者无权限修改状态！");
         }
-        return updateFlag;
+        return true;
     }
 
     @Override
-    public boolean executeQuartzJobById(String quartzJobId) {
+    public boolean executeQuartzJob(String quartzJobId) {
         AgileQuartzJob agileQuartzJob = this.getById(quartzJobId);
         if (agileQuartzJob != null && agileQuartzJob.isNotEmptyPk()) {
             AgileScheduleUtil.triggerJob(agileQuartzJob);
