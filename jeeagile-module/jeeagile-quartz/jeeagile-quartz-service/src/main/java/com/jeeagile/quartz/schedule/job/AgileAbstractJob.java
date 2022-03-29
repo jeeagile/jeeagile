@@ -1,7 +1,7 @@
 package com.jeeagile.quartz.schedule.job;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jeeagile.core.enums.AgileCommonStatus;
+import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.spring.AgileSpringUtil;
@@ -61,11 +61,11 @@ public abstract class AgileAbstractJob implements Job {
         long executeTime = agileQuartzLogger.getStopTime().getTime() - agileQuartzLogger.getStartTime().getTime();
         agileQuartzLogger.setExecuteTime(executeTime);
         if (throwable != null) {
-            agileQuartzLogger.setStatus(AgileCommonStatus.FAIL.getCode());
+            agileQuartzLogger.setStatus(AgileConstants.FAIL);
             String errorMsg = StringUtils.substring(throwable.getMessage(), 0, 2000);
             agileQuartzLogger.setMessage(errorMsg);
         } else {
-            agileQuartzLogger.setStatus(AgileCommonStatus.SUCCESS.getCode());
+            agileQuartzLogger.setStatus(AgileConstants.SUCCESS);
         }
         AgileSpringUtil.getBean(IAgileQuartzLoggerService.class).save(agileQuartzLogger);
     }

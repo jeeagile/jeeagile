@@ -25,13 +25,13 @@ import org.springframework.context.annotation.ComponentScan;
 public class AgileCoreAutoConfigure {
 
     @Bean
-    @ConditionalOnProperty(prefix = AgileConstants.AGILE_PROTOCOL, name = AgileConstants.AGILE_PROTOCOL_TYPE, havingValue = "local", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = AgileConstants.AGILE_PROTOCOL, name = "type", havingValue = "local", matchIfMissing = true)
     public AgileReferenceBeanPostProcessor agileReferenceBeanPostProcessor() {
         return new AgileReferenceBeanPostProcessor();
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = AgileConstants.AGILE_PROTOCOL, name = AgileConstants.AGILE_PROTOCOL_TYPE, havingValue = "local", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = AgileConstants.AGILE_PROTOCOL, name = "type", havingValue = "local", matchIfMissing = true)
     public AgileServiceBeanPostProcessor agileServiceBeanPostProcessor() {
         return new AgileServiceBeanPostProcessor();
     }

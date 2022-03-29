@@ -11,11 +11,19 @@ public class AgileConstants {
     private AgileConstants() {
     }
 
+    // UTF-8 编码
     public static final String UTF8 = AgileCharsetUtil.UTF_8;
+
+
+    // 系统通用成功标识
+    public static final String SUCCESS = "0";
+
+    // 系统通用失败标识
+    public static final String FAIL = "1";
+
 
     public static final String AGILE_SECURITY = "agile.security";
     public static final String AGILE_PROTOCOL = "agile.protocol";
-    public static final String AGILE_PROTOCOL_TYPE = "type";
 
     // 用户信息KEY 用于上下文用户信息传递
     public static final String AGILE_USER_DATA = "AGILE_USER_DATA";

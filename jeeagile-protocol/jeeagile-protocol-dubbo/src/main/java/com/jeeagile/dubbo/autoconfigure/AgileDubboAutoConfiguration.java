@@ -29,7 +29,7 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_SCAN_PREFIX;
  */
 @Configuration
 @EnableConfigurationProperties({AgileProtocolProperties.class, DubboConfigurationProperties.class})
-@ConditionalOnProperty(prefix = AgileConstants.AGILE_PROTOCOL, name = AgileConstants.AGILE_PROTOCOL_TYPE, havingValue = "dubbo")
+@ConditionalOnProperty(prefix = AgileConstants.AGILE_PROTOCOL, name = "type", havingValue = "dubbo")
 @AutoConfigureAfter({AgileCoreAutoConfigure.class, ReferenceAnnotationBeanPostProcessor.class})
 @ImportResource("classpath:dubbo/dubbo-provider.xml")
 public class AgileDubboAutoConfiguration {

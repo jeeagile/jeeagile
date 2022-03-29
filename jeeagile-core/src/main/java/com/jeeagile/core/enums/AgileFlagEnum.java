@@ -12,6 +12,7 @@ public enum AgileFlagEnum {
      * 码值
      */
     private String code;
+
     /**
      * 描述
      */

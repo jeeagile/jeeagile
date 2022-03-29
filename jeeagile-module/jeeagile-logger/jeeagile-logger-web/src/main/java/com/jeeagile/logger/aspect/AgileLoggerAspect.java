@@ -1,6 +1,7 @@
 package com.jeeagile.logger.aspect;
 
 import com.alibaba.fastjson.JSON;
+import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
@@ -8,8 +9,6 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.AgileAgentUtil;
 import com.jeeagile.core.util.system.util.AgileSystemUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
-import com.jeeagile.core.enums.AgileCommonStatus;
-import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.enums.AgileLoggerType;
 import com.jeeagile.logger.entity.AgileLoggerLogin;
 import com.jeeagile.logger.entity.AgileLoggerOperate;
@@ -209,7 +208,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
 
     private AgileLoggerLogin getAgileLoggerLogin(HttpServletRequest httpServletRequest, Throwable throwable) {
         AgileLoggerLogin agileLoggerLogin = new AgileLoggerLogin();
-        agileLoggerLogin.setStatus(AgileCommonStatus.SUCCESS.getCode());
+        agileLoggerLogin.setStatus(AgileConstants.SUCCESS);
         agileLoggerLogin.setLoginTime(new Date());
         agileLoggerLogin.setLoginIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
         String serverAddress = AgileSystemUtil.getHostInfo().getAddress() + ":" + serverPort;
@@ -220,7 +219,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
         agileLoggerLogin.setLoginDevice(userAgent.getOperatingSystem().getDeviceType().getName());
         agileLoggerLogin.setLoginBrowser(userAgent.getBrowser().getName());
         if (throwable != null) {
-            agileLoggerLogin.setStatus(AgileCommonStatus.FAIL.getCode());
+            agileLoggerLogin.setStatus(AgileConstants.FAIL);
             String excMessage = throwable.getMessage();
             if (excMessage.length() > 100) {
                 agileLoggerLogin.setMessage(excMessage.substring(100));
@@ -228,7 +227,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                 agileLoggerLogin.setMessage(throwable.getMessage());
             }
         } else {
-            agileLoggerLogin.setStatus(AgileCommonStatus.SUCCESS.getCode());
+            agileLoggerLogin.setStatus(AgileConstants.SUCCESS);
             agileLoggerLogin.setMessage("登录成功");
         }
         return agileLoggerLogin;
@@ -260,7 +259,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
         agileLoggerOperate.setOperateDevice(userAgent.getOperatingSystem().getDeviceType().getName());
         agileLoggerOperate.setOperateBrowser(userAgent.getBrowser().getName());
         if (throwable != null) {
-            agileLoggerOperate.setStatus(AgileCommonStatus.FAIL.getCode());
+            agileLoggerOperate.setStatus(AgileConstants.FAIL);
             String excMessage = throwable.getMessage();
             if (excMessage.length() > 200) {
                 agileLoggerOperate.setMessage(excMessage.substring(200));
@@ -268,7 +267,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                 agileLoggerOperate.setMessage(excMessage);
             }
         } else {
-            agileLoggerOperate.setStatus(AgileCommonStatus.SUCCESS.getCode());
+            agileLoggerOperate.setStatus(AgileConstants.SUCCESS);
         }
         return agileLoggerOperate;
     }

@@ -2,7 +2,7 @@ package com.jeeagile.system.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.constants.AgileConstants;
-import com.jeeagile.core.enums.AgileStatusEnum;
+import com.jeeagile.core.enums.AgileUserStatus;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.protocol.annotation.AgileService;
@@ -10,7 +10,6 @@ import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
-import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.frame.user.AgileUserData;
 import com.jeeagile.system.entity.AgileSysDept;
 import com.jeeagile.system.entity.AgileSysUser;
@@ -20,8 +19,6 @@ import com.jeeagile.system.service.IAgileSysUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -99,7 +96,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         if (agileSysUser == null) {
             throw new AgileAuthException(AgileResultCode.FAIL_USER_DISABLE, "用户不存在，请核实！");
         }
-        if (!AgileStatusEnum.NORMAL.getCode().equals(agileSysUser.getUserStatus())) {
+        if (!AgileUserStatus.NORMAL.getCode().equals(agileSysUser.getUserStatus())) {
             throw new AgileAuthException(AgileResultCode.FAIL_USER_DISABLE, "用户已停用！");
         }
     }

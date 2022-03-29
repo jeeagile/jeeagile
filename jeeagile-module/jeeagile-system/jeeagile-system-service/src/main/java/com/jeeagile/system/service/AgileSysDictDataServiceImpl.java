@@ -4,7 +4,6 @@ package com.jeeagile.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.enums.AgileFlagEnum;
-import com.jeeagile.core.enums.AgileStatusEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -51,7 +50,6 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
     public List<AgileSysDictData> selectDictDataByDictType(String dictType) {
         QueryWrapper<AgileSysDictData> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(AgileSysDictData::getDictType, dictType);
-        queryWrapper.lambda().eq(AgileSysDictData::getDictStatus, AgileStatusEnum.NORMAL.getCode());
         queryWrapper.lambda().orderByAsc(AgileSysDictData::getDictSort);
         return this.list(queryWrapper);
     }
