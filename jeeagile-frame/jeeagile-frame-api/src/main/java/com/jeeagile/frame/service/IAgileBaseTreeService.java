@@ -29,10 +29,18 @@ public interface IAgileBaseTreeService<T extends AgileBaseTreeModel> extends IAg
     List<T> selectAllChildList(Serializable parentUuid);
 
     /**
-     * 根据父节点获取下级节点
+     * 获取下级节点个数
      *
      * @param parentUuid
      * @return
      */
     long countChild(Serializable parentUuid);
+
+    /**
+     * 是否存在下级节点
+     *
+     * @param parentId
+     * @return
+     */
+    boolean hasChild(Serializable parentId);
 }

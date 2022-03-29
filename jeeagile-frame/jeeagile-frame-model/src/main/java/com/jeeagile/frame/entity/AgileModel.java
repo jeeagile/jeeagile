@@ -4,6 +4,7 @@ package com.jeeagile.frame.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,5 +39,14 @@ public abstract class AgileModel<T extends AgileModel<T>> extends Model<T> {
     @ApiModelProperty(hidden = true)
     public boolean isEmptyPk() {
         return AgileStringUtil.isEmpty(this.pkVal());
+    }
+
+    /**
+     * 校验数据
+     *
+     * @param group
+     */
+    public void validate(Class... group) {
+        AgileValidateUtil.validateObject(this, group);
     }
 }

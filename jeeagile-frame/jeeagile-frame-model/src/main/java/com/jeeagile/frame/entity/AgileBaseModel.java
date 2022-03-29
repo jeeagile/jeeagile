@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileModel<T> implements AgileValidateModel {
+public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileModel<T> {
     @ApiModelProperty(value = "主键ID")
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;

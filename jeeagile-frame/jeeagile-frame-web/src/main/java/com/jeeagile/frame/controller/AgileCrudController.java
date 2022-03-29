@@ -7,7 +7,6 @@ import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.entity.AgileModel;
-import com.jeeagile.frame.entity.AgileValidateModel;
 import com.jeeagile.frame.enums.AgileLoggerType;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
@@ -132,7 +131,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(notes = "导入数据", type = AgileLoggerType.IMPORT)
     @ApiOperation(value = "导入数据", notes = "导入数据接口")
     public AgileResult importExcel(T agileModel) {
-        return AgileResult.error(AgileResultCode.FAIL_OPS_IMPORT,"正在紧急建设中，敬请期待!");
+        return AgileResult.error(AgileResultCode.FAIL_OPS_IMPORT, "正在紧急建设中，敬请期待!");
     }
 
     @PostMapping(value = "/export")
@@ -140,7 +139,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(notes = "导出数据", type = AgileLoggerType.EXPORT)
     @ApiOperation(value = "导出数据", notes = "导出数据接口")
     public AgileResult exportExcel(T agileModel) {
-        return AgileResult.error(AgileResultCode.FAIL_OPS_EXPORT,"正在紧急建设中，敬请期待!");
+        return AgileResult.error(AgileResultCode.FAIL_OPS_EXPORT, "正在紧急建设中，敬请期待!");
     }
 
     /**
@@ -167,8 +166,6 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
      * @param agileModel
      */
     protected void validateModel(T agileModel) {
-        if (agileModel instanceof AgileValidateModel) {
-            ((AgileValidateModel) agileModel).validate();
-        }
+        agileModel.validate();
     }
 }

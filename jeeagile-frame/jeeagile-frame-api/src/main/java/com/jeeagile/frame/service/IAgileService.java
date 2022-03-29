@@ -6,13 +6,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.frame.entity.AgileModel;
-import com.jeeagile.frame.entity.AgileValidateModel;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 
 import java.io.Serializable;
 import java.util.List;
-
 
 /**
  * @author JeeAgile
@@ -122,9 +120,7 @@ public interface IAgileService<T extends AgileModel> extends IService<T> {
      * @param agileModel
      */
     default void validateModel(T agileModel) {
-        if (agileModel instanceof AgileValidateModel) {
-            ((AgileValidateModel) agileModel).validate();
-        }
+        agileModel.validate();
     }
 
 
