@@ -1,31 +1,27 @@
-package com.jeeagile.core.enums;
+package com.jeeagile.quartz.enums;
 
-/**
- * @author JeeAgile
- * @date 2021-03-21
- * @description 状态枚举
- */
-public enum AgileStatusEnum {
+public enum AgileJobStatus {
     NORMAL("0", "正常"),
     DISABLE("1", "停用");
     /**
      * 码值
      */
     private String code;
+
     /**
      * 描述
      */
     private String desc;
 
-    AgileStatusEnum(String code, String desc) {
+    AgileJobStatus(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
     public static String getDesc(String code) {
-        for (AgileStatusEnum agileStatusEnum : AgileStatusEnum.values()) {
-            if (agileStatusEnum.code.equals(code)) {
-                return agileStatusEnum.desc;
+        for (AgileJobStatus agileJobStatus : AgileJobStatus.values()) {
+            if (agileJobStatus.code.equals(code)) {
+                return agileJobStatus.desc;
             }
         }
         return "";
