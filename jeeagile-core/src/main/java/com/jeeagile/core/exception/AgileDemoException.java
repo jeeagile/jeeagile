@@ -6,7 +6,7 @@ import com.jeeagile.core.result.AgileResultCode;
 /**
  * @author JeeAgile
  * @date 2021-03-21
- * @description 异常处理类
+ * @description 演示模式异常处理类
  */
 public class AgileDemoException extends AgileBaseException {
 
