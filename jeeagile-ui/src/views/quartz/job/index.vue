@@ -359,7 +359,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const data = { id: row.id, status: row.jobStatus }
+          const data = { id: row.id, jobStatus: row.jobStatus }
           return changeJobStatus(data)
         }).then(() => {
           this.messageSuccess(text + '成功')
