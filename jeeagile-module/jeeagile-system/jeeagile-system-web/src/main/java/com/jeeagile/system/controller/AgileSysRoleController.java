@@ -32,8 +32,8 @@ public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleSer
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "更新角色状态", notes = "更新角色状态")
     @AgileLogger(notes = "更新角色状态", type = AgileLoggerType.UPDATE)
-    public AgileResult<String> changeRoleStatus(@SingleRequestBody String userId, @SingleRequestBody String roleStatus) {
-        if (this.getAgileService().changeRoleStatus(userId, roleStatus)) {
+    public AgileResult<String> changeRoleStatus(@SingleRequestBody String roleId, @SingleRequestBody String roleStatus) {
+        if (this.getAgileService().changeRoleStatus(roleId, roleStatus)) {
             return this.success();
         } else {
             return this.error(AgileResultCode.FAIL_UPDATE_EXCEPTION, "角色状态更新失败！");
