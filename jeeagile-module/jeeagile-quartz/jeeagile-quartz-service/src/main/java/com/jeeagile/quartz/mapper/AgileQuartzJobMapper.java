@@ -1,6 +1,6 @@
 package com.jeeagile.quartz.mapper;
 
-import com.jeeagile.frame.annotation.AgileMapperScan;
+import com.jeeagile.frame.annotation.AgileMapper;
 import com.jeeagile.frame.mapper.AgileBaseMapper;
 import com.jeeagile.quartz.entity.AgileQuartzJob;
 
@@ -9,7 +9,7 @@ import com.jeeagile.quartz.entity.AgileQuartzJob;
  * @date 2021-03-21
  * @description
  */
-@AgileMapperScan
+@AgileMapper
 public interface AgileQuartzJobMapper extends AgileBaseMapper<AgileQuartzJob> {
 
 }

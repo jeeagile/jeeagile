@@ -1,6 +1,6 @@
 package com.jeeagile.system.mapper;
 
-import com.jeeagile.frame.annotation.AgileMapperScan;
+import com.jeeagile.frame.annotation.AgileMapper;
 import com.jeeagile.frame.mapper.AgileBaseMapper;
 import com.jeeagile.system.entity.AgileSysDictType;
 
@@ -9,7 +9,7 @@ import com.jeeagile.system.entity.AgileSysDictType;
  * @date 2021-03-21
  * @description
  */
-@AgileMapperScan
+@AgileMapper
 public interface AgileSysDictTypeMapper extends AgileBaseMapper<AgileSysDictType> {
 
 }

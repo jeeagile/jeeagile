@@ -1,6 +1,6 @@
 package com.jeeagile.system.mapper;
 
-import com.jeeagile.frame.annotation.AgileMapperScan;
+import com.jeeagile.frame.annotation.AgileMapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @date 2021-03-21
  * @description
  */
-@AgileMapperScan
+@AgileMapper
 public interface AgileSysPersonMapper {
     /**
      * 根据用户ID获取已分配的角色名称

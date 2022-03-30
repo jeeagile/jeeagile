@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.jeeagile.frame.annotation.AgileDataScope;
-import com.jeeagile.frame.annotation.AgileMapperScan;
+import com.jeeagile.frame.annotation.AgileMapper;
 import com.jeeagile.frame.handler.AgileMetaObjectHandler;
 import com.jeeagile.frame.plugins.datascope.AgileDataScopeInterceptor;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
@@ -41,7 +41,7 @@ public class AgileMybatisAutoConfiguration implements ApplicationListener<Contex
         mybatisPlusProperties.getGlobalConfig().setBanner(false);
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
         mapperScannerConfigurer.setBasePackage("com.jeeagile");
-        mapperScannerConfigurer.setAnnotationClass(AgileMapperScan.class);
+        mapperScannerConfigurer.setAnnotationClass(AgileMapper.class);
         mybatisPlusProperties.getGlobalConfig().getDbConfig().setWhereStrategy(FieldStrategy.NOT_EMPTY);
         return mapperScannerConfigurer;
     }

@@ -1,6 +1,6 @@
 package com.jeeagile.generator.mapper;
 
-import com.jeeagile.frame.annotation.AgileMapperScan;
+import com.jeeagile.frame.annotation.AgileMapper;
 import com.jeeagile.frame.mapper.AgileBaseMapper;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.generator.entity.AgileGeneratorTable;
@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2021-06-21
  * @description
  */
-@AgileMapperScan
+@AgileMapper
 public interface AgileGeneratorTableMapper extends AgileBaseMapper<AgileGeneratorTable> {
     /**
      * 分页查询当前用户下所有表信息

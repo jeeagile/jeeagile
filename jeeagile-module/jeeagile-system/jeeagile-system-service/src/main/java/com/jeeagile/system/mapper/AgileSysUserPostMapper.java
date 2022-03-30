@@ -1,7 +1,7 @@
 package com.jeeagile.system.mapper;
 
 
-import com.jeeagile.frame.annotation.AgileMapperScan;
+import com.jeeagile.frame.annotation.AgileMapper;
 import com.jeeagile.frame.mapper.AgileBaseMapper;
 import com.jeeagile.system.entity.AgileSysUserPost;
 
@@ -10,7 +10,7 @@ import com.jeeagile.system.entity.AgileSysUserPost;
  * @date 2021-03-21
  * @description
  */
-@AgileMapperScan
+@AgileMapper
 public interface AgileSysUserPostMapper extends AgileBaseMapper<AgileSysUserPost> {
 
 }
