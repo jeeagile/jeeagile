@@ -6,7 +6,6 @@ import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.generator.entity.AgileGeneratorTable;
 import com.jeeagile.generator.entity.AgileGeneratorTableColumn;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 

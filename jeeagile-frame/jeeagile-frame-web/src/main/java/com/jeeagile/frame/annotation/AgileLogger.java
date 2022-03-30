@@ -1,7 +1,7 @@
 package com.jeeagile.frame.annotation;
 
-import lombok.NonNull;
 import com.jeeagile.frame.enums.AgileLoggerType;
+import lombok.NonNull;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;

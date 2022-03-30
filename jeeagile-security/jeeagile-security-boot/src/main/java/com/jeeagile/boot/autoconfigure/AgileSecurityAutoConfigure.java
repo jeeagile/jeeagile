@@ -1,13 +1,13 @@
 package com.jeeagile.boot.autoconfigure;
 
 
-import com.jeeagile.core.security.properties.AgileSecurityProperties;
 import com.jeeagile.boot.access.AgileAccessDeniedHandler;
 import com.jeeagile.boot.access.AgileAuthenticationEntryPoint;
 import com.jeeagile.boot.crypto.AgilePasswordEncoder;
 import com.jeeagile.boot.filter.AgileUserTokenFilter;
 import com.jeeagile.boot.security.AgileBootSecurity;
 import com.jeeagile.boot.userdetails.AgileUserDetailsServiceImpl;
+import com.jeeagile.core.security.properties.AgileSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

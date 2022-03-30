@@ -1,18 +1,14 @@
-import {
-  isArray,
-  isFunction,
-  forEach
-} from 'min-dash'
+import {forEach, isArray, isFunction} from 'min-dash'
 
 import {
-  domify,
-  query as domQuery,
   attr as domAttr,
-  clear as domClear,
   classes as domClasses,
-  matches as domMatches,
+  clear as domClear,
   delegate as domDelegate,
-  event as domEvent
+  domify,
+  event as domEvent,
+  matches as domMatches,
+  query as domQuery
 } from 'min-dom'
 
 

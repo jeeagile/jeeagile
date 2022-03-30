@@ -1,4 +1,4 @@
-import { postApi } from '@/utils/axios'
+import {postApi} from '@/utils/axios'
 
 /**
  * 初始化数据接口

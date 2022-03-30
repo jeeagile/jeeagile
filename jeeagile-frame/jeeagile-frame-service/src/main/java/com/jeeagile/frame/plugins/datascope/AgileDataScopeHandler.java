@@ -2,10 +2,6 @@ package com.jeeagile.frame.plugins.datascope;
 
 import net.sf.jsqlparser.expression.Expression;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
 /**
  * @author JeeAgile
  * @date 2022-03-21

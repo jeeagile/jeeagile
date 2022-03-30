@@ -7,8 +7,8 @@ import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.result.AgileResultCode;
-import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileBaseUser;
+import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.frame.user.AgileUserData;
 import com.jeeagile.system.entity.AgileSysDept;
@@ -20,7 +20,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author JeeAgile

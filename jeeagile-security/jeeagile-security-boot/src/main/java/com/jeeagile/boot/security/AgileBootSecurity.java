@@ -1,21 +1,21 @@
 package com.jeeagile.boot.security;
 
 
+import com.jeeagile.boot.userdetails.AgileUserDetails;
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
 import com.jeeagile.core.cache.util.AgileCacheUtil;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.result.AgileResultCode;
+import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.annotation.AgileLogical;
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.core.security.annotation.AgileRequiresRoles;
-import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.boot.userdetails.AgileUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;

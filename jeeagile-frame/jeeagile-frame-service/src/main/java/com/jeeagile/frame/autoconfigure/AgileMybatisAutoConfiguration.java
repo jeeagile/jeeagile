@@ -7,8 +7,6 @@ import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
-import com.jeeagile.core.util.spring.AgileSpringUtil;
 import com.jeeagile.frame.annotation.AgileDataScope;
 import com.jeeagile.frame.annotation.AgileMapperScan;
 import com.jeeagile.frame.handler.AgileMetaObjectHandler;

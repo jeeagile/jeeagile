@@ -1,19 +1,19 @@
 package com.jeeagile.system.controller;
 
-import com.jeeagile.frame.annotation.AgileDemo;
-import com.jeeagile.frame.annotation.AgileLogger;
-import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
-import com.jeeagile.system.service.IAgileSysPersonService;
-import com.jeeagile.system.vo.AgileSysPerson;
-import com.jeeagile.system.vo.AgilePersonInfo;
 import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgileRequiresUser;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.core.util.file.AgileFileUtil;
+import com.jeeagile.frame.annotation.AgileDemo;
+import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
+import com.jeeagile.system.service.IAgileSysPersonService;
+import com.jeeagile.system.vo.AgilePersonInfo;
+import com.jeeagile.system.vo.AgileSysPerson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;

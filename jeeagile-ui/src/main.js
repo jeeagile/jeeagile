@@ -29,12 +29,11 @@ import directive from '@/directive'
 import processDesigner from '@/components/ProcessDesigner'
 import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getSysDictData } from '@/api/system/common'
-import { getSysDictDataList } from '@/api/system/common'
-import { getSysConfig } from '@/api/system/common'
-import { getSysConfigValue } from '@/api/system/common'
-import { handleDictLabel, handleTree, resetForm } from '@/utils/agile'
+import {getSysConfig, getSysConfigValue, getSysDictData, getSysDictDataList} from '@/api/system/common'
+import {handleDictLabel, handleTree, resetForm} from '@/utils/agile'
 import VueParticles from 'vue-particles'
+import {vuePlugin} from 'highlight.js'
+import 'highlight.js/styles/atom-one-dark-reasonable.css'
 
 
 // 全局组件挂载
@@ -74,9 +73,6 @@ Vue.prototype.messageInfo = function (message) {
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
-
-import { vuePlugin } from 'highlight.js'
-import 'highlight.js/styles/atom-one-dark-reasonable.css'
 
 Vue.use(vuePlugin)
 

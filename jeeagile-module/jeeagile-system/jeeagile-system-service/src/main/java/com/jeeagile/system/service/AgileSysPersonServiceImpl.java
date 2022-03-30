@@ -6,10 +6,10 @@ import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.system.mapper.AgileSysPersonMapper;
-import com.jeeagile.system.vo.AgileSysPerson;
-import com.jeeagile.system.vo.AgilePersonInfo;
 import com.jeeagile.system.entity.AgileSysUser;
+import com.jeeagile.system.mapper.AgileSysPersonMapper;
+import com.jeeagile.system.vo.AgilePersonInfo;
+import com.jeeagile.system.vo.AgileSysPerson;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 

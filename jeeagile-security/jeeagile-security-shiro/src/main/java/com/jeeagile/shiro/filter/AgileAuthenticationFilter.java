@@ -7,7 +7,6 @@ import com.jeeagile.core.security.annotation.AgileRequiresGuest;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.support.RequestContextUtils;
 

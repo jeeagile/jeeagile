@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
-import { Message, MessageBox } from 'element-ui'
-import { getUserToken } from '@/utils/cookie'
+import {Message, MessageBox} from 'element-ui'
+import {getUserToken} from '@/utils/cookie'
 // api 的 base_url
 const baseURL = process.env.VUE_APP_BASE_API
 

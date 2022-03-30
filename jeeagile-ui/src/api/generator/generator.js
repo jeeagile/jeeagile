@@ -1,4 +1,4 @@
-import { postApi } from '@/utils/axios'
+import {postApi} from '@/utils/axios'
 
 /**
  * 分页查询代码生成列表

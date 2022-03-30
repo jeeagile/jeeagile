@@ -1,29 +1,14 @@
-import {
-  assign,
-  forEach,
-  isArray
-} from 'min-dash'
+import {assign, forEach, isArray} from 'min-dash'
 
-import {
-  is
-} from 'bpmn-js/lib/util/ModelUtil'
+import {is} from 'bpmn-js/lib/util/ModelUtil'
 
-import {
-  isExpanded,
-  isEventSubProcess
-} from 'bpmn-js/lib/util/DiUtil'
+import {isEventSubProcess, isExpanded} from 'bpmn-js/lib/util/DiUtil'
 
-import {
-  isAny
-} from 'bpmn-js/lib/features/modeling/util/ModelingUtil'
+import {isAny} from 'bpmn-js/lib/features/modeling/util/ModelingUtil'
 
-import {
-  getChildLanes
-} from 'bpmn-js/lib/features/modeling/util/LaneUtil'
+import {getChildLanes} from 'bpmn-js/lib/features/modeling/util/LaneUtil'
 
-import {
-  hasPrimaryModifier
-} from 'diagram-js/lib/util/Mouse'
+import {hasPrimaryModifier} from 'diagram-js/lib/util/Mouse'
 
 
 /**

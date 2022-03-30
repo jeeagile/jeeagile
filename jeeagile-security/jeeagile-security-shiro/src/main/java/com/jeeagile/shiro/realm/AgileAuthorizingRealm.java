@@ -5,12 +5,12 @@ import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResultCode;
-import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.user.AgileBaseUser;
+import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
+import com.jeeagile.core.util.AgileAgentUtil;
 import com.jeeagile.core.util.AgileNetUtil;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.util.AgileAgentUtil;
 import com.jeeagile.core.util.spring.AgileServletUtil;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.shiro.SecurityUtils;
@@ -21,6 +21,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 

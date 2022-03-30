@@ -1,8 +1,8 @@
 package com.jeeagile.system.service;
 
 
-import com.jeeagile.system.vo.AgileSysPerson;
 import com.jeeagile.system.vo.AgilePersonInfo;
+import com.jeeagile.system.vo.AgileSysPerson;
 
 /**
  * @author JeeAgile

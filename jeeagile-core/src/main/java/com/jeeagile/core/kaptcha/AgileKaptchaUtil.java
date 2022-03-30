@@ -1,8 +1,8 @@
 package com.jeeagile.core.kaptcha;
 
 import com.jeeagile.core.exception.AgileFrameException;
-import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.core.util.spring.AgileSpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Base64Utils;

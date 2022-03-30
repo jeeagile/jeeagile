@@ -1,8 +1,6 @@
 package com.jeeagile.frame.plugins.datascope.property;
 
-import com.jeeagile.frame.annotation.AgileDataColumn;
 import com.jeeagile.frame.annotation.AgileDataScope;
-import lombok.Data;
 import lombok.Getter;
 
 import java.util.Arrays;
