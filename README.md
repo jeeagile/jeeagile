@@ -159,7 +159,7 @@ jeeagile
 ├─jeeagile-security    安全框架支持
 │  ├─jeeagile-security-shiro       apache shiro安全框架集成
 │  │
-│  └─jeeagile-security-spring      spring security安全框架集成
+│  └─jeeagile-security-boot        spring security安全框架集成
 │  
 ├─jeeagile-ui          前端UI模块（包括登录、系统管理、监控、队列、日志等）
 │  

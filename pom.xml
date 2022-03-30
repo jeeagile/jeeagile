@@ -279,7 +279,7 @@
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-security-spring</artifactId>
+                <artifactId>jeeagile-security-boot</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
 
