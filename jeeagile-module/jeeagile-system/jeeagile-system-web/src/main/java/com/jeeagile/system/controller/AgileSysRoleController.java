@@ -1,14 +1,15 @@
 package com.jeeagile.system.controller;
 
 import com.jeeagile.core.result.AgileResult;
+import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.system.entity.AgileSysRole;
 import com.jeeagile.system.service.IAgileSysRoleService;
-import com.jeeagile.system.vo.AgileUpdateStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,14 +27,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/system/role")
 @AgilePermissionsPrefix("system:role")
 @Api(value = "角色管理", tags = "角色管理")
-public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleService,AgileSysRole> {
+public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleService, AgileSysRole> {
     @AgileDemo
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "更新角色状态", notes = "更新角色状态")
     @AgileLogger(notes = "更新角色状态", type = AgileLoggerType.UPDATE)
-    public AgileResult<String> changeRoleStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
-        this.getAgileService().changeRoleStatus(agileUpdateStatus);
-        return this.success();
+    public AgileResult<String> changeRoleStatus(@SingleRequestBody String userId, @SingleRequestBody String roleStatus) {
+        if (this.getAgileService().changeRoleStatus(userId, roleStatus)) {
+            return this.success();
+        } else {
+            return this.error(AgileResultCode.FAIL_UPDATE_EXCEPTION, "角色状态更新失败！");
+        }
     }
 
     @AgileDemo
@@ -41,8 +45,11 @@ public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleSer
     @ApiOperation(value = "更新角色权限范围", notes = "更新角色权限范围")
     @AgileLogger(notes = "更新角色权限范围", type = AgileLoggerType.UPDATE)
     public AgileResult<String> dataScope(@RequestBody AgileSysRole agileSysRole) {
-        this.getAgileService().updateRoleDataScope(agileSysRole);
-        return this.success();
+        if (this.getAgileService().updateRoleDataScope(agileSysRole)) {
+            return this.success();
+        } else {
+            return this.error(AgileResultCode.FAIL_UPDATE_EXCEPTION, "角色权限范围更新失败！");
+        }
     }
 }
 

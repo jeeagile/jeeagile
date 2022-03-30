@@ -62,7 +62,7 @@ public class AgileSysMenuServiceImpl extends AgileBaseTreeServiceImpl<AgileSysMe
 
     @Override
     public void deleteModelValidate(Serializable menuId) {
-        if (this.countChild(menuId) > 0) {
+        if (this.hasChild(menuId)) {
             throw new AgileValidateException("该菜单下存在下级菜单不能进行删除操作！");
         }
     }

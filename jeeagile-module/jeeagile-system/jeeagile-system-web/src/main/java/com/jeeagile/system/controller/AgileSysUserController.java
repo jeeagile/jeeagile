@@ -7,14 +7,12 @@ import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.system.entity.AgileSysUser;
 import com.jeeagile.system.service.IAgileSysUserService;
-import com.jeeagile.system.vo.AgileUpdatePwd;
-import com.jeeagile.system.vo.AgileUpdateStatus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,8 +34,8 @@ public class AgileSysUserController extends AgileCrudController<IAgileSysUserSer
     @ApiOperation(value = "重置用户密码", notes = "重置用户密码")
     @AgileLogger(notes = "重置用户密码", type = AgileLoggerType.UPDATE)
     @AgileRequiresPermissions("password")
-    public AgileResult<Object> resetUserPassword(@RequestBody AgileUpdatePwd agileUpdatePwd) {
-        this.getAgileService().resetUserPwd(agileUpdatePwd);
+    public AgileResult<Object> resetUserPassword(@SingleRequestBody String userId, @SingleRequestBody String password) {
+        this.getAgileService().resetUserPassword(userId, password);
         return this.success();
     }
 
@@ -45,8 +43,8 @@ public class AgileSysUserController extends AgileCrudController<IAgileSysUserSer
     @PostMapping(value = "/status")
     @ApiOperation(value = "更新用户状态", notes = "更新用户状态")
     @AgileLogger(notes = "更新用户状态", type = AgileLoggerType.UPDATE)
-    public AgileResult<Object> changeStatus(@RequestBody AgileUpdateStatus agileUpdateStatus) {
-        this.getAgileService().changeUserStatus(agileUpdateStatus);
+    public AgileResult<Object> changeStatus(@SingleRequestBody String userId, @SingleRequestBody String userStatus) {
+        this.getAgileService().changeUserStatus(userId, userStatus);
         return this.success();
     }
 }

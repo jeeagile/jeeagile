@@ -107,6 +107,8 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     @ApiModelProperty(value = "备注", position = 12)
     @Size(max = 150, message = "备注长度最大值为150！")
     private String remark;
+
+
     /**
      * 用户已分配角色
      */

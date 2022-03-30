@@ -1,9 +1,8 @@
 package com.jeeagile.system.service;
 
 
+import com.jeeagile.system.vo.AgileSysPerson;
 import com.jeeagile.system.vo.AgilePersonInfo;
-import com.jeeagile.system.vo.AgileUpdatePerson;
-import com.jeeagile.system.vo.AgileUpdatePwd;
 
 /**
  * @author JeeAgile
@@ -14,20 +13,20 @@ public interface IAgileSysPersonService {
     /**
      * 获取个人详细信息
      */
-    AgilePersonInfo getPersonInfo();
+    AgileSysPerson getAgileSysPerson();
 
     /**
      * 更新个人信息
      */
-    boolean updatePersonInfo(AgileUpdatePerson agileUpdatePerson);
+    boolean updatePersonInfo(AgilePersonInfo agilePersonInfo);
 
     /**
      * 更新个人密码
-     *
-     * @param agileUpdatePwd
+     * @param oldPwd 老密码
+     * @param newPwd 新密码
      * @return
      */
-    boolean updatePersonPwd(AgileUpdatePwd agileUpdatePwd);
+    boolean updatePersonPassword(String oldPwd, String newPwd);
 
     /**
      * 更新用户头像
@@ -35,5 +34,5 @@ public interface IAgileSysPersonService {
      * @param userAvatar
      * @return
      */
-    boolean updateUserAvatar(String userAvatar);
+    boolean updatePersonAvatar(String userAvatar);
 }

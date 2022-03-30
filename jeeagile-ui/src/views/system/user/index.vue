@@ -117,7 +117,7 @@
           <el-col :span="12">
             <el-form-item label="归属部门" prop="deptId">
               <tree-select v-model="form.deptId" :options="deptTreeOptionList" :show-count="true"
-                           :normalizer="deptNormalizer" placeholder="请选择归属部门" />
+                           :normalizer="deptNormalizer" placeholder="请选择归属部门"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -374,7 +374,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const data = { id: row.id, status: row.userStatus }
+          const data = { userId: row.id, userStatus: row.userStatus }
           return changeUserStatus(data)
         }).then(() => {
           this.messageSuccess(text + '成功')
@@ -448,7 +448,7 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         }).then(({ value }) => {
-          const data = { userId: row.id, newPwd: value }
+          const data = { userId: row.id, password: value }
           resetPassword(data).then(() => {
             this.messageSuccess('修改成功，新密码是：' + value)
           })

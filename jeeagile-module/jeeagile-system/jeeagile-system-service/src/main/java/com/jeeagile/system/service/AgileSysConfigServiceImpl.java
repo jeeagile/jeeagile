@@ -73,12 +73,12 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     }
 
     @Override
-    public String getDefaultPwd() {
-        String defaultPwd = getConfigValueByKey("sys.user.pwd");
-        if (AgileStringUtil.isEmpty(defaultPwd)) {
-            defaultPwd = "888888";
+    public String getDefaultPassword() {
+        String defaultPassword = getConfigValueByKey("sys.user.pwd");
+        if (AgileStringUtil.isEmpty(defaultPassword)) {
+            defaultPassword = "888888";
         }
-        return defaultPwd;
+        return defaultPassword;
     }
 
     /**

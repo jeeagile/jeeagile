@@ -281,7 +281,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          const data = { id: row.id, status: row.roleStatus }
+          const data = { roleId: row.id, roleStatus: row.roleStatus }
           return changeRoleStatus(data)
         }).then(() => {
           this.messageSuccess(text + '成功')

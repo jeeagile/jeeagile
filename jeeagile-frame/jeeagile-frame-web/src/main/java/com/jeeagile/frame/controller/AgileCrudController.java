@@ -82,8 +82,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @ApiOperation(value = "新增数据", notes = "新增数据")
     public AgileResult<T> add(@RequestBody T agileModel) {
         this.saveModelValidate(agileModel);
-        agileModel = agileService.saveModel(agileModel);
-        return AgileResult.success(agileModel);
+        return AgileResult.success(agileService.saveModel(agileModel));
     }
 
     @AgileDemo

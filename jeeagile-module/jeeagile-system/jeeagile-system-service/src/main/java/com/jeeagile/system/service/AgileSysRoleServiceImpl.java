@@ -1,6 +1,7 @@
 package com.jeeagile.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -10,7 +11,6 @@ import com.jeeagile.system.entity.AgileSysRoleDept;
 import com.jeeagile.system.entity.AgileSysRoleMenu;
 import com.jeeagile.system.entity.AgileSysUserRole;
 import com.jeeagile.system.mapper.AgileSysRoleMapper;
-import com.jeeagile.system.vo.AgileUpdateStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
@@ -105,21 +105,28 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     }
 
     @Override
-    public boolean changeRoleStatus(AgileUpdateStatus agileUpdateStatus) {
+    public boolean changeRoleStatus(Serializable roleId, String roleStatus) {
         AgileSysRole agileSysRole = new AgileSysRole();
-        agileSysRole.setId(agileUpdateStatus.getId());
-        agileSysRole.setRoleStatus(agileUpdateStatus.getStatus());
+        agileSysRole.setId(roleId.toString());
+        agileSysRole.setRoleStatus(roleStatus);
         return this.updateById(agileSysRole);
     }
 
     @Override
     public boolean updateRoleDataScope(AgileSysRole agileSysRole) {
-        agileSysRole.setId(agileSysRole.getId());
-        agileSysRole.setDataScope(agileSysRole.getDataScope());
-        this.updateById(agileSysRole);
-        this.deleteRoleDept(agileSysRole.getId());
-        if (AGILE_DATA_SCOPE_05.equals(agileSysRole.getDataScope())) {
-            this.saveRoleDept(agileSysRole);
+        String dataScope = agileSysRole.getDataScope();
+        List<String> deptIdList = agileSysRole.getDeptIdList();
+        agileSysRole = this.getById(agileSysRole.getId());
+        if (agileSysRole != null && agileSysRole.isNotEmptyPk()) {
+            agileSysRole.setDataScope(dataScope);
+            this.updateById(agileSysRole);
+            this.deleteRoleDept(agileSysRole.getId());
+            if (AGILE_DATA_SCOPE_05.equals(agileSysRole.getDataScope())) {
+                agileSysRole.setDeptIdList(deptIdList);
+                this.saveRoleDept(agileSysRole);
+            }
+        } else {
+            throw new AgileFrameException("数据已不存在或无权限操作该条数据！");
         }
         return true;
     }
@@ -136,7 +143,7 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
         List<AgileSysRoleMenu> roleMenuList = agileSysRoleMenuService.list(lambdaQueryWrapper);
         List<String> roleMenuIdList = new ArrayList<>();
         for (AgileSysRoleMenu sysRoleMenu : roleMenuList) {
-            if (agileSysMenuService.countChild(sysRoleMenu.getMenuId()) < 1) {
+            if (!agileSysMenuService.hasChild(sysRoleMenu.getMenuId())) {
                 roleMenuIdList.add(sysRoleMenu.getMenuId());
             }
         }

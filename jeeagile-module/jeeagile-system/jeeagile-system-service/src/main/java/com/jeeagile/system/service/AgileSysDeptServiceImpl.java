@@ -60,7 +60,7 @@ public class AgileSysDeptServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDe
 
     @Override
     public void deleteModelValidate(Serializable deptId) {
-        if (this.countChild(deptId) > 0) {
+        if (this.hasChild(deptId)) {
             throw new AgileValidateException("该部门存在下级部门不能进行删除操作！");
         }
     }

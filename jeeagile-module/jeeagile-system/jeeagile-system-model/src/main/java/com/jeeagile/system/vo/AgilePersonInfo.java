@@ -1,12 +1,11 @@
 package com.jeeagile.system.vo;
 
-import com.jeeagile.system.entity.AgileSysUser;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author JeeAgile
@@ -16,13 +15,26 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgilePersonInfo extends AgileSysUser {
+public class AgilePersonInfo {
     /**
-     * 分配角色列表
+     * 用户昵称
      */
-    private List<String> roleNameList = new ArrayList<>();
+    @NotNull(message = "用户昵称不能为空!")
+    @Size(max = 50, message = "用户昵称最大长度为150")
+    private String nickName;
+
     /**
-     * 分配岗位列表
+     * 用户性别
      */
-    private List<String> postNameList = new ArrayList<>();
+    private String userSex;
+
+    /**
+     * 联系电话
+     */
+    private String userPhone;
+
+    /**
+     * 邮箱地址
+     */
+    private String userEmail;
 }

@@ -22,5 +22,5 @@ public interface IAgileSysConfigService extends IAgileBaseService<AgileSysConfig
     /**
      * 获取默认配置密码
      */
-    String getDefaultPwd();
+    String getDefaultPassword();
 }

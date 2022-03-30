@@ -12,8 +12,6 @@ import com.jeeagile.system.entity.AgileSysUser;
 import com.jeeagile.system.entity.AgileSysUserPost;
 import com.jeeagile.system.entity.AgileSysUserRole;
 import com.jeeagile.system.mapper.AgileSysUserMapper;
-import com.jeeagile.system.vo.AgileUpdatePwd;
-import com.jeeagile.system.vo.AgileUpdateStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
@@ -92,7 +90,7 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     public AgileSysUser saveModel(AgileSysUser agileSysUser) {
         String userPwd = agileSysUser.getUserPwd();
         if (AgileStringUtil.isEmpty(userPwd)) {
-            userPwd = agileSysConfigService.getDefaultPwd();
+            userPwd = agileSysConfigService.getDefaultPassword();
         }
         agileSysUser.setUserPwd(AgileSecurityUtil.encryptPassword(userPwd));
         this.validateData(agileSysUser);
@@ -122,24 +120,22 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     }
 
     @Override
-    public boolean resetUserPwd(AgileUpdatePwd agileUpdatePwd) {
-        String userPwd = agileUpdatePwd.getNewPwd();
-        if (AgileStringUtil.isEmpty(userPwd)) {
-            userPwd = agileSysConfigService.getDefaultPwd();
+    public boolean resetUserPassword(Serializable userId, String password) {
+        if (AgileStringUtil.isEmpty(password)) {
+            password = agileSysConfigService.getDefaultPassword();
         }
-        userPwd = AgileSecurityUtil.encryptPassword(userPwd);
+        password = AgileSecurityUtil.encryptPassword(password);
         AgileSysUser agileSysUser = new AgileSysUser();
-        agileSysUser.setId(agileUpdatePwd.getUserId());
-        agileSysUser.setUserPwd(userPwd);
+        agileSysUser.setId(userId.toString());
+        agileSysUser.setUserPwd(password);
         return this.updateById(agileSysUser);
     }
 
     @Override
-    public boolean changeUserStatus(AgileUpdateStatus agileUpdateStatus) {
+    public boolean changeUserStatus(Serializable userId, String userStatus) {
         AgileSysUser agileSysUser = new AgileSysUser();
-        agileSysUser.setId(agileUpdateStatus.getId());
-        agileSysUser.setUserStatus(agileUpdateStatus.getStatus());
-
+        agileSysUser.setId(userId.toString());
+        agileSysUser.setUserStatus(userStatus);
         return this.updateById(agileSysUser);
     }
 

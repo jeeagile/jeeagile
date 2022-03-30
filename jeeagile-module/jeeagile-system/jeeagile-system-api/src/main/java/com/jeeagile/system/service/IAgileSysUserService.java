@@ -2,8 +2,8 @@ package com.jeeagile.system.service;
 
 import com.jeeagile.frame.service.IAgileBaseService;
 import com.jeeagile.system.entity.AgileSysUser;
-import com.jeeagile.system.vo.AgileUpdatePwd;
-import com.jeeagile.system.vo.AgileUpdateStatus;
+
+import java.io.Serializable;
 
 /**
  * @author JeeAgile
@@ -14,10 +14,10 @@ public interface IAgileSysUserService extends IAgileBaseService<AgileSysUser> {
     /**
      * 重置用户密码
      */
-    boolean resetUserPwd(AgileUpdatePwd agileUpdatePwd);
+    boolean resetUserPassword(Serializable userId, String password);
 
     /**
      * 修改用户状态
      */
-    boolean changeUserStatus(AgileUpdateStatus agileUpdateStatus);
+    boolean changeUserStatus(Serializable userId, String userStatus);
 }
