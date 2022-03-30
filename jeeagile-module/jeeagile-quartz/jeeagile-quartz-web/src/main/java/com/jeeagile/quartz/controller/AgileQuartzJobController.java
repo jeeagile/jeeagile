@@ -33,7 +33,7 @@ public class AgileQuartzJobController extends AgileCrudController<IAgileQuartzJo
     @ApiOperation(value = "更新任务状态", notes = "更新任务状态")
     @AgileLogger(notes = "更新任务状态", type = AgileLoggerType.UPDATE)
     public AgileResult<String> changeJobStatus(@RequestBody AgileQuartzJob agileQuartzJob) {
-        this.getAgileService().changeQuartzJobStatus(agileQuartzJob);
+        this.getAgileBaseService().changeQuartzJobStatus(agileQuartzJob);
         return this.success();
     }
 
@@ -42,7 +42,7 @@ public class AgileQuartzJobController extends AgileCrudController<IAgileQuartzJo
     @AgileLogger(notes = "执行任务", type = AgileLoggerType.DELETE)
     @AgileRequiresPermissions("execute")
     public AgileResult execute(@SingleRequestBody String quartzJobId) {
-        this.getAgileService().executeQuartzJob(quartzJobId);
+        this.getAgileBaseService().executeQuartzJob(quartzJobId);
         return this.success("执行任务成功！");
     }
 }

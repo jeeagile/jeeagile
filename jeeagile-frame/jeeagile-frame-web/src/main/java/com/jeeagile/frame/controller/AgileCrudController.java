@@ -10,7 +10,7 @@ import com.jeeagile.frame.entity.AgileModel;
 import com.jeeagile.frame.enums.AgileLoggerType;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
-import com.jeeagile.frame.service.IAgileService;
+import com.jeeagile.frame.service.IAgileBaseService;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import io.swagger.annotations.ApiOperation;
 import lombok.Getter;
@@ -24,11 +24,11 @@ import java.util.List;
  * @date 2022-03-02
  * @description
  */
-public abstract class AgileCrudController<I extends IAgileService<T>, T extends AgileModel> extends AgileBaseController {
+public abstract class AgileCrudController<I extends IAgileBaseService<T>, T extends AgileModel> extends AgileBaseController {
 
     @Getter
     @AgileReference
-    private I agileService;
+    private I agileBaseService;
 
     @RequestMapping(value = "/init", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "初始化", notes = "提供页面初始化数据接口")
@@ -40,7 +40,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
      * 初始化数据
      */
     protected Object initData() {
-        return agileService.initData();
+        return agileBaseService.initData();
     }
 
     @PostMapping(value = "/page")
@@ -48,7 +48,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(notes = "根据条件分页查询数据", type = AgileLoggerType.SELECT)
     @ApiOperation(value = "分页查询", notes = "分页查询数据接口")
     public AgileResult<AgilePage<T>> selectPage(@RequestBody AgilePageable<T> agilePageable) {
-        return AgileResult.success(agileService.selectPage(agilePageable));
+        return AgileResult.success(agileBaseService.selectPage(agilePageable));
     }
 
     @PostMapping(value = "/list")
@@ -56,7 +56,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(notes = "根据条件查询数据", type = AgileLoggerType.SELECT)
     @ApiOperation(value = "查询列表", notes = "根据条件查询数据")
     public AgileResult<List<T>> selectList(@RequestBody T agileModel) {
-        return AgileResult.success(agileService.selectList(agileModel));
+        return AgileResult.success(agileBaseService.selectList(agileModel));
     }
 
     @PostMapping("/detail")
@@ -64,7 +64,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<T> detail(@SingleRequestBody Serializable id) {
-        return AgileResult.success(agileService.selectModel(id));
+        return AgileResult.success(agileBaseService.selectModel(id));
     }
 
     @GetMapping("/{id}")
@@ -72,7 +72,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<T> detailInfo(@PathVariable Serializable id) {
-        return AgileResult.success(agileService.selectModel(id));
+        return AgileResult.success(agileBaseService.selectModel(id));
     }
 
     @AgileDemo
@@ -82,7 +82,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @ApiOperation(value = "新增数据", notes = "新增数据")
     public AgileResult<T> add(@RequestBody T agileModel) {
         this.saveModelValidate(agileModel);
-        return AgileResult.success(agileService.saveModel(agileModel));
+        return AgileResult.success(agileBaseService.saveModel(agileModel));
     }
 
     @AgileDemo
@@ -92,7 +92,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @ApiOperation(value = "更新数据", notes = "根据主键更新数据")
     public AgileResult update(@RequestBody T agileModel) {
         this.updateModelValidate(agileModel);
-        if (agileService.updateModel(agileModel)) {
+        if (agileBaseService.updateModel(agileModel)) {
             return AgileResult.success("数据更新成功！");
         } else {
             return AgileResult.error(AgileResultCode.FAIL_OPS_UPDATE, "数据更新失败！");
@@ -105,7 +105,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(notes = "根据主键删除数据", type = AgileLoggerType.DELETE)
     @ApiOperation(value = "删除数据", notes = "删除业务数据")
     public AgileResult delete(@SingleRequestBody Serializable id) {
-        if (agileService.deleteModel(id)) {
+        if (agileBaseService.deleteModel(id)) {
             return AgileResult.success("数据删除成功！");
         } else {
             return AgileResult.error(AgileResultCode.FAIL_OPS_DELETE, "数据删除失败！");
@@ -118,7 +118,7 @@ public abstract class AgileCrudController<I extends IAgileService<T>, T extends 
     @AgileLogger(notes = "根据主键删除数据", type = AgileLoggerType.DELETE)
     @ApiOperation(value = "删除数据", notes = "根据主键删除数据")
     public AgileResult deleteInfo(@PathVariable Serializable id) {
-        if (agileService.deleteModel(id)) {
+        if (agileBaseService.deleteModel(id)) {
             return AgileResult.success("数据删除成功！");
         } else {
             return AgileResult.error(AgileResultCode.FAIL_OPS_DELETE, "数据删除失败！");

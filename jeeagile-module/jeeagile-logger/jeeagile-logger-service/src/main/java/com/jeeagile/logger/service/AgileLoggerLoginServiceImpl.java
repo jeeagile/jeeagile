@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.frame.service.AgileServiceImpl;
+import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.logger.entity.AgileLoggerLogin;
 import com.jeeagile.logger.mapper.AgileLoggerLoginMapper;
 
@@ -14,7 +14,7 @@ import com.jeeagile.logger.mapper.AgileLoggerLoginMapper;
  * @description
  */
 @AgileService
-public class AgileLoggerLoginServiceImpl extends AgileServiceImpl<AgileLoggerLoginMapper, AgileLoggerLogin> implements IAgileLoggerLoginService {
+public class AgileLoggerLoginServiceImpl extends AgileBaseServiceImpl<AgileLoggerLoginMapper, AgileLoggerLogin> implements IAgileLoggerLoginService {
 
     @Override
     public LambdaQueryWrapper<AgileLoggerLogin> queryWrapper(AgileLoggerLogin agileLoggerLogin) {

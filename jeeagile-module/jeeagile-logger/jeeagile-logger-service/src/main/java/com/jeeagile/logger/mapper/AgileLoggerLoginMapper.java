@@ -1,7 +1,7 @@
 package com.jeeagile.logger.mapper;
 
 import com.jeeagile.frame.annotation.AgileMapperScan;
-import com.jeeagile.frame.mapper.AgileMapper;
+import com.jeeagile.frame.mapper.AgileBaseMapper;
 import com.jeeagile.logger.entity.AgileLoggerLogin;
 
 /**
@@ -10,6 +10,6 @@ import com.jeeagile.logger.entity.AgileLoggerLogin;
  * @description
  */
 @AgileMapperScan
-public interface AgileLoggerLoginMapper extends AgileMapper<AgileLoggerLogin> {
+public interface AgileLoggerLoginMapper extends AgileBaseMapper<AgileLoggerLogin> {
 
 }

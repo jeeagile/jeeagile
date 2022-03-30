@@ -1,6 +1,8 @@
 package com.jeeagile.frame.service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileModel;
 import com.jeeagile.frame.mapper.AgileBaseMapper;
 
 /**
@@ -8,6 +10,6 @@ import com.jeeagile.frame.mapper.AgileBaseMapper;
  * @date 2021-03-21
  * @description
  */
-public abstract class AgileBaseServiceImpl<M extends AgileBaseMapper<T>, T extends AgileBaseModel> extends AgileServiceImpl<M, T> implements IAgileBaseService<T> {
+public abstract class AgileBaseServiceImpl<M extends AgileBaseMapper<T>, T extends AgileModel> extends ServiceImpl<M, T> implements IAgileBaseService<T> {
 
 }

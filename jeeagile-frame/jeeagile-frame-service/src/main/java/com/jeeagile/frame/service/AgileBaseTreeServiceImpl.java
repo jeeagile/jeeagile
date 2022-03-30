@@ -2,6 +2,7 @@ package com.jeeagile.frame.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.util.AgileCollectionUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.entity.AgileBaseTreeModel;
 import com.jeeagile.frame.mapper.AgileBaseTreeMapper;
 
@@ -18,12 +19,12 @@ public class AgileBaseTreeServiceImpl<M extends AgileBaseTreeMapper<T>, T extend
 
     @Override
     public List<T> selectChildList(Serializable parentId) {
-        QueryWrapper<T> wrapper = new QueryWrapper<>();
-        if (parentId == null) {
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        if (AgileStringUtil.isEmpty(parentId)) {
             parentId = "0";
         }
-        wrapper.eq("parent_id", parentId);
-        return this.list(wrapper);
+        queryWrapper.eq("parent_id", parentId);
+        return this.list(queryWrapper);
     }
 
     @Override
@@ -41,13 +42,14 @@ public class AgileBaseTreeServiceImpl<M extends AgileBaseTreeMapper<T>, T extend
 
     @Override
     public long countChild(Serializable parentId) {
-        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (parentId == null) {
             parentId = "0";
         }
-        wrapper.eq("parent_id", parentId);
-        return this.count(wrapper);
+        queryWrapper.eq("parent_id", parentId);
+        return this.count(queryWrapper);
     }
+
     @Override
     public boolean hasChild(Serializable parentId) {
         return this.countChild(parentId) > 0 ? true : false;

@@ -1,6 +1,6 @@
 package com.jeeagile.logger.service;
 
-import com.jeeagile.frame.service.IAgileService;
+import com.jeeagile.frame.service.IAgileBaseService;
 import com.jeeagile.logger.entity.AgileLoggerLogin;
 
 /**
@@ -8,7 +8,7 @@ import com.jeeagile.logger.entity.AgileLoggerLogin;
  * @date 2021-03-21
  * @description
  */
-public interface IAgileLoggerLoginService extends IAgileService<AgileLoggerLogin> {
+public interface IAgileLoggerLoginService extends IAgileBaseService<AgileLoggerLogin> {
     /**
      * 清空日志记录
      */

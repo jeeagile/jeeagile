@@ -1,7 +1,7 @@
 package com.jeeagile.quartz.mapper;
 
 import com.jeeagile.frame.annotation.AgileMapperScan;
-import com.jeeagile.frame.mapper.AgileMapper;
+import com.jeeagile.frame.mapper.AgileBaseMapper;
 import com.jeeagile.quartz.entity.AgileQuartzLogger;
 
 /**
@@ -10,6 +10,6 @@ import com.jeeagile.quartz.entity.AgileQuartzLogger;
  * @description
  */
 @AgileMapperScan
-public interface AgileQuartzLoggerMapper extends AgileMapper<AgileQuartzLogger> {
+public interface AgileQuartzLoggerMapper extends AgileBaseMapper<AgileQuartzLogger> {
 
 }

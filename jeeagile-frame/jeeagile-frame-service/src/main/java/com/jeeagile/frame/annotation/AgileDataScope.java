@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.METHOD})
 public @interface AgileDataScope {
     /**
      * 数据权限类型 默认 系统内部实现 方便 二次开发使用

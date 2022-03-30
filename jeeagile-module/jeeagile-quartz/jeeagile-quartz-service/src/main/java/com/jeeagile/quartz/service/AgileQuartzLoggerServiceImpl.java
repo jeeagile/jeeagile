@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.frame.service.AgileServiceImpl;
+import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.quartz.entity.AgileQuartzLogger;
 import com.jeeagile.quartz.mapper.AgileQuartzLoggerMapper;
 
@@ -14,7 +14,7 @@ import com.jeeagile.quartz.mapper.AgileQuartzLoggerMapper;
  * @description
  */
 @AgileService
-public class AgileQuartzLoggerServiceImpl extends AgileServiceImpl<AgileQuartzLoggerMapper, AgileQuartzLogger> implements IAgileQuartzLoggerService {
+public class AgileQuartzLoggerServiceImpl extends AgileBaseServiceImpl<AgileQuartzLoggerMapper, AgileQuartzLogger> implements IAgileQuartzLoggerService {
 
     @Override
     public LambdaQueryWrapper<AgileQuartzLogger> queryWrapper(AgileQuartzLogger agileQuartzLogger) {
