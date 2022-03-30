@@ -13,5 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>jeeagile-protocol-dubbo</module>
+        <module>jeeagile-protocol-rabbit</module>
     </modules>
 </project>
