@@ -29,11 +29,12 @@ import directive from '@/directive'
 import processDesigner from '@/components/ProcessDesigner'
 import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getDictDataByDictType } from '@/api/system/dictData'
-import { getConfigByKey } from '@/api/system/config'
+import { getSysDictData } from '@/api/system/common'
+import { getSysDictDataList } from '@/api/system/common'
+import { getSysConfig } from '@/api/system/common'
+import { getSysConfigValue } from '@/api/system/common'
 import { handleDictLabel, handleTree, resetForm } from '@/utils/agile'
 import VueParticles from 'vue-particles'
-
 
 
 // 全局组件挂载
@@ -49,8 +50,10 @@ Vue.use(VueParticles)
 Vue.prototype.resetForm = resetForm
 Vue.prototype.handleTree = handleTree
 Vue.prototype.handleDictLabel = handleDictLabel
-Vue.prototype.getConfigByKey = getConfigByKey
-Vue.prototype.getDictDataByDictType = getDictDataByDictType
+Vue.prototype.getSysDictData = getSysDictData
+Vue.prototype.getSysDictDataList = getSysDictDataList
+Vue.prototype.getSysConfig= getSysConfig
+Vue.prototype.getSysConfigValue = getSysConfigValue
 
 Vue.prototype.messageSuccess = function (message) {
   this.$message({ showClose: true, message: message, type: 'success' })

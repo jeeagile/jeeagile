@@ -165,7 +165,7 @@
       const jobCode = this.$route.params && this.$route.params.jobCode
       this.queryParam.queryCond.jobCode = jobCode
       this.getLoggerList()
-      this.getDictDataByDictType('sys_common_status').then(response => {
+      this.getSysDictDataList('sys_common_status').then(response => {
         this.statusOptions = response.data
       })
     },

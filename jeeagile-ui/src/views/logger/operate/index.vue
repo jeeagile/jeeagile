@@ -174,10 +174,10 @@
     },
     created() {
       this.getLoggerList()
-      this.getDictDataByDictType('sys_logger_type').then(response => {
+      this.getSysDictDataList('sys_logger_type').then(response => {
         this.typeOptions = response.data
       })
-      this.getDictDataByDictType('sys_logger_status').then(response => {
+      this.getSysDictDataList('sys_logger_status').then(response => {
         this.statusOptions = response.data
       })
     },

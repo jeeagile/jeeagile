@@ -218,11 +218,11 @@
     },
     created() {
       this.getMenuList()
-      this.getDictDataByDictType('sys_show_visible').then(response => {
+      this.getSysDictDataList('sys_show_visible').then(response => {
         this.menuVisibleOptionList = response.data
       })
 
-      this.getDictDataByDictType('sys_normal_disable').then(response => {
+      this.getSysDictDataList('sys_normal_disable').then(response => {
         this.menuStatusOptionList = response.data
       })
     },

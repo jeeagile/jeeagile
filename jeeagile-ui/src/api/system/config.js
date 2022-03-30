@@ -30,8 +30,3 @@ export const deleteConfig = data => postApi('/system/config/delete', data)
  */
 export const clearConfigCache = data => postApi('/system/config/clearCache', data)
 
-/**
- * 根据键值获取配置信息
- */
-export const getConfigByKey = configKey => postApi('/system/config/getConfigByKey', configKey)
-

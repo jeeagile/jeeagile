@@ -10,14 +10,14 @@ import com.jeeagile.system.entity.AgileSysConfig;
  */
 public interface IAgileSysConfigService extends IAgileBaseService<AgileSysConfig> {
     /**
-     * 根据配置键值获取配置信息
+     * 获取系统参数配置信息
      */
-    AgileSysConfig selectConfigByConfigKey(String configKey);
+    AgileSysConfig getSysConfig(String configKey);
 
     /**
      * 根据配置键值获取配置值
      */
-    String getConfigValueByKey(String configKey);
+    String getSysConfigValue(String configKey);
 
     /**
      * 获取默认配置密码

@@ -47,11 +47,19 @@ public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileS
     }
 
     @Override
-    public List<AgileSysDictData> selectDictDataByDictType(String dictType) {
-        QueryWrapper<AgileSysDictData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(AgileSysDictData::getDictType, dictType);
-        queryWrapper.lambda().orderByAsc(AgileSysDictData::getDictSort);
-        return this.list(queryWrapper);
+    public List<AgileSysDictData> getSysDictDataList(String dictType) {
+        LambdaQueryWrapper<AgileSysDictData> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysDictData::getDictType, dictType);
+        lambdaQueryWrapper.orderByAsc(AgileSysDictData::getDictSort);
+        return this.list(lambdaQueryWrapper);
+    }
+
+    @Override
+    public AgileSysDictData getSysDictData(String dictType, String dictValue) {
+        LambdaQueryWrapper<AgileSysDictData> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysDictData::getDictType, dictType);
+        lambdaQueryWrapper.eq(AgileSysDictData::getDictValue, dictValue);
+        return this.getOne(lambdaQueryWrapper);
     }
 
     @Override

@@ -230,10 +230,10 @@
     created() {
       this.initData()
       this.getRoleList()
-      this.getDictDataByDictType('sys_normal_disable').then(response => {
+      this.getSysDictDataList('sys_normal_disable').then(response => {
         this.roleStatusOptionList = response.data
       })
-      this.getDictDataByDictType('sys_data_scope').then(response => {
+      this.getSysDictDataList('sys_data_scope').then(response => {
         this.dataScopeOptionList = response.data
       })
     },

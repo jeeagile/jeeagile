@@ -138,7 +138,7 @@
     },
     created() {
       this.getDeptTreeList()
-      this.getDictDataByDictType('sys_normal_disable').then(response => {
+      this.getSysDictDataList('sys_normal_disable').then(response => {
         this.deptStatusOptionList = response.data
       })
     },

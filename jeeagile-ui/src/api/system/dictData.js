@@ -29,9 +29,3 @@ export const updateDictData = data => postApi('/system/dict/data/update', data)
  * 删除字典数据
  */
 export const deleteDictData = data => postApi('/system/dict/data/delete', data)
-
-/**
- * 根据字典类型获取字典数据列表
- */
-export const getDictDataByDictType = dictType => postApi('/system/dict/data/getDictDataByDictType', dictType)
-

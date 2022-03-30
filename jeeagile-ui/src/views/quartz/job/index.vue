@@ -294,7 +294,7 @@
     },
     created() {
       this.getJobList()
-      this.getDictDataByDictType('sys_job_status').then(response => {
+      this.getSysDictDataList('sys_job_status').then(response => {
         this.jobStatusOption = response.data
       })
     },

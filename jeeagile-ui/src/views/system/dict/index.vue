@@ -167,7 +167,7 @@
     },
     created() {
       this.getDictTypeList()
-      this.getDictDataByDictType('sys_normal_disable').then(response => {
+      this.getSysDictDataList('sys_normal_disable').then(response => {
         this.dictStatusOptionList = response.data
       })
     },

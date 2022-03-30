@@ -13,7 +13,12 @@ import java.util.List;
 public interface IAgileSysDictDataService extends IAgileBaseTreeService<AgileSysDictData> {
 
     /**
-     * 根据字典类型查询字典数据列表
+     * 获取字典数据列表
      */
-    List<AgileSysDictData> selectDictDataByDictType(String dictType);
+    List<AgileSysDictData> getSysDictDataList(String dictType);
+
+    /**
+     * 获取字典数据
+     */
+    AgileSysDictData getSysDictData(String dictType, String dictValue);
 }

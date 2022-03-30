@@ -156,7 +156,7 @@
     },
     created() {
       this.getConfigList()
-      this.getDictDataByDictType('sys_yes_no').then(response => {
+      this.getSysDictDataList('sys_yes_no').then(response => {
         this.flagOptionList = response.data
       })
     },

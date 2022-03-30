@@ -38,7 +38,7 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     }
 
     @Override
-    public AgileSysConfig selectConfigByConfigKey(String configKey) {
+    public AgileSysConfig getSysConfig(String configKey) {
         QueryWrapper<AgileSysConfig> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(AgileSysConfig::getConfigKey, configKey);
         return this.getOne(queryWrapper);
@@ -64,8 +64,8 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
 
 
     @Override
-    public String getConfigValueByKey(String configKey) {
-        AgileSysConfig agileSysConfig = this.selectConfigByConfigKey(configKey);
+    public String getSysConfigValue(String configKey) {
+        AgileSysConfig agileSysConfig = this.getSysConfig(configKey);
         if (agileSysConfig != null) {
             return agileSysConfig.getConfigValue();
         }
@@ -74,7 +74,7 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
 
     @Override
     public String getDefaultPassword() {
-        String defaultPassword = getConfigValueByKey("sys.user.pwd");
+        String defaultPassword = getSysConfigValue("sys.user.pwd");
         if (AgileStringUtil.isEmpty(defaultPassword)) {
             defaultPassword = "888888";
         }

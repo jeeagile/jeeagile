@@ -95,7 +95,7 @@
     },
     created() {
       this.getLoginList()
-      this.getDictDataByDictType('sys_common_status').then(response => {
+      this.getSysDictDataList('sys_common_status').then(response => {
         this.statusOptions = response.data
       })
     },

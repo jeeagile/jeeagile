@@ -306,13 +306,13 @@
     created() {
       this.initData()
       this.getUserList()
-      this.getDictDataByDictType('sys_normal_disable').then(response => {
+      this.getSysDictDataList('sys_normal_disable').then(response => {
         this.userStatusOptionList = response.data
       })
-      this.getDictDataByDictType('sys_user_sex').then(response => {
+      this.getSysDictDataList('sys_user_sex').then(response => {
         this.userSexOptionList = response.data
       })
-      this.getConfigByKey('sys.user.pwd').then(response => {
+      this.getSysConfig('sys.user.pwd').then(response => {
         this.defaultPwd = response.data.configValue
       })
     },
