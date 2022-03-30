@@ -2,8 +2,8 @@ package ${packageName}.service.${moduleName};
 
 import ${packageName}.entity.${moduleName}.${ClassName};
 #if($tableType=="tree")
-import com.jeeagile.frame.service.IAgileBaseTreeService;
-#set($BaseService="IAgileBaseTreeService")
+import com.jeeagile.frame.service.IAgileTreeService;
+#set($BaseService="IAgileTreeService")
 #elseif($tableType=="crud")
 import com.jeeagile.frame.service.IAgileBaseService;
 import com.jeeagile.frame.page.AgilePage;

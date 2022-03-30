@@ -4,7 +4,7 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import ${packageName}.entity.${moduleName}.${ClassName};
 import ${packageName}.mapper.${moduleName}.${ClassName}Mapper;
 #if($tableType=="tree")
-    #set($BaseServiceImpl="AgileBaseTreeServiceImpl")
+    #set($BaseServiceImpl="AgileTreeServiceImpl")
 #elseif($tableType=="crud")
     #set($BaseServiceImpl="AgileBaseServiceImpl")
 #end

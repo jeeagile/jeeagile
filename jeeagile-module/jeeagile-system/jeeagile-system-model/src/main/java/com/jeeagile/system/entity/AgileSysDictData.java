@@ -1,6 +1,6 @@
 package com.jeeagile.system.entity;
 
-import com.jeeagile.frame.entity.AgileBaseTreeModel;
+import com.jeeagile.frame.entity.AgileTreeModel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileSysDictData extends AgileBaseTreeModel<AgileSysDictData> {
+public class AgileSysDictData extends AgileTreeModel<AgileSysDictData> {
     /**
      * 字典类型
      */

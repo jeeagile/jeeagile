@@ -1,7 +1,7 @@
 package com.jeeagile.system.mapper;
 
 import com.jeeagile.frame.annotation.AgileMapper;
-import com.jeeagile.frame.mapper.AgileBaseTreeMapper;
+import com.jeeagile.frame.mapper.AgileTreeMapper;
 import com.jeeagile.system.entity.AgileSysMenu;
 
 /**
@@ -10,6 +10,6 @@ import com.jeeagile.system.entity.AgileSysMenu;
  * @description
  */
 @AgileMapper
-public interface AgileSysMenuMapper extends AgileBaseTreeMapper<AgileSysMenu> {
+public interface AgileSysMenuMapper extends AgileTreeMapper<AgileSysMenu> {
 
 }

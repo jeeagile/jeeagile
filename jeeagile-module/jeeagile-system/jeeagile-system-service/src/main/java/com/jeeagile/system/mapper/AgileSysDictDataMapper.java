@@ -1,7 +1,7 @@
 package com.jeeagile.system.mapper;
 
 import com.jeeagile.frame.annotation.AgileMapper;
-import com.jeeagile.frame.mapper.AgileBaseTreeMapper;
+import com.jeeagile.frame.mapper.AgileTreeMapper;
 import com.jeeagile.system.entity.AgileSysDictData;
 
 /**
@@ -10,6 +10,6 @@ import com.jeeagile.system.entity.AgileSysDictData;
  * @description
  */
 @AgileMapper
-public interface AgileSysDictDataMapper extends AgileBaseTreeMapper<AgileSysDictData> {
+public interface AgileSysDictDataMapper extends AgileTreeMapper<AgileSysDictData> {
 
 }

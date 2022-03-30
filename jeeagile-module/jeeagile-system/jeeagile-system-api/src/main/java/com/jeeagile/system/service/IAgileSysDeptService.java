@@ -1,6 +1,6 @@
 package com.jeeagile.system.service;
 
-import com.jeeagile.frame.service.IAgileBaseTreeService;
+import com.jeeagile.frame.service.IAgileTreeService;
 import com.jeeagile.system.entity.AgileSysDept;
 
 /**
@@ -8,5 +8,5 @@ import com.jeeagile.system.entity.AgileSysDept;
  * @date 2021-03-21
  * @description
  */
-public interface IAgileSysDeptService extends IAgileBaseTreeService<AgileSysDept> {
+public interface IAgileSysDeptService extends IAgileTreeService<AgileSysDept> {
 }

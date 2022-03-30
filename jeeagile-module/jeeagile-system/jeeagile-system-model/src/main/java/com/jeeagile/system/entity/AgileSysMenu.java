@@ -1,6 +1,6 @@
 package com.jeeagile.system.entity;
 
-import com.jeeagile.frame.entity.AgileBaseTreeModel;
+import com.jeeagile.frame.entity.AgileTreeModel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileSysMenu extends AgileBaseTreeModel<AgileSysMenu> {
+public class AgileSysMenu extends AgileTreeModel<AgileSysMenu> {
    /**
      * 菜单名称
      */

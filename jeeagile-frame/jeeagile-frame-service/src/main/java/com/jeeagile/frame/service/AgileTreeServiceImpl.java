@@ -3,8 +3,8 @@ package com.jeeagile.frame.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.frame.entity.AgileBaseTreeModel;
-import com.jeeagile.frame.mapper.AgileBaseTreeMapper;
+import com.jeeagile.frame.entity.AgileTreeModel;
+import com.jeeagile.frame.mapper.AgileTreeMapper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2021-03-21
  * @description
  */
-public class AgileBaseTreeServiceImpl<M extends AgileBaseTreeMapper<T>, T extends AgileBaseTreeModel> extends AgileBaseServiceImpl<M, T> implements IAgileBaseTreeService<T> {
+public class AgileTreeServiceImpl<M extends AgileTreeMapper<T>, T extends AgileTreeModel> extends AgileBaseServiceImpl<M, T> implements IAgileTreeService<T> {
 
     @Override
     public List<T> selectChildList(Serializable parentId) {

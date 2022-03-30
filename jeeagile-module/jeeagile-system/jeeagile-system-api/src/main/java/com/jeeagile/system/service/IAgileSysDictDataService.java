@@ -1,6 +1,6 @@
 package com.jeeagile.system.service;
 
-import com.jeeagile.frame.service.IAgileBaseTreeService;
+import com.jeeagile.frame.service.IAgileTreeService;
 import com.jeeagile.system.entity.AgileSysDictData;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  * @date 2021-03-21
  * @description
  */
-public interface IAgileSysDictDataService extends IAgileBaseTreeService<AgileSysDictData> {
+public interface IAgileSysDictDataService extends IAgileTreeService<AgileSysDictData> {
 
     /**
      * 获取字典数据列表

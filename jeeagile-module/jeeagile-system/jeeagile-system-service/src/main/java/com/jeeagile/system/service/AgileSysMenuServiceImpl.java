@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
+import com.jeeagile.frame.service.AgileTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysMenu;
 import com.jeeagile.system.entity.AgileSysRoleMenu;
 import com.jeeagile.system.mapper.AgileSysMenuMapper;
@@ -22,7 +22,7 @@ import java.util.List;
  * @description
  */
 @AgileService
-public class AgileSysMenuServiceImpl extends AgileBaseTreeServiceImpl<AgileSysMenuMapper, AgileSysMenu> implements IAgileSysMenuService {
+public class AgileSysMenuServiceImpl extends AgileTreeServiceImpl<AgileSysMenuMapper, AgileSysMenu> implements IAgileSysMenuService {
 
     @Autowired
     private IAgileSysRoleMenuService agileSysRoleMenuService;

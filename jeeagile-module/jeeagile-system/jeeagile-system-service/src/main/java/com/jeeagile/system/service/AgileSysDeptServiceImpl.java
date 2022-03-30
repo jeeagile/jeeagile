@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
+import com.jeeagile.frame.service.AgileTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysDept;
 import com.jeeagile.system.entity.AgileSysRoleDept;
 import com.jeeagile.system.mapper.AgileSysDeptMapper;
@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @description
  */
 @AgileService
-public class AgileSysDeptServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDeptMapper, AgileSysDept> implements IAgileSysDeptService {
+public class AgileSysDeptServiceImpl extends AgileTreeServiceImpl<AgileSysDeptMapper, AgileSysDept> implements IAgileSysDeptService {
 
     @Autowired
     private IAgileSysRoleDeptService agileSysRoleDeptService;

@@ -2,7 +2,7 @@ package ${packageName}.mapper.${moduleName};
 
 import com.jeeagile.frame.annotation.AgileMapper;
 #if($tableType=="tree")
-#set($BaseMapper="AgileBaseTreeMapper")
+#set($BaseMapper="AgileTreeMapper")
 #elseif($tableType=="crud")
 #set($BaseMapper="AgileBaseMapper")
 #end

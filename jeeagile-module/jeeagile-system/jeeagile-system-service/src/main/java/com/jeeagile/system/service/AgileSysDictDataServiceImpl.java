@@ -6,7 +6,7 @@ import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.frame.service.AgileBaseTreeServiceImpl;
+import com.jeeagile.frame.service.AgileTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysDictData;
 import com.jeeagile.system.mapper.AgileSysDictDataMapper;
 
@@ -19,7 +19,7 @@ import java.util.List;
  * @description
  */
 @AgileService
-public class AgileSysDictDataServiceImpl extends AgileBaseTreeServiceImpl<AgileSysDictDataMapper, AgileSysDictData> implements IAgileSysDictDataService {
+public class AgileSysDictDataServiceImpl extends AgileTreeServiceImpl<AgileSysDictDataMapper, AgileSysDictData> implements IAgileSysDictDataService {
 
     @Override
     public LambdaQueryWrapper<AgileSysDictData> queryWrapper(AgileSysDictData agileSysDictData) {
