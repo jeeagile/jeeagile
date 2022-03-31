@@ -29,10 +29,10 @@ public class AgileCommandRunner implements CommandLineRunner {
         }
         String host = AgileSystemUtil.getHostInfo().getAddress();
         System.out.println("*****************************************************************************");
-        System.out.println("           φ(゜▽゜*)♪    " + AgileUtil.getProjectName() + "启动成功!     ლ(´ڡ`ლ)");
-        System.out.println("     访问地址：");
-        System.out.println("           - Local:    http://localhost:" + serverPort + "/" + contextPath);
-        System.out.println("           - Network:  http://" + host + ":" + serverPort + "/" + contextPath);
+        System.out.println("              φ(゜▽゜*)♪    " + AgileUtil.getProjectName() + "应用启动成功!     ლ(´ڡ`ლ)");
+        System.out.println("      应用访问地址：");
+        System.out.println("            - Local:    http://localhost:" + serverPort + "/" + contextPath);
+        System.out.println("            - Network:  http://" + host + ":" + serverPort + "/" + contextPath);
         System.out.println("*****************************************************************************");
     }
 }
