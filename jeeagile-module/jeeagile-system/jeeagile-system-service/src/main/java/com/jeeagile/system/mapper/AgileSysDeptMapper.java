@@ -17,6 +17,5 @@ import java.util.List;
  */
 @AgileMapper
 public interface AgileSysDeptMapper extends AgileTreeMapper<AgileSysDept> {
-    @AgileDataScope(dept = @AgileDataColumn(name = "id"))
     List<AgileSysDept> selectList(@Param("ew") Wrapper<AgileSysDept> queryWrapper);
 }
