@@ -190,12 +190,13 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     }
 
     @Override
+    @Cacheable
     public Set<String> getUserDeptList(AgileBaseUser agileBaseUser, String dataScopeType) {
         try {
             if (agileBaseUser != null) {
                 Set<String> userDeptList = new HashSet<>();
                 if (AgileConstants.AGILE_DATA_SCOPE_03.equals(dataScopeType)) {
-                    List<AgileSysDept> agileSysDeptList = agileSysDeptService.selectAllChildList(agileBaseUser.getDeptId());
+                    List<AgileSysDept> agileSysDeptList = agileSysDeptService.selectAllChild(agileBaseUser.getDeptId());
                     agileSysDeptList.forEach(agileSysDept -> userDeptList.add(agileSysDept.getId()));
                 }
                 if (AgileConstants.AGILE_DATA_SCOPE_05.equals(dataScopeType)) {
@@ -208,6 +209,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new AgileAuthException("获取用户部门权限异常！");
         }
     }

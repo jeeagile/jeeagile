@@ -11,6 +11,7 @@ import com.jeeagile.frame.annotation.AgileDataScope;
 import com.jeeagile.frame.annotation.AgileMapper;
 import com.jeeagile.frame.handler.AgileMetaObjectHandler;
 import com.jeeagile.frame.plugins.datascope.AgileDataScopeInterceptor;
+import com.jeeagile.frame.plugins.injector.AgileCustomSqlInjector;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -59,6 +60,11 @@ public class AgileMybatisAutoConfiguration implements ApplicationListener<Contex
     @ConditionalOnMissingBean
     public MetaObjectHandler metaObjectHandler() {
         return new AgileMetaObjectHandler();
+    }
+
+    @Bean
+    public AgileCustomSqlInjector agileSqlInjector() {
+        return new AgileCustomSqlInjector();
     }
 
     @Bean

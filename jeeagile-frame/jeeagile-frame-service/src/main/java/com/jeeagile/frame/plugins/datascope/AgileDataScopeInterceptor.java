@@ -11,7 +11,7 @@ import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.spring.AgileSpringUtil;
-import com.jeeagile.frame.plugins.AgileDataScopeHelper;
+import com.jeeagile.frame.plugins.helper.AgileDataScopeHelper;
 import com.jeeagile.frame.plugins.datascope.property.AgileDataScopeProperty;
 import com.jeeagile.frame.plugins.parser.AgileSqlParserSupport;
 import lombok.EqualsAndHashCode;

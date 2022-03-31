@@ -1,4 +1,4 @@
-package com.jeeagile.frame.plugins;
+package com.jeeagile.frame.plugins.helper;
 
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileDataScope;
