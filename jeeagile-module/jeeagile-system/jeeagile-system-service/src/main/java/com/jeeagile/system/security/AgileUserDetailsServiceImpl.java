@@ -19,6 +19,7 @@ import com.jeeagile.system.service.IAgileSysUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,10 +34,15 @@ import java.util.Set;
 @AgileService
 public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
 
+    @Lazy
     @Autowired
     private IAgileSysUserService agileSysUserService;
+
+    @Lazy
     @Autowired
     private IAgileSysDeptService agileSysDeptService;
+
+    @Lazy
     @Autowired
     private AgileUserDetailsMapper agileUserDetailsMapper;
 
