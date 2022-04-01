@@ -114,7 +114,7 @@ public class AgileGlobalExceptionHandler {
      */
     @ExceptionHandler({AgileBaseException.class})
     public <T> AgileResult<T> agileBaseException(AgileBaseException ex) {
-        logger.warn("系统发生自定义异常，异常信息：{}", ex.getMessage().replace("\r\n", ""));
+        logger.warn("自定义异常，异常信息：{}", ex.getMessage().replace("\r\n", ""));
         return agileResult(ex);
     }
 
@@ -123,11 +123,11 @@ public class AgileGlobalExceptionHandler {
      */
     @ExceptionHandler({Exception.class})
     public <T> AgileResult<T> exception(Exception ex) {
-        logger.error("未知错误异常，异常信息：", ex);
+        logger.error("系统级错误异常，异常信息：", ex);
         if (ex.getCause() instanceof AgileBaseException) {
             return agileResult((AgileBaseException) ex.getCause());
         }
-        return agileResult(AgileResultCode.FAIL_SERVER_EXCEPTION, "系统发生未知错误异常！");
+        return agileResult(AgileResultCode.FAIL_SERVER_EXCEPTION, "系统级错误异常！");
     }
 
     private <T> AgileResult<T> agileResult(AgileBaseException ex) {

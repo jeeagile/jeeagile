@@ -5,7 +5,7 @@
       <el-table-column label="类型" align="center" min-width="55px" prop="type" :formatter="row => listenerTypeMap[row.type]" show-overflow-tooltip/>
       <el-table-column label="参数" align="center" min-width="70px">
         <template slot-scope="scope">
-          <el-badge :value="scope.row.fieldList ? scope.row.fieldList.length : 0" >
+          <el-badge :value="scope.row.fieldList ? scope.row.fieldList.length : 0">
             <el-button size="mini" type="primary" @click="editTaskListenerField(scope.row, scope.$index)">配置</el-button>
           </el-badge>
         </template>
@@ -70,7 +70,9 @@
       </div>
     </el-dialog>
     <el-dialog title="参数配置" :visible.sync="taskListenerFieldVisible" width="360px" append-to-body destroy-on-close>
-      <field-config v-model="taskListenerInfo.fieldList" :fields="taskListenerInfo.fieldList"/>
+      <el-form ref="taskListenerInfo" :model="taskListenerInfo" :rules="rules">
+        <field-config ref="taskListenerInfo" v-model="taskListenerInfo.fieldList" :fields="taskListenerInfo.fieldList"/>
+      </el-form>
       <div slot="footer">
         <el-button size="mini" @click="taskListenerFieldVisible = false">取 消</el-button>
         <el-button size="mini" type="primary" @click="createTaskListenerInfo">确 定</el-button>

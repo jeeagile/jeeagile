@@ -75,7 +75,7 @@
   import MapList from './map'
 
   export default {
-    name: 'Input',
+    name: 'Output',
     components: { ValueList, MapList },
     props: {
       processModeler: {  // 流程Modeler
@@ -220,16 +220,20 @@
           extensionElements = processHelper.createElement('bpmn:ExtensionElements')
         }
         const inputOutputElementName = `${this.processInfo.processPrefix}:InputOutput`
-        let inputOutputElement = this.activeElement.businessObject.get(inputOutputElementName)
-        if (!inputOutputElement) {
-          inputOutputElement = processHelper.createElement(inputOutputElementName)
-        }
-        extensionElements.values = inputOutputElement.values?.filter(item => item.$type !== `${this.processInfo.processPrefix}:OutputParameter`) ?? []
+        let inputOutputElement = extensionElements.values?.filter(item => item.$type == inputOutputElementName)
+        extensionElements.values = extensionElements.values?.filter(item => item.$type !== inputOutputElementName)
         if (this.outputParameterList?.length) {
           const parameterElementList = this.outputParameterList.map(outputParameterInfo => {
             return this.createOutputParameterElement(outputParameterInfo)
           })
-          inputOutputElement.outputParameters = parameterElementList
+          let inputParameters = []
+          if (inputOutputElement?.length) {
+            inputParameters = inputOutputElement[0]?.inputParameters
+          }
+          inputOutputElement = processHelper.createElement(inputOutputElementName, {
+            inputParameters: inputParameters,
+            outputParameters: parameterElementList
+          })
           extensionElements.get('values').push(inputOutputElement)
           processHelper.updateProperties(this.activeElement, { extensionElements: extensionElements })
         }

@@ -70,7 +70,9 @@
       </div>
     </el-dialog>
     <el-dialog title="参数配置" :visible.sync="executionListenerFieldVisible" width="360px" append-to-body destroy-on-close>
-      <field-config v-model="executionListenerInfo.fieldList" :fields="executionListenerInfo.fieldList"/>
+      <el-form ref="executionListenerInfo" :model="executionListenerInfo" :rules="rules">
+        <field-config v-model="executionListenerInfo.fieldList" :fields="executionListenerInfo.fieldList"/>
+      </el-form>
       <div slot="footer">
         <el-button size="mini" @click="executionListenerFieldVisible = false">取 消</el-button>
         <el-button size="mini" type="primary" @click="createExecutionListenerInfo">确 定</el-button>

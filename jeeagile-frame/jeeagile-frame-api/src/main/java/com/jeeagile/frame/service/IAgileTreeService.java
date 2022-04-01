@@ -18,7 +18,7 @@ public interface IAgileTreeService<T extends AgileTreeModel> extends IAgileBaseS
      * @param parentUuid
      * @return
      */
-    List<T> selectChildList(Serializable parentUuid);
+    List<T> selectChild(Serializable parentUuid);
 
     /**
      * 根据父节点获取所有下级节点
@@ -26,7 +26,7 @@ public interface IAgileTreeService<T extends AgileTreeModel> extends IAgileBaseS
      * @param parentUuid
      * @return
      */
-    List<T> selectAllChildList(Serializable parentUuid);
+    List<T> selectAllChild(Serializable parentUuid);
 
     /**
      * 获取下级节点个数

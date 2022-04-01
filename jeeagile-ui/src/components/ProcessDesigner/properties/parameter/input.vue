@@ -220,16 +220,20 @@
           extensionElements = processHelper.createElement('bpmn:ExtensionElements')
         }
         const inputOutputElementName = `${this.processInfo.processPrefix}:InputOutput`
-        let inputOutputElement = this.activeElement.businessObject.get(inputOutputElementName)
-        if (!inputOutputElement) {
-          inputOutputElement = processHelper.createElement(inputOutputElementName)
-        }
-        extensionElements.values = inputOutputElement.values?.filter(item => item.$type !== `${this.processInfo.processPrefix}:InputParameter`) ?? []
+        let inputOutputElement = extensionElements.values?.filter(item => item.$type == inputOutputElementName)
+        extensionElements.values = extensionElements.values?.filter(item => item.$type !== inputOutputElementName)
         if (this.inputParameterList?.length) {
           const parameterElementList = this.inputParameterList.map(inputParameterInfo => {
             return this.createInputParameterElement(inputParameterInfo)
           })
-          inputOutputElement.inputParameters = parameterElementList
+          let outputParameters = []
+          if (inputOutputElement?.length) {
+            outputParameters = inputOutputElement[0]?.outputParameters
+          }
+          inputOutputElement = processHelper.createElement(inputOutputElementName, {
+            inputParameters: parameterElementList,
+            outputParameters: outputParameters
+          })
           extensionElements.get('values').push(inputOutputElement)
           processHelper.updateProperties(this.activeElement, { extensionElements: extensionElements })
         }

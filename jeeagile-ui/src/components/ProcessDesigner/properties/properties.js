@@ -9,10 +9,8 @@ import Button from './button'
 import Process from './process'
 import Instance from './instance'
 import Condition from './condition'
-import TaskListener from './listener/TaskListener'
-import ExecutionListener from './listener/ExecutionListener'
-import Input from './parameter/input'
-import Output from './parameter/output'
+import Listener from './listener'
+import Parameter from './parameter'
 import Extensions from './extensions'
 import Documentation from './documentation'
 
@@ -98,20 +96,12 @@ export const ConditionProperties = {
   component: Condition
 }
 /** 任务监听 */
-export const TaskListenersProperties = {
-  name: 'taskListeners',
-  title: '任务监听',
+export const ListenersProperties = {
+  name: 'Listeners',
+  title: '监听器',
   icon: 'el-icon-headset',
   sort: 10,
-  component: TaskListener
-}
-/** 执行监听 */
-export const ExecuteListenersProperties = {
-  name: 'executeListeners',
-  title: '执行监听',
-  icon: 'el-icon-bell',
-  sort: 11,
-  component: ExecutionListener
+  component: Listener
 }
 /** 按钮配置 */
 export const ButtonProperties = {
@@ -121,21 +111,12 @@ export const ButtonProperties = {
   sort: 12,
   component: Button
 }
-/** 输入参数 */
-export const InputProperties = {
-  name: 'input',
-  title: '输入参数',
-  icon: 'el-icon-bottom',
+export const ParameterProperties = {
+  name: 'parameter',
+  title: '输入/输出',
+  icon: 'el-icon-sort',
   sort: 13,
-  component: Input
-}
-/** 输出参数 */
-export const OutputProperties = {
-  name: 'output',
-  title: '输出参数',
-  icon: 'el-icon-top',
-  sort: 14,
-  component: Output
+  component: Parameter
 }
 /** 扩展属性 */
 export const ExtensionsProperties = {
@@ -156,7 +137,7 @@ export const DocumentationProperties = {
 /** 协作 属性分组 */
 export const CollaborationPropertiesGroup = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -164,7 +145,7 @@ export const CollaborationPropertiesGroup = [
 /** 流程 属性分组 */
 export const ProcessPropertiesGroup = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -173,21 +154,21 @@ export const StartEventPropertiesGroup = [
   BaseProperties,
   FormProperties,
   AsyncProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 中间事件 属性分组 */
 export const IntermediateThrowEventPropertiesGroup = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 中间消息捕获事件 属性分组 */
 export const IntermediateCatchEventPropertiesGroup = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -195,9 +176,8 @@ export const IntermediateCatchEventPropertiesGroup = [
 /** 任务 属性分组 */
 export const TaskPropertiesGroup = [
   BaseProperties,
-  TaskListenersProperties,
   AsyncProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -206,8 +186,7 @@ export const SendTaskPropertiesGroup = [
   BaseProperties,
   SendTaskProperties,
   AsyncProperties,
-  TaskListenersProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -216,8 +195,7 @@ export const ReceiveTaskPropertiesGroup = [
   BaseProperties,
   ReceiveTaskProperties,
   AsyncProperties,
-  TaskListenersProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -228,41 +206,33 @@ export const UserTaskPropertiesGroup = [
   UserTaskProperties,
   AsyncProperties,
   InstanceProperties,
-  TaskListenersProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ButtonProperties,
-  InputProperties,
-  OutputProperties,
+  ParameterProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 手工任务 属性分组 */
 export const ManualTaskPropertiesGroup = [
   BaseProperties,
-  TaskListenersProperties,
-  ExecuteListenersProperties,
-  InputProperties,
-  OutputProperties,
+  ListenersProperties,
+  ParameterProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 业务规则任务 属性分组 */
 export const BusinessRuleTaskPropertiesGroup = [
   BaseProperties,
-  TaskListenersProperties,
-  ExecuteListenersProperties,
-  InputProperties,
-  OutputProperties,
+  ListenersProperties,
+  ParameterProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 服务任务 属性分组 */
 export const ServiceTaskPropertiesGroup = [
   BaseProperties,
-  TaskListenersProperties,
-  ExecuteListenersProperties,
-  InputProperties,
-  OutputProperties,
+  ListenersProperties,
+  ParameterProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -270,10 +240,8 @@ export const ServiceTaskPropertiesGroup = [
 export const ScriptTaskPropertiesGroup = [
   BaseProperties,
   ScriptTaskProperties,
-  TaskListenersProperties,
-  ExecuteListenersProperties,
-  InputProperties,
-  OutputProperties,
+  ListenersProperties,
+  ParameterProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -281,15 +249,15 @@ export const ScriptTaskPropertiesGroup = [
 /** 引用流程 属性分组 */
 export const CallActivityPropertiesGroup = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 结束 属性分组 */
 export const EndEventPropertiesGroup = [
   BaseProperties,
-  ExecuteListenersProperties,
-  InputProperties,
+  ListenersProperties,
+  ParameterProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -297,8 +265,7 @@ export const EndEventPropertiesGroup = [
 export const SequenceFlowPropertiesGroup = [
   BaseProperties,
   ConditionProperties,
-  TaskListenersProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -306,7 +273,7 @@ export const SequenceFlowPropertiesGroup = [
 export const ExclusiveGatewayPropertiesGroup = [
   BaseProperties,
   AsyncProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -314,7 +281,7 @@ export const ExclusiveGatewayPropertiesGroup = [
 export const ParallelGatewayPropertiesGroup = [
   BaseProperties,
   AsyncProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -322,7 +289,7 @@ export const ParallelGatewayPropertiesGroup = [
 export const InclusiveGatewayProperties = [
   BaseProperties,
   AsyncProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -330,28 +297,28 @@ export const InclusiveGatewayProperties = [
 export const ComplexGatewayProperties = [
   BaseProperties,
   AsyncProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 事件网关 属性分组 */
 export const EventBasedGatewayProperties = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 数据对象 属性分组 */
 export const DataObjectReferenceProperties = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 数据存储 属性分组 */
 export const DataStoreReferencePropertiesGroup = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -359,7 +326,7 @@ export const DataStoreReferencePropertiesGroup = [
 export const SubProcessPropertiesGroup = [
   BaseProperties,
   ProcessProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -367,14 +334,14 @@ export const SubProcessPropertiesGroup = [
 export const ParticipantPropertiesGroup = [
   BaseProperties,
   ProcessProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
 /** 分组 属性分组 */
 export const GroupPropertiesGroup = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -382,7 +349,7 @@ export const GroupPropertiesGroup = [
 /** 默认 属性分组 */
 export const DefaultPropertiesGroup = [
   BaseProperties,
-  ExecuteListenersProperties,
+  ListenersProperties,
   ExtensionsProperties,
   DocumentationProperties
 ]
@@ -460,4 +427,136 @@ export default {
   'bpmn:TextAnnotation': TextAnnotationPropertiesGroup,
   /** 结合关系 */
   'bpmn:Association': AssociationPropertiesGroup
+}
+export const ListenerVisible = {
+  'bpmn:Collaboration': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:Process': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:StartEvent': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:IntermediateThrowEvent': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:IntermediateCatchEvent': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:Task': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:SendTask': {
+    executionVisible: true,
+    taskVisible: true
+  },
+  'bpmn:ReceiveTask': {
+    executionVisible: true,
+    taskVisible: true
+  },
+  'bpmn:UserTask': {
+    executionVisible: true,
+    taskVisible: true
+  },
+  'bpmn:ManualTask': {
+    executionVisible: true,
+    taskVisible: true
+  },
+  'bpmn:BusinessRuleTask': {
+    executionVisible: true,
+    taskVisible: true
+  },
+  'bpmn:ServiceTask': {
+    executionVisible: true,
+    taskVisible: true
+  },
+  'bpmn:ScriptTask': {
+    executionVisible: true,
+    taskVisible: true
+  },
+  'bpmn:CallActivity': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:EndEvent': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:SequenceFlow': {
+    executionVisible: true,
+    taskVisible: true
+  },
+  'bpmn:ExclusiveGateway': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:ParallelGateway': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:InclusiveGateway': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:ComplexGateway': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:EventBasedGateway': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:DataObjectReference': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:DataStoreReference': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:SubProcess': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:Participant': {
+    executionVisible: true,
+    taskVisible: false
+  },
+  'bpmn:Group': {
+    executionVisible: true,
+    taskVisible: false
+  }
+}
+export const ParameterVisible = {
+  'bpmn:UserTask': {
+    inputVisible: true,
+    outputVisible: true
+  },
+  'bpmn:ManualTask': {
+    inputVisible: true,
+    outputVisible: true
+  },
+  'bpmn:BusinessRuleTask': {
+    inputVisible: true,
+    outputVisible: true
+  },
+  'bpmn:ServiceTask': {
+    inputVisible: true,
+    outputVisible: true
+  },
+  'bpmn:ScriptTask': {
+    inputVisible: true,
+    outputVisible: true
+  },
+  'bpmn:EndEvent': {
+    inputVisible: true,
+    outputVisible: false
+  }
 }
