@@ -45,4 +45,9 @@ public class AgileConstants {
     //资源映射路径 前缀
     public static final String AGILE_RESOURCE_PREFIX = "/resource";
 
+
+    // 字典类型常量
+    public static final String SYS_USER_SEX = "sys_user_sex";
+    public static final String SYS_USER_STATUS = "sys_user_status";
+
 }

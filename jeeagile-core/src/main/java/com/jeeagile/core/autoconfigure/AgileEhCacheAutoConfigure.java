@@ -1,5 +1,6 @@
 package com.jeeagile.core.autoconfigure;
 
+import com.jeeagile.core.cache.ehcache.AgileEhCacheCacheManager;
 import net.sf.ehcache.Cache;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
@@ -35,13 +36,13 @@ public class AgileEhCacheAutoConfigure {
     @Bean
     @ConditionalOnMissingBean
     public CacheManagerCustomizers cacheManagerCustomizers(ObjectProvider<CacheManagerCustomizer<?>> customizers) {
-        return new CacheManagerCustomizers((List) customizers.orderedStream().collect(Collectors.toList()));
+        return new CacheManagerCustomizers(customizers.orderedStream().collect(Collectors.toList()));
     }
 
     @Bean
     @ConditionalOnMissingBean
-    EhCacheCacheManager cacheManager(CacheManagerCustomizers customizers, net.sf.ehcache.CacheManager ehCacheCacheManager) {
-        return customizers.customize(new EhCacheCacheManager(ehCacheCacheManager));
+    AgileEhCacheCacheManager cacheManager(CacheManagerCustomizers customizers, net.sf.ehcache.CacheManager ehCacheCacheManager) {
+        return customizers.customize(new AgileEhCacheCacheManager(ehCacheCacheManager));
     }
 
     @Bean

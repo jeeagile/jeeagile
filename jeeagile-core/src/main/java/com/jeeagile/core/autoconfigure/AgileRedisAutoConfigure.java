@@ -1,6 +1,7 @@
 package com.jeeagile.core.autoconfigure;
 
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
+import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.util.AgileStringUtil;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -8,7 +9,9 @@ import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +39,7 @@ import java.util.Map;
 @ConditionalOnClass({RedisConnectionFactory.class})
 @AutoConfigureAfter({RedisAutoConfiguration.class})
 @ConditionalOnMissingBean({CacheManager.class})
-@EnableConfigurationProperties(CacheProperties.class)
+@EnableConfigurationProperties({CacheProperties.class, RedisProperties.class})
 public class AgileRedisAutoConfigure {
 
     @Bean
