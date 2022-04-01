@@ -21,6 +21,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.context.annotation.Lazy;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.List;
  */
 public class AgileAuthorizingRealm extends AuthorizingRealm {
 
+    @Lazy
     @AgileReference
     private IAgileUserDetailsService agileUserDetailsService;
 
