@@ -37,11 +37,9 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     @Lazy
     @Autowired
     private IAgileSysUserService agileSysUserService;
-
     @Lazy
     @Autowired
     private IAgileSysDeptService agileSysDeptService;
-
     @Lazy
     @Autowired
     private AgileUserDetailsMapper agileUserDetailsMapper;

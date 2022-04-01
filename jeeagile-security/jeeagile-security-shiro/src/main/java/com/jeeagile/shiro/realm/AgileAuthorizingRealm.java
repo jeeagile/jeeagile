@@ -40,7 +40,7 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) {
         if (agileUserDetailsService == null) {
-            throw new AgileFrameException(AgileResultCode.FAIL_SERVER_EXCEPTION, "请设置用户验证接口实现类！");
+            throw new AgileFrameException(AgileResultCode.FAIL_SERVER_EXCEPTION, "请配置用户信息接口实现类！");
         }
         String loginName = (String) authenticationToken.getPrincipal();// 获取用户名
         char[] credentials = (char[]) authenticationToken.getCredentials();// 字符类型密码获取(用户输入的密码)
