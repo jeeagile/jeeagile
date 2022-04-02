@@ -73,5 +73,4 @@ public class AgileSysPersonController extends AgileBaseController {
         agileSysPersonService.updatePersonAvatar(userAvatar);
         return this.success((Object) userAvatar);
     }
-
 }

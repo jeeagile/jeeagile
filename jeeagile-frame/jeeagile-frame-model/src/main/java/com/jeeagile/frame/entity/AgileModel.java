@@ -1,7 +1,9 @@
 package com.jeeagile.frame.entity;
 
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
@@ -19,6 +21,11 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public abstract class AgileModel<T extends AgileModel<T>> extends Model<T> {
+    @ExcelIgnore
+    @ApiModelProperty(hidden = true)
+    @TableField(exist = false)
+    private String excelName;
+
     /**
      * 判断主键是否为空
      *

@@ -1,6 +1,8 @@
 package com.jeeagile.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.constants.AgileConstants;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
@@ -8,6 +10,7 @@ import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import com.jeeagile.system.entity.AgileSysDept;
 import com.jeeagile.system.entity.AgileSysUser;
 import com.jeeagile.system.entity.AgileSysUserPost;
 import com.jeeagile.system.entity.AgileSysUserRole;
@@ -19,6 +22,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.jeeagile.core.constants.AgileConstants.SYS_USER_SEX;
+import static com.jeeagile.core.constants.AgileConstants.SYS_USER_STATUS;
 
 /**
  * @author JeeAgile
@@ -40,6 +46,8 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
     private IAgileSysUserPostService agileSysUserPostService;
     @Autowired
     private IAgileSysConfigService agileSysConfigService;
+    @Autowired
+    private IAgileSysDictDataService agileSysDictDataService;
 
     @Override
     public Object initData() {
@@ -76,6 +84,88 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
         lambdaQueryWrapper.ne(AgileSysUser::getUserName, AgileUtil.getSuperAdmin());
         lambdaQueryWrapper.orderByAsc(AgileSysUser::getUserSort);
         return lambdaQueryWrapper;
+    }
+
+    @Override
+    public List<AgileSysUser> selectExportData(AgileSysUser agileSysUser) {
+        List<AgileSysUser> agileSysUserList = this.selectList(agileSysUser);
+        agileSysUserList.forEach(item -> {
+            item.setUserSex(agileSysDictDataService.getSysDictLabel(SYS_USER_SEX, item.getUserSex()));
+            item.setUserStatus(agileSysDictDataService.getSysDictLabel(SYS_USER_STATUS, item.getUserStatus()));
+            AgileSysDept agileSysDept = agileSysDeptService.getById(item.getDeptId());
+            if (agileSysDept != null && agileSysDept.isNotEmptyPk()) {
+                item.setDeptName(agileSysDept.getDeptName());
+            }
+        });
+        return agileSysUserList;
+    }
+
+    @Override
+    public Object importData(List<AgileSysUser> agileModelList) {
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+        String password = agileSysConfigService.getDefaultPassword();
+        for (AgileSysUser agileSysUser : agileModelList) {
+            try {
+                if (this.userNameExist(agileSysUser.getUserName())) {
+                    failureNum++;
+                    failureMsg.append("<br/>" + failureNum + "、用户 " + agileSysUser.getUserName() + " 已存在！");
+                    continue;
+                }
+                agileSysUser.setUserSex(agileSysDictDataService.getSysDictValue(SYS_USER_SEX, agileSysUser.getUserSex()));
+                agileSysUser.setUserStatus(agileSysDictDataService.getSysDictValue(SYS_USER_STATUS, agileSysUser.getUserStatus()));
+                agileSysUser.setUserPwd(AgileSecurityUtil.encryptPassword(password));
+                String deptId = getDeptId(agileSysUser.getDeptName());
+                if (AgileStringUtil.isEmpty(deptId)) {
+                    failureNum++;
+                    failureMsg.append("<br/>" + failureNum + "、用户 " + agileSysUser.getUserName() + " 部门不存在！");
+                    continue;
+                }
+                agileSysUser.setDeptId(deptId);
+                if (this.save(agileSysUser)) {
+                    successNum++;
+                    successMsg.append("<br/>" + successNum + "、用户 " + agileSysUser.getUserName() + " 导入成功");
+                } else {
+                    failureNum++;
+                    failureMsg.append("<br/>" + failureNum + "、用户 " + agileSysUser.getUserName() + " 导入失败！");
+                }
+            } catch (Exception ex) {
+                failureNum++;
+                failureMsg.append("<br/>" + failureNum + "、用户 " + agileSysUser.getUserName() + " 导入失败！");
+            }
+
+        }
+        if (failureNum > 0) {
+            failureMsg.insert(0, "抱歉，共 " + failureNum + " 条数据导入失败！，错误数据如下：");
+            return failureMsg.toString();
+        } else {
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+            return successMsg.toString();
+        }
+    }
+
+    private boolean userNameExist(String userName) {
+        LambdaQueryWrapper<AgileSysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysUser::getUserName, userName);
+        AgileSysUser agileSysUser = this.getOne(lambdaQueryWrapper);
+        if (agileSysUser != null && agileSysUser.isNotEmptyPk()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private String getDeptId(String deptName) {
+        LambdaQueryWrapper<AgileSysDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysDept::getDeptName, deptName);
+        AgileSysDept agileSysDept = agileSysDeptService.getOne(lambdaQueryWrapper);
+        if (agileSysDept != null && agileSysDept.isNotEmptyPk()) {
+            return agileSysDept.getId();
+        } else {
+            return null;
+        }
     }
 
     @Override

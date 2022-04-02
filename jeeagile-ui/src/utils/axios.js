@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
-import {Message, MessageBox} from 'element-ui'
-import {getUserToken} from '@/utils/cookie'
+import { Message, MessageBox } from 'element-ui'
+import { getUserToken } from '@/utils/cookie'
 // api 的 base_url
 const baseURL = process.env.VUE_APP_BASE_API
 
@@ -32,8 +32,10 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
   response => {
     let res = response.data
-    if (response.request.responseType === 'blob') { // 文件二进制流响应全部数据（PS:文件名在请求头中）
-      res = binaryParser(response)
+    if (!res.code) {
+      if (response.request.responseType === 'blob') { // 文件二进制流响应全部数据（PS:文件名在请求头中）
+        res = binaryParser(response)
+      }
     }
     if (res.code === '1000' || res.code === '1001') {
       MessageBox.confirm('用户登录状态已过期，您可以继续留在该页面，或重新登录', '系统提示', {

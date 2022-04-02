@@ -1,6 +1,10 @@
 package com.jeeagile.system.entity;
 
 
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ContentRowHeight;
+import com.alibaba.excel.annotation.write.style.HeadRowHeight;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,12 +26,13 @@ import java.util.List;
  * @description
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
+@HeadRowHeight(value = 20)
+@ContentRowHeight(value = 18)
 public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 用户名
      */
+    @ExcelProperty(value = {"用户信息", "用户名"}, index = 0)
     @ApiModelProperty(value = "用户名", position = 1)
     @NotEmpty(message = "用户名不能为空!")
     @Size(max = 30, message = "用户名最大长度为30!")
@@ -36,6 +41,7 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 用户昵称
      */
+    @ExcelProperty(value = {"用户信息", "用户昵称"}, index = 1)
     @ApiModelProperty(value = "用户昵称", position = 2)
     @NotEmpty(message = "用户昵称不能为空!")
     @Size(max = 50, message = "用户昵称最大长度为50")
@@ -44,18 +50,21 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 用户密码
      */
+    @ExcelIgnore
     @ApiModelProperty(value = "用户密码", position = 3)
     private String userPwd;
 
     /**
      * 用户性别
      */
+    @ExcelProperty(value = {"用户信息", "用户性别"}, index = 2)
     @ApiModelProperty(value = "用户性别", position = 4)
     private String userSex;
 
     /**
      * 联系电话
      */
+    @ExcelProperty(value = {"用户信息", "联系电话"}, index = 3)
     @ApiModelProperty(value = "联系电话", position = 5)
     @Size(max = 20, message = "联系电话最大长度为20!")
     private String userPhone;
@@ -64,6 +73,7 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 邮箱地址
      */
+    @ExcelProperty(value = {"用户信息", "邮箱地址"}, index = 4)
     @ApiModelProperty(value = "邮箱地址", position = 6)
     @Size(max = 50, message = "邮箱地址最大长度为50！")
     private String userEmail;
@@ -71,12 +81,14 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 用户排序
      */
+    @ExcelProperty(value = {"用户信息", "用户排序"}, index = 5)
     @ApiModelProperty(value = "用户排序", position = 7)
     private Integer userSort;
 
     /**
      * 部门ID
      */
+    @ExcelIgnore
     @ApiModelProperty(value = "所属部门", position = 8)
     @NotNull(message = "所属部门不能为空！")
     private String deptId;
@@ -84,12 +96,14 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 部门名称
      */
+    @ExcelProperty(value = {"用户信息", "部门名称"}, index = 6)
     @ApiModelProperty(value = "部门名称", position = 9, hidden = true)
     @TableField(exist = false)
     private String deptName;
     /**
      * 用户状态（0正常 1停用 )
      */
+    @ExcelProperty(value = {"用户信息", "用户状态"}, index = 7)
     @ApiModelProperty(value = "用户状态", position = 10)
     @Pattern(regexp = "[01]", message = "用户状态必须为0或1（0正常 1停用）！")
     private String userStatus;
@@ -97,6 +111,7 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 用户头像
      */
+    @ExcelIgnore
     @ApiModelProperty(value = "用户头像", position = 11)
     @Size(max = 50, message = "用户头像最大长度为50")
     private String userAvatar;
@@ -104,6 +119,7 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 备注
      */
+    @ExcelIgnore
     @ApiModelProperty(value = "备注", position = 12)
     @Size(max = 150, message = "备注长度最大值为150！")
     private String remark;
@@ -112,12 +128,14 @@ public class AgileSysUser extends AgileBaseModel<AgileSysUser> {
     /**
      * 用户已分配角色
      */
+    @ExcelIgnore
     @ApiModelProperty(value = "用户已分配角色", position = 13)
     @TableField(exist = false)
     private List<String> roleIdList = new ArrayList<>();
     /**
      * 用户已分配岗位
      */
+    @ExcelIgnore
     @ApiModelProperty(value = "用户已分配岗位", position = 14)
     @TableField(exist = false)
     private List<String> postIdList = new ArrayList<>();

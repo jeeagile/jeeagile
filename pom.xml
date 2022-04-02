@@ -50,7 +50,9 @@
         <lombok.version>1.18.22</lombok.version>
 
         <google-format.version>1.10.0</google-format.version>
+
         <alibaba.druid.version>1.2.8</alibaba.druid.version>
+        <alibaba.easyexcel.version>3.0.5</alibaba.easyexcel.version>
 
         <velocity.version>1.7</velocity.version>
 
@@ -130,6 +132,7 @@
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-dependencies-zookeeper</artifactId>
@@ -203,6 +206,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${alibaba.druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${alibaba.easyexcel.version}</version>
             </dependency>
 
             <dependency>

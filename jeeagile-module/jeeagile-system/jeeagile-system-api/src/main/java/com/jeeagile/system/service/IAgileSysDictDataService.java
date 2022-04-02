@@ -21,4 +21,14 @@ public interface IAgileSysDictDataService extends IAgileTreeService<AgileSysDict
      * 获取字典数据
      */
     AgileSysDictData getSysDictData(String dictType, String dictValue);
+
+    /**
+     * 获取字典标签
+     */
+    String getSysDictLabel(String dictType, String dictValue);
+
+    /**
+     * 获取字典值
+     */
+    String getSysDictValue(String dictType, String dictLabel);
 }

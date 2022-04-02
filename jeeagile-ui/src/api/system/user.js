@@ -1,4 +1,4 @@
-import {postApi} from '@/utils/axios'
+import { postApi } from '@/utils/axios'
 
 /**
  * 初始化数据接口
@@ -45,3 +45,13 @@ export const resetPassword = data => postApi('/system/user/password', data)
  */
 export const changeUserStatus = data => postApi('/system/user/status', data)
 
+/**
+ * 导出用户
+ */
+export const exportUser = data => postApi('/system/user/export', data, { responseType: 'blob' })
+
+
+/**
+ * 导入用户
+ */
+export const importUser = data => postApi('/system/user/import', data)

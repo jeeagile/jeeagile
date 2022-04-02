@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jeeagile.core.exception.AgileFrameException;
-import com.jeeagile.frame.entity.AgileBaseModel;
 import com.jeeagile.frame.entity.AgileModel;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
@@ -68,6 +67,24 @@ public interface IAgileBaseService<T extends AgileModel> extends IService<T> {
      */
     default List<T> selectList(T agileModel) {
         return this.list(queryWrapper(agileModel));
+    }
+
+    /**
+     * 查询导入数据 方便重写
+     *
+     * @param agileModel
+     * @return
+     */
+    default List<T> selectExportData(T agileModel) {
+        return this.selectList();
+    }
+
+    default Object importData(List<T> agileModelList) {
+        if (this.saveBatch(agileModelList)) {
+            return "数据导入成功";
+        } else {
+            return "数据导入失败";
+        }
     }
 
     /**

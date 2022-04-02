@@ -1,5 +1,6 @@
 package com.jeeagile.frame.entity;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -16,6 +17,7 @@ public abstract class AgileTreeModel<T extends AgileTreeModel<T>> extends AgileB
     /**
      * 父级ID
      */
+    @ExcelIgnore
     private String parentId;
 
 }

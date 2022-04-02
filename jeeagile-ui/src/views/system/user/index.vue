@@ -5,11 +5,13 @@
       <el-col :span="4" :xs="24">
         <div class="head-container">
           <el-input v-model="deptName" placeholder="请输入部门名称" clearable size="small" prefix-icon="el-icon-search"
-                    style="margin-bottom: 20px"/>
+                    style="margin-bottom: 20px"
+          />
         </div>
         <div class="head-container">
           <el-tree ref="deptTree" :data="deptTreeOptionList" :props="deptTreeProps" :expand-on-click-node="false"
-                   :filter-node-method="filterDeptNode" default-expand-all @node-click="handleDeptNodeClick"/>
+                   :filter-node-method="filterDeptNode" default-expand-all @node-click="handleDeptNodeClick"
+          />
         </div>
       </el-col>
       <!--用户数据-->
@@ -17,17 +19,21 @@
         <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
           <el-form-item label="用户名称" prop="userName">
             <el-input v-model="queryParam.queryCond.userName" placeholder="请输入用户名称" clearable size="small"
-                      style="width: 240px" @keyup.enter.native="handleQuery"/>
+                      style="width: 240px" @keyup.enter.native="handleQuery"
+            />
           </el-form-item>
           <el-form-item label="手机号码" prop="userPhone">
             <el-input v-model="queryParam.queryCond.userPhone" placeholder="请输入手机号码" clearable size="small"
-                      style="width: 240px" @keyup.enter.native="handleQuery"/>
+                      style="width: 240px" @keyup.enter.native="handleQuery"
+            />
           </el-form-item>
           <el-form-item label="状态" prop="userStatus">
             <el-select v-model="queryParam.queryCond.userStatus" placeholder="用户状态" clearable size="small"
-                       style="width: 240px">
+                       style="width: 240px"
+            >
               <el-option v-for="userStatusOption in userStatusOptionList" :key="userStatusOption.dictValue"
-                         :label="userStatusOption.dictLabel" :value="userStatusOption.dictValue"/>
+                         :label="userStatusOption.dictLabel" :value="userStatusOption.dictValue"
+              />
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -38,21 +44,40 @@
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd"
-                       v-hasPerm="['system:user:add']">
+            <el-button v-hasPerm="['system:user:add']" type="primary" icon="el-icon-plus" size="mini"
+                       @click="handleAdd"
+            >
               新增
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
-                       v-hasPerm="['system:user:update']">
+            <el-button v-hasPerm="['system:user:update']" type="success" icon="el-icon-edit" size="mini"
+                       :disabled="single"
+                       @click="handleUpdate"
+            >
               修改
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-                       v-hasPerm="['system:user:delete']">
+            <el-button v-hasPerm="['system:user:delete']" type="danger" icon="el-icon-delete" size="mini"
+                       :disabled="multiple"
+                       @click="handleDelete"
+            >
               删除
+            </el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button v-hasPerm="['system:user:import']" type="info" icon="el-icon-upload2" size="mini"
+                       @click="handleImport"
+            >
+              导入
+            </el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button v-hasPerm="['system:user:export']" type="warning" icon="el-icon-download" size="mini"
+                       @click="handleExport"
+            >
+              导出
             </el-button>
           </el-col>
           <right-toolbar :show-search.sync="showSearch" @queryTable="getUserList"/>
@@ -63,26 +88,31 @@
           <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true"/>
           <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true"/>
           <el-table-column label="部门" align="center" prop="deptName" :show-overflow-tooltip="true"
-                           :formatter="deptNameFormat"/>
+                           :formatter="deptNameFormat"
+          />
           <el-table-column label="手机号码" align="center" prop="userPhone"/>
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.userStatus" active-value="0" inactive-value="1"
-                         @change="handleStatusChange(scope.row)"/>
+                         @change="handleStatusChange(scope.row)"
+              />
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" lass-name="small-padding fixed-width" width="200px">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-                         v-hasPerm="['system:user:update']">
+              <el-button v-hasPerm="['system:user:update']" size="mini" type="text" icon="el-icon-edit"
+                         @click="handleUpdate(scope.row)"
+              >
                 修改
               </el-button>
-              <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-                         v-hasPerm="['system:user:delete']">
+              <el-button v-hasPerm="['system:user:delete']" size="mini" type="text" icon="el-icon-delete"
+                         @click="handleDelete(scope.row)"
+              >
                 删除
               </el-button>
-              <el-button size="mini" type="text" icon="el-icon-key" @click="handleResetPassword(scope.row)"
-                         v-hasPerm="['system:user:password']">
+              <el-button v-hasPerm="['system:user:password']" size="mini" type="text" icon="el-icon-key"
+                         @click="handleResetPassword(scope.row)"
+              >
                 重置
               </el-button>
             </template>
@@ -92,7 +122,8 @@
         <!-- 分页 -->
         <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
                     :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
-                    @pagination="getUserList"/>
+                    @pagination="getUserList"
+        />
 
       </el-col>
     </el-row>
@@ -117,7 +148,8 @@
           <el-col :span="12">
             <el-form-item label="归属部门" prop="deptId">
               <tree-select v-model="form.deptId" :options="deptTreeOptionList" :show-count="true"
-                           :normalizer="deptNormalizer" placeholder="请选择归属部门"/>
+                           :normalizer="deptNormalizer" placeholder="请选择归属部门"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -144,7 +176,8 @@
             <el-form-item label="用户性别">
               <el-select v-model="form.userSex" placeholder="请选择">
                 <el-option v-for="userSexOption in userSexOptionList" :key="userSexOption.dictValue"
-                           :label="userSexOption.dictLabel" :value="userSexOption.dictValue"/>
+                           :label="userSexOption.dictLabel" :value="userSexOption.dictValue"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -152,7 +185,8 @@
             <el-form-item label="状态">
               <el-radio-group v-model="form.userStatus">
                 <el-radio v-for="userStatusOption in userStatusOptionList" :key="userStatusOption.dictValue"
-                          :label="userStatusOption.dictValue">
+                          :label="userStatusOption.dictValue"
+                >
                   {{ userStatusOption.dictLabel }}
                 </el-radio>
               </el-radio-group>
@@ -165,7 +199,8 @@
               <el-select v-model="form.postIdList" multiple placeholder="请选择">
                 <el-option v-for="postOption in postList" :key="postOption.id"
                            :label="postOption.postName" :value="postOption.id"
-                           :disabled="postOption.postStatus == 1"/>
+                           :disabled="postOption.postStatus == 1"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -174,7 +209,8 @@
               <el-select v-model="form.roleIdList" multiple placeholder="请选择">
                 <el-option v-for="roleOption in roleList" :key="roleOption.id"
                            :label="roleOption.roleName" :value="roleOption.id"
-                           :disabled="roleOption.roleStatus == 1"/>
+                           :disabled="roleOption.roleStatus == 1"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -193,6 +229,33 @@
       </div>
     </el-dialog>
 
+    <!-- 用户导入对话框 -->
+    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
+      <el-upload
+        ref="upload"
+        :limit="1"
+        accept=".xlsx, .xls"
+        action="#"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :auto-upload="false"
+        drag
+      >
+        <i class="el-icon-upload"/>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div slot="tip" class="el-upload__tip text-center">
+          <span>仅允许导入xls、xlsx格式文件。</span>
+          <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
+                   @click="importTemplate"
+          >下载模板
+          </el-link>
+        </div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -205,7 +268,9 @@
     addUser,
     updateUser,
     resetPassword,
-    changeUserStatus
+    changeUserStatus,
+    exportUser,
+    importUser
   } from '@/api/system/user'
 
   export default {
@@ -252,6 +317,17 @@
           children: 'children',
           label: 'deptName'
         },
+        // 用户导入参数
+        upload: {
+          // 是否显示弹出层（用户导入）
+          open: false,
+          // 弹出层标题（用户导入）
+          title: '',
+          // 是否禁用上传
+          isUploading: false,
+          // 是否更新已经存在的用户数据
+          updateSupport: 0
+        },
         // 查询参数
         queryParam: {
           pageTotal: 0,
@@ -261,7 +337,8 @@
             userName: undefined,
             userPhone: undefined,
             userStatus: undefined,
-            deptId: undefined
+            deptId: undefined,
+            excelName: '用户信息'
           }
         },
         // 表单校验
@@ -487,6 +564,40 @@
           this.getUserList()
           this.messageSuccess('删除成功')
         })
+      },
+      /** 导出按钮操作 */
+      handleExport() {
+        this.$confirm('请确认是否导出用户数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return exportUser(this.queryParam.queryCond)
+        })
+      },
+      /** 导入按钮操作 */
+      handleImport() {
+        this.upload.title = '用户导入'
+        this.upload.open = true
+      },
+      /** 文件上传中处理 */
+      handleFileUploadProgress(event, file, fileList) {
+        this.upload.isUploading = true
+      },
+      /** 提交上传文件 */
+      submitFileForm() {
+        if (this.$refs.upload.uploadFiles.length < 1) {
+          return
+        }
+        let formData = new FormData()
+        formData.append('importExcel', this.$refs.upload.uploadFiles[0].raw),
+          importUser(formData).then(response => {
+            this.upload.open = false
+            this.upload.isUploading = false
+            this.$refs.upload.clearFiles()
+            this.$alert('<div style=\'overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;\'>' + response.data + '</div>', '导入结果', { dangerouslyUseHTMLString: true })
+            this.getUserList()
+          })
       }
     }
   }

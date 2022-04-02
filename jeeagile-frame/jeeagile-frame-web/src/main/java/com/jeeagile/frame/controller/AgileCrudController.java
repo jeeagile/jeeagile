@@ -1,22 +1,34 @@
 package com.jeeagile.frame.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
+import com.jeeagile.core.util.AgileCollectionUtil;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.entity.AgileModel;
 import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.frame.excel.AgileExcelListener;
+import com.jeeagile.frame.excel.AgileDefaultExcelListener;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.IAgileBaseService;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import io.swagger.annotations.ApiOperation;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -24,11 +36,12 @@ import java.util.List;
  * @date 2022-03-02
  * @description
  */
+@Slf4j
 public abstract class AgileCrudController<I extends IAgileBaseService<T>, T extends AgileModel> extends AgileBaseController {
 
     @Getter
     @AgileReference
-    private I agileBaseService;
+    protected I agileBaseService;
 
     @RequestMapping(value = "/init", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "初始化", notes = "提供页面初始化数据接口")
@@ -125,20 +138,51 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
         }
     }
 
+    @AgileDemo
     @PostMapping(value = "/import")
     @AgileRequiresPermissions("import")
     @AgileLogger(notes = "导入数据", type = AgileLoggerType.IMPORT)
     @ApiOperation(value = "导入数据", notes = "导入数据接口")
-    public AgileResult importExcel(T agileModel) {
-        return AgileResult.error(AgileResultCode.FAIL_OPS_IMPORT, "正在紧急建设中，敬请期待!");
+    public AgileResult importExcel(@RequestParam("importExcel") MultipartFile multipartFile) {
+        try {
+            AgileExcelListener agileExcelListener = this.getAgileExcelListener();
+            EasyExcel.read(multipartFile.getInputStream(), agileBaseService.getEntityClass(), agileExcelListener).sheet().doRead();
+            List<T> agileModelList = agileExcelListener.getAgileModelList();
+            if (AgileCollectionUtil.isNotEmpty(agileModelList)) {
+                return AgileResult.success(agileBaseService.importData(agileModelList));
+            } else {
+                return AgileResult.error(AgileResultCode.FAIL_OPS_IMPORT, "没有读取到任务数据！");
+            }
+        } catch (IOException ex) {
+            log.error("数据导入异常！", ex);
+        }
+        return AgileResult.error(AgileResultCode.FAIL_OPS_IMPORT, "数据导入异常！");
+    }
+
+    protected AgileExcelListener<T> getAgileExcelListener() {
+        return new AgileDefaultExcelListener();
     }
 
     @PostMapping(value = "/export")
     @AgileRequiresPermissions("export")
     @AgileLogger(notes = "导出数据", type = AgileLoggerType.EXPORT)
     @ApiOperation(value = "导出数据", notes = "导出数据接口")
-    public AgileResult exportExcel(T agileModel) {
-        return AgileResult.error(AgileResultCode.FAIL_OPS_EXPORT, "正在紧急建设中，敬请期待!");
+    public void exportExcel(HttpServletResponse httpServletResponse, @RequestBody T agileModel) {
+        String excelName = agileModel.getExcelName();
+        if (AgileStringUtil.isEmpty(excelName)) {
+            excelName = "导出数据";
+        }
+        try {
+            List<T> data = agileBaseService.selectExportData(agileModel);
+            httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            httpServletResponse.setCharacterEncoding("utf-8");
+            String fileName = URLEncoder.encode(excelName, "UTF-8").replaceAll("\\+", "%20");
+            httpServletResponse.setHeader("Content-disposition", "attachment;filename*=" + fileName + ".xlsx");
+            EasyExcel.write(httpServletResponse.getOutputStream(), agileModel.getClass()).sheet(excelName).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).doWrite(data);
+        } catch (Exception ex) {
+            throw new AgileFrameException(AgileResultCode.FAIL_OPS_EXPORT, excelName + "数据导出失败！", ex);
+        }
+
     }
 
     /**

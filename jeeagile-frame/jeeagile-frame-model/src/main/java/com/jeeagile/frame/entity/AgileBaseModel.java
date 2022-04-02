@@ -1,5 +1,6 @@
 package com.jeeagile.frame.entity;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,6 +20,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileModel<T> {
+    @ExcelIgnore
     @ApiModelProperty(value = "主键ID")
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
@@ -26,6 +28,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
     /**
      * 创建人
      */
+    @ExcelIgnore
     @ApiModelProperty(hidden = true)
     @TableField(fill = FieldFill.INSERT, updateStrategy = FieldStrategy.NEVER)
     @JSONField(serialize = false)
@@ -34,6 +37,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
     /**
      * 创建时间
      */
+    @ExcelIgnore
     @ApiModelProperty(hidden = true)
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
@@ -41,6 +45,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
     /**
      * 更新人
      */
+    @ExcelIgnore
     @ApiModelProperty(hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @JSONField(serialize = false)
@@ -49,6 +54,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
     /**
      * 更新时间
      */
+    @ExcelIgnore
     @ApiModelProperty(hidden = true)
     @TableField(fill = FieldFill.INSERT_UPDATE, whereStrategy = FieldStrategy.NEVER)
     private Date updateTime;

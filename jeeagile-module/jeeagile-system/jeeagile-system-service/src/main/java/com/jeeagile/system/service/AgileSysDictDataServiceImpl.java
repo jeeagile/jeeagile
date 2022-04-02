@@ -9,9 +9,12 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileTreeServiceImpl;
 import com.jeeagile.system.entity.AgileSysDictData;
 import com.jeeagile.system.mapper.AgileSysDictDataMapper;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
+
 
 /**
  * @author JeeAgile
@@ -59,6 +62,29 @@ public class AgileSysDictDataServiceImpl extends AgileTreeServiceImpl<AgileSysDi
         lambdaQueryWrapper.eq(AgileSysDictData::getDictType, dictType);
         lambdaQueryWrapper.eq(AgileSysDictData::getDictValue, dictValue);
         return this.getOne(lambdaQueryWrapper);
+    }
+
+    @Override
+    @Cacheable(value = "sys_dict")
+    public String getSysDictLabel(String dictType, String dictValue) {
+        AgileSysDictData agileSysDictData = this.getSysDictData(dictType, dictValue);
+        if (agileSysDictData != null && agileSysDictData.isNotEmptyPk()) {
+            return agileSysDictData.getDictLabel();
+        }
+        return "";
+    }
+
+    @Override
+    @Cacheable(value = "sys_dict")
+    public String getSysDictValue(String dictType, String dictLabel) {
+        LambdaQueryWrapper<AgileSysDictData> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysDictData::getDictType, dictType);
+        lambdaQueryWrapper.eq(AgileSysDictData::getDictValue, dictLabel);
+        AgileSysDictData agileSysDictData = this.getOne(lambdaQueryWrapper);
+        if (agileSysDictData != null && agileSysDictData.isNotEmptyPk()) {
+            return agileSysDictData.getDictValue();
+        }
+        return dictLabel;
     }
 
     @Override
