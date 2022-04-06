@@ -14,6 +14,10 @@ import com.jeeagile.system.mapper.AgileSysDictTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.util.List;
+
+import static com.jeeagile.core.constants.AgileConstants.SYS_NORMAL_DISABLE;
+import static com.jeeagile.core.constants.AgileConstants.SYS_YES_NO;
 
 
 /**
@@ -45,6 +49,16 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
             }
         }
         return lambdaQueryWrapper;
+    }
+
+    @Override
+    public List<AgileSysDictType> selectExportData(AgileSysDictType agileSysDictType) {
+        List<AgileSysDictType> agileSysDictTypeList = this.selectList(agileSysDictType);
+        agileSysDictTypeList.forEach(item -> {
+            item.setDictStatus(agileSysDictDataService.getSysDictLabel(SYS_NORMAL_DISABLE, item.getDictStatus()));
+            item.setSystemFlag(agileSysDictDataService.getSysDictLabel(SYS_YES_NO,item.getSystemFlag()));
+        });
+        return agileSysDictTypeList;
     }
 
     @Override

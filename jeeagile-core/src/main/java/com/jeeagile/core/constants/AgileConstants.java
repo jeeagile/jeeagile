@@ -51,4 +51,6 @@ public class AgileConstants {
     public static final String SYS_USER_STATUS = "sys_user_status";
     public static final String SYS_DATA_SCOPE = "sys_data_scope";
     public static final String SYS_NORMAL_DISABLE = "sys_normal_disable";
+    public static final String SYS_YES_NO = "sys_yes_no";
+
 }

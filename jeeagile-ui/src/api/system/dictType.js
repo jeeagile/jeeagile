@@ -1,4 +1,4 @@
-import {postApi} from '@/utils/axios'
+import { postApi } from '@/utils/axios'
 
 /**
  * 分页查询字典类型列表
@@ -36,3 +36,7 @@ export const deleteDictType = data => postApi('/system/dict/type/delete', data)
  */
 export const clearDictTypeCache = data => postApi('/system/dict/type/clearCache', data)
 
+/**
+ * 导出字段类型
+ */
+export const exportDictType = data => postApi('/system/dict/type/export', data, { responseType: 'blob' })

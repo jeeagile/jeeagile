@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.io.Serializable;
 import java.util.List;
 
+import static com.jeeagile.core.constants.AgileConstants.SYS_NORMAL_DISABLE;
+import static com.jeeagile.core.constants.AgileConstants.SYS_YES_NO;
+
 
 /**
  * @author JeeAgile
@@ -46,6 +49,16 @@ public class AgileSysDictDataServiceImpl extends AgileTreeServiceImpl<AgileSysDi
         }
         lambdaQueryWrapper.orderByAsc(AgileSysDictData::getDictSort);
         return lambdaQueryWrapper;
+    }
+
+    @Override
+    public List<AgileSysDictData> selectExportData(AgileSysDictData agileSysDictData) {
+        List<AgileSysDictData> agileSysDictDataList = this.selectList(agileSysDictData);
+        agileSysDictDataList.forEach(item -> {
+            item.setDictStatus(this.getSysDictLabel(SYS_NORMAL_DISABLE, item.getDictStatus()));
+            item.setSystemFlag(this.getSysDictLabel(SYS_YES_NO, item.getSystemFlag()));
+        });
+        return agileSysDictDataList;
     }
 
     @Override

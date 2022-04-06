@@ -42,6 +42,13 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
+        <el-button v-hasPerm="['system:dict:type:export']" type="warning" icon="el-icon-download" size="mini"
+                   @click="handleExport"
+        >
+          导出
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
         <el-button type="danger" icon="el-icon-refresh" size="mini" @click="handleClearCache"
                    v-hasPerm="['system:dict:type:clear']">
           清理缓存
@@ -116,7 +123,8 @@
     addDictType,
     updateDictType,
     deleteDictType,
-    clearDictTypeCache
+    clearDictTypeCache,
+    exportDictType
   } from '@/api/system/dictType'
 
   export default {
@@ -149,7 +157,8 @@
           queryCond: {
             dictName: undefined,
             dictType: undefined,
-            dictStatus: undefined
+            dictStatus: undefined,
+            excelName: '字段类型'
           }
         },
         // 表单参数
@@ -267,6 +276,16 @@
         }).then(() => {
           this.getDictTypeList()
           this.messageSuccess('删除成功')
+        })
+      },
+      /** 导出按钮操作 */
+      handleExport() {
+        this.$confirm('请确认是否导出字段类型数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return exportDictType(this.queryParam.queryCond)
         })
       },
       /** 清理缓存按钮操作 */

@@ -29,3 +29,8 @@ export const updateDictData = data => postApi('/system/dict/data/update', data)
  * 删除字典数据
  */
 export const deleteDictData = data => postApi('/system/dict/data/delete', data)
+
+/**
+ * 导出字段数据
+ */
+export const exportDictData = data => postApi('/system/dict/data/export', data, { responseType: 'blob' })

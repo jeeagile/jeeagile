@@ -42,6 +42,13 @@
           删除
         </el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button v-hasPerm="['system:dict:data:export']" type="warning" icon="el-icon-download" size="mini"
+                   @click="handleExport"
+        >
+          导出
+        </el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getDictDataList"></right-toolbar>
     </el-row>
 
@@ -111,7 +118,8 @@
     addDictData,
     detailDictData,
     deleteDictData,
-    updateDictData
+    updateDictData,
+    exportDictData
   } from '@/api/system/dictData'
   import { selectDictTypeList, detailDictType } from '@/api/system/dictType'
 
@@ -151,7 +159,8 @@
           queryCond: {
             dictName: undefined,
             dictType: undefined,
-            dictStatus: undefined
+            dictStatus: undefined,
+            excelName: '字段数据'
           }
         },
         // 表单参数
@@ -289,6 +298,16 @@
         }).then(() => {
           this.getDictDataList()
           this.messageSuccess('删除成功')
+        })
+      },
+      /** 导出按钮操作 */
+      handleExport() {
+        this.$confirm('请确认是否导出字段数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return exportDictData(this.queryParam.queryCond)
         })
       }
     }
