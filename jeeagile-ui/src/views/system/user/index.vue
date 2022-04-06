@@ -44,39 +44,32 @@
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button v-hasPerm="['system:user:add']" type="primary" icon="el-icon-plus" size="mini"
-                       @click="handleAdd"
-            >
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd"
+                       v-hasPerm="['system:user:add']">
               新增
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button v-hasPerm="['system:user:update']" type="success" icon="el-icon-edit" size="mini"
-                       :disabled="single"
-                       @click="handleUpdate"
-            >
+            <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+                       v-hasPerm="['system:user:update']">
               修改
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button v-hasPerm="['system:user:delete']" type="danger" icon="el-icon-delete" size="mini"
-                       :disabled="multiple"
-                       @click="handleDelete"
-            >
+            <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+                       v-hasPerm="['system:user:delete']">
               删除
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button v-hasPerm="['system:user:import']" type="info" icon="el-icon-upload2" size="mini"
-                       @click="handleImport"
-            >
+            <el-button type="info" icon="el-icon-upload2" size="mini" @click="handleImport"
+                       v-hasPerm="['system:user:import']">
               导入
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button v-hasPerm="['system:user:export']" type="warning" icon="el-icon-download" size="mini"
-                       @click="handleExport"
-            >
+            <el-button type="warning" icon="el-icon-download" size="mini" @click="handleExport"
+                       v-hasPerm="['system:user:export']">
               导出
             </el-button>
           </el-col>
@@ -100,19 +93,16 @@
           </el-table-column>
           <el-table-column label="操作" align="center" lass-name="small-padding fixed-width" width="200px">
             <template slot-scope="scope">
-              <el-button v-hasPerm="['system:user:update']" size="mini" type="text" icon="el-icon-edit"
-                         @click="handleUpdate(scope.row)"
-              >
+              <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                         v-hasPerm="['system:user:update']">
                 修改
               </el-button>
-              <el-button v-hasPerm="['system:user:delete']" size="mini" type="text" icon="el-icon-delete"
-                         @click="handleDelete(scope.row)"
-              >
+              <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                         v-hasPerm="['system:user:delete']">
                 删除
               </el-button>
-              <el-button v-hasPerm="['system:user:password']" size="mini" type="text" icon="el-icon-key"
-                         @click="handleResetPassword(scope.row)"
-              >
+              <el-button size="mini" type="text" icon="el-icon-key" @click="handleResetPassword(scope.row)"
+                         v-hasPerm="['system:user:password']">
                 重置
               </el-button>
             </template>

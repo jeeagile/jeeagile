@@ -42,9 +42,8 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button v-hasPerm="['system:dict:type:export']" type="warning" icon="el-icon-download" size="mini"
-                   @click="handleExport"
-        >
+        <el-button type="warning" icon="el-icon-download" size="mini" @click="handleExport"
+                   v-hasPerm="['system:dict:type:export']">
           导出
         </el-button>
       </el-col>
@@ -280,7 +279,7 @@
       },
       /** 导出按钮操作 */
       handleExport() {
-        this.$confirm('请确认是否导出字段类型数据项?', '警告', {
+        this.$confirm('请确认是否导出字典类型数据项?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

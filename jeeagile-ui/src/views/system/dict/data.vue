@@ -43,9 +43,8 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button v-hasPerm="['system:dict:data:export']" type="warning" icon="el-icon-download" size="mini"
-                   @click="handleExport"
-        >
+        <el-button type="warning" icon="el-icon-download" size="mini" @click="handleExport"
+                   v-hasPerm="['system:dict:data:export']">
           导出
         </el-button>
       </el-col>
