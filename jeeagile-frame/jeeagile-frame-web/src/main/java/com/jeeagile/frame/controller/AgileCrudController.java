@@ -9,6 +9,7 @@ import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.spring.AgileServletUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.entity.AgileModel;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -159,30 +161,55 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
         return AgileResult.error(AgileResultCode.FAIL_OPS_IMPORT, "数据导入异常！");
     }
 
+    /**
+     * 设置Excel解析器
+     *
+     * @return
+     */
     protected AgileExcelListener<T> getAgileExcelListener() {
         return new AgileDefaultExcelListener();
+    }
+
+    @PostMapping(value = "/importTemplate")
+    @AgileRequiresPermissions("import")
+    @ApiOperation(value = "导入数据模版", notes = "导入数据模版")
+    public void importTemplate(@RequestBody T agileModel) {
+        String excelName = agileModel.getExcelName();
+        if (AgileStringUtil.isEmpty(excelName)) {
+            excelName = "数据模版";
+        }
+        this.exportExcel(new ArrayList<>(), excelName);
     }
 
     @PostMapping(value = "/export")
     @AgileRequiresPermissions("export")
     @AgileLogger(notes = "导出数据", type = AgileLoggerType.EXPORT)
     @ApiOperation(value = "导出数据", notes = "导出数据接口")
-    public void exportExcel(HttpServletResponse httpServletResponse, @RequestBody T agileModel) {
+    public void exportExcel(@RequestBody T agileModel) {
         String excelName = agileModel.getExcelName();
         if (AgileStringUtil.isEmpty(excelName)) {
             excelName = "导出数据";
         }
+        this.exportExcel(agileBaseService.selectExportData(agileModel), excelName);
+    }
+
+    /**
+     * 导出数据方便重写
+     *
+     * @param dataList
+     * @param excelName
+     */
+    protected void exportExcel(List<T> dataList, String excelName) {
         try {
-            List<T> data = agileBaseService.selectExportData(agileModel);
+            HttpServletResponse httpServletResponse = AgileServletUtil.getHttpServletResponse();
             httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             httpServletResponse.setCharacterEncoding("utf-8");
             String fileName = URLEncoder.encode(excelName, "UTF-8").replaceAll("\\+", "%20");
             httpServletResponse.setHeader("Content-disposition", "attachment;filename*=" + fileName + ".xlsx");
-            EasyExcel.write(httpServletResponse.getOutputStream(), agileModel.getClass()).sheet(excelName).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).doWrite(data);
+            EasyExcel.write(httpServletResponse.getOutputStream(), this.agileBaseService.getEntityClass()).sheet(excelName).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).doWrite(dataList);
         } catch (Exception ex) {
             throw new AgileFrameException(AgileResultCode.FAIL_OPS_EXPORT, excelName + "数据导出失败！", ex);
         }
-
     }
 
     /**

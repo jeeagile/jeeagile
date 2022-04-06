@@ -270,7 +270,8 @@
     resetPassword,
     changeUserStatus,
     exportUser,
-    importUser
+    importUser,
+    importTemplate
   } from '@/api/system/user'
 
   export default {
@@ -579,6 +580,10 @@
       handleImport() {
         this.upload.title = '用户导入'
         this.upload.open = true
+      },
+      /** 下载模板操作 */
+      importTemplate() {
+        return importTemplate(this.queryParam.queryCond)
       },
       /** 文件上传中处理 */
       handleFileUploadProgress(event, file, fileList) {

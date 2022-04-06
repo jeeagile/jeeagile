@@ -50,8 +50,12 @@ export const changeUserStatus = data => postApi('/system/user/status', data)
  */
 export const exportUser = data => postApi('/system/user/export', data, { responseType: 'blob' })
 
-
 /**
  * 导入用户
  */
 export const importUser = data => postApi('/system/user/import', data)
+
+/**
+ * 导入用户
+ */
+export const importTemplate = data => postApi('/system/user/importTemplate', data, { responseType: 'blob' })
