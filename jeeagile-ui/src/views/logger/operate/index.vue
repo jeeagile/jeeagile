@@ -256,7 +256,7 @@
       },
       /** 导出按钮操作 */
       handleExport() {
-        this.$confirm('请确认是否导出字典类型数据项?', '警告', {
+        this.$confirm('请确认是否导出操作日志数据项?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
