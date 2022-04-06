@@ -1,6 +1,7 @@
 package com.jeeagile.system.entity;
 
 import com.jeeagile.frame.entity.AgileTreeModel;
+import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -21,12 +22,14 @@ public class AgileSysDept extends AgileTreeModel<AgileSysDept> {
     /**
      * 部门编码
      */
+    @ApiModelProperty("部门编码")
     @NotEmpty(message = "部门编码不能为空！")
     @Size(max = 20, message = "部门编码最大长度为20！")
     private String deptCode;
     /**
      * 部门名称
      */
+    @ApiModelProperty("部门名称")
     @NotEmpty(message = "部门名称不能为空！")
     @Size(max = 50, message = "部门名称最大长度为50！")
     private String deptName;
@@ -34,12 +37,14 @@ public class AgileSysDept extends AgileTreeModel<AgileSysDept> {
     /**
      * 显示顺序
      */
+    @ApiModelProperty("显示顺序")
     @NotNull(message = "显示顺序不能为空！")
     private Integer deptSort;
 
     /**
      * 使用状态（0:正常 1:停用）
      */
+    @ApiModelProperty("使用状态")
     @Pattern(regexp = "[01]", message = "部门状态必须为0或1（0:正常 1:停用）！")
     private String deptStatus = "0";
 }

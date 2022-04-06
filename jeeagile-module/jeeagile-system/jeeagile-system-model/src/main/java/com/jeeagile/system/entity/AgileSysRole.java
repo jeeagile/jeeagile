@@ -12,8 +12,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +29,7 @@ public class AgileSysRole extends AgileBaseModel<AgileSysRole> {
      * 角色编码
      */
     @ExcelProperty(value = {"角色信息", "角色编码"}, index = 0)
-    @ApiModelProperty(value = "角色编码", position = 1)
+    @ApiModelProperty("角色编码")
     @NotEmpty(message = "角色编码不能为空！")
     @Size(max = 30, message = "角色编码长度最大值为30！")
     private String roleCode;
@@ -40,7 +38,7 @@ public class AgileSysRole extends AgileBaseModel<AgileSysRole> {
      * 角色名称
      */
     @ExcelProperty(value = {"角色信息", "角色名称"}, index = 1)
-    @ApiModelProperty(value = "角色名称", position = 2)
+    @ApiModelProperty("角色名称")
     @NotEmpty(message = "角色名称不能为空！")
     @Size(max = 50, message = "角色名称长度最大值为50！")
     private String roleName;
@@ -49,7 +47,7 @@ public class AgileSysRole extends AgileBaseModel<AgileSysRole> {
      * 角色状态（0:正常 1:停用）
      */
     @ExcelProperty(value = {"角色信息", "角色状态"}, index = 2)
-    @ApiModelProperty(value = "角色状态", position = 3)
+    @ApiModelProperty("角色状态")
     @Pattern(regexp = "[01]", message = "角色状态值必须为0或1（0：正常 1：停用）！")
     private String roleStatus;
 
@@ -57,7 +55,7 @@ public class AgileSysRole extends AgileBaseModel<AgileSysRole> {
      * 角色排序
      */
     @ExcelProperty(value = {"角色信息", "角色排序"}, index = 3)
-    @ApiModelProperty(value = "角色排序", position = 4)
+    @ApiModelProperty("角色排序")
     @NotNull(message = "角色排序不能为空！")
     private Integer roleSort;
 
@@ -65,14 +63,14 @@ public class AgileSysRole extends AgileBaseModel<AgileSysRole> {
      * 数据范围
      */
     @ExcelProperty(value = {"角色信息", "数据范围"}, index = 4)
-    @ApiModelProperty(value = "数据范围", position = 5)
+    @ApiModelProperty("数据范围")
     private String dataScope;
 
     /**
      * 备注
      */
     @ExcelIgnore
-    @ApiModelProperty(value = "备注", position = 6)
+    @ApiModelProperty("备注")
     @Size(max = 150, message = "备注长度最大值为150！")
     private String remark;
 
@@ -80,7 +78,7 @@ public class AgileSysRole extends AgileBaseModel<AgileSysRole> {
      * 角色已分配菜单
      */
     @ExcelIgnore
-    @ApiModelProperty(value = "已分配菜单", position = 7)
+    @ApiModelProperty("已分配菜单")
     @TableField(exist = false)
     private List<String> menuIdList = new ArrayList<>();
 
@@ -88,7 +86,7 @@ public class AgileSysRole extends AgileBaseModel<AgileSysRole> {
      * 角色已分配部门权限
      */
     @ExcelIgnore
-    @ApiModelProperty(value = "已分配部门权限", position = 8)
+    @ApiModelProperty("已分配部门权限")
     @TableField(exist = false)
     private List<String> deptIdList = new ArrayList<>();
 }
