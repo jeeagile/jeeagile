@@ -1,4 +1,4 @@
-import {postApi} from '@/utils/axios'
+import { postApi } from '@/utils/axios'
 
 /**
  * 查询参数列表
@@ -30,3 +30,7 @@ export const deleteConfig = data => postApi('/system/config/delete', data)
  */
 export const clearConfigCache = data => postApi('/system/config/clearCache', data)
 
+/**
+ * 导出参数配置
+ */
+export const exportConfig = data => postApi('/system/config/export', data, { responseType: 'blob' })

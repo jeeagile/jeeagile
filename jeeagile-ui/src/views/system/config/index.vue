@@ -2,14 +2,17 @@
   <div class="app-container">
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="参数名称" prop="configName">
-        <el-input v-model="queryParam.queryCond.configName" placeholder="请输入参数名称" clearable size="small" style="width: 240px" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.queryCond.configName" placeholder="请输入参数名称" clearable size="small"
+                  style="width: 240px" @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="参数键名" prop="configKey">
-        <el-input v-model="queryParam.queryCond.configKey" placeholder="请输入参数键名" clearable size="small" style="width: 240px" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.queryCond.configKey" placeholder="请输入参数键名" clearable size="small"
+                  style="width: 240px" @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="系统内置" prop="systemFlag">
         <el-select v-model="queryParam.queryCond.systemFlag" placeholder="系统内置" clearable size="small">
-          <el-option v-for="flagOption in flagOptionList" :key="flagOption.dictValue" :label="flagOption.dictLabel" :value="flagOption.dictValue"/>
+          <el-option v-for="flagOption in flagOptionList" :key="flagOption.dictValue" :label="flagOption.dictLabel"
+                     :value="flagOption.dictValue"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -25,17 +28,27 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPerm="['system:config:update']">
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+                   v-hasPerm="['system:config:update']">
           修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete" v-hasPerm="['system:config:delete']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete"
+                   v-hasPerm="['system:config:delete']">
           删除
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-refresh" size="mini" @click="handleClearCache" v-hasPerm="['system:config:delete']">
+        <el-button v-hasPerm="['system:config:export']" type="warning" icon="el-icon-download" size="mini"
+                   @click="handleExport"
+        >
+          导出
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="danger" icon="el-icon-refresh" size="mini" @click="handleClearCache"
+                   v-hasPerm="['system:config:delete']">
           清理缓存
         </el-button>
       </el-col>
@@ -51,10 +64,12 @@
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPerm="['system:config:update']">
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                     v-hasPerm="['system:config:update']">
             修改
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPerm="['system:config:delete']">
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                     v-hasPerm="['system:config:delete']">
             删除
           </el-button>
         </template>
@@ -62,7 +77,9 @@
     </el-table>
 
     <!-- 分页 -->
-    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal" :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getConfigList"/>
+    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
+                @pagination="getConfigList"/>
 
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="500px" append-to-body>
@@ -102,7 +119,8 @@
     deleteConfig,
     addConfig,
     updateConfig,
-    clearConfigCache
+    clearConfigCache,
+    exportConfig
   } from '@/api/system/config'
 
   export default {
@@ -135,7 +153,8 @@
           queryCond: {
             configName: undefined,
             configKey: undefined,
-            systemFlag: undefined
+            systemFlag: undefined,
+            excelName: '参数配置'
           }
         },
         // 表单参数
@@ -256,6 +275,16 @@
         }).then(() => {
           this.getConfigList()
           this.messageSuccess('删除成功')
+        })
+      },
+      /** 导出按钮操作 */
+      handleExport() {
+        this.$confirm('请确认是否导出字段类型数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return exportConfig(this.queryParam.queryCond)
         })
       },
       /** 清理缓存按钮操作 */

@@ -9,8 +9,12 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysConfig;
 import com.jeeagile.system.mapper.AgileSysConfigMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.util.List;
+
+import static com.jeeagile.core.constants.AgileConstants.SYS_YES_NO;
 
 /**
  * @author JeeAgile
@@ -19,6 +23,8 @@ import java.io.Serializable;
  */
 @AgileService
 public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConfigMapper, AgileSysConfig> implements IAgileSysConfigService {
+    @Autowired
+    private IAgileSysDictDataService agileSysDictDataService;
 
     @Override
     public LambdaQueryWrapper<AgileSysConfig> queryWrapper(AgileSysConfig agileSysConfig) {
@@ -35,6 +41,13 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
             }
         }
         return lambdaQueryWrapper;
+    }
+
+    @Override
+    public List<AgileSysConfig> selectExportData(AgileSysConfig agileSysConfig) {
+        List<AgileSysConfig> agileSysConfigList = this.selectList(agileSysConfig);
+        agileSysConfigList.forEach(item -> item.setSystemFlag(agileSysDictDataService.getSysDictLabel(SYS_YES_NO, item.getSystemFlag())));
+        return agileSysConfigList;
     }
 
     @Override
