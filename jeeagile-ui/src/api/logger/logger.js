@@ -14,3 +14,8 @@ export const deleteLogger = logId => postApi('/logger/operate/delete', logId)
  * 删除所有日志基类
  */
 export const clearLogger = () => postApi('/logger/operate/clear')
+
+/**
+ * 导出操作日志
+ */
+export const exportLogger = data => postApi('/logger/operate/export', data, { responseType: 'blob' })

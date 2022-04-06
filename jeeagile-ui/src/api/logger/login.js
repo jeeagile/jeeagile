@@ -14,3 +14,8 @@ export const deleteLogin = logId => postApi('/logger/login/delete', logId)
  * 删除所有日志基类
  */
 export const cleanLogin = () => postApi('/logger/login/clear')
+
+/**
+ * 导出登录日志
+ */
+export const exportLogin = data => postApi('/logger/login/export', data, { responseType: 'blob' })

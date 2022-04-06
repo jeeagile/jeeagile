@@ -2,11 +2,13 @@
   <div class="app-container">
     <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
       <el-form-item label="登录用户" prop="loginName">
-        <el-input v-model="queryParam.queryCond.loginName" placeholder="请输入登录用户名" clearable style="width: 240px;" size="small" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.queryCond.loginName" placeholder="请输入登录用户名" clearable style="width: 240px;"
+                  size="small" @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParam.queryCond.status" placeholder="登录状态" clearable size="small" style="width: 240px">
-          <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+          <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
+                     :value="dict.dictValue"/>
         </el-select>
       </el-form-item>
       <el-form-item label="操作时间">
@@ -21,13 +23,21 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete" v-hasPerm="['logger:login:delete']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete"
+                   v-hasPerm="['logger:login:delete']">
           删除
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleClean" v-hasPerm="['logger:login:clear']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleClean"
+                   v-hasPerm="['logger:login:clear']">
           清空
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="warning" icon="el-icon-download" size="mini" @click="handleExport"
+                   v-hasPerm="['logger:login:export']">
+          导出
         </el-button>
       </el-col>
       <right-toolbar :show-search.sync="showSearch" @queryTable="getLoginList"/>
@@ -46,12 +56,14 @@
       <el-table-column label="登录日期" align="center" prop="loginTime" width="180"/>
     </el-table>
     <!-- 分页 -->
-    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal" :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getLoginList"/>
+    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
+                @pagination="getLoginList"/>
   </div>
 </template>
 
 <script>
-  import { selectLoginPage, deleteLogin, cleanLogin } from '@/api/logger/login'
+  import { selectLoginPage, deleteLogin, cleanLogin, exportLogin } from '@/api/logger/login'
 
   export default {
     name: 'Login',
@@ -88,7 +100,8 @@
             title: undefined,
             type: undefined,
             status: undefined,
-            loginName: undefined
+            loginName: undefined,
+            excelName: '登录日志'
           }
         }
       }
@@ -165,6 +178,16 @@
         }).then(() => {
           this.getLoginList()
           this.messageSuccess('清空成功')
+        })
+      },
+      /** 导出按钮操作 */
+      handleExport() {
+        this.$confirm('请确认是否导出字典类型数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return exportLogin(this.queryParam.queryCond)
         })
       }
     }

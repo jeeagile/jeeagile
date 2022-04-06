@@ -2,6 +2,8 @@ package com.jeeagile.logger.controller;
 
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
+import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author JeeAgile
@@ -41,8 +45,8 @@ public class AgileLoggerLoginController extends AgileBaseController {
     @PostMapping("/delete")
     @ApiOperation(value = "删除登录日志记录", notes = "删除登录日志记录")
     @AgileLogger(notes = "删除登录日志记录", type = AgileLoggerType.DELETE)
-    public AgileResult<String> delete(@SingleRequestBody String configId) {
-        agileLoggerLoginService.deleteModel(configId);
+    public AgileResult<String> delete(@SingleRequestBody String id) {
+        agileLoggerLoginService.deleteModel(id);
         return this.success("登录日志记录删除成功！");
     }
 
@@ -54,5 +58,18 @@ public class AgileLoggerLoginController extends AgileBaseController {
     public AgileResult clear() {
         agileLoggerLoginService.clearRecord();
         return this.success("登录日志记录清空成功！");
+    }
+
+    @PostMapping(value = "/export")
+    @AgileRequiresPermissions("export")
+    @AgileLogger(notes = "导出数据", type = AgileLoggerType.EXPORT)
+    @ApiOperation(value = "导出数据", notes = "导出数据接口")
+    public void exportExcel(@RequestBody AgileLoggerLogin agileLoggerLogin) {
+        String excelName = agileLoggerLogin.getExcelName();
+        if (AgileStringUtil.isEmpty(excelName)) {
+            excelName = "导出数据";
+        }
+        List<AgileLoggerLogin> dataList = agileLoggerLoginService.selectExportData(agileLoggerLogin);
+        this.exportExcel(dataList, excelName, AgileLoggerLogin.class);
     }
 }

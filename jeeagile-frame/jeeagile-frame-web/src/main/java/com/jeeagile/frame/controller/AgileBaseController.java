@@ -1,7 +1,16 @@
 package com.jeeagile.frame.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.result.AgileResult;
+import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.result.IAgileResultCode;
+import com.jeeagile.core.util.spring.AgileServletUtil;
+
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * @author JeeAgile
@@ -9,6 +18,26 @@ import com.jeeagile.core.result.IAgileResultCode;
  * @description
  */
 public abstract class AgileBaseController {
+
+    /**
+     * 导出数据方便重写
+     *
+     * @param dataList
+     * @param excelName
+     */
+    protected void exportExcel(List dataList, String excelName, Class<?> entityClass) {
+        try {
+            HttpServletResponse httpServletResponse = AgileServletUtil.getHttpServletResponse();
+            httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            httpServletResponse.setCharacterEncoding("utf-8");
+            String fileName = URLEncoder.encode(excelName, "UTF-8").replaceAll("\\+", "%20");
+            httpServletResponse.setHeader("Content-disposition", "attachment;filename*=" + fileName + ".xlsx");
+            EasyExcel.write(httpServletResponse.getOutputStream(), entityClass).sheet(excelName).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).doWrite(dataList);
+        } catch (Exception ex) {
+            throw new AgileFrameException(AgileResultCode.FAIL_OPS_EXPORT, excelName + "数据导出失败！", ex);
+        }
+    }
+
     /**
      * 返回成功结果集
      *

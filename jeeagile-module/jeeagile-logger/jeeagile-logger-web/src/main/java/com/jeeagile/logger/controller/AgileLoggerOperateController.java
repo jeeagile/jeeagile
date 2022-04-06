@@ -2,6 +2,8 @@ package com.jeeagile.logger.controller;
 
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
+import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author JeeAgile
@@ -53,5 +57,19 @@ public class AgileLoggerOperateController extends AgileBaseController {
     public AgileResult clear() {
         agileLoggerOperateService.clearRecord();
         return this.success("操作日志记录清空成功！");
+    }
+
+    @PostMapping(value = "/export")
+    @AgileRequiresPermissions("export")
+    @AgileLogger(notes = "导出数据", type = AgileLoggerType.EXPORT)
+    @ApiOperation(value = "导出数据", notes = "导出数据接口")
+    public void exportExcel(@RequestBody AgileLoggerOperate agileLoggerOperate) {
+        String excelName = agileLoggerOperate.getExcelName();
+        if (AgileStringUtil.isEmpty(excelName)) {
+            excelName = "导出数据";
+        }
+
+        List<AgileLoggerOperate> dataList = agileLoggerOperateService.selectExportData(agileLoggerOperate);
+        this.exportExcel(dataList, excelName, AgileLoggerOperate.class);
     }
 }

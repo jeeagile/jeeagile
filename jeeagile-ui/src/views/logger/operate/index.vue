@@ -44,6 +44,10 @@
           清空
         </el-button>
       </el-col>
+      <el-button type="warning" icon="el-icon-download" size="mini" @click="handleExport"
+                 v-hasPerm="['logger:operate:export']">
+        导出
+      </el-button>
       <right-toolbar :show-search.sync="showSearch" @queryTable="getLoggerList"/>
     </el-row>
 
@@ -130,7 +134,7 @@
 </template>
 
 <script>
-  import { selectLoggerPage, deleteLogger, clearLogger } from '@/api/logger/logger'
+  import { selectLoggerPage, deleteLogger, clearLogger, exportLogger } from '@/api/logger/logger'
 
   export default {
     name: 'Operate',
@@ -167,7 +171,8 @@
             operateModule: undefined,
             operateType: undefined,
             operateUser: undefined,
-            status: undefined
+            status: undefined,
+            excelName: '操作日志'
           }
         }
       }
@@ -247,6 +252,16 @@
         }).then(() => {
           this.getLoggerList()
           this.messageSuccess('清空成功')
+        })
+      },
+      /** 导出按钮操作 */
+      handleExport() {
+        this.$confirm('请确认是否导出字典类型数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return exportLogger(this.queryParam.queryCond)
         })
       }
     }
