@@ -6,11 +6,16 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysPost;
+import com.jeeagile.system.entity.AgileSysRole;
 import com.jeeagile.system.entity.AgileSysUserPost;
 import com.jeeagile.system.mapper.AgileSysPostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.util.List;
+
+import static com.jeeagile.core.constants.AgileConstants.SYS_DATA_SCOPE;
+import static com.jeeagile.core.constants.AgileConstants.SYS_NORMAL_DISABLE;
 
 
 /**
@@ -23,6 +28,8 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
 
     @Autowired
     private IAgileSysUserPostService agileSysUserPostService;
+    @Autowired
+    private IAgileSysDictDataService agileSysDictDataService;
 
     @Override
     public LambdaQueryWrapper<AgileSysPost> queryWrapper(AgileSysPost agileSysPost) {
@@ -45,6 +52,13 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
     }
 
     @Override
+    public List<AgileSysPost> selectExportData(AgileSysPost agileSysPost) {
+        List<AgileSysPost> agileSysPostList = this.selectList(agileSysPost);
+        agileSysPostList.forEach(item -> item.setPostStatus(agileSysDictDataService.getSysDictLabel(SYS_NORMAL_DISABLE, item.getPostStatus())));
+        return agileSysPostList;
+    }
+
+    @Override
     public void saveModelValidate(AgileSysPost agileSysPost) {
         this.validateData(agileSysPost);
     }
@@ -62,6 +76,7 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
 
     /**
      * 将该岗位从已分配的用户中删除
+     *
      * @param postId
      * @return
      */

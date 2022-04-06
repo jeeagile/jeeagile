@@ -2,14 +2,17 @@
   <div class="app-container">
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="岗位编码" prop="postCode">
-        <el-input v-model="queryParam.queryCond.postCode" placeholder="请输入岗位编码" clearable size="small" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.queryCond.postCode" placeholder="请输入岗位编码" clearable size="small"
+                  @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="岗位名称" prop="postName">
-        <el-input v-model="queryParam.queryCond.postName" placeholder="请输入岗位名称" clearable size="small" @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParam.queryCond.postName" placeholder="请输入岗位名称" clearable size="small"
+                  @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="状态" prop="postStatus">
         <el-select v-model="queryParam.queryCond.postStatus" placeholder="岗位状态" clearable size="small">
-          <el-option v-for="postStatusOption in postStatusOptionList" :key="postStatusOption.dictValue" :label="postStatusOption.dictLabel" :value="postStatusOption.dictValue"/>
+          <el-option v-for="postStatusOption in postStatusOptionList" :key="postStatusOption.dictValue"
+                     :label="postStatusOption.dictLabel" :value="postStatusOption.dictValue"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -25,13 +28,22 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPerm="['system:post:update']">
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+                   v-hasPerm="['system:post:update']">
           修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete" v-hasPerm="['system:post:delete']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete"
+                   v-hasPerm="['system:post:delete']">
           删除
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button v-hasPerm="['system:user:export']" type="warning" icon="el-icon-download" size="mini"
+                   @click="handleExport"
+        >
+          导出
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getPostList"></right-toolbar>
@@ -45,17 +57,21 @@
       <el-table-column label="状态" align="center" prop="postStatus" :formatter="postStatusFormat"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPerm="['system:post:update']">
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                     v-hasPerm="['system:post:update']">
             修改
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPerm="['system:post:delete']">
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                     v-hasPerm="['system:post:delete']">
             删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal" :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize" @pagination="getPostList"/>
+    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
+                @pagination="getPostList"/>
 
     <!-- 添加或修改岗位对话框 -->
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="500px" append-to-body>
@@ -71,7 +87,8 @@
         </el-form-item>
         <el-form-item label="岗位状态" prop="postStatus">
           <el-radio-group v-model="form.postStatus">
-            <el-radio v-for="postStatusOption in postStatusOptionList" :key="postStatusOption.dictValue" :label="postStatusOption.dictValue">
+            <el-radio v-for="postStatusOption in postStatusOptionList" :key="postStatusOption.dictValue"
+                      :label="postStatusOption.dictValue">
               {{ postStatusOption.dictLabel }}
             </el-radio>
           </el-radio-group>
@@ -89,7 +106,7 @@
 </template>
 
 <script>
-  import { selectPostPage, detailPost, deletePost, addPost, updatePost } from '@/api/system/post'
+  import { selectPostPage, detailPost, deletePost, addPost, updatePost, exportPost } from '@/api/system/post'
 
   export default {
     name: 'Post',
@@ -123,7 +140,8 @@
           queryCond: {
             postCode: undefined,
             postName: undefined,
-            postStatus: undefined
+            postStatus: undefined,
+            excelName: '岗位数据'
           }
         },
         // 表单参数
@@ -243,6 +261,16 @@
         }).then(() => {
           this.getPostList()
           this.messageSuccess('删除成功')
+        })
+      },
+      /** 导出按钮操作 */
+      handleExport() {
+        this.$confirm('请确认是否导出岗位数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return exportPost(this.queryParam.queryCond)
         })
       }
     }

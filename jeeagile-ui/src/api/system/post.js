@@ -30,3 +30,7 @@ export const updatePost = data => postApi('/system/post/update', data)
  */
 export const deletePost = data => postApi('/system/post/delete', data)
 
+/**
+ * 导出岗位
+ */
+export const exportPost = data => postApi('/system/post/export', data, { responseType: 'blob' })
