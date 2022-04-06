@@ -40,7 +40,7 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button v-hasPerm="['system:user:export']" type="warning" icon="el-icon-download" size="mini"
+        <el-button v-hasPerm="['system:post:export']" type="warning" icon="el-icon-download" size="mini"
                    @click="handleExport"
         >
           导出
