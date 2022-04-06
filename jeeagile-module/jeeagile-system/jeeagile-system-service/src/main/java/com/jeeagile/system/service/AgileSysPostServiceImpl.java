@@ -6,7 +6,6 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.system.entity.AgileSysPost;
-import com.jeeagile.system.entity.AgileSysRole;
 import com.jeeagile.system.entity.AgileSysUserPost;
 import com.jeeagile.system.mapper.AgileSysPostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.Serializable;
 import java.util.List;
 
-import static com.jeeagile.core.constants.AgileConstants.SYS_DATA_SCOPE;
 import static com.jeeagile.core.constants.AgileConstants.SYS_NORMAL_DISABLE;
 
 
