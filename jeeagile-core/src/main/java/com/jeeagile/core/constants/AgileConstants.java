@@ -49,5 +49,6 @@ public class AgileConstants {
     // 字典类型常量
     public static final String SYS_USER_SEX = "sys_user_sex";
     public static final String SYS_USER_STATUS = "sys_user_status";
-
+    public static final String SYS_DATA_SCOPE = "sys_data_scope";
+    public static final String SYS_NORMAL_DISABLE = "sys_normal_disable";
 }
