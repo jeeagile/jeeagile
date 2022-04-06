@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.jeeagile.core.constants.AgileConstants.AGILE_DATA_SCOPE_05;
+import static com.jeeagile.core.constants.AgileConstants.*;
 
 /**
  * @author JeeAgile
@@ -44,6 +44,9 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
 
     @Autowired
     private IAgileSysRoleDeptService agileSysRoleDeptService;
+
+    @Autowired
+    private IAgileSysDictDataService agileSysDictDataService;
 
     @Override
     public Object initData() {
@@ -72,6 +75,17 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     }
 
     @Override
+    public List<AgileSysRole> selectExportData(AgileSysRole agileSysRole) {
+        List<AgileSysRole> agileSysRoleList = this.selectList(agileSysRole);
+        agileSysRoleList.forEach(item -> {
+            item.setRoleStatus(agileSysDictDataService.getSysDictLabel(SYS_NORMAL_DISABLE, item.getRoleStatus()));
+            item.setDataScope(agileSysDictDataService.getSysDictLabel(SYS_DATA_SCOPE, item.getDataScope()));
+        });
+        return agileSysRoleList;
+    }
+
+
+    @Override
     public AgileSysRole selectModel(Serializable roleId) {
         AgileSysRole agileSysRole = this.getById(roleId);
         agileSysRole.setMenuIdList(this.selectRoleMenuIdList(roleId));
@@ -80,6 +94,7 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
         }
         return agileSysRole;
     }
+
 
     @Override
     public AgileSysRole saveModel(AgileSysRole agileSysRole) {

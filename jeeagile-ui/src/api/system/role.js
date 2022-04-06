@@ -45,4 +45,8 @@ export const changeRoleStatus = data => postApi('/system/role/changeStatus', dat
  */
 export const updateDataScope = data => postApi('/system/role/dataScope', data)
 
+/**
+ * 导出角色
+ */
+export const exportRole = data => postApi('/system/role/export', data, { responseType: 'blob' })
 

@@ -40,6 +40,13 @@
           删除
         </el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button v-hasPerm="['system:user:export']" type="warning" icon="el-icon-download" size="mini"
+                   @click="handleExport"
+        >
+          导出
+        </el-button>
+      </el-col>
       <right-toolbar :show-search.sync="showSearch" @queryTable="getRoleList"/>
     </el-row>
 
@@ -153,7 +160,8 @@
     addRole,
     updateRole,
     changeRoleStatus,
-    updateDataScope
+    updateDataScope,
+    exportRole
   } from '@/api/system/role'
 
   export default {
@@ -200,7 +208,8 @@
           queryCond: {
             roleName: undefined,
             roleCode: undefined,
-            roleStatus: undefined
+            roleStatus: undefined,
+            excelName: '角色数据'
           }
         },
         // 表单参数
@@ -436,6 +445,16 @@
         }).then(() => {
           this.getRoleList()
           this.messageSuccess('删除成功')
+        })
+      },
+      /** 导出按钮操作 */
+      handleExport() {
+        this.$confirm('请确认是否导出角色数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return exportRole(this.queryParam.queryCond)
         })
       }
     }
