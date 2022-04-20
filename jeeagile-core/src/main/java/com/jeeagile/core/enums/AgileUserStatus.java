@@ -24,7 +24,7 @@ public enum AgileUserStatus {
                 return agileUserStatus.desc;
             }
         }
-        return "";
+        return code;
     }
 
     public String getDesc() {
