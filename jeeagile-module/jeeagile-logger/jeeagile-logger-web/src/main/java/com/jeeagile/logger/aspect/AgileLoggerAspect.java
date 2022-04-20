@@ -91,7 +91,6 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
      */
     private void saveAgileLoggerOperate(ProceedingJoinPoint joinPoint, Throwable throwable, Object rtnObject, long executeTime) {
         try {
-//            AgileLogger agileLogger = joinPoint.getTarget().getClass().getAnnotation(AgileLogger.class);
             MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
             Method method = methodSignature.getMethod();
             AgileLogger agileLogger = method.getAnnotation(AgileLogger.class);
