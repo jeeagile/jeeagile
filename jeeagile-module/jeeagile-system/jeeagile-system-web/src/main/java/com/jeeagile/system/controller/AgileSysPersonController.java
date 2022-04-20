@@ -61,6 +61,7 @@ public class AgileSysPersonController extends AgileBaseController {
     }
 
 
+    @AgileDemo
     @AgileRequiresUser
     @PostMapping("/avatar")
     @ApiOperation(value = "上传头像", notes = "上传头像")
