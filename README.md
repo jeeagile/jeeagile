@@ -113,24 +113,6 @@ jeeagile
 │  │  │
 │  │  └─jeeagile-generator-web     代码生成模块web层
 │  │  
-│  ├─jeeagile-logger         日志管理模块（包括日志切面和操作日志记录）
-│  │  ├─jeeagile-logger-api        日志管理模块api层
-│  │  │
-│  │  ├─jeeagile-logger-model      日志管理模块model层
-│  │  │
-│  │  ├─jeeagile-logger-service    日志管理模块service层
-│  │  │
-│  │  └─jeeagile-logger-web        日志管理模块web层
-│  │  
-│  ├─jeeagile-monitor        服务端监控模块
-│  │  ├─jeeagile-monitor-api       服务监控模块api层
-│  │  │
-│  │  ├─jeeagile-monitor-model     服务监控模块model层
-│  │  │
-│  │  ├─jeeagile-monitor-service   服务监控模块service层
-│  │  │
-│  │  └─jeeagile-monitor-web       服务监控模块web层
-│  │  
 │  ├─jeeagile-quartz         队列管理模块
 │  │  ├─jeeagile-quartz-api        队列管理模块api层
 │  │  │
@@ -139,15 +121,6 @@ jeeagile
 │  │  ├─jeeagile-quartz-service    队列管理模块service层
 │  │  │
 │  │  └─jeeagile-quartz-web        队列管理模块web层
-│  │  
-│  ├─jeeagile-system         系统管理模块
-│  │  ├─jeeagile-system-api        系统管理模块api层
-│  │  │
-│  │  ├─jeeagile-system-model      系统管理模块model层
-│  │  │
-│  │  ├─jeeagile-system-service    系统管理模块service层
-│  │  │
-│  │  └─jeeagile-system-web        系统管理模块web层
 │  │  
 ├─jeeagile-plugin      框架第三方插件支持
 │  ├─jeeagile-plugin-crypto        加解密插件（包括各种对称、非对称、摘要等加密方式））
