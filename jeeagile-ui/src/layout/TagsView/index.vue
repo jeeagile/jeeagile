@@ -46,7 +46,7 @@
         return this.$store.state.tagsView.visitedViews
       },
       routes() {
-        return this.$store.state.user.userRoute
+        return this.$store.state.auth.userRoute
       },
       theme() {
         return this.$store.state.settings.theme

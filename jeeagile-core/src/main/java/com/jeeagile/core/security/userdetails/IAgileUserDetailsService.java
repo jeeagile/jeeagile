@@ -60,20 +60,4 @@ public interface IAgileUserDetailsService {
      * @return
      */
     List<Object> getUserMenu(AgileBaseUser userData);
-
-    /**
-     * 获取用户数据权限
-     *
-     * @param userData
-     * @return
-     */
-    List<String> getUserDataScope(AgileBaseUser userData);
-
-    /**
-     * 根据数据权限类型获取用户权限部门列表
-     *
-     * @param dataScopeType
-     * @return
-     */
-    Set<String> getUserDeptList(AgileBaseUser agileBaseUser, String dataScopeType);
 }

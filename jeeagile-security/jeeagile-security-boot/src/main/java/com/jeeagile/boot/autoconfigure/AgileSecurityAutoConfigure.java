@@ -66,7 +66,7 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
 
         // 过滤请求 对于登录login 允许匿名访问
         httpSecurity.authorizeRequests().antMatchers(
-                "/system/user/login" ,
+                "/system/auth/login" ,
                 "/system/kaptcha/image" ,
                 "/system/kaptcha/valid")
                 .permitAll();

@@ -15,8 +15,8 @@ export default {
   name: 'Process',
   data() {
     return {
-      processId: `process_${new Date().getTime()}`,
-      processName: `流程_${new Date().getTime()}`,
+      processId: `kkkk`,
+      processName: `流程kkkkk`,
       processPrefix: 'activiti',
       processDesc: '',
       processXml: null

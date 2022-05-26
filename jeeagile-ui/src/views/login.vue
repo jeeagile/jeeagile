@@ -116,7 +116,6 @@
         }
       },
       handleLogin() {
-
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true
@@ -127,7 +126,7 @@
               Cookies.remove('userName')
               Cookies.remove('rememberMe')
             }
-            this.$store.dispatch('user/login', this.loginForm)
+            this.$store.dispatch('auth/login', this.loginForm)
               .then(() => {
                 this.$router.push({ path: this.redirect || '/' })
               })

@@ -2,9 +2,9 @@ drop table if exists agile_logger_login;
 drop table if exists agile_logger_operate;
 
 /*==============================================================*/
-/* table: agile_logger_login 用户登录日志表                      */
+/* table: agile_sys_login 用户登录日志表                      */
 /*==============================================================*/
-create table agile_logger_login
+create table agile_sys_login
 (
   id                     varchar(32) not null comment '登录日志主键',
   login_module           varchar(150) not null comment '登录类型',
@@ -21,12 +21,12 @@ create table agile_logger_login
   primary key (id)
 );
 
-alter table agile_logger_login comment '用户登录日志表';
+alter table agile_sys_login comment '用户登录日志表';
 
 /*==============================================================*/
-/* table: agile_logger_operate 用户操作日志表                    */
+/* table: agile_sys_logger 用户操作日志表                    */
 /*==============================================================*/
-create table agile_logger_operate
+create table agile_sys_logger
 (
   id                    varchar(32) not null comment '操作日志主键',
   operate_module        varchar(100) not null comment '操作模块',
@@ -54,4 +54,4 @@ create table agile_logger_operate
   primary key (id)
 );
 
-alter table agile_logger_operate comment '用户操作日志表';
+alter table agile_sys_logger comment '用户操作日志表';

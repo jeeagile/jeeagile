@@ -25,5 +25,5 @@ public interface AgileTreeMapper<T extends AgileTreeModel> extends AgileBaseMapp
      * @param parentId
      * @return
      */
-    long countChild(Serializable parentId);
+    Long countChild(Serializable parentId);
 }

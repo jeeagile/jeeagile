@@ -107,7 +107,7 @@ public class AgileDataScopeInterceptor extends AgileSqlParserSupport implements 
         if (agileBaseUser.isSuperAdmin()) {
             return null;
         }
-        List<String> dataScopeList = agileUserDetailsService.getUserDataScope(agileBaseUser);
+        List<String> dataScopeList = null;//agileUserDetailsService.getUserDataScope(agileBaseUser);
         Parenthesis parenthesis = new Parenthesis();
         if (AgileCollectionUtil.isNotEmpty(dataScopeList)) {
             if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_01)) {
@@ -149,10 +149,10 @@ public class AgileDataScopeInterceptor extends AgileSqlParserSupport implements 
         }
         if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_03)) {
             userDeptList.add(agileBaseUser.getDeptId());
-            userDeptList.addAll(agileUserDetailsService.getUserDeptList(agileBaseUser, AgileConstants.AGILE_DATA_SCOPE_03));
+//            userDeptList.addAll(agileUserDetailsService.getUserDeptList(agileBaseUser, AgileConstants.AGILE_DATA_SCOPE_03));
         }
         if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_05)) {
-            userDeptList.addAll(agileUserDetailsService.getUserDeptList(agileBaseUser, AgileConstants.AGILE_DATA_SCOPE_05));
+//            userDeptList.addAll(agileUserDetailsService.getUserDeptList(agileBaseUser, AgileConstants.AGILE_DATA_SCOPE_05));
         }
         //防止没有分配任何部门权限
         if (userDeptList.isEmpty()) {

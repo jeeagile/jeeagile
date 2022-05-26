@@ -1,21 +1,21 @@
 import {postApi} from '@/utils/axios'
 
 /**
- * 用户登录
+ * 查询参数列表
  */
-export const login = data => postApi('/system/user/login', data)
+export const selectLoginPage = data => postApi('/system/login/page', data)
 
 /**
- * 用户退出
+ * 删除日志记录
  */
-export const logout = () => postApi('/system/user/logout')
+export const deleteLogin = logId => postApi('/system/login/delete', logId)
 
 /**
- * 获取登录用户信息
+ * 删除所有日志基类
  */
-export const getUserInfo = () => postApi('/system/user/getUserInfo')
+export const cleanLogin = () => postApi('/system/login/clear')
 
 /**
- * 获取登录用户菜单
+ * 导出登录日志
  */
-export const getUserMenu = () => postApi('/system/user/getUserMenu')
+export const exportLogin = data => postApi('/system/login/export', data, { responseType: 'blob' })

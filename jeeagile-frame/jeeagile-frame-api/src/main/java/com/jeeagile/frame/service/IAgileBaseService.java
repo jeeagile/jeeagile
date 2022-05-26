@@ -76,7 +76,7 @@ public interface IAgileBaseService<T extends AgileModel> extends IService<T> {
      * @return
      */
     default List<T> selectExportData(T agileModel) {
-        return this.selectList();
+        return this.selectList(agileModel);
     }
 
     default Object importData(List<T> agileModelList) {

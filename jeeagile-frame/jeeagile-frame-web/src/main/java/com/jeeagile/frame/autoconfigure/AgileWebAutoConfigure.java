@@ -17,6 +17,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -33,6 +35,7 @@ import java.util.List;
  * @date 2021-03-21
  * @description
  */
+@EnableAsync
 @Configuration
 @ComponentScan({"com.jeeagile"})
 @EnableConfigurationProperties({AgileSecurityProperties.class, AgileProperties.class})
@@ -58,7 +61,7 @@ public class AgileWebAutoConfigure implements WebMvcConfigurer {
         if (agileSecurityProperties.getAnonUrl() != null && !agileSecurityProperties.getAnonUrl().isEmpty()) {
             interceptorRegistration.excludePathPatterns(agileSecurityProperties.getAnonUrl());
         }
-        interceptorRegistration.excludePathPatterns("/system/user/login", "/system/kaptcha/**");
+        interceptorRegistration.excludePathPatterns("/system/auth/login", "/system/kaptcha/**");
     }
 
     @Bean
@@ -85,5 +88,17 @@ public class AgileWebAutoConfigure implements WebMvcConfigurer {
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
         fastConverter.setFastJsonConfig(fastJsonConfig);
         return fastConverter;
+    }
+
+    @Bean("AgileAsyncTask")
+    public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setCorePoolSize(50);
+        threadPoolTaskExecutor.setMaxPoolSize(80);
+        threadPoolTaskExecutor.setQueueCapacity(30);
+        threadPoolTaskExecutor.setKeepAliveSeconds(200);
+        threadPoolTaskExecutor.setThreadNamePrefix("AgileAsyncTask");
+        threadPoolTaskExecutor.initialize();
+        return threadPoolTaskExecutor;
     }
 }

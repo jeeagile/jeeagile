@@ -797,13 +797,13 @@ INSERT INTO agile_sys_menu VALUES ('10505','105','岗位导入',5,'','','#','F',
 INSERT INTO agile_sys_menu VALUES ('10506','105','岗位导出',6,'','','#','F','0','0','1','system:post:export','',NULL,NULL,NULL,NULL);
 
 
-INSERT INTO agile_sys_menu VALUES ('106','1','字典管理',6,'system/dict/index','dict','dict','C','0','0','1','system:dict:page','字典管理菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10601','106','字典明细',1,'','','#','F','0','0','1','system:dict:detail','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10602','106','字典新增',2,'','','#','F','0','0','1','system:dict:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10603','106','字典修改',3,'','','#','F','0','0','1','system:dict:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10604','106','字典删除',4,'','','#','F','0','0','1','system:dict:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10605','106','字典导入',5,'','','#','F','0','0','1','system:dict:import','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10606','106','字典导出',6,'','','#','F','0','0','1','system:dict:export','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('106','1','字典管理',6,'system/dict/index','dict','dict','C','0','0','1','system:dict:type:page','字典管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10601','106','字典明细',1,'','','#','F','0','0','1','system:dict:type:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10602','106','字典新增',2,'','','#','F','0','0','1','system:dict:type:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10603','106','字典修改',3,'','','#','F','0','0','1','system:dict:type:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10604','106','字典删除',4,'','','#','F','0','0','1','system:dict:type:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10605','106','字典导入',5,'','','#','F','0','0','1','system:dict:type:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10606','106','字典导出',6,'','','#','F','0','0','1','system:dict:type:export','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10607','106','字典数据列表',7,'','','#','F','0','0','1','system:dict:data:detail','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10608','106','字典数据明细',8,'','','#','F','0','0','1','system:dict:data:detail','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10609','106','字典数据新增',9,'','','#','F','0','0','1','system:dict:data:add','',NULL,NULL,NULL,NULL);

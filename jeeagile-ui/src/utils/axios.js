@@ -43,7 +43,7 @@ service.interceptors.response.use(
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        store.dispatch('user/fedLogOut').then(() => {
+        store.dispatch('auth/fedLogOut').then(() => {
           window.location.href = '/'
         })
       })

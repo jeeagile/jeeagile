@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jeeagile-admin</artifactId>
         <groupId>com.jeeagile</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,19 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-system-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-monitor-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-quartz-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-logger-web</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jeeagile</groupId>
@@ -36,7 +24,6 @@
             <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-security-shiro</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-admin-api</artifactId>
@@ -54,20 +41,20 @@
 <!--            <artifactId>jeeagile-protocol-dubbo</artifactId>-->
 <!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
+<!--        </dependency>-->
 
 <!--        <dependency>-->
-<!--            <groupId>net.sf.ehcache</groupId>-->
-<!--            <artifactId>ehcache</artifactId>-->
+<!--            <groupId>org.apache.commons</groupId>-->
+<!--            <artifactId>commons-pool2</artifactId>-->
 <!--        </dependency>-->
+
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
 
     </dependencies>
 

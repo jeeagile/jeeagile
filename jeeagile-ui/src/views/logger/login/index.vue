@@ -63,7 +63,7 @@
 </template>
 
 <script>
-  import { selectLoginPage, deleteLogin, cleanLogin, exportLogin } from '@/api/logger/login'
+  import { selectLoginPage, deleteLogin, cleanLogin, exportLogin } from '@/api/system/login'
 
   export default {
     name: 'Login',

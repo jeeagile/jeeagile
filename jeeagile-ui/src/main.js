@@ -51,7 +51,7 @@ Vue.prototype.handleTree = handleTree
 Vue.prototype.handleDictLabel = handleDictLabel
 Vue.prototype.getSysDictData = getSysDictData
 Vue.prototype.getSysDictDataList = getSysDictDataList
-Vue.prototype.getSysConfig= getSysConfig
+Vue.prototype.getSysConfig = getSysConfig
 Vue.prototype.getSysConfigValue = getSysConfigValue
 
 Vue.prototype.messageSuccess = function (message) {

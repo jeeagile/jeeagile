@@ -134,7 +134,7 @@
 </template>
 
 <script>
-  import { selectLoggerPage, deleteLogger, clearLogger, exportLogger } from '@/api/logger/logger'
+  import { selectLoggerPage, deleteLogger, clearLogger, exportLogger } from '@/api/system/logger'
 
   export default {
     name: 'Operate',

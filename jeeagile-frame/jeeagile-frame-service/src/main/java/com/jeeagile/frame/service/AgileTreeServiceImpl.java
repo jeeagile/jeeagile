@@ -22,7 +22,8 @@ public abstract class AgileTreeServiceImpl<M extends AgileTreeMapper<T>, T exten
 
     @Override
     public long countChild(Serializable parentId) {
-        return this.baseMapper.countChild(parentId);
+        Long count = this.baseMapper.countChild(parentId);
+        return count == null ? 0 : count;
     }
 
     @Override

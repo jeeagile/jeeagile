@@ -141,8 +141,8 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       if (store.getters.userRole.length === 0) {
-        store.dispatch('user/getInfo').then(() => {
-          store.dispatch('user/getRoutes').then(accessRoutes => {
+        store.dispatch('auth/getInfo').then(() => {
+          store.dispatch('auth/getRoutes').then(accessRoutes => {
             if (accessRoutes instanceof Array) {
               for (const itemRoute of accessRoutes) {
                 router.addRoute(itemRoute)
@@ -153,7 +153,7 @@ router.beforeEach((to, from, next) => {
             next({ ...to, replace: true })
           })
         }).catch(err => {
-          store.dispatch('user/fedLogOut').then(() => {
+          store.dispatch('auth/fedLogOut').then(() => {
             Message.error(err)
             next({ path: '/login' })
           })

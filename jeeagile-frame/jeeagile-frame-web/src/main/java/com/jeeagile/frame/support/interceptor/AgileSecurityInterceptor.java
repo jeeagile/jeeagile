@@ -9,6 +9,7 @@ import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
+import com.jeeagile.frame.controller.AgileCrudController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -97,7 +98,10 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
                 if (agilePermissionsPrefix != null) {
                     agileSecurity.checkPermission(agilePermissionsPrefix, agileRequiresPermissions);
                 } else {
-                    agileSecurity.checkPermission(agileRequiresPermissions);
+                    if (!(handlerMethod.getBean() instanceof AgileCrudController)) {
+                        agileSecurity.checkPermission(agileRequiresPermissions);
+                    }
+
                 }
             }
         } catch (AgileBaseException ex) {
