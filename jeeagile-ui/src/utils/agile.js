@@ -1,4 +1,6 @@
-﻿/**
+﻿import arrayToTree from 'array-to-tree'
+
+/**
  * 表单重置
  * @param refName
  */
@@ -33,24 +35,14 @@ export function handleDictLabel(data, value) {
  * @param {*} id id字段 默认 'id'
  * @param {*} parentId 父节点字段 默认 'parentId'
  * @param {*} children 孩子节点字段 默认 'children'
- * @param {*} rootId 根Id 默认 0
  */
-export function handleTree(data, id, parentId, children, rootId) {
+export function handleTree(data, id, parentId, children) {
   id = id || 'id'
   parentId = parentId || 'parentId'
   children = children || 'children'
-  rootId = rootId || '0'
-  // 对源数据深度克隆
-  const cloneData = JSON.parse(JSON.stringify(data))
-  // 循环所有项
-  const treeData = cloneData.filter(father => {
-    let branchArr = cloneData.filter(child => {
-      // 返回每一项的子级数组
-      return father[id] === child[parentId]
-    })
-    branchArr.length > 0 ? father.children = branchArr : ''
-    // 返回第一层
-    return father[parentId] === rootId
+  return arrayToTree(data, {
+    customID: id,
+    parentProperty: parentId,
+    childrenProperty: children
   })
-  return treeData != '' ? treeData : data
 }
