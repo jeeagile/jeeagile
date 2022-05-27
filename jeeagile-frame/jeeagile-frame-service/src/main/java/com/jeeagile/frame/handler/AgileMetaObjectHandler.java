@@ -20,24 +20,30 @@ public class AgileMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        handlerFieldValByName(CREATE_USER_FIELD_NAME, AgileSecurityContext.getUserId(), metaObject);
-        handlerFieldValByName(UPDATE_USER_FIELD_NAME, AgileSecurityContext.getUserId(), metaObject);
+        handlerFieldValByName(CREATE_USER_FIELD_NAME, metaObject);
+        handlerFieldValByName(UPDATE_USER_FIELD_NAME, metaObject);
 
-        handlerFieldValByName(CREATE_TIME_FIELD_NAME, new Date(), metaObject);
-        handlerFieldValByName(UPDATE_TIME_FIELD_NAME, new Date(), metaObject);
+        handlerFieldValByName(CREATE_TIME_FIELD_NAME, metaObject);
+        handlerFieldValByName(UPDATE_TIME_FIELD_NAME, metaObject);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        handlerFieldValByName(UPDATE_USER_FIELD_NAME, AgileSecurityContext.getUserId(), metaObject);
+        handlerFieldValByName(UPDATE_USER_FIELD_NAME, metaObject);
 
-        handlerFieldValByName(UPDATE_TIME_FIELD_NAME, new Date(), metaObject);
+        handlerFieldValByName(UPDATE_TIME_FIELD_NAME, metaObject);
     }
 
-    private void handlerFieldValByName(String fieldName, Object fieldVal, MetaObject metaObject) {
+    private void handlerFieldValByName(String fieldName, MetaObject metaObject) {
         if (metaObject.hasGetter(fieldName)) {
             Object objectValue = metaObject.getValue(fieldName);
             if (objectValue == null) {
+                Object fieldVal = null;
+                if (fieldName.equals(CREATE_USER_FIELD_NAME) || fieldName.equals(UPDATE_USER_FIELD_NAME)) {
+                    fieldVal = AgileSecurityContext.getUserId();
+                } else if (fieldName.equals(CREATE_TIME_FIELD_NAME) || fieldName.equals(UPDATE_TIME_FIELD_NAME)) {
+                    fieldVal = new Date();
+                }
                 setFieldValByName(fieldName, fieldVal, metaObject);
             }
         }
