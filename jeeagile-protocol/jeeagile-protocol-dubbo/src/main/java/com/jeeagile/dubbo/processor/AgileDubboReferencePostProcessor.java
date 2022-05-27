@@ -1,6 +1,7 @@
 package com.jeeagile.dubbo.processor;
 
 import com.jeeagile.core.protocol.annotation.AgileReference;
+import com.jeeagile.core.util.AgileStringUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.dubbo.common.utils.Assert;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.MethodMetadata;
 
@@ -248,7 +250,7 @@ public class AgileDubboReferencePostProcessor extends AbstractAgileBeanPostProce
     public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) throws BeansException {
         try {
             AnnotatedInjectionMetadata metadata = findInjectionMetadata(beanName, bean.getClass(), pvs);
-            prepareInjection(metadata);
+            prepareInjection(bean.getClass(), metadata);
             metadata.inject(bean, beanName, pvs);
         } catch (BeansException ex) {
             throw ex;
@@ -263,7 +265,7 @@ public class AgileDubboReferencePostProcessor extends AbstractAgileBeanPostProce
         return ReferenceBean.class.getName().equals(beanDefinition.getBeanClassName());
     }
 
-    protected void prepareInjection(AnnotatedInjectionMetadata metadata) throws BeansException {
+    protected void prepareInjection(Class<?> beanClass, AnnotatedInjectionMetadata metadata) throws BeansException {
         try {
             //find and register bean definition for @DubboReference/@Reference
             for (AnnotatedFieldElement fieldElement : metadata.getFieldElements()) {
@@ -271,8 +273,19 @@ public class AgileDubboReferencePostProcessor extends AbstractAgileBeanPostProce
                     continue;
                 }
                 Class<?> injectedType = fieldElement.field.getType();
+                String propertyName = fieldElement.getPropertyName();
+                if (fieldElement.field.getName().equals("agileBaseService")) {
+                    ResolvableType resolvableType = ResolvableType.forClass(beanClass);
+                    ResolvableType resolvableSuperType = resolvableType.getSuperType();
+                    injectedType = resolvableSuperType.getGeneric(0).getRawClass();
+                    String interfaceName = injectedType.getSimpleName();
+                    if (interfaceName.startsWith("I")) {
+                        interfaceName = interfaceName.substring(1);
+                    }
+                    propertyName = AgileStringUtil.toUnderlineCase(interfaceName);
+                }
                 AnnotationAttributes attributes = fieldElement.attributes;
-                String referenceBeanName = registerReferenceBean(fieldElement.getPropertyName(), injectedType, attributes, fieldElement.field);
+                String referenceBeanName = registerReferenceBean(propertyName, injectedType, attributes, fieldElement.field);
 
                 //associate fieldElement and reference bean
                 fieldElement.injectedObject = referenceBeanName;
