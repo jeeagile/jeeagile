@@ -2,6 +2,7 @@ package com.jeeagile.frame.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.enums.AgileUserStatus;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
@@ -18,8 +19,8 @@ import com.jeeagile.frame.user.AgileUserData;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author JeeAgile
@@ -31,17 +32,18 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
 
     @Autowired
     private IAgileSysUserService agileSysUserService;
-
     @Autowired
     private IAgileSysUserRoleService agileSysUserRoleService;
-
     @Autowired
     private IAgileSysRoleService agileSysRoleService;
-
     @Autowired
     private IAgileSysRoleMenuService agileSysRoleMenuService;
     @Autowired
     private IAgileSysMenuService agileSysMenuService;
+    @Autowired
+    private IAgileSysDeptService agileSysDeptService;
+    @Autowired
+    private IAgileSysRoleDeptService agileSysRoleDeptService;
 
     @Override
     public AgileBaseUser userLogin(String loginName, String userPassword) {
@@ -176,6 +178,68 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         }
     }
 
+    @Override
+    public List<String> getUserDataScope(AgileBaseUser agileBaseUser) {
+        try {
+            if (agileBaseUser != null) {
+                List<String> userDataScopeList = new ArrayList<>();
+                List<AgileSysRole> agileSysRoleList = this.getUserRoleList(agileBaseUser.getUserId());
+                agileSysRoleList.forEach(agileSysRole -> {
+                    if (agileSysRole.getRoleStatus().equals("0")
+                            && !userDataScopeList.contains(agileSysRole.getDataScope())) {
+                        userDataScopeList.add(agileSysRole.getDataScope());
+                    }
+                });
+                return userDataScopeList;
+            } else {
+                throw new AgileAuthException(AgileResultCode.FAIL_USER_INFO);
+            }
+        } catch (AgileBaseException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AgileAuthException("获取用户权限类型异常！");
+        }
+    }
+
+    @Override
+    public Set<String> getUserDeptScopeList(AgileBaseUser agileBaseUser, String dataScopeType) {
+        try {
+            if (agileBaseUser != null) {
+                Set<String> userDeptList = new HashSet<>();
+                if (AgileConstants.AGILE_DATA_SCOPE_03.equals(dataScopeType)) {
+                    List<AgileSysDept> agileSysDeptList = agileSysDeptService.selectAllChild(agileBaseUser.getDeptId());
+                    agileSysDeptList.forEach(agileSysDept -> userDeptList.add(agileSysDept.getId()));
+                }
+                if (AgileConstants.AGILE_DATA_SCOPE_05.equals(dataScopeType)) {
+                    userDeptList.addAll(this.getUserDeptScopeList(agileBaseUser.getUserId()));
+                }
+                return userDeptList;
+            } else {
+                throw new AgileAuthException(AgileResultCode.FAIL_USER_INFO);
+            }
+        } catch (AgileBaseException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new AgileAuthException("获取用户部门权限异常！");
+        }
+    }
+
+    /**
+     * 获取用户部门权限列表
+     *
+     * @param userId
+     * @return
+     */
+    private List<String> getUserDeptScopeList(String userId) {
+        List<String> userRoleIdList = this.getUserRoleIdList(userId);
+        QueryWrapper<AgileSysRoleDept> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("distinct dept_id");
+        queryWrapper.lambda().in(AgileSysRoleDept::getRoleId, userRoleIdList);
+        return agileSysRoleDeptService.listObjs(queryWrapper).stream().map(deptId -> (String) deptId).collect(Collectors.toList());
+    }
+
+
     /**
      * 获取超级管理员菜单列表
      *
@@ -198,15 +262,17 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     private List<String> getUserPermByUserId(String userId) {
         List<String> userPermList = new ArrayList<>();
         List<String> userMenuIdList = getUserMenuIdByUserId(userId);
-        LambdaQueryWrapper<AgileSysMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileSysMenu::getMenuStatus, "0");
-        lambdaQueryWrapper.in(AgileSysMenu::getId, userMenuIdList);
-        List<AgileSysMenu> agileSysMenuList = agileSysMenuService.list(lambdaQueryWrapper);
-        agileSysMenuList.forEach(agileSysMenu -> {
-            if (AgileStringUtil.isNotEmpty(agileSysMenu.getMenuPerm())) {
-                userPermList.add(agileSysMenu.getMenuPerm());
-            }
-        });
+        if (AgileCollectionUtil.isNotEmpty(userMenuIdList)) {
+            LambdaQueryWrapper<AgileSysMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysMenu::getMenuStatus, "0");
+            lambdaQueryWrapper.in(AgileSysMenu::getId, userMenuIdList);
+            List<AgileSysMenu> agileSysMenuList = agileSysMenuService.list(lambdaQueryWrapper);
+            agileSysMenuList.forEach(agileSysMenu -> {
+                if (AgileStringUtil.isNotEmpty(agileSysMenu.getMenuPerm())) {
+                    userPermList.add(agileSysMenu.getMenuPerm());
+                }
+            });
+        }
         return userPermList;
     }
 
@@ -218,13 +284,17 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
      */
     private List<AgileSysMenu> getUserMenuByUserId(String userId) {
         List<String> userMenuIdList = getUserMenuIdByUserId(userId);
-        LambdaQueryWrapper<AgileSysMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileSysMenu::getMenuStatus, "0");
-        lambdaQueryWrapper.in(AgileSysMenu::getId, userMenuIdList);
-        lambdaQueryWrapper.eq(AgileSysMenu::getMenuStatus, "0");
-        lambdaQueryWrapper.in(AgileSysMenu::getMenuType, "M", "C");
-        lambdaQueryWrapper.orderByAsc(AgileSysMenu::getParentId, AgileSysMenu::getMenuSort);
-        return agileSysMenuService.list(lambdaQueryWrapper);
+        if (AgileCollectionUtil.isNotEmpty(userMenuIdList)) {
+            LambdaQueryWrapper<AgileSysMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysMenu::getMenuStatus, "0");
+            lambdaQueryWrapper.in(AgileSysMenu::getId, userMenuIdList);
+            lambdaQueryWrapper.eq(AgileSysMenu::getMenuStatus, "0");
+            lambdaQueryWrapper.in(AgileSysMenu::getMenuType, "M", "C");
+            lambdaQueryWrapper.orderByAsc(AgileSysMenu::getParentId, AgileSysMenu::getMenuSort);
+            return agileSysMenuService.list(lambdaQueryWrapper);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -264,9 +334,15 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
      */
     private List<AgileSysRole> getUserRoleList(String userId) {
         List<String> userRoleIdList = agileSysUserRoleService.getUserRoleIdList(userId);
-        LambdaQueryWrapper<AgileSysRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileSysRole::getRoleStatus, "0");
-        lambdaQueryWrapper.in(AgileSysRole::getId, userRoleIdList);
-        return agileSysRoleService.list(lambdaQueryWrapper);
+        if (AgileCollectionUtil.isNotEmpty(userRoleIdList)) {
+            LambdaQueryWrapper<AgileSysRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysRole::getRoleStatus, "0");
+            lambdaQueryWrapper.in(AgileSysRole::getId, userRoleIdList);
+            return agileSysRoleService.list(lambdaQueryWrapper);
+        } else {
+            return new ArrayList<>();
+        }
     }
+
+
 }

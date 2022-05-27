@@ -51,7 +51,7 @@ public class AgileMybatisAutoConfiguration implements ApplicationListener<Contex
     @ConditionalOnMissingBean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
-//        mybatisPlusInterceptor.addInnerInterceptor(new AgileDataScopeInterceptor());
+        mybatisPlusInterceptor.addInnerInterceptor(new AgileDataScopeInterceptor());
         mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return mybatisPlusInterceptor;
     }
