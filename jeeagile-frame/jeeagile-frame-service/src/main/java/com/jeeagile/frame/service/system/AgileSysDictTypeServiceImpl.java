@@ -48,6 +48,7 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
                 lambdaQueryWrapper.eq(AgileSysDictType::getDictStatus, agileSysDictType.getDictStatus());
             }
         }
+        lambdaQueryWrapper.orderByDesc(AgileSysDictType::getDictType);
         return lambdaQueryWrapper;
     }
 
@@ -56,7 +57,7 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
         List<AgileSysDictType> agileSysDictTypeList = this.selectList(agileSysDictType);
         agileSysDictTypeList.forEach(item -> {
             item.setDictStatus(agileSysDictDataService.getSysDictLabel(SYS_NORMAL_DISABLE, item.getDictStatus()));
-            item.setSystemFlag(agileSysDictDataService.getSysDictLabel(SYS_YES_NO,item.getSystemFlag()));
+            item.setSystemFlag(agileSysDictDataService.getSysDictLabel(SYS_YES_NO, item.getSystemFlag()));
         });
         return agileSysDictTypeList;
     }
