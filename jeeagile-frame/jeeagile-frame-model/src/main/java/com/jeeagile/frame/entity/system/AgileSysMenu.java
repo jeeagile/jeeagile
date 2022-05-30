@@ -79,7 +79,7 @@ public class AgileSysMenu extends AgileTreeModel<AgileSysMenu> {
      */
     @ApiModelProperty("外链标识")
     @NotEmpty(message = "外链标识不能为空!")
-    private String menuFrame = "0";
+    private String menuFrame;
 
     /**
      * 权限标识
