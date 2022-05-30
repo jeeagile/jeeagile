@@ -343,25 +343,25 @@
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-activiti-api</artifactId>
+                <artifactId>jeeagile-process-api</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-activiti-model</artifactId>
+                <artifactId>jeeagile-process-model</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-activiti-service</artifactId>
+                <artifactId>jeeagile-process-service</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-activiti-web</artifactId>
+                <artifactId>jeeagile-process-web</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
 
