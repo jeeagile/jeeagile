@@ -15,5 +15,6 @@
         <module>jeeagile-admin</module>
         <module>jeeagile-quartz</module>
         <module>jeeagile-generator</module>
+        <module>jeeagile-process</module>
     </modules>
 </project>

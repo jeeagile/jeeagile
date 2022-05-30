@@ -315,6 +315,11 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         return userMenuIdList;
     }
 
+    /**
+     * 获取用户角色ID列表
+     * @param userId
+     * @return
+     */
     private List<String> getUserRoleIdList(String userId) {
         List<String> userRoleIdList = new ArrayList<>();
         List<AgileSysRole> agileSysRoleList = this.getUserRoleList(userId);
@@ -343,6 +348,4 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
             return new ArrayList<>();
         }
     }
-
-
 }

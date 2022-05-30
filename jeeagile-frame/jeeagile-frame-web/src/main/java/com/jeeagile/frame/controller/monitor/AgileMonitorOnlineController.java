@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/monitor/online")
-@Api(value = "在线用户监控", tags = "在线用户监控")
+@Api(value = "在线用户", tags = "在线用户")
 public class AgileMonitorOnlineController extends AgileBaseController {
 
     @PostMapping(value = "/user")

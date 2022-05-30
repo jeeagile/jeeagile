@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/system/auth")
-@Api(value = "用户登录", tags = "用户登录")
+@Api(value = "用户认证", tags = "用户认证")
 public class AgileSysAuthController extends AgileBaseController {
 
     @AgileReference

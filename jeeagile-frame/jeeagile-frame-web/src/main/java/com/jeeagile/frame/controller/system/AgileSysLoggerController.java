@@ -28,9 +28,9 @@ import java.util.List;
  * @description 操作日志管理 前端控制器
  */
 @RestController
-@AgileLogger("操作日志管理")
+@AgileLogger("操作日志")
 @RequestMapping("/system/logger")
-@Api(value = "操作日志管理", tags = "操作日志管理")
+@Api(value = "操作日志", tags = "操作日志")
 public class AgileSysLoggerController extends AgileBaseController {
     @AgileReference
     private IAgileSysLoggerService agileSysLoggerService;

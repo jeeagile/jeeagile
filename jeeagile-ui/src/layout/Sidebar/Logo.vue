@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title: 'JeeAgile',
+      title: this.$store.state.settings.title,
       logo: logoImg
     }
   }
@@ -60,7 +60,7 @@ export default {
       height: 32px;
       vertical-align: middle;
       margin-left: 10px;
-      margin-right: 30px;
+      margin-right: 15px;
     }
 
     & .sidebar-title {

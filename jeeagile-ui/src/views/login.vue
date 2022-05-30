@@ -2,7 +2,7 @@
   <div class="login_container">
     <div class="login_box">
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-        <h3 class="title">JeeAgile 敏捷快速开发平台</h3>
+        <h3 class="title">{{title}}</h3>
         <el-form-item prop="userName">
           <el-input v-model="loginForm.userName" type="text" auto-complete="off" placeholder="账号">
             <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon"/>
@@ -67,6 +67,7 @@
     data() {
       return {
         codeUrl: '',
+        title: '',
         loginForm: {
           userName: 'admin',
           password: '123456',
@@ -96,6 +97,7 @@
       }
     },
     created() {
+      this.title = this.$store.state.settings.title
       this.getCodeImage()
       this.getCookie()
     },

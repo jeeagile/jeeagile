@@ -29,10 +29,10 @@ import directive from '@/directive'
 import processDesigner from '@/components/ProcessDesigner'
 import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import {getSysConfig, getSysConfigValue, getSysDictData, getSysDictDataList} from '@/api/system/common'
-import {handleDictLabel, handleTree, resetForm} from '@/utils/agile'
+import { getSysConfig, getSysConfigValue, getSysDictData, getSysDictDataList } from '@/api/system/common'
+import { handleDictLabel, handleTree, resetForm } from '@/utils/agile'
 import VueParticles from 'vue-particles'
-import {vuePlugin} from 'highlight.js'
+import { vuePlugin } from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark-reasonable.css'
 
 

@@ -28,9 +28,9 @@ import java.util.List;
  * @description 登录日志管理 前端控制器
  */
 @RestController
-@AgileLogger("登录日志管理")
+@AgileLogger("登录日志")
 @RequestMapping("/system/login")
-@Api(value = "登录日志管理", tags = "登录日志管理")
+@Api(value = "登录日志", tags = "登录日志")
 public class AgileSysLoginController extends AgileBaseController {
     @AgileReference
     private IAgileSysLoginService agileSysLoginService;
