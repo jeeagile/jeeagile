@@ -84,26 +84,18 @@
 ```
 jeeagile      
 ├─jeeagile-core       核心模块 包括用户安全认证、缓存、工具类等
-├─jeeagile-frame      开发框架依赖模块 包括api层、model层、service层、web层
-│  ├─jeeagile-frame-api       开发框架api层 主要是接口基类
+│  
+├─jeeagile-frame      开发框架基础依赖模块 
+│  ├─jeeagile-frame-api       开发框架api层
 │  │
-│  ├─jeeagile-frame-model     开发框架model层 主要包括实体基类和分页工具类等
+│  ├─jeeagile-frame-model     开发框架model层
 │  │
-│  ├─jeeagile-frame-service   开发框架service层 主要包括接口实现层基类、事务控制、Dao层基类等
+│  ├─jeeagile-frame-service   开发框架service层 
 │  │
-│  └─jeeagile-frame-web       开发框架web层 主要包括外部应用接口基类和安全控制等
+│  └─jeeagile-frame-web       开发框架web层
 │  
 ├─jeeagile-module     系统默认实现模块
 │  │
-│  ├─jeeagile-admin        后端管理模块（引入其他模块）
-│  │  ├─jeeagile-admin-api         系统管理模块api层
-│  │  │
-│  │  ├─jeeagile-admin-model       系统管理模块model层
-│  │  │
-│  │  ├─jeeagile-admin-service     系统管理模块service层
-│  │  │
-│  │  └─jeeagile-admin-web         系统管理模块web层
-│  │  
 │  ├─jeeagile-generator     代码生成模块
 │  │  ├─jeeagile-generator-api     代码生成模块api层
 │  │  │
@@ -132,18 +124,18 @@ jeeagile
 │  │  └─jeeagile-process-web        工作流模块web层
 │  │  
 ├─jeeagile-plugin      框架第三方插件支持
-│  ├─jeeagile-plugin-crypto        加解密插件（包括各种对称、非对称、摘要等加密方式））
+│  ├─jeeagile-plugin-crypto        加解密插件
 │  │
-│  ├─jeeagile-plugin-http          http工具插件
+│  ├─jeeagile-plugin-http          http请求工具类
 │  │
-│  └─jeeagile-plugin-redis         redis工具插件（主要包括redis操作静态工具类）
+│  └─jeeagile-plugin-redis         redis操作静态工具类
 │  
 ├─jeeagile-security    安全框架支持
 │  ├─jeeagile-security-shiro       apache shiro安全框架集成
 │  │
 │  └─jeeagile-security-boot        spring security安全框架集成
 │  
-├─jeeagile-vue-ui                  前端UI模块（包括登录、系统管理、监控、队列、日志、工作流等）
+├─jeeagile-vue-ui                  前端UI模块
 │  
 ```
 #### 特别提醒
