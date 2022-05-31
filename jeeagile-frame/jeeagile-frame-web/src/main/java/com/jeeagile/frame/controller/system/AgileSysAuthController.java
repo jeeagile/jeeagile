@@ -62,14 +62,14 @@ public class AgileSysAuthController extends AgileBaseController {
 
     @AgileRequiresUser
     @PostMapping("/getUserInfo")
-    @ApiOperation(value = "获取当前登录用户信息", notes = "获取当前登录用户信息")
+    @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
     public AgileResult<AgileUserData> getUserInfo() {
         return this.success(AgileSecurityUtil.getUserData());
     }
 
     @AgileRequiresUser
     @PostMapping("/getUserMenu")
-    @ApiOperation(value = "获取用户分配菜单", notes = "获取用户分配菜单")
+    @ApiOperation(value = "获取用户菜单", notes = "获取用户菜单")
     public AgileResult<AgileSysMenu> getUserMenu() {
         try {
             AgileBaseUser userData = AgileSecurityUtil.getUserData();
