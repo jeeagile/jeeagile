@@ -1,9 +1,13 @@
 package com.jeeagile.process.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseModel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author JeeAgile
@@ -13,50 +17,51 @@ import lombok.Data;
 @Data
 public class AgileProcessModel extends AgileBaseModel<AgileProcessModel> {
     /**
-     * 流程编码
+     * 流程模型编码
      */
     @NotEmpty(message = "流程编码不能为空！")
     @Size(max = 10, message = "流程编码最大长度为10！")
-    private String processCode;
+    private String modelCode;
     /**
-     * 流程名称
+     * 流程模型名称
      */
     @NotEmpty(message = "流程名称不能为空！")
     @Size(max = 50, message = "流程名称最大长度为50！")
-    private String processName;
+    private String modelName;
     /**
-     * 流程版本
+     * 流程模型版本
      */
-    private int processVersion;
+    private int modelVersion;
     /**
-     * 流程设计XMl
+     * 流程模型设计XMl
      */
-    private String processDesigner;
+    private String modelXml;
     /**
-     * 流程表单类型
+     * 流程表单类型（1:流程表单 2:业务表单）
      */
     @NotEmpty(message = "流程表单类型不能为空！")
-    private String processFormType;
+    private String formType;
     /**
      * 流程表单ID
      */
-    private String processFormId;
+    private String formId;
     /**
      * 流程表单地址
      */
-    private String processFormUrl;
+    private String formUrl;
     /**
-     * 流程部署状态
+     * 流程部署状态 (1:已发布 2：未发布)
      */
-    private String processDeploymentStatus;
+    private String deploymentStatus;
     /**
      * 流程部署时间
      */
-    private String processDeploymentTime;
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private Date deploymentTime;
     /**
      * 流程部署ID（流程组件生成）
      */
-    private String processDeploymentId;
+    private String deploymentId;
     /**
      * 备注
      */

@@ -27,12 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 @AgilePermissionsPrefix("process:form")
 @Api(value = "流程表单", tags = "流程表单")
 public class AgileProcessFormController extends AgileCrudController<IAgileProcessFormService, AgileProcessForm> {
-    @AgileDemo
     @PostMapping("/designer")
     @AgileRequiresPermissions("designer")
     @AgileLogger(notes = "保存流程表单设计", type = AgileLoggerType.UPDATE)
     @ApiOperation(value = "保存流程表单设计", notes = "保存流程表单设计")
-    public AgileResult<AgileProcessForm> update(@SingleRequestBody String formId, @SingleRequestBody String formConf, @SingleRequestBody String formFields) {
-        return AgileResult.success(agileBaseService.saveProcessDesigner(formId, formConf, formFields));
+    public AgileResult<AgileProcessForm> designer(@SingleRequestBody String formId, @SingleRequestBody String formConf, @SingleRequestBody String formFields) {
+        return AgileResult.success(agileBaseService.saveProcessFormDesigner(formId, formConf, formFields));
     }
 }

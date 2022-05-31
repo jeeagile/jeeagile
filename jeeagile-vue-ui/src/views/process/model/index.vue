@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="流程编码" prop="processCode">
-        <el-input v-model="queryParam.queryCond.processCode" placeholder="请输入流程编码" clearable size="small"
+      <el-form-item label="模型编码" prop="modelCode">
+        <el-input v-model="queryParam.queryCond.modelCode" placeholder="请输入模型编码" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="流程名称" prop="processName">
-        <el-input v-model="queryParam.queryCond.processName" placeholder="请输入流程名称" clearable size="small"
+      <el-form-item label="模型名称" prop="modelName">
+        <el-input v-model="queryParam.queryCond.modelName" placeholder="请输入模型名称" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="部署状态" prop="processDeploymentStatus">
-        <el-select v-model="queryParam.queryCond.processDeploymentStatus" placeholder="流程状态" clearable size="small">
+      <el-form-item label="发布状态" prop="deploymentStatus">
+        <el-select v-model="queryParam.queryCond.deploymentStatus" placeholder="发布状态" clearable size="small">
           <el-option v-for="processDeploymentStatusOption in processDeploymentStatusOptionList"
                      :key="processDeploymentStatusOption.dictValue"
                      :label="processDeploymentStatusOption.dictLabel" :value="processDeploymentStatusOption.dictValue"/>
@@ -45,15 +45,16 @@
 
     <el-table v-loading="loading" :data="modelList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="流程编码" align="center" prop="processCode"/>
-      <el-table-column label="流程名称" align="center" prop="processName"/>
-      <el-table-column label="流程版本" align="center" prop="processVersion">
+      <el-table-column label="模型编码" align="center" prop="modelCode"/>
+      <el-table-column label="模型名称" align="center" prop="modelName"/>
+      <el-table-column label="模型版本" align="center" prop="modelVersion">
         <template slot-scope="scope">
-          <span>v{{scope.row.processVersion}}</span>
+          <span>v{{scope.row.modelVersion}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="部署状态" align="center" prop="processDeploymentStatus"
+      <el-table-column label="发布状态" align="center" prop="deploymentStatus"
                        :formatter="processDeploymentStatusFormat"/>
+      <el-table-column label="发布时间" align="center" prop="deploymentTime"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -75,22 +76,22 @@
     <!-- 添加或修改流程对话框 -->
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="流程名称" prop="processName">
-          <el-input v-model="form.processName" placeholder="请输入流程名称"/>
+        <el-form-item label="模型编码" prop="modelCode">
+          <el-input v-model="form.modelCode" placeholder="请输入模型编码"/>
         </el-form-item>
-        <el-form-item label="流程编码" prop="processCode">
-          <el-input v-model="form.processCode" placeholder="请输入编码名称"/>
+        <el-form-item label="模型名称" prop="modelName">
+          <el-input v-model="form.modelName" placeholder="请输入模型名称"/>
         </el-form-item>
-        <el-form-item label="表单类型" prop="processFormType">
-          <el-radio-group v-model="form.processFormType">
+        <el-form-item label="表单类型" prop="formType">
+          <el-radio-group v-model="form.formType">
             <el-radio v-for="processFormTypeOption in processFormTypeOptionList" :key="processFormTypeOption.dictValue"
                       :label="processFormTypeOption.dictValue">
               {{ processFormTypeOption.dictLabel }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="流程表单" prop="processFormId" v-if="form.processFormType=='1'">
-          <el-select v-model="form.processFormId" placeholder="请选择" style="width: 100%">
+        <el-form-item label="流程表单" prop="formId" v-if="form.formType=='1'">
+          <el-select v-model="form.formId" placeholder="请选择" style="width: 100%">
             <el-option
               v-for="processFormOption in processFormList"
               :key="processFormOption.id"
@@ -100,8 +101,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="表单地址" prop="processFormUrl" v-if="form.processFormType=='2'">
-          <el-input v-model="form.processFormUrl" placeholder="请输入表单地址"/>
+        <el-form-item label="表单地址" prop="formUrl" v-if="form.formType=='2'">
+          <el-input v-model="form.formUrl" placeholder="请输入表单地址"/>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
@@ -155,28 +156,28 @@
           pageSize: 10,
           currentPage: 1,
           queryCond: {
-            processCode: undefined,
-            processName: undefined,
-            processDeploymentStatus: undefined
+            modelCode: undefined,
+            modelName: undefined,
+            deploymentStatus: undefined
           }
         },
         // 表单参数
         form: {},
         // 表单校验
         rules: {
-          processName: [
-            { required: true, message: '流程名称不能为空', trigger: 'blur' }
-          ],
-          processCode: [
+          modelCode: [
             { required: true, message: '流程编码不能为空', trigger: 'blur' }
           ],
-          processFormType: [
+          modelName: [
+            { required: true, message: '流程名称不能为空', trigger: 'blur' }
+          ],
+          formType: [
             { required: true, message: '流程表单类型不能为空', trigger: 'blur' }
           ],
-          processFormId: [
+          formId: [
             { required: true, message: '流程表单不能为空', trigger: 'blur' }
           ],
-          processFormUrl: [
+          formUrl: [
             { required: true, message: '表单地址不能为空', trigger: 'blur' }
           ]
         }
@@ -224,7 +225,9 @@
           id: undefined,
           processCode: undefined,
           processName: undefined,
-          processFormType: '1',
+          formType: '1',
+          formId: undefined,
+          formUrl: undefined,
           remark: undefined
         }
         this.resetForm('form')

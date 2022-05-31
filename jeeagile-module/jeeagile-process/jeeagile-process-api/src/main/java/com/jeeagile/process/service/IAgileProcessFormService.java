@@ -13,5 +13,5 @@ public interface IAgileProcessFormService extends IAgileBaseService<AgileProcess
      * 保存流程设计
      * @return
      */
-    AgileProcessForm saveProcessDesigner(String formId, String formConf, String formFields);
+    AgileProcessForm saveProcessFormDesigner(String formId, String formConf, String formFields);
 }

@@ -61,7 +61,7 @@ public class AgileProcessFormServiceImpl extends AgileBaseServiceImpl<AgileProce
     }
 
     @Override
-    public AgileProcessForm saveProcessDesigner(String formId, String formConf, String formFields) {
+    public AgileProcessForm saveProcessFormDesigner(String formId, String formConf, String formFields) {
         AgileProcessForm agileProcessForm = this.getById(formId);
         if (agileProcessForm == null || agileProcessForm.isEmptyPk()) {
             throw new AgileValidateException("流程表单已不存在！");
