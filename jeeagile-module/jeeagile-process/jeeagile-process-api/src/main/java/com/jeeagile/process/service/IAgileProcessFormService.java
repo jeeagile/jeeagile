@@ -9,4 +9,9 @@ import com.jeeagile.process.entity.AgileProcessForm;
  * @description 流程表单
  */
 public interface IAgileProcessFormService extends IAgileBaseService<AgileProcessForm> {
+    /**
+     * 保存流程设计
+     * @return
+     */
+    AgileProcessForm saveProcessDesigner(String formId, String formConf, String formFields);
 }

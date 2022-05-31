@@ -1,6 +1,7 @@
 package com.jeeagile.process.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -31,5 +32,19 @@ public class AgileProcessFormServiceImpl extends AgileBaseServiceImpl<AgileProce
         }
         lambdaQueryWrapper.orderByDesc(AgileProcessForm::getFormCode);
         return lambdaQueryWrapper;
+    }
+
+    @Override
+    public AgileProcessForm saveProcessDesigner(String formId, String formConf, String formFields) {
+        AgileProcessForm agileProcessForm = this.getById(formId);
+        if (agileProcessForm == null || agileProcessForm.isEmptyPk()) {
+            throw new AgileValidateException("流程表单已不存在！");
+        }
+        agileProcessForm.setFormConf(formConf);
+        agileProcessForm.setFormFields(formFields);
+        agileProcessForm.setUpdateUser(null);
+        agileProcessForm.setUpdateTime(null);
+        this.updateModel(agileProcessForm);
+        return agileProcessForm;
     }
 }

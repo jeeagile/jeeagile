@@ -32,7 +32,7 @@ public class AgileProcessForm extends AgileBaseModel<AgileProcessForm> {
     /**
      * 表单配置
      */
-    private String formConfig;
+    private String formConf;
     /**
      * 表单字段
      */

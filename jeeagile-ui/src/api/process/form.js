@@ -29,3 +29,10 @@ export const updateProcessForm = data => postApi('/process/form/update', data)
  * 删除表单设计
  */
 export const deleteProcessForm = data => postApi('/process/form/delete', data)
+
+/**
+ * 保存表单设计
+ * @param data
+ * @returns {*}
+ */
+export const saveProcessFormDesigner = data => postApi('/process/form/designer', data)

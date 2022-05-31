@@ -47,11 +47,19 @@
       <el-table-column label="表单编码" align="center" prop="formCode"/>
       <el-table-column label="表单名称" align="center" prop="formName"/>
       <el-table-column label="状态" align="center" prop="formStatus" :formatter="formStatusFormat"/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="300px">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
                      v-hasPerm="['process:form:update']">
             修改
+          </el-button>
+          <el-button size="mini" type="text" icon="el-icon-view" @click="handleFormView(scope.row)"
+                     v-hasPerm="['process:form:view']">
+            预览
+          </el-button>
+          <el-button size="mini" type="text" icon="el-icon-s-custom" @click="handleFormDesigner(scope.row)"
+                     v-hasPerm="['process:form:designer']">
+            设计
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
                      v-hasPerm="['process:form:delete']">
@@ -91,14 +99,27 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="表单预览" :visible.sync="parserOpen" width="50%" append-to-body>
+      <div class="test-form">
+        <form-parser :key="new Date().getTime()" :form-conf="parserForm" @submit="submitFormData"/>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { selectProcessFormPage, detailProcessForm, deleteProcessForm, addProcessForm, updateProcessForm } from '@/api/process/form'
+  import {
+    selectProcessFormPage,
+    detailProcessForm,
+    deleteProcessForm,
+    addProcessForm,
+    updateProcessForm
+  } from '@/api/process/form'
+  import FormParser from '@/components/FormDesigner/parser/Parser'
 
   export default {
     name: 'Form',
+    components: { FormParser },
     data() {
       return {
         // 遮罩层
@@ -134,6 +155,10 @@
         },
         // 表单参数
         form: {},
+        parserOpen: false,
+        parserForm: {
+          fields: []
+        },
         // 表单校验
         rules: {
           formName: [
@@ -213,6 +238,23 @@
           this.dialogTitle = '修改表单'
         })
       },
+      handleFormView(row) {
+        detailProcessForm(row.id).then(response => {
+          this.$nextTick(() => {
+            if (response.data.formConf && response.data.formFields) {
+              this.parserForm = {
+                fields: JSON.parse(response.data.formFields),
+                ...JSON.parse(response.data.formConf)
+              }
+            }
+            this.parserOpen = true
+          })
+        })
+      },
+      /** 流程设计操作 */
+      handleFormDesigner(row) {
+        this.$router.push('/process/form/designer/' + row.id)
+      },
       /** 提交按钮 */
       submitForm: function () {
         this.$refs.form.validate(valid => {
@@ -246,6 +288,9 @@
           this.getProcessFormList()
           this.messageSuccess('删除成功')
         })
+      },
+      submitFormData(data) {
+        alert(JSON.stringify(data))
       }
     }
   }
