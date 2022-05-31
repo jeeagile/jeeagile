@@ -22,6 +22,7 @@ public @interface AgileLogger {
      */
     @AliasFor("module")
     String value() default "";
+
     /**
      * 模块
      *
@@ -52,4 +53,18 @@ public @interface AgileLogger {
      * @return
      */
     boolean param() default false;
+
+    /**
+     * 是否记录日志
+     *
+     * @return
+     */
+    boolean recordFlag() default true;
+
+    /**
+     * 需记录方法名
+     *
+     * @return
+     */
+    String[] methodName() default {};
 }

@@ -9,6 +9,7 @@ import com.jeeagile.core.util.AgileAgentUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.system.util.AgileSystemUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
+import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.entity.system.AgileSysLogger;
 import com.jeeagile.frame.entity.system.AgileSysLogin;
 import com.jeeagile.frame.enums.AgileLoggerType;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -96,6 +98,16 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
         try {
             MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
             Method method = methodSignature.getMethod();
+            if (joinPoint.getTarget() instanceof AgileCrudController) {
+                AgileLogger agileLogger = joinPoint.getTarget().getClass().getAnnotation(AgileLogger.class);
+                if (agileLogger == null || !agileLogger.recordFlag()) {
+                    return;
+                }
+                if (agileLogger.methodName() != null && agileLogger.methodName().length > 0
+                        && !Arrays.toString(agileLogger.methodName()).contains(method.getName())) {
+                    return;
+                }
+            }
             AgileLogger agileLogger = method.getAnnotation(AgileLogger.class);
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (agileLogger != null && servletRequestAttributes != null) {
