@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.frame.entity.system.AgileSysPost;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.process.entity.AgileProcessForm;
 import com.jeeagile.process.mapper.AgileProcessFormMapper;
@@ -49,14 +48,14 @@ public class AgileProcessFormServiceImpl extends AgileBaseServiceImpl<AgileProce
      * 校验岗位编码、岗位名称是否存在
      */
     private void validateProcessForm(AgileProcessForm agileProcessForm) {
-        LambdaQueryWrapper<AgileProcessForm> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<AgileProcessForm> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (agileProcessForm.getId() != null) {
-            queryWrapper.ne(AgileProcessForm::getId, agileProcessForm.getId());
+            lambdaQueryWrapper.ne(AgileProcessForm::getId, agileProcessForm.getId());
         }
-        queryWrapper.and(wrapper ->
-                wrapper.eq(AgileProcessForm::getFormCode, agileProcessForm.getFormCode()).or().eq(AgileProcessForm::getFormName, agileProcessForm.getFormName())
+        lambdaQueryWrapper.and(queryWrapper ->
+                queryWrapper.eq(AgileProcessForm::getFormCode, agileProcessForm.getFormCode()).or().eq(AgileProcessForm::getFormName, agileProcessForm.getFormName())
         );
-        if (this.count(queryWrapper) > 0) {
+        if (this.count(lambdaQueryWrapper) > 0) {
             throw new AgileValidateException("流程表单编码或表单名称已存在！");
         }
     }
