@@ -2,7 +2,7 @@ drop table if exists agile_process_model;
 drop table if exists agile_process_form;
 
 /*==============================================================*/
-/* table: agile_process_form 流程表单表                         */
+/* table: agile_process_form 流程表单表                          */
 /*==============================================================*/
 CREATE TABLE agile_process_form (
   id                            varchar(32) NOT NULL COMMENT '表单主键ID',
