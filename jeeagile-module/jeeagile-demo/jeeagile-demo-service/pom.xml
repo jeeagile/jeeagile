@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>jeeagile-admin</artifactId>
+        <artifactId>jeeagile-demo</artifactId>
         <groupId>com.jeeagile</groupId>
         <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jeeagile-admin-service</artifactId>
+    <artifactId>jeeagile-demo-service</artifactId>
 
     <dependencies>
         <dependency>
@@ -20,10 +20,13 @@
             <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-generator-service</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-admin-api</artifactId>
+            <artifactId>jeeagile-process-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-demo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -56,10 +59,10 @@
 <!--            <artifactId>jeeagile-protocol-dubbo</artifactId>-->
 <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>net.sf.ehcache</groupId>-->
-<!--            <artifactId>ehcache</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
 
     </dependencies>
 </project>

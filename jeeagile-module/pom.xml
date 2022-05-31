@@ -12,7 +12,7 @@
     <artifactId>jeeagile-module</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>jeeagile-admin</module>
+        <module>jeeagile-demo</module>
         <module>jeeagile-quartz</module>
         <module>jeeagile-generator</module>
         <module>jeeagile-process</module>

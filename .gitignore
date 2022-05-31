@@ -2,6 +2,5 @@
 *.iml
 target
 
+jeeagile-demo
 jeeagile-protocol-rabbit
-
-jeeagile-admin
