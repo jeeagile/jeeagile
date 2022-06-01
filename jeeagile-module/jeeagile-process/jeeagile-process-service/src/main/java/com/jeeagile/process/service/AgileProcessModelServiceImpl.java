@@ -39,6 +39,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
 
     @Override
     public void saveModelValidate(AgileProcessModel agileProcessModel) {
+        agileProcessModel.setDeploymentStatus("2");
         this.validateProcessForm(agileProcessModel);
         this.validateProcessModel(agileProcessModel);
     }
@@ -97,12 +98,12 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
     }
 
     @Override
-    public AgileProcessModel saveProcessModelDesigner(String modelId, String modelXml) {
+    public AgileProcessModel saveProcessModelDesigner(String modelId, String processXml) {
         AgileProcessModel agileProcessModel = this.getById(modelId);
         if (agileProcessModel == null || agileProcessModel.isEmptyPk()) {
             throw new AgileValidateException("流程模型已不存在！");
         }
-        agileProcessModel.setModelXml(modelXml);
+        agileProcessModel.setProcessXml(processXml);
         agileProcessModel.setDeploymentStatus("2");
         agileProcessModel.setUpdateUser(null);
         agileProcessModel.setUpdateTime(null);

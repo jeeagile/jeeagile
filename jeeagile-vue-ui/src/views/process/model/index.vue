@@ -24,18 +24,18 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPerm="['process:model:add']">
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleProcessAdd" v-hasPerm="['process:model:add']">
           新增
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleProcessUpdate"
                    v-hasPerm="['process:model:update']">
           修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDelete"
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleProcessDelete"
                    v-hasPerm="['process:model:delete']">
           删除
         </el-button>
@@ -47,24 +47,47 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="模型编码" align="center" prop="modelCode"/>
       <el-table-column label="模型名称" align="center" prop="modelName"/>
-      <el-table-column label="模型版本" align="center" prop="modelVersion">
+      <el-table-column label="流程版本" align="center" prop="modelVersion">
         <template slot-scope="scope">
-          <span>v{{scope.row.modelVersion}}</span>
+          <span>v{{scope.row.processVersion}}</span>
         </template>
       </el-table-column>
       <el-table-column label="发布状态" align="center" prop="deploymentStatus"
                        :formatter="processDeploymentStatusFormat"/>
       <el-table-column label="发布时间" align="center" prop="deploymentTime"/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" width="350px" align="center" class-name="small-padding">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-                     v-hasPerm="['process:model:update']">
-            修改
+          <el-button size="mini" type="text" icon="el-icon-s-custom" @click="handleProcessView(scope.row)">
+            流程预览
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-                     v-hasPerm="['process:model:delete']">
-            删除
+          <el-button size="mini" type="text" icon="el-icon-setting" @click="handleProcessDesigner(scope.row)"
+                     v-hasPerm="['process:model:designer']">
+            流程设计
           </el-button>
+          <el-button size="mini" type="text" icon="el-icon-thumb" @click="handleProcessDeployment(scope.row)"
+                     v-hasPerm="['process:model:deployment']">
+            流程发布
+          </el-button>
+
+          <el-dropdown size="mini" @command="(command) => handleProcessCommand(command, scope.row)">
+            <span class="el-dropdown-link">
+              <i class="el-icon-d-arrow-right el-icon--right"></i>更多操作
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="handleProcessUpdate" icon="el-icon-edit"
+                                v-hasPerm="['process:model:edit']">
+                流程编辑
+              </el-dropdown-item>
+              <el-dropdown-item command="handleProcessDefinition" icon="el-icon-ice-cream-round"
+                                v-hasPerm="['process:model:definition']">
+                流程定义
+              </el-dropdown-item>
+              <el-dropdown-item command="handleProcessDelete" icon="el-icon-delete"
+                                v-hasPerm="['process:model:remove']">
+                流程删除
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -118,7 +141,12 @@
 
 <script>
   import {
-    selectProcessModelPage, detailProcessModel, deleteProcessModel, addProcessModel, updateProcessModel
+    selectProcessModelPage,
+    detailProcessModel,
+    deleteProcessModel,
+    addProcessModel,
+    updateProcessModel,
+    processDeployment
   } from '@/api/process/model'
   import { selectProcessFormList } from '@/api/process/form'
 
@@ -166,7 +194,8 @@
         // 表单校验
         rules: {
           modelCode: [
-            { required: true, message: '流程编码不能为空', trigger: 'blur' }
+            { required: true, message: '流程编码不能为空', trigger: 'blur' },
+            { pattern: /[a-zA-Z_][\-_.0-9_a-zA-Z$]*/, message: '请以字母或下划线开头' }
           ],
           modelName: [
             { required: true, message: '流程名称不能为空', trigger: 'blur' }
@@ -212,7 +241,7 @@
       },
       /** 流程状态字典翻译 */
       processDeploymentStatusFormat(row, column) {
-        return this.handleDictLabel(this.processDeploymentStatusOptionList, row.processDeploymentStatus)
+        return this.handleDictLabel(this.processDeploymentStatusOptionList, row.deploymentStatus)
       },
       /** 取消按钮 */
       cancel() {
@@ -248,20 +277,58 @@
         this.single = selection.length != 1
         this.multiple = !selection.length
       },
+      /** 流程查看 */
+      handleProcessView(row) {
+        detailProcessModel(row.id).then(response => {
+            this.processXml = response.data.processXml
+            this.openView = true
+          }
+        )
+      },
       /** 新增按钮操作 */
-      handleAdd() {
+      handleProcessAdd() {
         this.reset()
         this.openDialog = true
         this.dialogTitle = '添加流程'
       },
+      // 更多操作触发
+      handleProcessCommand(command, row) {
+        switch (command) {
+        case 'handleProcessUpdate':
+          this.handleProcessUpdate(row)
+          break
+        case 'handleProcessDefinition':
+          this.handleProcessDefinition(row)
+          break
+        case 'handleProcessDelete':
+          this.handleProcessDelete(row)
+          break
+        default:
+          break
+        }
+      },
       /** 修改按钮操作 */
-      handleUpdate(row) {
+      handleProcessUpdate(row) {
         this.reset()
         row = undefined === row.id ? this.selectRowList[0] : row
         detailProcessModel(row.id).then(response => {
           this.form = response.data
           this.openDialog = true
           this.dialogTitle = '修改流程'
+        })
+      },
+      /** 流程设计操作 */
+      handleProcessDesigner(row) {
+        // this.$router.push('/process/model/designer/' + row.id)
+      },
+      /** 流程定义 */
+      handleProcessDefinition(row) {
+        this.$router.push('/process/definition/' + row.id)
+      },
+      handleProcessDeployment(row) {
+        processDeployment(row.id).then(response => {
+          this.messageSuccess('流程发布成功')
+          this.getProcessModelList()
         })
       },
       /** 提交按钮 */
@@ -285,9 +352,9 @@
         })
       },
       /** 删除按钮操作 */
-      handleDelete(row) {
+      handleProcessDelete(row) {
         row = undefined === row.id ? this.selectRowList[0] : row
-        this.$confirm('是否确认删除流程编号为"' + row.processName + '"的数据项?', '警告', {
+        this.$confirm('是否确认删除流程名称为"' + row.modelName + '"的数据项?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

@@ -31,11 +31,11 @@ public class AgileProcessModel extends AgileBaseModel<AgileProcessModel> {
     /**
      * 流程模型版本
      */
-    private int modelVersion;
+    private int processVersion;
     /**
      * 流程模型设计XMl
      */
-    private String modelXml;
+    private String processXml;
     /**
      * 流程表单类型（1:流程表单 2:业务表单）
      */

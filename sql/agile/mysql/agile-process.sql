@@ -26,13 +26,13 @@ alter table agile_process_form comment '流程表单表';
 /*==============================================================*/
 CREATE TABLE agile_process_model (
   id                            varchar(32) NOT NULL COMMENT '流程模型主键ID',
-  process_code                  varchar(20) NOT NULL COMMENT '流程编码',
-  process_name                  varchar(100) NOT NULL COMMENT '流程名称',
+  model_code                  varchar(20) NOT NULL COMMENT '流程编码',
+  model_name                  varchar(100) NOT NULL COMMENT '流程名称',
   process_version               int NOT NULL COMMENT '流程版本',
   process_xml                   text COMMENT '流程设计XMl',
-  process_form_type             varchar(32) NOT NULL COMMENT '流程表单类型（1:流程表单 2:业务表单）',
-  process_form_id               varchar(32)  COMMENT '流程表单ID',
-  process_form_url              varchar(32) COMMENT '流程表单地址',
+  form_type             varchar(32) NOT NULL COMMENT '流程表单类型（1:流程表单 2:业务表单）',
+  form_id               varchar(32)  COMMENT '流程表单ID',
+  form_url              varchar(32) COMMENT '流程表单地址',
   deployment_status             varchar(1) DEFAULT '1' COMMENT '流程部署状态（1:已发布 2:未发布）',
   deployment_time               datetime DEFAULT NULL COMMENT '流程部署时间',
   deployment_id                 varchar(50) DEFAULT NULL COMMENT '流程部署ID（流程组件生成）',

@@ -127,7 +127,7 @@
     name: 'ProcessDesigner',
     components: { processProperties },
     props: {
-      processId: { // 流程ID
+      processCode: { // 流程编码
         type: String,
         default: `process_${new Date().getTime()}`
       },
@@ -172,7 +172,7 @@
         processSimulation: false,
         panelFold: true,
         processInfo: {
-          processId: this.processId,
+          processCode: this.processCode,
           processName: this.processName,
           processPrefix: this.processPrefix,
           processDesc: this.processDesc,
@@ -259,7 +259,7 @@
       },
       /** 创建新的流程图 */
       async createNewProcess(processXml) {
-        let newProcessXml = processXml || defaultDiagram(this.processId, this.processName, this.processPrefix)
+        let newProcessXml = processXml || defaultDiagram(this.processCode, this.processName, this.processPrefix)
         try {
           let { warnings } = await this.processModeler.importXML(newProcessXml)
           if (warnings && warnings.length) {
@@ -383,6 +383,4 @@
     }
   }
 </script>
-<style lang='scss'>
-</style>
 

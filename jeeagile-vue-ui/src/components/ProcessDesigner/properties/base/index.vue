@@ -89,7 +89,7 @@
       updateProcessInfo() {
         const elementType = this.activeElement.type
         if (elementType === 'bpmn:Collaboration' || elementType === 'bpmn:Process') {
-          this.processData.processId = this.baseInfo.id
+          this.processData.processCode = this.baseInfo.id
           this.processData.processName = this.baseInfo.name
         }
       }

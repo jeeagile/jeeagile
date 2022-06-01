@@ -12,8 +12,8 @@ public interface IAgileProcessModelService extends IAgileBaseService<AgileProces
     /**
      * 保存流程模型设计
      * @param modelId
-     * @param modelXml
+     * @param processXml
      * @return
      */
-    AgileProcessModel saveProcessModelDesigner(String modelId, String modelXml);
+    AgileProcessModel saveProcessModelDesigner(String modelId, String processXml);
 }

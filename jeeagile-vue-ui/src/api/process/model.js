@@ -24,3 +24,8 @@ export const updateProcessModel = data => postApi('/process/model/update', data)
  * 删除流程模型
  */
 export const deleteProcessModel = data => postApi('/process/model/delete', data)
+
+/**
+ * 流程发布
+ */
+export const processDeployment = modelId => postApi('/process/model/deployment', modelId)

@@ -130,7 +130,13 @@ export const agileRouter = [
         path: 'form/designer/:formId(.*)',
         component: (resolve) => require(['@/views/process/form/designer'], resolve),
         name: 'FormDesigner',
-        meta: { title: '流程表单设计' }
+        meta: { title: '表单设计' }
+      },
+      {
+        path: 'model/designer/:modelId(.*)',
+        component: (resolve) => require(['@/views/process/model/designer'], resolve),
+        name: 'ProcessDesigner',
+        meta: { title: '流程设计' }
       }
     ]
   }
