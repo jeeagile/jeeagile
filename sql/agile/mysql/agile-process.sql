@@ -33,7 +33,7 @@ CREATE TABLE agile_process_model (
   form_type             varchar(32) NOT NULL COMMENT '流程表单类型（1:流程表单 2:业务表单）',
   form_id               varchar(32)  COMMENT '流程表单ID',
   form_url              varchar(32) COMMENT '流程表单地址',
-  deployment_status             varchar(1) DEFAULT '1' COMMENT '流程部署状态（1:已发布 2:未发布）',
+  deployment_status             varchar(1) DEFAULT '2' COMMENT '流程部署状态（1:已发布 2:未发布）',
   deployment_time               datetime DEFAULT NULL COMMENT '流程部署时间',
   deployment_id                 varchar(50) DEFAULT NULL COMMENT '流程部署ID（流程组件生成）',
   remark                        varchar(300) DEFAULT NULL COMMENT '备注',
