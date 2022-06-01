@@ -512,7 +512,7 @@
       },
       /** 重置密码按钮操作 */
       handleResetPassword(row) {
-        this.$prompt('请输入"' + row.userName + '"的新密码', '提示', {
+        this.$prompt('请输入用户"' + row.userName + '"的新密码', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         }).then(({ value }) => {
