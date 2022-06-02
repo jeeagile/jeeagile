@@ -43,9 +43,6 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
     private AgileAuthenticationEntryPoint agileAuthenticationEntryPoint;
 
 
-
-
-
     @Bean("AgileSecurity")
     @ConditionalOnMissingBean
     public AgileBootSecurity agileSpringSecurity() {

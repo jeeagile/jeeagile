@@ -11,9 +11,17 @@ import com.jeeagile.process.entity.AgileProcessModel;
 public interface IAgileProcessModelService extends IAgileBaseService<AgileProcessModel> {
     /**
      * 保存流程模型设计
+     *
      * @param modelId
      * @param processXml
      * @return
      */
     AgileProcessModel saveProcessDesigner(String modelId, String processXml);
+
+    /**
+     * 流程发布
+     * @param modelId
+     * @return
+     */
+    boolean processDeployment(String modelId);
 }

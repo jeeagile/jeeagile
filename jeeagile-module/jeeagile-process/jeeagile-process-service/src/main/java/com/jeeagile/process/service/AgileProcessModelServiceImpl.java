@@ -1,12 +1,15 @@
 package com.jeeagile.process.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.process.entity.AgileProcessModel;
 import com.jeeagile.process.mapper.AgileProcessModelMapper;
+import com.jeeagile.process.support.IAgileProcessService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author JeeAgile
@@ -15,6 +18,9 @@ import com.jeeagile.process.mapper.AgileProcessModelMapper;
  */
 @AgileService
 public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProcessModelMapper, AgileProcessModel> implements IAgileProcessModelService {
+    @Autowired
+    private IAgileProcessService agileProcessService;
+
     /**
      * 拼装查询条件
      */
@@ -108,6 +114,24 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
         agileProcessModel.setUpdateTime(null);
         this.updateModel(agileProcessModel);
         return agileProcessModel;
+    }
+
+    @Override
+    public boolean processDeployment(String modelId) {
+        AgileProcessModel agileProcessModel = this.getById(modelId);
+        if (agileProcessModel != null && agileProcessModel.isNotEmptyPk()) {
+            if (agileProcessModel.getDeploymentStatus().equals("1")) {
+                throw new AgileFrameException("当前流程已处于发布状态！");
+            }
+            if (AgileStringUtil.isEmpty(agileProcessModel.getProcessXml())) {
+                throw new AgileFrameException("流程模型不存在，请先进行流程设计！");
+            }
+            //流程发布
+            agileProcessService.processDeployment(agileProcessModel);
+            return true;
+        } else {
+            throw new AgileFrameException("流程已不存在无法进行发布操作！");
+        }
     }
 
     /**

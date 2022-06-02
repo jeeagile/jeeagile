@@ -1,6 +1,7 @@
 package com.jeeagile.process.controller;
 
 import com.jeeagile.core.result.AgileResult;
+import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileLogger;
@@ -32,5 +33,17 @@ public class AgileProcessModelController extends AgileCrudController<IAgileProce
     @ApiOperation(value = "保存流程设计", notes = "保存流程设计")
     public AgileResult<AgileProcessModel> designer(@SingleRequestBody String modelId, @SingleRequestBody String processXml) {
         return AgileResult.success(agileBaseService.saveProcessDesigner(modelId, processXml));
+    }
+
+    @PostMapping("/deployment")
+    @AgileRequiresPermissions("deployment")
+    @AgileLogger(notes = "流程发布", type = AgileLoggerType.UPDATE)
+    @ApiOperation(value = "流程发布", notes = "流程发布")
+    public AgileResult<AgileProcessModel> deployment(@SingleRequestBody String modelId) {
+        if (agileBaseService.processDeployment(modelId)) {
+            return AgileResult.success("流程发布成功！");
+        } else {
+            return AgileResult.error(AgileResultCode.FAIL_OPS, "流程发布失败！");
+        }
     }
 }
