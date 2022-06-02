@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AgileProcessModelController extends AgileCrudController<IAgileProcessModelService, AgileProcessModel> {
     @PostMapping("/designer")
     @AgileRequiresPermissions("designer")
-    @AgileLogger(notes = "保存流程表单设计", type = AgileLoggerType.UPDATE)
-    @ApiOperation(value = "保存流程表单设计", notes = "保存流程表单设计")
+    @AgileLogger(notes = "保存流程设计", type = AgileLoggerType.UPDATE)
+    @ApiOperation(value = "保存流程设计", notes = "保存流程设计")
     public AgileResult<AgileProcessModel> designer(@SingleRequestBody String modelId, @SingleRequestBody String processXml) {
-        return AgileResult.success(agileBaseService.saveProcessModelDesigner(modelId, processXml));
+        return AgileResult.success(agileBaseService.saveProcessDesigner(modelId, processXml));
     }
 }

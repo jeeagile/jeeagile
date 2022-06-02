@@ -5,7 +5,6 @@ import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
-import com.jeeagile.process.entity.AgileProcessForm;
 import com.jeeagile.process.entity.AgileProcessModel;
 import com.jeeagile.process.mapper.AgileProcessModelMapper;
 
@@ -98,7 +97,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
     }
 
     @Override
-    public AgileProcessModel saveProcessModelDesigner(String modelId, String processXml) {
+    public AgileProcessModel saveProcessDesigner(String modelId, String processXml) {
         AgileProcessModel agileProcessModel = this.getById(modelId);
         if (agileProcessModel == null || agileProcessModel.isEmptyPk()) {
             throw new AgileValidateException("流程模型已不存在！");

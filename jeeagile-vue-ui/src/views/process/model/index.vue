@@ -319,7 +319,7 @@
       },
       /** 流程设计操作 */
       handleProcessDesigner(row) {
-        // this.$router.push('/process/model/designer/' + row.id)
+        this.$router.push('/process/designer/' + row.id)
       },
       /** 流程定义 */
       handleProcessDefinition(row) {

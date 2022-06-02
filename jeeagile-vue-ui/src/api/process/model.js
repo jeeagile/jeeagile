@@ -24,7 +24,10 @@ export const updateProcessModel = data => postApi('/process/model/update', data)
  * 删除流程模型
  */
 export const deleteProcessModel = data => postApi('/process/model/delete', data)
-
+/**
+ * 保存流程设计
+ */
+export const saveProcessDesigner = data => postApi('/process/model/designer', data)
 /**
  * 流程发布
  */

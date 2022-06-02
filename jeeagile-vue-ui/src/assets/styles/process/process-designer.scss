@@ -19,6 +19,18 @@
   border-left: 1px solid #EFEFEF;
   border-right: 1px solid #EFEFEF;
 
+  .header__left {
+    text-align: left;
+    float: left;
+    margin-left: 20px;
+  }
+
+  .header__right {
+    float: right;
+    text-align: right;
+    margin-right: 20px;
+  }
+
   .el-button {
     text-align: center;
   }
@@ -84,6 +96,8 @@
       transform: rotate(90deg) translate(0, 60%);
     }
   }
+
+
 }
 
 .process-designer__logo {
@@ -105,10 +119,12 @@
 .process-designer__container {
   border: 1px solid #cccccc;
   height: calc(100vh - 125px);
+
   .el-pagination {
     text-align: center;
   }
-  .el-aside{
+
+  .el-aside {
     overflow: visible;
     margin: 0px;
     padding: 0px;
@@ -203,6 +219,7 @@
 .process-designer__right {
   border-left: 1px solid #cccccc;
   background-color: #f0f2f5;
+
   .panel-title {
     height: 40px;
     line-height: 40px;

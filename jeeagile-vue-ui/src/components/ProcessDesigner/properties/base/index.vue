@@ -9,14 +9,15 @@
       </el-form-item>
       <el-form-item label="Text:" v-if="baseInfo.$type === 'bpmn:TextAnnotation'">
         <el-input type="textarea" v-model="baseInfo.text" size="mini" resize="vertical"
-                  :autosize="{ minRows: 2, maxRows: 4 }"  @change="updateBaseInfo('text')"/>
+                  :autosize="{ minRows: 2, maxRows: 4 }" @change="updateBaseInfo('text')"/>
       </el-form-item>
       <template v-if="baseInfo.$type === 'bpmn:Process'">
         <el-form-item label="版本标签:">
           <el-input v-model="baseInfo.versionTag" @change="updateBaseInfo('versionTag')"/>
         </el-form-item>
         <el-form-item label="可执行:">
-          <el-switch v-model="baseInfo.isExecutable" active-text="是" inactive-text="否" @change="updateBaseInfo('isExecutable')"/>
+          <el-switch v-model="baseInfo.isExecutable" active-text="是" inactive-text="否"
+                     @change="updateBaseInfo('isExecutable')"/>
         </el-form-item>
       </template>
     </el-form>
@@ -72,6 +73,9 @@
                 }
               }
               this.updateBaseInfo('name')
+            }
+            if (this.baseInfo.$type == 'bpmn:Process') {
+              this.$set(this.baseInfo, 'versionTag', 'v' + this.processInfo.processVersion)
             }
           }
         },
