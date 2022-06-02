@@ -140,7 +140,7 @@ public class AgileShiroAutoConfigure {
      * 权限管理
      */
     @Bean
-    public SecurityManager securityManager(AgileAuthorizingRealm agileAuthorizingRealm) {
+    public SecurityManager agileShiroSecurityManager(AgileAuthorizingRealm agileAuthorizingRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(agileAuthorizingRealm);
         //配置 ehcache缓存管理器
