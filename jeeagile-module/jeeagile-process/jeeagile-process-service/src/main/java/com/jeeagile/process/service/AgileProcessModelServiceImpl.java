@@ -38,14 +38,14 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
 
     @Override
     public void saveModelValidate(AgileProcessModel agileProcessModel) {
-        agileProcessModel.setDeploymentStatus("2");
+        handlerDeploymentStatus(agileProcessModel);
         this.validateProcessForm(agileProcessModel);
         this.validateProcessModel(agileProcessModel);
     }
 
     @Override
     public void updateModelValidate(AgileProcessModel agileProcessModel) {
-        agileProcessModel.setDeploymentStatus("2");
+        handlerDeploymentStatus(agileProcessModel);
         agileProcessModel.setDeploymentTime(null);
         agileProcessModel.setDeploymentId("");
         this.validateProcessForm(agileProcessModel);
@@ -103,10 +103,25 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
             throw new AgileValidateException("流程模型已不存在！");
         }
         agileProcessModel.setProcessXml(processXml);
-        agileProcessModel.setDeploymentStatus("2");
+        handlerDeploymentStatus(agileProcessModel);
         agileProcessModel.setUpdateUser(null);
         agileProcessModel.setUpdateTime(null);
         this.updateModel(agileProcessModel);
         return agileProcessModel;
+    }
+
+    /**
+     * 处理发布状态 如果已处于发布状态则修改状态为未发布，且将版本号加一
+     */
+    private void handlerDeploymentStatus(AgileProcessModel agileProcessModel) {
+        String deploymentStatus = agileProcessModel.getDeploymentStatus();
+        if (AgileStringUtil.isNotEmpty(deploymentStatus) && deploymentStatus.equals("1")) {
+            agileProcessModel.setDeploymentStatus("2");
+            agileProcessModel.setDeploymentTime(null);
+            agileProcessModel.setProcessVersion(agileProcessModel.getProcessVersion() + 1);
+        } else {
+            agileProcessModel.setDeploymentStatus("2");
+            agileProcessModel.setDeploymentTime(null);
+        }
     }
 }
