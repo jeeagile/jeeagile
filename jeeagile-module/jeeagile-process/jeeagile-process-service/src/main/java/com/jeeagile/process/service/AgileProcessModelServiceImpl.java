@@ -128,7 +128,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
             }
             //流程发布
             agileProcessService.processDeployment(agileProcessModel);
-            return true;
+            return this.updateById(agileProcessModel);
         } else {
             throw new AgileFrameException("流程已不存在无法进行发布操作！");
         }

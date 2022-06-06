@@ -24,7 +24,8 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleProcessAdd" v-hasPerm="['process:model:add']">
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleProcessAdd"
+                   v-hasPerm="['process:model:add']">
           新增
         </el-button>
       </el-col>
@@ -54,7 +55,7 @@
       </el-table-column>
       <el-table-column label="发布状态" align="center" prop="deploymentStatus"
                        :formatter="processDeploymentStatusFormat"/>
-      <el-table-column label="发布时间" align="center" prop="deploymentTime"/>
+      <el-table-column label="发布时间" align="center" prop="deploymentTime" width="150px"/>
       <el-table-column label="操作" width="350px" align="center" class-name="small-padding">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-s-custom" @click="handleProcessView(scope.row)">
@@ -136,6 +137,10 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <!-- 流程模型图的预览 -->
+    <el-dialog title="流程图" :visible.sync="openProcessView" width="600px" append-to-body>
+      <process-view key="designer" v-model="processXml"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -189,6 +194,8 @@
             deploymentStatus: undefined
           }
         },
+        openProcessView: false,
+        processXml: undefined,
         // 表单参数
         form: {},
         // 表单校验
@@ -281,7 +288,7 @@
       handleProcessView(row) {
         detailProcessModel(row.id).then(response => {
             this.processXml = response.data.processXml
-            this.openView = true
+            this.openProcessView = true
           }
         )
       },
