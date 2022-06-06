@@ -1,7 +1,7 @@
 <template>
-  <div class="activiti-view__container">
-    <div ref="canvas" class="activiti-view__canvas">
-      <div class="activiti-view__zoom">
+  <div class="process-view__container">
+    <div ref="canvas" class="process-view__canvas">
+      <div class="process-view__zoom">
         <el-button-group key="scale-control">
           <el-tooltip effect="light" content="重置视图居中" placement="bottom">
             <el-button size="mini" icon="el-icon-rank" @click="handlerViewCenter"/>
@@ -139,12 +139,14 @@
 </script>
 <style lang='scss'>
 
-  .activiti-view__container {
+  .process-view__container {
     flex: 1;
     width: 100%;
 
-    .activiti-view__zoom {
-      top: -100px;
+    .process-view__zoom {
+      position: absolute;
+      z-index: 9999999;
+      left: 35%;
       align-content: center;
       min-height: 36px;
       text-align: center;
@@ -172,7 +174,7 @@
       }
     }
 
-    .activiti-view__canvas {
+    .process-view__canvas {
       flex: 1;
       height: 350px;
       position: relative;
