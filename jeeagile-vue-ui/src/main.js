@@ -25,8 +25,9 @@ import 'bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css'
 
 import Pagination from '@/components/Pagination'
 import RightToolbar from '@/components/RightToolbar'
-import directive from '@/directive'
-import processDesigner from '@/components/ProcessDesigner'
+import Directive from '@/directive'
+import ProcessDesigner from '@/components/ProcessDesigner/ProcessDesigner'
+import ProcessView from '@/components/ProcessDesigner/ProcessView'
 import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getSysConfig, getSysConfigValue, getSysDictData, getSysDictDataList } from '@/api/system/common'
@@ -40,9 +41,9 @@ import 'highlight.js/styles/atom-one-dark-reasonable.css'
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
 Vue.component('TreeSelect', TreeSelect)
-Vue.component('ProcessDesigner', processDesigner)
-
-Vue.use(directive)
+Vue.component('ProcessDesigner', ProcessDesigner)
+Vue.component('ProcessView', ProcessView)
+Vue.use(Directive)
 Vue.use(VueParticles)
 
 
