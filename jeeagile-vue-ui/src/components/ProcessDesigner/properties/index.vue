@@ -12,7 +12,7 @@
         />
       </el-collapse-item>
     </el-collapse>
-    <el-dialog :title="activeTitle" :visible.sync="activeVisible" width="350px" append-to-body destroy-on-close>
+    <el-dialog :title="activeTitle" :visible.sync="activeVisible" width="380px" append-to-body destroy-on-close>
       <component :is="activeComponent" v-if="activeElement" :process-info="processInfo"
                  :process-modeler="processModeler"
                  :active-element="activeElement"

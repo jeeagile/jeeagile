@@ -96,7 +96,7 @@
               <i :class="panelFold ? 'el-icon-s-unfold':'el-icon-s-fold'"/>
             </div>
           </div>
-          <process-properties v-if="processModeler" :process-modeler="processModeler" :process-info="processInfo"
+          <properties-panel v-if="processModeler" :process-modeler="processModeler" :process-info="processInfo"
                               :panel-fold="panelFold"/>
         </el-aside>
       </el-container>
@@ -127,10 +127,13 @@
   import agileExtension from '@/components/ProcessDesigner/extension'
   // 自定义 流程解析文件
   import agileDescriptor from '@/components/ProcessDesigner/descriptor'
-
-  import processProperties from '@/components/ProcessDesigner/properties'
-
+  // 默认流程配置
   import defaultDiagram from '@/components/ProcessDesigner/default'
+  // 自定义流程配置分组
+  import CustomPropertiesGroup from './properties'
+
+  // 自定义 属性配置
+  import PropertiesPanel from '@/components/ProcessDesigner/properties'
 
   import { saveAs } from 'file-saver'
 
@@ -138,7 +141,7 @@
 
   export default {
     name: 'ProcessDesigner',
-    components: { processProperties },
+    components: { PropertiesPanel },
     data() {
       return {
         processModeler: null,
@@ -158,7 +161,7 @@
           processPrefix: 'activiti',
           processXml: undefined,
           processDesc: undefined,
-          processProperties: undefined,
+          processProperties: CustomPropertiesGroup,
           elementName: undefined
         }
       }
@@ -255,7 +258,6 @@
       },
       /** 创建新的流程图 */
       async createNewProcess(processXml) {
-        debugger
         let newProcessXml = processXml || defaultDiagram(this.processInfo.processCode, this.processInfo.processName, this.processInfo.processPrefix)
         try {
           let { warnings } = await this.processModeler.importXML(newProcessXml)
