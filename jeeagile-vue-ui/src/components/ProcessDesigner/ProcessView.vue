@@ -67,30 +67,30 @@
       },
       getElementColor(data) {
         const colorJson = []
-        for (const k in data.highLine) {
+        for (const k in data?.highLine) {
           const par = {
             'name': data.highLine[k],
             'stroke': 'blue'
           }
           colorJson.push(par)
         }
-        for (const k in data.highPoint) {
+        for (const k in data?.highPoint) {
           const par = {
             'name': data.highPoint[k],
             'stroke': 'blue'
           }
           colorJson.push(par)
         }
-        for (const k in data.handlePoint) {
+        for (const k in data?.handlePoint) {
           const par = {
-            'name': data.handlePoint[k],
+            'name': data?.handlePoint[k],
             'stroke': 'blue',
             'fill': '#a3d68e'
           }
           colorJson.push(par)
         }
 
-        for (const k in data.waitingPoint) {
+        for (const k in data?.waitingPoint) {
           const par = {
             'name': data.waitingPoint[k],
             'stroke': 'red'

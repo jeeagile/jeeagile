@@ -137,6 +137,12 @@ export const agileRouter = [
         component: (resolve) => require(['@/views/process/designer/index'], resolve),
         name: 'ProcessDesigner',
         meta: { title: '流程设计' }
+      },
+      {
+        path: 'definition/:modelId(.*)',
+        component: (resolve) => require(['@/views/process/definition/index'], resolve),
+        name: 'ProcessDefinition',
+        meta: { title: '流程定义' }
       }
     ]
   }

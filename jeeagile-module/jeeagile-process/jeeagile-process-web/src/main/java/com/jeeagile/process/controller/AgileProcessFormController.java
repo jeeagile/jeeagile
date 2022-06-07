@@ -3,7 +3,6 @@ package com.jeeagile.process.controller;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
-import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.enums.AgileLoggerType;

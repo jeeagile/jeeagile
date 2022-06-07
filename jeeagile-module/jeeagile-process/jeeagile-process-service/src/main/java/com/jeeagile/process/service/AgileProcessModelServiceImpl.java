@@ -6,10 +6,14 @@ import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import com.jeeagile.process.entity.AgileProcessDefinition;
+import com.jeeagile.process.entity.AgileProcessForm;
 import com.jeeagile.process.entity.AgileProcessModel;
 import com.jeeagile.process.mapper.AgileProcessModelMapper;
 import com.jeeagile.process.support.IAgileProcessService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author JeeAgile
@@ -20,14 +24,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProcessModelMapper, AgileProcessModel> implements IAgileProcessModelService {
     @Autowired
     private IAgileProcessService agileProcessService;
+    @Autowired
+    private IAgileProcessFormService agileProcessFormService;
+    @Autowired
+    private IAgileProcessDefinitionService agileProcessDefinitionService;
 
-    /**
-     * 拼装查询条件
-     */
     @Override
     public LambdaQueryWrapper<AgileProcessModel> queryWrapper(AgileProcessModel agileProcessModel) {
         LambdaQueryWrapper<AgileProcessModel> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.select(AgileProcessModel.class, i -> !"processXml".contains(i.getProperty()));
+        lambdaQueryWrapper.select(AgileProcessModel.class, i -> !"modelXml".contains(i.getProperty()));
         if (agileProcessModel != null) {
             if (AgileStringUtil.isNotEmpty(agileProcessModel.getModelCode())) {
                 lambdaQueryWrapper.eq(AgileProcessModel::getModelCode, agileProcessModel.getModelCode());
@@ -103,12 +108,12 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
     }
 
     @Override
-    public AgileProcessModel saveProcessDesigner(String modelId, String processXml) {
+    public AgileProcessModel saveProcessDesigner(String modelId, String modelXml) {
         AgileProcessModel agileProcessModel = this.getById(modelId);
         if (agileProcessModel == null || agileProcessModel.isEmptyPk()) {
             throw new AgileValidateException("流程模型已不存在！");
         }
-        agileProcessModel.setProcessXml(processXml);
+        agileProcessModel.setModelXml(modelXml);
         handlerDeploymentStatus(agileProcessModel);
         agileProcessModel.setUpdateUser(null);
         agileProcessModel.setUpdateTime(null);
@@ -117,17 +122,41 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean processDeployment(String modelId) {
         AgileProcessModel agileProcessModel = this.getById(modelId);
         if (agileProcessModel != null && agileProcessModel.isNotEmptyPk()) {
             if (agileProcessModel.getDeploymentStatus().equals("1")) {
                 throw new AgileFrameException("当前流程已处于发布状态！");
             }
-            if (AgileStringUtil.isEmpty(agileProcessModel.getProcessXml())) {
+            if (AgileStringUtil.isEmpty(agileProcessModel.getModelXml())) {
                 throw new AgileFrameException("流程模型不存在，请先进行流程设计！");
+            }
+            AgileProcessForm agileProcessForm = null;
+            if (agileProcessModel.getFormType().equals("1")) {
+                agileProcessForm = agileProcessFormService.getById(agileProcessModel.getFormId());
+                if (agileProcessForm == null || agileProcessForm.isEmptyPk()) {
+                    throw new AgileFrameException("流程表单不存在，请核实！");
+                }
+                if ("1".equals(agileProcessForm.getFormStatus())) {
+                    throw new AgileFrameException("流程表单已停用！");
+                }
             }
             //流程发布
             agileProcessService.processDeployment(agileProcessModel);
+            String definitionId = agileProcessService.getProcessDefinitionId(agileProcessModel.getDeploymentId());
+
+            AgileProcessDefinition agileProcessDefinition = new AgileProcessDefinition();
+            BeanUtils.copyProperties(agileProcessModel, agileProcessDefinition);
+            if (agileProcessModel.getFormType().equals("1")) {
+                agileProcessDefinition.setFormConf(agileProcessForm.getFormConf());
+                agileProcessDefinition.setFormFields(agileProcessForm.getFormFields());
+            }
+            agileProcessDefinition.setSuspensionState(1);
+            agileProcessDefinition.setDefinitionId(definitionId);
+            agileProcessDefinition.setModelId(agileProcessModel.getId());
+            agileProcessDefinition.setId(null);
+            agileProcessDefinitionService.save(agileProcessDefinition);
             return this.updateById(agileProcessModel);
         } else {
             throw new AgileFrameException("流程已不存在无法进行发布操作！");
@@ -142,7 +171,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
         if (AgileStringUtil.isNotEmpty(deploymentStatus) && deploymentStatus.equals("1")) {
             agileProcessModel.setDeploymentStatus("2");
             agileProcessModel.setDeploymentTime(null);
-            agileProcessModel.setProcessVersion(agileProcessModel.getProcessVersion() + 1);
+            agileProcessModel.setModelVersion(agileProcessModel.getModelVersion() + 1);
         } else {
             agileProcessModel.setDeploymentStatus("2");
             agileProcessModel.setDeploymentTime(null);

@@ -205,8 +205,8 @@
           this.processInfo.modelId = response.data.id
           this.processInfo.processCode = response.data.modelCode
           this.processInfo.processName = response.data.modelName
-          this.processInfo.processVersion = response.data.processVersion
-          this.processInfo.processXml = response.data.processXml
+          this.processInfo.processVersion = response.data.modelVersion
+          this.processInfo.processXml = response.data.modelXml
           this.createNewProcess(this.processInfo.processXml)
         })
       },
@@ -381,7 +381,7 @@
         const { xml } = await this.processModeler.saveXML()
         saveProcessDesigner({
           modelId: this.processInfo.modelId,
-          processXml: xml
+          modelXml: xml
         }).then(response => {
           this.messageSuccess('流程设计保存成功')
         })

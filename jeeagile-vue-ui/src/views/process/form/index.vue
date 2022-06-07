@@ -118,7 +118,7 @@
   import FormParser from '@/components/FormDesigner/parser/Parser'
 
   export default {
-    name: 'Form',
+    name: 'ProcessForm',
     components: { FormParser },
     data() {
       return {
@@ -132,8 +132,6 @@
         multiple: true,
         // 显示搜索条件
         showSearch: true,
-        // 总条数
-        total: 0,
         // 表单表格数据
         formList: [],
         // 弹出层标题

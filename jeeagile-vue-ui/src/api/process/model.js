@@ -4,7 +4,10 @@ import { postApi } from '@/utils/axios'
  * 查询流程模型列表
  */
 export const selectProcessModelPage = data => postApi('/process/model/page', data)
-
+/**
+ * 查询流程模型列表
+ */
+export const selectProcessModelList = data => postApi('/process/model/list', data)
 /**
  * 查看流程模型
  */

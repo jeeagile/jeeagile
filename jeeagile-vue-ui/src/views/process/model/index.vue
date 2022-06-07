@@ -50,7 +50,7 @@
       <el-table-column label="模型名称" align="center" prop="modelName"/>
       <el-table-column label="流程版本" align="center" prop="modelVersion">
         <template slot-scope="scope">
-          <span>v{{scope.row.processVersion}}</span>
+          <span>v{{scope.row.modelVersion}}</span>
         </template>
       </el-table-column>
       <el-table-column label="发布状态" align="center" prop="deploymentStatus"
@@ -156,7 +156,7 @@
   import { selectProcessFormList } from '@/api/process/form'
 
   export default {
-    name: 'Model',
+    name: 'ProcessModel',
     data() {
       return {
         // 遮罩层
@@ -169,8 +169,6 @@
         multiple: true,
         // 显示搜索条件
         showSearch: true,
-        // 总条数
-        total: 0,
         // 流程表格数据
         modelList: [],
         // 弹出层标题
@@ -287,7 +285,7 @@
       /** 流程查看 */
       handleProcessView(row) {
         detailProcessModel(row.id).then(response => {
-            this.processXml = response.data.processXml
+            this.processXml = response.data.modelXml
             this.openProcessView = true
           }
         )

@@ -25,7 +25,7 @@ public class AgileProcessForm extends AgileBaseModel<AgileProcessForm> {
     @Size(max = 50, message = "任务名称最大长度为10！")
     private String formName;
     /**
-     * 表单状态
+     * 表单状态 （0:正常 1:停用）
      */
     @NotEmpty(message = "表单状态不能为空！")
     private String formStatus;

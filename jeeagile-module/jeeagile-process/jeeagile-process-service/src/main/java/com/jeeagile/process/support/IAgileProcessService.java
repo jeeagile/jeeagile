@@ -23,4 +23,20 @@ public interface IAgileProcessService {
      * @return
      */
     String getProcessDefinitionId(String deploymentId);
+
+    /**
+     * 流程定义激活
+     *
+     * @param definitionId
+     * @return
+     */
+    boolean processDefinitionActive(String definitionId);
+
+    /**
+     * 流程定义挂起
+     *
+     * @param definitionId
+     * @return
+     */
+    boolean processDefinitionSuspend(String definitionId);
 }

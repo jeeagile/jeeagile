@@ -31,8 +31,8 @@ public class AgileProcessModelController extends AgileCrudController<IAgileProce
     @AgileRequiresPermissions("designer")
     @AgileLogger(notes = "保存流程设计", type = AgileLoggerType.UPDATE)
     @ApiOperation(value = "保存流程设计", notes = "保存流程设计")
-    public AgileResult<AgileProcessModel> designer(@SingleRequestBody String modelId, @SingleRequestBody String processXml) {
-        return AgileResult.success(agileBaseService.saveProcessDesigner(modelId, processXml));
+    public AgileResult<AgileProcessModel> designer(@SingleRequestBody String modelId, @SingleRequestBody String modelXml) {
+        return AgileResult.success(agileBaseService.saveProcessDesigner(modelId, modelXml));
     }
 
     @PostMapping("/deployment")
