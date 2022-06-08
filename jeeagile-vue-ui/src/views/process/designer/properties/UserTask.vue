@@ -128,7 +128,9 @@
             this.initAssigneeUser()
             this.initCandidateUsers()
           }
-        }
+        },
+        deep: true,
+        immediate: true
       }
     },
     created() {
