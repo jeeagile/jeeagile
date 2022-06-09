@@ -81,7 +81,7 @@
         this.loading = true
         getOnlineUserList(this.queryParam).then(response => {
           this.queryParam.pageTotal = response.data.pageTotal
-          this.onlineList = response.data.recordList
+          this.onlineList = response.data.records
           this.loading = false
         })
       },

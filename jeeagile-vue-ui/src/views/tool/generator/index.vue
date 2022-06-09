@@ -146,7 +146,7 @@
         this.loading = true
         selectGeneratorTablePage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
-            this.generatorTableList = response.data.recordList
+            this.generatorTableList = response.data.records
             this.loading = false
           }
         )

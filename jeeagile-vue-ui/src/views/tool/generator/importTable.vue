@@ -86,7 +86,7 @@
       getDbTableList() {
         selectDbTablePage(this.queryParam).then(response => {
           this.queryParam.pageTotal = response.data.pageTotal
-          this.dbTableList = response.data.recordList
+          this.dbTableList = response.data.records
           this.loading = false
         })
       },

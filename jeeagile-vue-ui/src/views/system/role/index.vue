@@ -258,7 +258,7 @@
         this.loading = true
         selectRolePage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
-            this.roleList = response.data.recordList
+            this.roleList = response.data.records
             this.loading = false
           }
         )

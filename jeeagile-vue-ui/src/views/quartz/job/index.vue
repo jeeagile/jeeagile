@@ -304,7 +304,7 @@
         this.loading = true
         selectJobPage(this.queryParam).then(response => {
           this.queryParam.pageTotal = response.data.pageTotal
-          this.quartzJobList = response.data.recordList
+          this.quartzJobList = response.data.records
           this.loading = false
         })
       },

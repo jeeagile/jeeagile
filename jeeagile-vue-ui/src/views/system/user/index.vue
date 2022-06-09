@@ -399,7 +399,7 @@
         this.loading = true
         selectUserPage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
-            this.userList = response.data.recordList
+            this.userList = response.data.records
             this.loading = false
           }
         )

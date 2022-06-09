@@ -171,7 +171,7 @@
         this.loading = true
         selectPostPage(this.queryParam).then(response => {
           this.queryParam.pageTotal = response.data.pageTotal
-          this.postList = response.data.recordList
+          this.postList = response.data.records
           this.loading = false
         })
       },

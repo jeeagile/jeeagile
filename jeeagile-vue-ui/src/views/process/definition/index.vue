@@ -152,7 +152,7 @@
         this.loading = true
         selectProcessDefinitionPage(this.queryParam).then(response => {
           this.queryParam.pageTotal = response.data.pageTotal
-          this.definitionList = response.data.recordList
+          this.definitionList = response.data.records
           this.loading = false
         })
       },

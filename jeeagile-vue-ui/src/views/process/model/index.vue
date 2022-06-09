@@ -240,7 +240,7 @@
         this.loading = true
         selectProcessModelPage(this.queryParam).then(response => {
           this.queryParam.pageTotal = response.data.pageTotal
-          this.modelList = response.data.recordList
+          this.modelList = response.data.records
           this.loading = false
         })
       },

@@ -33,7 +33,6 @@ public class AgilePage<T> implements IPage<T> {
      * 查询数据列表
      */
     @SuppressWarnings("all")
-    @JSONField(name = "recordList")
     private List<T> records = Collections.emptyList();
 
     /**

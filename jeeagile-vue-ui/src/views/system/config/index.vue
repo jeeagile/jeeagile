@@ -184,7 +184,7 @@
         this.loading = true
         selectConfigPage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
-            this.configList = response.data.recordList
+            this.configList = response.data.records
             this.loading = false
           }
         )

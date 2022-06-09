@@ -192,7 +192,7 @@
         this.loading = true
         selectLoggerPage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
-            this.loggerList = response.data.recordList
+            this.loggerList = response.data.records
             this.loading = false
           }
         )

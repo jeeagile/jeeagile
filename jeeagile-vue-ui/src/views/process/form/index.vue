@@ -180,7 +180,7 @@
         this.loading = true
         selectProcessFormPage(this.queryParam).then(response => {
           this.queryParam.pageTotal = response.data.pageTotal
-          this.formList = response.data.recordList
+          this.formList = response.data.records
           this.loading = false
         })
       },

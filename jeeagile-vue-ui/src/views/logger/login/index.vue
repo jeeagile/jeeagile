@@ -118,7 +118,7 @@
         this.loading = true
         selectLoginPage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
-            this.loginList = response.data.recordList
+            this.loginList = response.data.records
             this.loading = false
           }
         )
