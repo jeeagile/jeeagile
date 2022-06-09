@@ -9,7 +9,8 @@ drop table if exists agile_sys_role_dept;
 drop table if exists agile_sys_role_menu;
 drop table if exists agile_sys_user;
 drop table if exists agile_sys_user_post;
-
+drop table if exists agile_logger_login;
+drop table if exists agile_logger_operate;
 
 
 /*==============================================================*/
@@ -85,7 +86,9 @@ INSERT INTO agile_sys_dict_type VALUES ('6','数据范围','sys_data_scope','0',
 INSERT INTO agile_sys_dict_type VALUES ('7','系统状态','sys_common_status','0','0','登录状态列表',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_type VALUES ('8','日志状态','sys_logger_status','0','0','日志状态列表',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_type VALUES ('9','日志类型','sys_logger_type','0','0','日志类型列表',NULL,NULL,NULL,NULL);
-
+INSERT INTO agile_sys_dict_type VALUES ('9','日志类型','sys_logger_type','0','0','日志类型列表',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('10', '流程发布状态', 'process_deployment_status', '0', '0', '流程发布状态', NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('11', '流程表单类型', 'process_form_type', '0', '0', '流程表单类型', NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
 /* table: agile_sys_dict_data 字典数据表                         */
@@ -149,7 +152,10 @@ INSERT INTO agile_sys_dict_data VALUES ('99','0',9,'清空数据','CLEAR','sys_l
 INSERT INTO agile_sys_dict_data VALUES ('910','0',10,'用户强退','FORCE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('911','0',11,'代码生成','GENERATOR','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('912','0',12,'其他操作','OTHER','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-
+INSERT INTO agile_sys_dict_data VALUES ('101', '0', 0, '已发布', '1', 'process_deployment_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('102', '0', 1, '未发布', '2', 'process_deployment_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('111', '0', 0, '流程表单', '1', 'process_form_type', '0', '0', NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('112', '0', 1, '业务表单', '2', 'process_form_type', '0', '0', NULL,NULL,NULL,NULL,NULL);
 
 
 /*==============================================================*/
@@ -309,6 +315,29 @@ INSERT INTO agile_sys_menu VALUES ('50103','501','清空',3,'','','','F','0','0'
 INSERT INTO agile_sys_menu VALUES ('502','5','登录日志',2,'logger/login/index','login','login','C','0','0','1','logger:login:list','登录日志菜单',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50201','502','删除',1,'','#','#','F','0','0','1','logger:login:delete','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50202','502','清空',2,'','','','F','0','0','1','logger:login:clear','',NULL,NULL,NULL,NULL);
+
+
+INSERT INTO agile_sys_menu VALUES ('6', '0', '流程管理', '6', '', 'process', 'process', 'M', '0', '0', '1', '', '', ,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('601', '6', '流程表单', '0', 'process/form/index', 'form', 'form', 'C', '0', '0', '1', 'process:form:page', '' ,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60101','601','流程表单明细',1,'','','#','F','0','0','1','process:form:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60102','601','流程表单新增',2,'','','#','F','0','0','1','process:form:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60103','601','流程表单修改',3,'','','#','F','0','0','1','process:form:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60104','601','流程表单删除',4,'','','#','F','0','0','1','process:form:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60105','601','流程表单导入',5,'','','#','F','0','0','1','process:form:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60106','601','流程表单导出',6,'','','#','F','0','0','1','process:form:export','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60107','601','流程表单预览',7,'','','#','F','0','0','1','process:form:view','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60108','601','流程表单设计',8,'','','#','F','0','0','1','process:form:designer','',NULL,NULL,NULL,NULL);
+
+INSERT INTO agile_sys_menu VALUES ('602', '6', '流程模型', '1', 'process/model/index', 'model', 'example', 'C', '0', '0', '0', 'process:model:page,process:model:list', '', ,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60201','602','流程模型明细',1,'','','#','F','0','0','1','process:model:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60202','602','流程模型新增',2,'','','#','F','0','0','1','process:model:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60203','602','流程模型修改',3,'','','#','F','0','0','1','process:model:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60204','602','流程模型删除',4,'','','#','F','0','0','1','process:model:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60205','602','流程模型导入',5,'','','#','F','0','0','1','process:model:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60206','602','流程模型导出',6,'','','#','F','0','0','1','process:model:export','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60207','602','流程模型预览',7,'','','#','F','0','0','1','process:model:view','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60208','602','流程模型设计',8,'','','#','F','0','0','1','process:model:designer','',NULL,NULL,NULL,NULL);
+
 
 /*==============================================================*/
 /* table: agile_sys_post 岗位信息表                              */
@@ -506,6 +535,60 @@ alter table agile_sys_user_role comment '用户角色关联表';
 
 INSERT INTO agile_sys_user_role VALUES ('1','1','1',NULL,NULL,NULL,NULL);
 
+/*==============================================================*/
+/* table: agile_sys_login 用户登录日志表                      */
+/*==============================================================*/
+create table agile_sys_login
+(
+  id                     varchar(32) not null comment '登录日志主键',
+  login_module           varchar(150) not null comment '登录类型',
+  login_name             varchar(150) not null comment '登录用户名',
+  login_time             datetime not null comment '登录时间',
+  login_ip               varchar(50) not null comment '登录IP',
+  login_address          varchar(150) default null comment '登录地址',
+  login_device           varchar(100) not null comment '登录设备名称',
+  login_os               varchar(100) not null comment '登录设备操作系统名称',
+  login_browser          varchar(100) not null comment '登录浏览器名称',
+  server_address         varchar(50) not null comment '服务器地址',
+  status                 varchar(1) not null comment '登录状态（0：成功 1：失败）',
+  message                longtext comment '登录信息',
+  primary key (id)
+);
+
+alter table agile_sys_login comment '用户登录日志表';
+
+/*==============================================================*/
+/* table: agile_sys_logger 用户操作日志表                    */
+/*==============================================================*/
+create table agile_sys_logger
+(
+  id                    varchar(32) not null comment '操作日志主键',
+  operate_module        varchar(100) not null comment '操作模块',
+  operate_notes         varchar(100) default null comment '操作详细描述',
+  operate_type          varchar(10) not null comment '操作类型',
+  operate_user          varchar(10) not null comment '操作人员名称',
+  request_uri           varchar(150) not null comment '请求uri',
+  request_method        varchar(30) not null comment '请求方式',
+  request_param         longtext comment '请求参数',
+  response_param        longtext comment '返回参数',
+  execute_method        varchar(150) default null comment '执行方法',
+  operate_ip            varchar(50) not null comment '操作IP',
+  operate_address       varchar(150) default null comment '操作地址',
+  operate_device        varchar(100) not null comment '操作设备名称',
+  operate_os            varchar(100) not null comment '操作设备操作系统名称',
+  operate_browser       varchar(100) not null comment '操作浏览器名称',
+  server_address        varchar(50) not null comment '服务器地址',
+  execute_time          decimal(10,0) not null comment '执行时间(毫秒)',
+  status                varchar(1) not null comment '操作状态（0：成功 1：失败）',
+  message               longtext comment '操作信息',
+  create_user           varchar(32) default null comment '创建人',
+  create_time           datetime default null comment '创建时间',
+  update_user           varchar(32) default null comment '修改人',
+  update_time           datetime default null comment '修改时间',
+  primary key (id)
+);
+
+alter table agile_sys_logger comment '用户操作日志表';
 
 alter table agile_sys_role_menu add constraint fk_sys_user_menu_ref_menu foreign key (menu_id)
       references agile_sys_menu (id) on delete restrict on update restrict;
