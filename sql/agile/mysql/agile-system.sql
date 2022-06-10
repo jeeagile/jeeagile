@@ -338,6 +338,12 @@ INSERT INTO agile_sys_menu VALUES ('60206','602','流程模型导出',6,'','','#
 INSERT INTO agile_sys_menu VALUES ('60207','602','流程模型预览',7,'','','#','F','0','0','1','process:model:view','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('60208','602','流程模型设计',8,'','','#','F','0','0','1','process:model:designer','',NULL,NULL,NULL,NULL);
 
+INSERT INTO agile_sys_menu VALUES ('7', '0', '我的事务', '0', '', 'process/task', 'education', 'M', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('701', '7', '流程发起', '1', 'process/task/start', 'start', 'edit', 'C', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('702', '7', '我的代办', '2', 'process/task/todo', 'todo', 'message', 'C', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('703', '7', '我的已办', '3', 'process/task/done', 'done', 'clipboard', 'C', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('704', '7', '我的发起', '4', 'process/task/apply', 'apply', 'button', 'C', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
+
 
 /*==============================================================*/
 /* table: agile_sys_post 岗位信息表                              */
