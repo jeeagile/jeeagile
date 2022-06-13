@@ -44,6 +44,10 @@ public class AgileProcessDefinition extends AgileBaseModel<AgileProcessDefinitio
      */
     private String formType;
     /**
+     * 流程表单名称
+     */
+    private String formName;
+    /**
      * 表单配置
      */
     private String formConf;

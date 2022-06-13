@@ -45,7 +45,7 @@
     <el-table v-loading="loading" :data="formList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="表单编码" align="center" prop="formCode"/>
-      <el-table-column label="表单名称" align="center" prop="formName"/>
+      <el-table-column label="表单名称" align="center" prop="formName" :show-overflow-tooltip="true"/>
       <el-table-column label="状态" align="center" prop="formStatus" :formatter="formStatusFormat"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="300px">
         <template slot-scope="scope">

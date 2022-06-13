@@ -46,6 +46,10 @@ public class AgileProcessModel extends AgileBaseModel<AgileProcessModel> {
      */
     private String formId;
     /**
+     * 流程表单名称
+     */
+    private String formName;
+    /**
      * 流程表单地址
      */
     private String formUrl;

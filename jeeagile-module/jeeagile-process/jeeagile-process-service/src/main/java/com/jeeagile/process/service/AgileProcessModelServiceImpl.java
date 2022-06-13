@@ -150,6 +150,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
             AgileProcessDefinition agileProcessDefinition = new AgileProcessDefinition();
             BeanUtils.copyProperties(agileProcessModel, agileProcessDefinition);
             if (agileProcessModel.getFormType().equals("1")) {
+                agileProcessDefinition.setFormName(agileProcessForm.getFormName());
                 agileProcessDefinition.setFormConf(agileProcessForm.getFormConf());
                 agileProcessDefinition.setFormFields(agileProcessForm.getFormFields());
             }

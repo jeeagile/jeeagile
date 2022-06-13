@@ -47,7 +47,7 @@
     <el-table v-loading="loading" :data="modelList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="模型编码" align="center" prop="modelCode"/>
-      <el-table-column label="模型名称" align="center" prop="modelName"/>
+      <el-table-column label="模型名称" align="center" prop="modelName" :show-overflow-tooltip="true"/>
       <el-table-column label="流程版本" align="center" prop="modelVersion">
         <template slot-scope="scope">
           <span>v{{scope.row.modelVersion}}</span>
@@ -124,6 +124,9 @@
               :disabled="processFormOption.formStatus==1"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="表单名称" prop="formName" v-if="form.formType=='2'">
+          <el-input v-model="form.formName" placeholder="请输入表单名称"/>
         </el-form-item>
         <el-form-item label="表单地址" prop="formUrl" v-if="form.formType=='2'">
           <el-input v-model="form.formUrl" placeholder="请输入表单地址"/>
@@ -211,6 +214,9 @@
           formId: [
             { required: true, message: '流程表单不能为空', trigger: 'blur' }
           ],
+          formName: [
+            { required: true, message: '表单名称不能为空', trigger: 'blur' }
+          ],
           formUrl: [
             { required: true, message: '表单地址不能为空', trigger: 'blur' }
           ]
@@ -261,6 +267,7 @@
           processName: undefined,
           formType: '1',
           formId: undefined,
+          formName: undefined,
           formUrl: undefined,
           remark: undefined
         }

@@ -39,7 +39,7 @@
 
     <el-table v-loading="loading" :data="definitionList">
       <el-table-column label="模型编码" align="center" prop="modelCode"/>
-      <el-table-column label="模型名称" align="center" prop="modelName"/>
+      <el-table-column label="模型名称" align="center" prop="modelName" :show-overflow-tooltip="true"/>
       <el-table-column label="流程版本" align="center" prop="modelVersion">
         <template slot-scope="scope">
           <span>v{{scope.row.modelVersion}}</span>
@@ -93,7 +93,8 @@
     <el-dialog title="流程图" :visible.sync="openProcessView" width="600px" append-to-body>
       <process-view key="designer" v-model="processXml"/>
     </el-dialog>
-    <el-dialog title="表单预览" :visible.sync="openFormView" width="50%" append-to-body>
+    <!-- 表单预览 -->
+    <el-dialog title="表单预览" :visible.sync="openFormView" width="500px" append-to-body>
       <div class="test-form">
         <form-parser :key="new Date().getTime()" :form-conf="parserForm" @submit="submitFormData"/>
       </div>
