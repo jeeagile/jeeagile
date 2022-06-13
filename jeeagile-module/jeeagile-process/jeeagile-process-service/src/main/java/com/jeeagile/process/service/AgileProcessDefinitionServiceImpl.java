@@ -1,6 +1,7 @@
 package com.jeeagile.process.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -35,7 +36,7 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
                 lambdaQueryWrapper.like(AgileProcessDefinition::getModelName, agileProcessDefinition.getModelName());
             }
         }
-        lambdaQueryWrapper.orderByDesc(AgileProcessDefinition::getCreateTime);
+        lambdaQueryWrapper.orderByDesc(AgileProcessDefinition::getModelVersion);
         return lambdaQueryWrapper;
     }
 
@@ -60,8 +61,34 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
         }
         agileProcessService.processDefinitionSuspend(agileProcessDefinition.getDefinitionId());
         agileProcessDefinition.setSuspensionState(2);
-        agileProcessDefinition.setUpdateTime(null);
-        agileProcessDefinition.setUpdateUser(null);
         return this.updateById(agileProcessDefinition);
+    }
+
+    @Override
+    public boolean updateMainVersion(String id) {
+        AgileProcessDefinition agileProcessDefinition = this.getById(id);
+        if (agileProcessDefinition != null && agileProcessDefinition.isNotEmptyPk()) {
+            this.updateNoMainVersion(agileProcessDefinition.getModelId());
+            agileProcessDefinition.setMainVersion(1);
+            return this.updateById(agileProcessDefinition);
+        }
+        return false;
+    }
+
+    @Override
+    public AgileProcessDefinition saveModel(AgileProcessDefinition agileProcessDefinition) {
+        this.updateNoMainVersion(agileProcessDefinition.getModelId());
+        //设置新流程定义为主版本
+        agileProcessDefinition.setMainVersion(1);
+        this.save(agileProcessDefinition);
+        return agileProcessDefinition;
+    }
+
+    public void updateNoMainVersion(String modelId) {
+        //将老版本更新为非主版本
+        LambdaUpdateWrapper<AgileProcessDefinition> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.set(AgileProcessDefinition::getMainVersion, "2");
+        lambdaUpdateWrapper.eq(AgileProcessDefinition::getModelId, modelId);
+        this.update(lambdaUpdateWrapper);
     }
 }

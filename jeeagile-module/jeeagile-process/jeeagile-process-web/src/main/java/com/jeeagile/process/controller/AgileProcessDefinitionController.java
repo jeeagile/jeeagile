@@ -49,4 +49,16 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
             return AgileResult.error(ex, "流程定义挂起异常！");
         }
     }
+
+    @PostMapping("/updateMainVersion")
+    @AgileRequiresPermissions("main")
+    @AgileLogger(notes = "设置主版本", type = AgileLoggerType.UPDATE)
+    @ApiOperation(value = "设置主版本", notes = "设置主版本")
+    public AgileResult<AgileProcessDefinition> updateMainVersion(@SingleRequestBody String id) {
+        try {
+            return AgileResult.success(this.getAgileBaseService().updateMainVersion(id));
+        } catch (Exception ex) {
+            return AgileResult.error(ex, "流程定义设置主版本异常！");
+        }
+    }
 }

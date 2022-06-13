@@ -42,7 +42,6 @@ public class AgileProcessDefinition extends AgileBaseModel<AgileProcessDefinitio
     /**
      * 流程表单类型（1:流程表单 2:业务表单）
      */
-    @NotEmpty(message = "流程表单类型不能为空！")
     private String formType;
     /**
      * 表单配置
@@ -56,6 +55,10 @@ public class AgileProcessDefinition extends AgileBaseModel<AgileProcessDefinitio
      * 流程表单地址
      */
     private String formUrl;
+    /**
+     * 流程定义主版本（1：主版本 2：非主版本）
+     */
+    private int mainVersion;
     /**
      * 流程部署时间
      */

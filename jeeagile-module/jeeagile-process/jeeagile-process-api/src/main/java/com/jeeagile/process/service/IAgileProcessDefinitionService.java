@@ -24,4 +24,12 @@ public interface IAgileProcessDefinitionService extends IAgileBaseService<AgileP
      * @return
      */
     boolean processDefinitionSuspend(String id);
+
+    /**
+     * 修改流程定义为主版本
+     * @param id
+     * @return
+     */
+    boolean updateMainVersion(String id);
+
 }

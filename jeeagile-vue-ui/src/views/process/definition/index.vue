@@ -52,7 +52,13 @@
           <el-tag type="warning" v-if="scope.row.suspensionState === 2">挂起</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="300" align="center" class-name="small-padding">
+      <el-table-column label="主版本" align="center" prop="mainVersion">
+        <template slot-scope="scope">
+          <el-tag type="success" v-if="scope.row.mainVersion === 1">主版本</el-tag>
+          <el-tag type="warning" v-if="scope.row.mainVersion === 2">非主版本</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="350" align="center" class-name="small-padding">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleProcessView(scope.row)">
             流程
@@ -71,6 +77,10 @@
 
           <el-button size="mini" type="text" icon="el-icon-delete"
                      @click="handleProcessDefinitionDelete(scope.row)" v-hasPerm="['process:definition:delete']">删除
+          </el-button>
+          <el-button v-if="scope.row.mainVersion==2" size="mini" type="text" icon="el-icon-setting"
+                     @click="handleMainVersion(scope.row)" v-hasPerm="['process:definition:main']">
+            设置为主版本
           </el-button>
         </template>
       </el-table-column>
@@ -97,7 +107,8 @@
     detailProcessDefinition,
     activeProcessDefinition,
     suspendProcessDefinition,
-    deleteProcessDefinition
+    deleteProcessDefinition,
+    updateMainVersion
   } from '@/api/process/definition'
   import {
     selectProcessModelList
@@ -194,6 +205,7 @@
           })
         })
       },
+      /** 流程定义激活 */
       handleProcessActive(row) {
         activeProcessDefinition(row.id).then(response => {
             this.getProcessDefinitionList()
@@ -201,10 +213,19 @@
           }
         )
       },
+      /** 流程定义挂起 */
       handleProcessSuspend(row) {
         suspendProcessDefinition(row.id).then(response => {
             this.getProcessDefinitionList()
             this.messageSuccess('流程定义挂起成功')
+          }
+        )
+      },
+      /** 设置主版本 */
+      handleMainVersion(row) {
+        updateMainVersion(row.id).then(response => {
+            this.getProcessDefinitionList()
+            this.messageSuccess('流程定义主版本设置成功')
           }
         )
       },

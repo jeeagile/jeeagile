@@ -24,3 +24,8 @@ export const activeProcessDefinition = definitionId => postApi('/process/definit
  * 挂起流程定义
  */
 export const suspendProcessDefinition = definitionId => postApi('/process/definition/suspend', definitionId)
+
+/**
+ * 设置为主版本
+ */
+export const updateMainVersion = definitionId => postApi('/process/definition/updateMainVersion', definitionId)
