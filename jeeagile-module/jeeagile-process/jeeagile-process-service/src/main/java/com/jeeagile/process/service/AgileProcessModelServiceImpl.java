@@ -1,6 +1,7 @@
 package com.jeeagile.process.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
@@ -14,6 +15,8 @@ import com.jeeagile.process.support.IAgileProcessService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * @author JeeAgile
@@ -58,7 +61,6 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
     public void updateModelValidate(AgileProcessModel agileProcessModel) {
         handlerDeploymentStatus(agileProcessModel);
         agileProcessModel.setDeploymentTime(null);
-        agileProcessModel.setDeploymentId("");
         this.validateProcessForm(agileProcessModel);
         this.validateProcessModel(agileProcessModel);
     }
@@ -115,8 +117,6 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
         }
         agileProcessModel.setModelXml(modelXml);
         handlerDeploymentStatus(agileProcessModel);
-        agileProcessModel.setUpdateUser(null);
-        agileProcessModel.setUpdateTime(null);
         this.updateModel(agileProcessModel);
         return agileProcessModel;
     }
@@ -130,7 +130,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
                 throw new AgileFrameException("当前流程已处于发布状态！");
             }
             if (AgileStringUtil.isEmpty(agileProcessModel.getModelXml())) {
-                throw new AgileFrameException("流程模型不存在，请先进行流程设计！");
+                throw new AgileFrameException("请先进行流程设计！");
             }
             AgileProcessForm agileProcessForm = null;
             if (agileProcessModel.getFormType().equals("1")) {
@@ -143,9 +143,10 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
                 }
             }
             //流程发布
-            agileProcessService.processDeployment(agileProcessModel);
-            String definitionId = agileProcessService.getProcessDefinitionId(agileProcessModel.getDeploymentId());
-
+            String deploymentId = agileProcessService.processDeployment(agileProcessModel);
+            String definitionId = agileProcessService.getProcessDefinitionId(deploymentId);
+            agileProcessModel.setDeploymentStatus("1");
+            agileProcessModel.setDeploymentTime(new Date());
             AgileProcessDefinition agileProcessDefinition = new AgileProcessDefinition();
             BeanUtils.copyProperties(agileProcessModel, agileProcessDefinition);
             if (agileProcessModel.getFormType().equals("1")) {
@@ -153,15 +154,18 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
                 agileProcessDefinition.setFormFields(agileProcessForm.getFormFields());
             }
             agileProcessDefinition.setSuspensionState(1);
+            agileProcessDefinition.setDeploymentId(deploymentId);
             agileProcessDefinition.setDefinitionId(definitionId);
             agileProcessDefinition.setModelId(agileProcessModel.getId());
             agileProcessDefinition.setId(null);
-            agileProcessDefinitionService.save(agileProcessDefinition);
+            agileProcessDefinitionService.saveModel(agileProcessDefinition);
+
             return this.updateById(agileProcessModel);
         } else {
             throw new AgileFrameException("流程已不存在无法进行发布操作！");
         }
     }
+
 
     /**
      * 处理发布状态 如果已处于发布状态则修改状态为未发布，且将版本号加一

@@ -12,24 +12,19 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
 @Component
 public class AgileActivitiProcessService implements IAgileProcessService {
     @Autowired
     private RepositoryService repositoryService;
 
     @Override
-    public AgileProcessModel processDeployment(AgileProcessModel agileProcessModel) {
+    public String processDeployment(AgileProcessModel agileProcessModel) {
         Deployment deployment = repositoryService.createDeployment()
                 .addString(agileProcessModel.getId() + ".bpmn", agileProcessModel.getModelXml())
                 .name(agileProcessModel.getModelName())
                 .key(agileProcessModel.getModelCode())
                 .deploy();
-        agileProcessModel.setDeploymentId(deployment.getId());
-        agileProcessModel.setDeploymentTime(new Date());
-        agileProcessModel.setDeploymentStatus("1");
-        return agileProcessModel;
+        return deployment.getId();
     }
 
     @Override

@@ -14,7 +14,7 @@ public interface IAgileProcessService {
      * @param agileProcessModel
      * @return
      */
-    AgileProcessModel processDeployment(AgileProcessModel agileProcessModel);
+    String processDeployment(AgileProcessModel agileProcessModel);
 
     /**
      * 通过流程部署ID获取流程定义ID

@@ -59,10 +59,6 @@ public class AgileProcessModel extends AgileBaseModel<AgileProcessModel> {
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Date deploymentTime;
     /**
-     * 流程部署ID（流程组件生成）
-     */
-    private String deploymentId;
-    /**
      * 备注
      */
     private String remark;
