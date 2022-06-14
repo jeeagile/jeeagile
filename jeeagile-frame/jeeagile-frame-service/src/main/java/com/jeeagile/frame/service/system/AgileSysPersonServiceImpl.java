@@ -9,9 +9,9 @@ import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.entity.system.*;
+import com.jeeagile.frame.util.AgileBeanUtils;
 import com.jeeagile.frame.vo.system.AgilePersonInfo;
 import com.jeeagile.frame.vo.system.AgileSysPerson;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class AgileSysPersonServiceImpl implements IAgileSysPersonService {
         AgileBaseUser userData = AgileSecurityContext.getUserData();
         AgileSysUser agileSysUser = agileSysUserService.getById(userData.getUserId());
         if (agileSysUser != null && AgileStringUtil.isNotEmpty(agileSysUser.getId())) {
-            BeanUtils.copyProperties(agileSysUser, agileSysPerson);
+            AgileBeanUtils.copyProperties(agileSysUser, agileSysPerson);
             agileSysPerson.setDeptName(userData.getDeptName());
             agileSysPerson.setRoleNameList(this.getRoleNameByUserId(agileSysUser.getId()));
             agileSysPerson.setPostNameList(this.getPostNameByUserId(agileSysUser.getId()));
@@ -53,7 +53,7 @@ public class AgileSysPersonServiceImpl implements IAgileSysPersonService {
     @Override
     public boolean updatePersonInfo(AgilePersonInfo agilePersonInfo) {
         AgileSysUser agileSysUser = new AgileSysUser();
-        BeanUtils.copyProperties(agilePersonInfo, agileSysUser);
+        AgileBeanUtils.copyProperties(agilePersonInfo, agileSysUser);
         agileSysUser.setId(AgileSecurityContext.getUserId());
         return agileSysUserService.updateById(agileSysUser);
     }

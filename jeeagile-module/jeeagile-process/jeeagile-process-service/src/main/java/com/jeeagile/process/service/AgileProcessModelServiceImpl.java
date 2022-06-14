@@ -1,18 +1,17 @@
 package com.jeeagile.process.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import com.jeeagile.frame.util.AgileBeanUtils;
 import com.jeeagile.process.entity.AgileProcessDefinition;
 import com.jeeagile.process.entity.AgileProcessForm;
 import com.jeeagile.process.entity.AgileProcessModel;
 import com.jeeagile.process.mapper.AgileProcessModelMapper;
 import com.jeeagile.process.support.IAgileProcessService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -148,7 +147,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
             agileProcessModel.setDeploymentStatus("1");
             agileProcessModel.setDeploymentTime(new Date());
             AgileProcessDefinition agileProcessDefinition = new AgileProcessDefinition();
-            BeanUtils.copyProperties(agileProcessModel, agileProcessDefinition);
+            AgileBeanUtils.copyProperties(agileProcessModel, agileProcessDefinition);
             if (agileProcessModel.getFormType().equals("1")) {
                 agileProcessDefinition.setFormName(agileProcessForm.getFormName());
                 agileProcessDefinition.setFormConf(agileProcessForm.getFormConf());

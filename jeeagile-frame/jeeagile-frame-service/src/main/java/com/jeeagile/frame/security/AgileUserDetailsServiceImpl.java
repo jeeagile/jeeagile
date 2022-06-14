@@ -16,7 +16,7 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.entity.system.*;
 import com.jeeagile.frame.service.system.*;
 import com.jeeagile.frame.user.AgileUserData;
-import org.springframework.beans.BeanUtils;
+import com.jeeagile.frame.util.AgileBeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -111,7 +111,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
 
     private AgileUserData getAgileUserData(AgileSysUser agileSysUser) {
         AgileUserData agileUserData = new AgileUserData();
-        BeanUtils.copyProperties(agileSysUser, agileUserData);
+        AgileBeanUtils.copyProperties(agileSysUser, agileUserData);
         agileUserData.setPassword(agileSysUser.getUserPwd());
         agileUserData.setUserId(agileSysUser.getId());
         return agileUserData;
