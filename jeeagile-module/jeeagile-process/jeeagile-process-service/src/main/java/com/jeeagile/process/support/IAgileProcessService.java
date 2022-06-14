@@ -2,6 +2,8 @@ package com.jeeagile.process.support;
 
 import com.jeeagile.process.entity.AgileProcessModel;
 
+import java.util.Map;
+
 /**
  * @author JeeAgile
  * @date 2022-06-02
@@ -25,6 +27,14 @@ public interface IAgileProcessService {
     String getProcessDefinitionId(String deploymentId);
 
     /**
+     * 校验流程定义
+     *
+     * @param definitionId
+     * @return
+     */
+    boolean checkProcessDefinition(String definitionId);
+
+    /**
      * 流程定义激活
      *
      * @param definitionId
@@ -39,4 +49,13 @@ public interface IAgileProcessService {
      * @return
      */
     boolean processDefinitionSuspend(String definitionId);
+
+    /**
+     * 启动流程实例
+     *
+     * @param definitionId
+     * @param variables
+     * @return
+     */
+    String startProcessInstance(String definitionId, Map<String, Object> variables);
 }

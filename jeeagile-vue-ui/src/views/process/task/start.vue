@@ -90,7 +90,8 @@
 <script>
   import {
     selectProcessDefinitionPage,
-    detailProcessDefinition
+    detailProcessDefinition,
+    startProcessInstance
   } from '@/api/process/task'
   import FormParser from '@/components/FormDesigner/parser/Parser'
 
@@ -189,7 +190,10 @@
         this.selectProcess = false
       },
       handleSubmitProcess(formData) {
-        alert(JSON.stringify(formData))
+        startProcessInstance({ processDefinitionId: this.processDefinition.id, formData: formData }).then(response => {
+            this.messageSuccess('业务流程《' + this.processDefinition.modelName + '》发起成功')
+          }
+        )
       },
       /** 搜索按钮操作 */
       handleQuery() {

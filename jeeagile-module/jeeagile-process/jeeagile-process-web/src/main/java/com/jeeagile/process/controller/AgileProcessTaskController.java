@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @AgileLogger("我的事务")
 @RequestMapping("/process/task")
@@ -34,5 +36,11 @@ public class AgileProcessTaskController extends AgileBaseController {
     @ApiOperation(value = "查看流程定义信息", notes = "查看流程定义信息")
     public AgileResult<AgileProcessDefinition> detailProcessDefinition(@SingleRequestBody String processDefinitionId) {
         return AgileResult.success(agileProcessTaskService.getProcessDefinitionInfo(processDefinitionId));
+    }
+
+    @PostMapping(value = "/startProcessInstance")
+    @ApiOperation(value = "查看流程定义信息", notes = "查看流程定义信息")
+    public AgileResult<AgileProcessDefinition> startProcessInstance(@SingleRequestBody String processDefinitionId, @SingleRequestBody Map<String, Object> formData) {
+        return AgileResult.success(agileProcessTaskService.startProcessInstance(processDefinitionId,formData));
     }
 }

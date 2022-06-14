@@ -4,6 +4,8 @@ import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.process.entity.AgileProcessDefinition;
 
+import java.util.Map;
+
 
 /**
  * @author JeeAgile
@@ -26,4 +28,13 @@ public interface IAgileProcessTaskService {
      * @return
      */
     AgileProcessDefinition getProcessDefinitionInfo(String processDefinitionId);
+
+    /**
+     * 启动流程定义
+     *
+     * @param processDefinitionId 流程定义ID
+     * @param formData            表单数据
+     * @return
+     */
+    boolean startProcessInstance(String processDefinitionId, Map<String, Object> formData);
 }

@@ -1,14 +1,22 @@
 package com.jeeagile.process.service;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.exception.AgileFrameException;
+import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
+import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
+import com.jeeagile.frame.util.AgileBeanUtils;
 import com.jeeagile.process.entity.AgileProcessDefinition;
-import com.jeeagile.process.entity.AgileProcessForm;
-import com.jeeagile.process.entity.AgileProcessModel;
+import com.jeeagile.process.entity.AgileProcessInstance;
+import com.jeeagile.process.support.IAgileProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  * @author JeeAgile
@@ -18,9 +26,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 @AgileService
 public class AgileProcessTaskServiceImpl implements IAgileProcessTaskService {
     @Autowired
-    private IAgileProcessModelService agileProcessModelService;
-    @Autowired
     private IAgileProcessDefinitionService agileProcessDefinitionService;
+    @Autowired
+    private IAgileProcessInstanceService agileProcessInstanceService;
+    @Autowired
+    private IAgileProcessService agileProcessService;
 
     @Override
     public AgilePage<AgileProcessDefinition> selectProcessDefinitionPage(AgilePageable<AgileProcessDefinition> agilePageable) {
@@ -40,7 +50,7 @@ public class AgileProcessTaskServiceImpl implements IAgileProcessTaskService {
             }
         }
         lambdaQueryWrapper.eq(AgileProcessDefinition::getSuspensionState, 1);
-        lambdaQueryWrapper.eq(AgileProcessDefinition::getMainVersion,1);
+        lambdaQueryWrapper.eq(AgileProcessDefinition::getMainVersion, 1);
         lambdaQueryWrapper.orderByDesc(AgileProcessDefinition::getModelCode, AgileProcessDefinition::getModelVersion);
         return agileProcessDefinitionService.page(agilePage, lambdaQueryWrapper);
     }
@@ -48,5 +58,29 @@ public class AgileProcessTaskServiceImpl implements IAgileProcessTaskService {
     @Override
     public AgileProcessDefinition getProcessDefinitionInfo(String processDefinitionId) {
         return agileProcessDefinitionService.selectModel(processDefinitionId);
+    }
+
+    @Override
+    public boolean startProcessInstance(String processDefinitionId, Map<String, Object> formData) {
+        AgileProcessDefinition agileProcessDefinition = agileProcessDefinitionService.selectModel(processDefinitionId);
+        if (agileProcessDefinition == null || agileProcessDefinition.isEmptyPk()) {
+            throw new AgileValidateException("流程定义已不存在！");
+        }
+        if (!agileProcessService.checkProcessDefinition(agileProcessDefinition.getDefinitionId())) {
+            throw new AgileValidateException("流程定义校验未通过，不能发起流程！");
+        }
+        String instanceId = agileProcessService.startProcessInstance(agileProcessDefinition.getDefinitionId(), formData);
+        if (AgileStringUtil.isEmpty(instanceId)) {
+            throw new AgileFrameException("流程启动失败！");
+        }
+        AgileProcessInstance agileProcessInstance = new AgileProcessInstance();
+        AgileBeanUtils.copyProperties(agileProcessDefinition, agileProcessInstance);
+        agileProcessInstance.setInstanceId(instanceId);
+        agileProcessInstance.setStartUser(AgileSecurityUtil.getUserId());
+        agileProcessInstance.setStartTime(new Date());
+        agileProcessInstance.setFormData(JSON.toJSONString(formData));
+        agileProcessInstance.setInstanceStatus("1");
+        agileProcessInstanceService.saveModel(agileProcessInstance);
+        return true;
     }
 }

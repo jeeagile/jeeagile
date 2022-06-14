@@ -6,16 +6,23 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.process.entity.AgileProcessModel;
 import com.jeeagile.process.support.IAgileProcessService;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.impl.persistence.entity.SuspensionState;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.Map;
 
 @Component
 public class AgileActivitiProcessService implements IAgileProcessService {
     @Autowired
     private RepositoryService repositoryService;
+    @Resource
+    private RuntimeService runtimeService;
 
     @Override
     public String processDeployment(AgileProcessModel agileProcessModel) {
@@ -37,6 +44,18 @@ public class AgileActivitiProcessService implements IAgileProcessService {
     }
 
     @Override
+    public boolean checkProcessDefinition(String definitionId) {
+        ProcessDefinition processDefinition = repositoryService.getProcessDefinition(definitionId);
+        if (processDefinition == null) {
+            throw new AgileValidateException("流程定义已不存在！");
+        }
+        if (processDefinition.isSuspended()) {
+            throw new AgileValidateException("流程定义处于挂起状态！");
+        }
+        return true;
+    }
+
+    @Override
     public boolean processDefinitionActive(String definitionId) {
         return updateSuspensionState(definitionId, SuspensionState.ACTIVE);
     }
@@ -44,6 +63,15 @@ public class AgileActivitiProcessService implements IAgileProcessService {
     @Override
     public boolean processDefinitionSuspend(String definitionId) {
         return updateSuspensionState(definitionId, SuspensionState.SUSPENDED);
+    }
+
+    @Override
+    public String startProcessInstance(String definitionId, Map<String, Object> variables) {
+        ProcessInstance processInstance = runtimeService.startProcessInstanceById(definitionId, variables);
+        if (processInstance == null || AgileStringUtil.isEmpty(processInstance.getId())) {
+            throw new AgileFrameException("流程定义启动失败！");
+        }
+        return processInstance.getId();
     }
 
     /**
