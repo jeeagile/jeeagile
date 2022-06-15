@@ -15,6 +15,7 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -196,25 +197,25 @@ public class AgileActivitiProcessService implements IAgileProcessService {
             agileProcessHistory.setInstanceId(historicActivityInstance.getProcessInstanceId());
             if (historicActivityInstance.getActivityType().equals("startEvent")) {
                 agileProcessHistory.setDurationTime("0秒");
-                agileProcessHistory.setStatus("开始");
+                agileProcessHistory.setStatus("已完成");
                 agileProcessHistory.setMessage("发起流程");
             } else if (historicActivityInstance.getActivityType().equals("userTask")) {
                 if (AgileStringUtil.isNotEmpty(historicActivityInstance.getEndTime())) {
+                    agileProcessHistory.setStatus("已完成");
                     if (AgileStringUtil.isNotEmpty(historicActivityInstance.getDeleteReason())) {
-                        agileProcessHistory.setStatus(historicActivityInstance.getDeleteReason());
+                        agileProcessHistory.setMessage(historicActivityInstance.getDeleteReason());
                     } else {
-                        agileProcessHistory.setStatus("同意");
+                        List<Comment> commentList = taskService.getTaskComments(historicActivityInstance.getTaskId());
+                        StringBuffer message = new StringBuffer("");
+                        for (Comment comment : commentList) {
+                            message.append(comment.getFullMessage()).append(";");
+                        }
+                        agileProcessHistory.setMessage(message.toString());
                     }
-                    List<Comment> commentList = taskService.getTaskComments(historicActivityInstance.getTaskId());
-                    StringBuffer message = new StringBuffer("");
-                    for (Comment comment : commentList) {
-                        message.append(comment.getFullMessage()).append(";");
-                    }
-                    agileProcessHistory.setMessage(message.toString());
                     String durationTime = AgileDateUtil.formatDateAgo(historicActivityInstance.getDurationInMillis());
                     agileProcessHistory.setDurationTime(durationTime);
                 } else {
-                    agileProcessHistory.setStatus("等待审核");
+                    agileProcessHistory.setStatus("办理中");
                     agileProcessHistory.setDurationTime("--秒");
                 }
             } else if (historicActivityInstance.getActivityType().equals("endEvent")) {
@@ -231,6 +232,7 @@ public class AgileActivitiProcessService implements IAgileProcessService {
 
     @Override
     public boolean cancelProcessInstance(String instanceId, String deleteReason) {
+        Authentication.setAuthenticatedUserId(AgileSecurityUtil.getUserId());
         runtimeService.deleteProcessInstance(instanceId, deleteReason);
         return true;
     }
