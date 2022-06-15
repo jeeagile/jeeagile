@@ -3,6 +3,7 @@ package com.jeeagile.frame.entity;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
+import com.jeeagile.core.security.util.AgileSecurityUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -62,5 +63,37 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
     @Override
     public Serializable pkVal() {
         return this.id;
+    }
+
+    /**
+     * 设置当前创建人和创建时间
+     */
+    public void setCreatValue() {
+        this.setCreateUser(AgileSecurityUtil.getUserId());
+        this.setCreateTime(new Date());
+    }
+
+    /**
+     * 设置当前更新人和更新时间
+     */
+    public void setUpdateValue() {
+        this.setUpdateUser(AgileSecurityUtil.getUserId());
+        this.setUpdateTime(null);
+    }
+
+    /**
+     * 更新创建人和创建时间为null
+     */
+    public void setCreatNullValue() {
+        this.setCreateUser(null);
+        this.setCreateTime(null);
+    }
+
+    /**
+     * 更新更新人和更新时间为null
+     */
+    public void setUpdateNullValue() {
+        this.setUpdateUser(null);
+        this.setUpdateTime(null);
     }
 }

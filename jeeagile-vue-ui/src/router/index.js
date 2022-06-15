@@ -143,6 +143,12 @@ export const agileRouter = [
         component: (resolve) => require(['@/views/process/definition/index'], resolve),
         name: 'ProcessDefinition',
         meta: { title: '流程定义' }
+      },
+      {
+        path: 'instance/detail/:instanceId(.*)',
+        component: (resolve) => require(['@/views/process/instance/detail'], resolve),
+        name: 'DetailInstance',
+        meta: { title: '流程实例信息' }
       }
     ]
   }

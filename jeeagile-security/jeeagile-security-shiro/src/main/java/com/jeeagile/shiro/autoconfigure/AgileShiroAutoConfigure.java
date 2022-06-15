@@ -40,6 +40,7 @@ import java.util.Map;
 @Configuration
 @EnableConfigurationProperties(AgileSecurityProperties.class)
 public class AgileShiroAutoConfigure {
+
     @Resource
     private AgileSecurityProperties agileSecurityProperties;
 
@@ -143,9 +144,7 @@ public class AgileShiroAutoConfigure {
     public SecurityManager agileShiroSecurityManager(AgileAuthorizingRealm agileAuthorizingRealm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(agileAuthorizingRealm);
-        //配置 ehcache缓存管理器
         securityManager.setCacheManager(agileShiroCacheManager());
-        //配置自定义session管理，使用ehcache 或redis
         securityManager.setSessionManager(sessionManager());
         return securityManager;
     }

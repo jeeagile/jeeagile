@@ -17,10 +17,8 @@ public class AgileBeanUtils {
                 AgileBaseModel agileBaseModel = (AgileBaseModel) target;
                 if (agileBaseModel != null) {
                     agileBaseModel.setId(null);
-                    agileBaseModel.setCreateUser(null);
-                    agileBaseModel.setCreateTime(null);
-                    agileBaseModel.setUpdateUser(null);
-                    agileBaseModel.setUpdateTime(null);
+                    agileBaseModel.setCreatNullValue();
+                    agileBaseModel.setUpdateNullValue();
                 }
             }
         } catch (Exception ex) {

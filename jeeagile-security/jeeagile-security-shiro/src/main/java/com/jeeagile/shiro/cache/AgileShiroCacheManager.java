@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  */
 public class AgileShiroCacheManager extends AbstractCacheManager {
-    @Autowired()
+    @Autowired
     private org.springframework.cache.CacheManager cacheManager;
 
     @Override

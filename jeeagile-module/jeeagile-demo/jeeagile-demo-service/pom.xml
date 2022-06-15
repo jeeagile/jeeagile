@@ -59,10 +59,10 @@
 <!--            <artifactId>jeeagile-protocol-dubbo</artifactId>-->
 <!--        </dependency>-->
 
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.sf.ehcache</groupId>-->
+<!--            <artifactId>ehcache</artifactId>-->
+<!--        </dependency>-->
 
     </dependencies>
 </project>

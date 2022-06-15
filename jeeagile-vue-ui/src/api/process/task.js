@@ -14,3 +14,9 @@ export const detailProcessDefinition = definitionId => postApi('/process/task/de
  * 启动流程定义
  */
 export const startProcessInstance = definitionId => postApi('/process/task/startProcessInstance', definitionId)
+
+/**
+ * 查询我的发起
+ */
+export const selectProcessInstancePage = data => postApi('/process/task/selectProcessInstancePage', data)
+

@@ -8,6 +8,7 @@ import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.process.entity.AgileProcessDefinition;
+import com.jeeagile.process.entity.AgileProcessInstance;
 import com.jeeagile.process.service.IAgileProcessTaskService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +36,7 @@ public class AgileProcessTaskController extends AgileBaseController {
     @PostMapping(value = "/detailProcessDefinition")
     @ApiOperation(value = "查看流程定义信息", notes = "查看流程定义信息")
     public AgileResult<AgileProcessDefinition> detailProcessDefinition(@SingleRequestBody String processDefinitionId) {
-        return AgileResult.success(agileProcessTaskService.getProcessDefinitionInfo(processDefinitionId));
+        return AgileResult.success(agileProcessTaskService.selectProcessDefinitionInfo(processDefinitionId));
     }
 
     @PostMapping(value = "/startProcessInstance")
@@ -43,4 +44,11 @@ public class AgileProcessTaskController extends AgileBaseController {
     public AgileResult<AgileProcessDefinition> startProcessInstance(@SingleRequestBody String processDefinitionId, @SingleRequestBody Map<String, Object> formData) {
         return AgileResult.success(agileProcessTaskService.startProcessInstance(processDefinitionId,formData));
     }
+
+    @PostMapping(value = "/selectProcessInstancePage")
+    @ApiOperation(value = "查询我的发起", notes = "查询我的发起")
+    public AgileResult<AgilePage<AgileProcessInstance>> selectProcessInstancePage(@RequestBody AgilePageable<AgileProcessInstance> agilePageable) {
+        return AgileResult.success(agileProcessTaskService.selectProcessInstancePage(agilePageable));
+    }
+
 }

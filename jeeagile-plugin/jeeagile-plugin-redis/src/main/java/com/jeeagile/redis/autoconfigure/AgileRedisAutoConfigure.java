@@ -27,7 +27,7 @@ public class AgileRedisAutoConfigure {
     private RedisConnectionFactory redisConnectionFactory;
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(name = {"stringRedisTemplate"})
     public StringRedisTemplate stringRedisTemplate() {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         stringRedisTemplate.setConnectionFactory(redisConnectionFactory);

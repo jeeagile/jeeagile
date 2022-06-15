@@ -3,6 +3,7 @@ package com.jeeagile.process.service;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.process.entity.AgileProcessDefinition;
+import com.jeeagile.process.entity.AgileProcessInstance;
 
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public interface IAgileProcessTaskService {
      * @param processDefinitionId
      * @return
      */
-    AgileProcessDefinition getProcessDefinitionInfo(String processDefinitionId);
+    AgileProcessDefinition selectProcessDefinitionInfo(String processDefinitionId);
 
     /**
      * 启动流程定义
@@ -37,4 +38,15 @@ public interface IAgileProcessTaskService {
      * @return
      */
     boolean startProcessInstance(String processDefinitionId, Map<String, Object> formData);
+
+
+    /**
+     * 查询当前用户发起的流程
+     *
+     * @param agilePageable
+     * @return
+     */
+    AgilePage<AgileProcessInstance> selectProcessInstancePage(AgilePageable<AgileProcessInstance> agilePageable);
+
+
 }

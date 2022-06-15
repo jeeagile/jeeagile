@@ -1,9 +1,11 @@
 package com.jeeagile.process.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseModel;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author JeeAgile
@@ -77,7 +79,7 @@ public class AgileProcessInstance extends AgileBaseModel<AgileProcessInstance> {
      */
     private int suspensionState;
     /**
-     * 流程实例状态(1:正在办理中)
+     * 流程实例状态(0:已撤销 1:办理中)
      */
     private String instanceStatus;
     /**
@@ -92,4 +94,11 @@ public class AgileProcessInstance extends AgileBaseModel<AgileProcessInstance> {
      * 流程实例结束时间
      */
     private Date endTime;
+
+    /**
+     * 流程实例高亮线
+     */
+    @TableField(exist = false)
+    private Map<String, Object> highLineData;
+
 }

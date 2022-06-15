@@ -56,7 +56,7 @@ public class AgileProcessTaskServiceImpl implements IAgileProcessTaskService {
     }
 
     @Override
-    public AgileProcessDefinition getProcessDefinitionInfo(String processDefinitionId) {
+    public AgileProcessDefinition selectProcessDefinitionInfo(String processDefinitionId) {
         return agileProcessDefinitionService.selectModel(processDefinitionId);
     }
 
@@ -83,4 +83,31 @@ public class AgileProcessTaskServiceImpl implements IAgileProcessTaskService {
         agileProcessInstanceService.saveModel(agileProcessInstance);
         return true;
     }
+
+    @Override
+    public AgilePage<AgileProcessInstance> selectProcessInstancePage(AgilePageable<AgileProcessInstance> agilePageable) {
+        AgilePage<AgileProcessInstance> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
+        LambdaQueryWrapper<AgileProcessInstance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.select(AgileProcessInstance.class, i -> !"modelXml".contains(i.getProperty()) || !"formFields".contains(i.getProperty()) || !"formConfig".contains(i.getProperty()));
+        AgileProcessInstance agileProcessInstance = agilePageable.getQueryCond();
+        if (agileProcessInstance != null) {
+            if (AgileStringUtil.isNotEmpty(agileProcessInstance.getModelCode())) {
+                lambdaQueryWrapper.eq(AgileProcessInstance::getModelCode, agileProcessInstance.getModelCode());
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessInstance.getInstanceStatus())) {
+                lambdaQueryWrapper.like(AgileProcessInstance::getInstanceStatus, agileProcessInstance.getInstanceStatus());
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessInstance.getModelName())) {
+                lambdaQueryWrapper.like(AgileProcessInstance::getModelName, agileProcessInstance.getModelName());
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessInstance.getFormName())) {
+                lambdaQueryWrapper.like(AgileProcessInstance::getFormName, agileProcessInstance.getFormName());
+            }
+        }
+        lambdaQueryWrapper.eq(AgileProcessInstance::getStartUser, AgileSecurityUtil.getUserId());
+        lambdaQueryWrapper.orderByDesc(AgileProcessInstance::getStartTime);
+        return agileProcessInstanceService.page(agilePage, lambdaQueryWrapper);
+    }
+
+
 }

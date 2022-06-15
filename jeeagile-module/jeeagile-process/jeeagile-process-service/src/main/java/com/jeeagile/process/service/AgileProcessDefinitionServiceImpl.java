@@ -48,8 +48,7 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
         }
         agileProcessService.processDefinitionActive(agileProcessDefinition.getDefinitionId());
         agileProcessDefinition.setSuspensionState(1);
-        agileProcessDefinition.setUpdateTime(null);
-        agileProcessDefinition.setUpdateUser(null);
+        agileProcessDefinition.setUpdateValue();
         return this.updateById(agileProcessDefinition);
     }
 

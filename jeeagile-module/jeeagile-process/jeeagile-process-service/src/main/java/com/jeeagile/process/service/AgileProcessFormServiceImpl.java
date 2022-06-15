@@ -68,8 +68,7 @@ public class AgileProcessFormServiceImpl extends AgileBaseServiceImpl<AgileProce
         }
         agileProcessForm.setFormConf(formConf);
         agileProcessForm.setFormFields(formFields);
-        agileProcessForm.setUpdateUser(null);
-        agileProcessForm.setUpdateTime(null);
+        agileProcessForm.setUpdateValue();
         this.updateModel(agileProcessForm);
         return agileProcessForm;
     }

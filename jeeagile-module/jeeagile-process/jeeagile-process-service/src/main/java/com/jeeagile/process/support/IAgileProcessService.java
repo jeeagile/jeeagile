@@ -1,7 +1,9 @@
 package com.jeeagile.process.support;
 
 import com.jeeagile.process.entity.AgileProcessModel;
+import com.jeeagile.process.vo.AgileProcessHistory;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,4 +60,31 @@ public interface IAgileProcessService {
      * @return
      */
     String startProcessInstance(String definitionId, Map<String, Object> variables);
+
+
+    /**
+     * 获取流程高亮线
+     *
+     * @param definitionId 流程定义ID
+     * @param instanceId   流程实例ID
+     * @return
+     */
+    Map<String, Object> getProcessInstanceHighLineData(String definitionId, String instanceId);
+
+    /**
+     * 获取流程历史审批信息
+     *
+     * @param instanceId
+     * @return
+     */
+    List<AgileProcessHistory> getProcessInstanceHistoric(String instanceId);
+
+    /**
+     * 撤销流程实例
+     *
+     * @param instanceId   流程实例ID
+     * @param deleteReason 撤销原因
+     * @return
+     */
+    boolean cancelProcessInstance(String instanceId, String deleteReason);
 }
