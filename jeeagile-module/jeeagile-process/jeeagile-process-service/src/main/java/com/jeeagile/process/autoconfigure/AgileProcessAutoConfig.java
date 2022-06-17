@@ -1,12 +1,20 @@
 package com.jeeagile.process.autoconfigure;
 
+import com.jeeagile.process.support.activiti.listener.AgileActivitiEventListener;
+import org.activiti.engine.delegate.event.ActivitiEventListener;
+import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
-public class AgileProcessAutoConfig {
+public class AgileProcessAutoConfig implements ProcessEngineConfigurationConfigurer {
 
     /**
      * 临时解决activit用户安全问题
@@ -17,5 +25,12 @@ public class AgileProcessAutoConfig {
                 .anyRequest().permitAll().and().logout().permitAll()
                 .and().headers().frameOptions().sameOrigin()
                 .and().csrf().disable().build();
+    }
+
+    @Override
+    public void configure(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
+        List<ActivitiEventListener> activitiEventListenerList=new ArrayList<>();
+        activitiEventListenerList.add(new AgileActivitiEventListener());
+        springProcessEngineConfiguration.setEventListeners(activitiEventListenerList);
     }
 }
