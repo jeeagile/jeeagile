@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.page.AgilePage;
+import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.process.entity.AgileProcessDefinition;
 import com.jeeagile.process.mapper.AgileProcessDefinitionMapper;
@@ -38,6 +40,29 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
         }
         lambdaQueryWrapper.orderByDesc(AgileProcessDefinition::getModelVersion);
         return lambdaQueryWrapper;
+    }
+
+    @Override
+    public AgilePage<AgileProcessDefinition> selectMainVersionPage(AgilePageable<AgileProcessDefinition> agilePageable) {
+        AgilePage<AgileProcessDefinition> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
+        LambdaQueryWrapper<AgileProcessDefinition> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.select(AgileProcessDefinition.class, i -> !"modelXml".contains(i.getProperty()) || !"formFields".contains(i.getProperty()) || !"formConfig".contains(i.getProperty()));
+        AgileProcessDefinition agileProcessDefinition = agilePageable.getQueryCond();
+        if (agileProcessDefinition != null) {
+            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getModelCode())) {
+                lambdaQueryWrapper.eq(AgileProcessDefinition::getModelCode, agileProcessDefinition.getModelCode());
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getModelName())) {
+                lambdaQueryWrapper.like(AgileProcessDefinition::getModelName, agileProcessDefinition.getModelName());
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getFormName())) {
+                lambdaQueryWrapper.like(AgileProcessDefinition::getFormName, agileProcessDefinition.getFormName());
+            }
+        }
+        lambdaQueryWrapper.eq(AgileProcessDefinition::getSuspensionState, 1);
+        lambdaQueryWrapper.eq(AgileProcessDefinition::getMainVersion, 1);
+        lambdaQueryWrapper.orderByDesc(AgileProcessDefinition::getModelCode, AgileProcessDefinition::getModelVersion);
+        return this.page(agilePage, lambdaQueryWrapper);
     }
 
     @Override

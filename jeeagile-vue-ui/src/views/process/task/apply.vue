@@ -55,13 +55,11 @@
 
 <script>
   import {
-    selectProcessInstancePage
-  } from '@/api/process/task'
-  import {
+    selectApplyProcessPage,
     cancelProcessInstance
   } from '@/api/process/instance'
   export default {
-    name: 'Start',
+    name: 'Apply',
     data() {
       return {
         // 遮罩层
@@ -93,7 +91,7 @@
     methods: {
       /** 查询流程表单列表 */
       getProcessInstanceList() {
-        selectProcessInstancePage(this.queryParam).then(response => {
+        selectApplyProcessPage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
             this.processList = response.data.records
             this.loading = false

@@ -89,10 +89,12 @@
 
 <script>
   import {
-    selectProcessDefinitionPage,
-    detailProcessDefinition,
+    selectMainVersionProcess,
+    detailProcessDefinition
+  } from '@/api/process/definition'
+  import {
     startProcessInstance
-  } from '@/api/process/task'
+  } from '@/api/process/instance'
   import FormParser from '@/components/FormDesigner/parser/Parser'
 
   export default {
@@ -134,7 +136,7 @@
     methods: {
       /** 查询流程表单列表 */
       getProcessDefinitionList() {
-        selectProcessDefinitionPage(this.queryParam).then(response => {
+        selectMainVersionProcess(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
             this.processList = response.data.records
             this.loading = false

@@ -1,10 +1,13 @@
 package com.jeeagile.process.service;
 
+import com.jeeagile.frame.page.AgilePage;
+import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.IAgileBaseService;
 import com.jeeagile.process.entity.AgileProcessInstance;
 import com.jeeagile.process.vo.AgileProcessHistory;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author JeeAgile
@@ -12,6 +15,23 @@ import java.util.List;
  * @description 流程实例
  */
 public interface IAgileProcessInstanceService extends IAgileBaseService<AgileProcessInstance> {
+    /**
+     * 启动流程定义
+     *
+     * @param processDefinitionId 流程定义ID
+     * @param formData            表单数据
+     * @return
+     */
+    AgileProcessInstance startProcessInstance(String processDefinitionId, Map<String, Object> formData);
+
+    /**
+     * 查询当前用户发起的流程
+     *
+     * @param agilePageable
+     * @return
+     */
+    AgilePage<AgileProcessInstance> selectProcessInstancePage(AgilePageable<AgileProcessInstance> agilePageable);
+
     /**
      * 查询流程实例信息
      *

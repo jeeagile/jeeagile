@@ -29,3 +29,9 @@ export const suspendProcessDefinition = definitionId => postApi('/process/defini
  * 设置为主版本
  */
 export const updateMainVersion = definitionId => postApi('/process/definition/updateMainVersion', definitionId)
+
+
+/**
+ * 查询可发起流程定义列表
+ */
+export const selectMainVersionProcess = data => postApi('/process/definition/selectMainVersion', data)

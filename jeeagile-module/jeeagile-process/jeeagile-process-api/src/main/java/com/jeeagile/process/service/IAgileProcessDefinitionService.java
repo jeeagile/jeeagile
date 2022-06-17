@@ -1,5 +1,7 @@
 package com.jeeagile.process.service;
 
+import com.jeeagile.frame.page.AgilePage;
+import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.IAgileBaseService;
 import com.jeeagile.process.entity.AgileProcessDefinition;
 
@@ -9,6 +11,14 @@ import com.jeeagile.process.entity.AgileProcessDefinition;
  * @description 流程定义
  */
 public interface IAgileProcessDefinitionService extends IAgileBaseService<AgileProcessDefinition> {
+    /**
+     * 查询可发起流程列表
+     *
+     * @param agilePageable
+     * @return
+     */
+    AgilePage<AgileProcessDefinition> selectMainVersionPage(AgilePageable<AgileProcessDefinition> agilePageable);
+
     /**
      * 流程定义激活
      *
@@ -27,6 +37,7 @@ public interface IAgileProcessDefinitionService extends IAgileBaseService<AgileP
 
     /**
      * 修改流程定义为主版本
+     *
      * @param id
      * @return
      */
