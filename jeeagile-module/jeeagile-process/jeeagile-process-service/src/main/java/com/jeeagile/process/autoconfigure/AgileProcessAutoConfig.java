@@ -4,6 +4,7 @@ import com.jeeagile.process.support.activiti.listener.AgileActivitiEventListener
 import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.activiti.spring.boot.ProcessEngineConfigurationConfigurer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,8 @@ import java.util.List;
 @Configuration
 public class AgileProcessAutoConfig implements ProcessEngineConfigurationConfigurer {
 
+    @Autowired
+    private AgileActivitiEventListener agileActivitiEventListener;
     /**
      * 临时解决activit用户安全问题
      */
@@ -30,7 +33,7 @@ public class AgileProcessAutoConfig implements ProcessEngineConfigurationConfigu
     @Override
     public void configure(SpringProcessEngineConfiguration springProcessEngineConfiguration) {
         List<ActivitiEventListener> activitiEventListenerList=new ArrayList<>();
-        activitiEventListenerList.add(new AgileActivitiEventListener());
+        activitiEventListenerList.add(agileActivitiEventListener);
         springProcessEngineConfiguration.setEventListeners(activitiEventListenerList);
     }
 }

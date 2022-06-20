@@ -71,7 +71,7 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
         if (agileProcessDefinition == null && agileProcessDefinition.isEmptyPk()) {
             throw new AgileFrameException("流程定义已不存在！");
         }
-        agileProcessService.processDefinitionActive(agileProcessDefinition.getDefinitionId());
+        agileProcessService.processDefinitionActive(agileProcessDefinition.getId());
         agileProcessDefinition.setSuspensionState(1);
         agileProcessDefinition.setUpdateValue();
         return this.updateById(agileProcessDefinition);
@@ -83,7 +83,7 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
         if (agileProcessDefinition == null && agileProcessDefinition.isEmptyPk()) {
             throw new AgileFrameException("流程定义已不存在！");
         }
-        agileProcessService.processDefinitionSuspend(agileProcessDefinition.getDefinitionId());
+        agileProcessService.processDefinitionSuspend(agileProcessDefinition.getId());
         agileProcessDefinition.setSuspensionState(2);
         return this.updateById(agileProcessDefinition);
     }

@@ -40,26 +40,15 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
     private IAgileSysUserService agileSysUserService;
 
     @Override
-    public AgileProcessInstance startProcessInstance(String processDefinitionId, Map<String, Object> formData) {
+    public boolean startProcessInstance(String processDefinitionId, Map<String, Object> formData) {
         AgileProcessDefinition agileProcessDefinition = agileProcessDefinitionService.selectModel(processDefinitionId);
         if (agileProcessDefinition == null || agileProcessDefinition.isEmptyPk()) {
             throw new AgileValidateException("流程定义已不存在！");
         }
-        if (!agileProcessService.checkProcessDefinition(agileProcessDefinition.getDefinitionId())) {
+        if (!agileProcessService.checkProcessDefinition(agileProcessDefinition.getId())) {
             throw new AgileValidateException("流程定义校验未通过，不能发起流程！");
         }
-        String instanceId = agileProcessService.startProcessInstance(agileProcessDefinition.getDefinitionId(), formData);
-        if (AgileStringUtil.isEmpty(instanceId)) {
-            throw new AgileFrameException("流程启动失败！");
-        }
-        AgileProcessInstance agileProcessInstance = new AgileProcessInstance();
-        AgileBeanUtils.copyProperties(agileProcessDefinition, agileProcessInstance);
-        agileProcessInstance.setInstanceId(instanceId);
-        agileProcessInstance.setStartUser(AgileSecurityUtil.getUserId());
-        agileProcessInstance.setStartTime(new Date());
-        agileProcessInstance.setFormData(JSON.toJSONString(formData));
-        agileProcessInstance.setInstanceStatus("1");
-        return this.saveModel(agileProcessInstance);
+        return agileProcessService.startProcessInstance(agileProcessDefinition.getId(), formData);
     }
 
     @Override
@@ -94,7 +83,7 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
         if (agileProcessInstance == null && agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例已不存在！");
         }
-        agileProcessInstance.setHighLineData(agileProcessService.getProcessInstanceHighLineData(agileProcessInstance.getDefinitionId(), agileProcessInstance.getInstanceId()));
+        agileProcessInstance.setHighLineData(agileProcessService.getProcessInstanceHighLineData(agileProcessInstance.getDefinitionId(), processInstanceId));
         return agileProcessInstance;
     }
 
@@ -104,7 +93,7 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
         if (agileProcessInstance == null && agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例已不存在！");
         }
-        List<AgileProcessHistory> agileProcessHistoryList = agileProcessService.getProcessInstanceHistoric(agileProcessInstance.getInstanceId());
+        List<AgileProcessHistory> agileProcessHistoryList = agileProcessService.getProcessInstanceHistoric(processInstanceId);
         agileProcessHistoryList.forEach(agileProcessHistory -> {
             //执行人
             String assignee = agileProcessHistory.getAssignee();
@@ -127,10 +116,6 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
         if (agileProcessInstance == null && agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例已不存在！");
         }
-        agileProcessService.cancelProcessInstance(agileProcessInstance.getInstanceId(), "发起人撤销流程");
-        agileProcessInstance.setInstanceStatus("0");
-        agileProcessInstance.setEndTime(new Date());
-        agileProcessInstance.setUpdateValue();
-        return this.updateById(agileProcessInstance);
+        return agileProcessService.cancelProcessInstance(processInstanceId, "发起人撤销流程");
     }
 }

@@ -22,7 +22,7 @@ public interface IAgileProcessInstanceService extends IAgileBaseService<AgilePro
      * @param formData            表单数据
      * @return
      */
-    AgileProcessInstance startProcessInstance(String processDefinitionId, Map<String, Object> formData);
+    boolean startProcessInstance(String processDefinitionId, Map<String, Object> formData);
 
     /**
      * 查询当前用户发起的流程

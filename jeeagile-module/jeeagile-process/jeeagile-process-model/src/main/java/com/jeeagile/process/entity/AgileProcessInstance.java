@@ -63,17 +63,9 @@ public class AgileProcessInstance extends AgileBaseModel<AgileProcessInstance> {
      */
     private Date deploymentTime;
     /**
-     * 流程部署ID（流程组件生成）
-     */
-    private String deploymentId;
-    /**
-     * 流程定义ID（流程组件生成）
+     * 流程定义ID
      */
     private String definitionId;
-    /**
-     * 流程实例ID（流程组件生成）
-     */
-    private String instanceId;
     /**
      * 实例挂起状态(1:激活，2:挂起)
      */
@@ -86,6 +78,10 @@ public class AgileProcessInstance extends AgileBaseModel<AgileProcessInstance> {
      * 流程实例发起人员
      */
     private String startUser;
+    /**
+     * 流程实例发起人员名称
+     */
+    private String startUserName;
     /**
      * 流程实例启动时间
      */

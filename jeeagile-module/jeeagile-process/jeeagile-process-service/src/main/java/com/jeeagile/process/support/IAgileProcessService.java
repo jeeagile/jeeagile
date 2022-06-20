@@ -59,7 +59,7 @@ public interface IAgileProcessService {
      * @param variables
      * @return
      */
-    String startProcessInstance(String definitionId, Map<String, Object> variables);
+    boolean startProcessInstance(String definitionId, Map<String, Object> variables);
 
 
     /**

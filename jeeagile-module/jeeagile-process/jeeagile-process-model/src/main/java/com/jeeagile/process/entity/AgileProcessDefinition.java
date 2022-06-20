@@ -68,14 +68,6 @@ public class AgileProcessDefinition extends AgileBaseModel<AgileProcessDefinitio
      */
     private Date deploymentTime;
     /**
-     * 流程部署ID（流程组件生成）
-     */
-    private String deploymentId;
-    /**
-     * 流程定义ID（流程组件生成）
-     */
-    private String definitionId;
-    /**
      * 流程挂起状态(1:激活，2:挂起)
      */
     private int suspensionState;

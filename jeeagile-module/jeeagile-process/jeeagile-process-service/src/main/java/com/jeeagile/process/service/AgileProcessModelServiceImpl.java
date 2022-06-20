@@ -154,10 +154,8 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
                 agileProcessDefinition.setFormFields(agileProcessForm.getFormFields());
             }
             agileProcessDefinition.setSuspensionState(1);
-            agileProcessDefinition.setDeploymentId(deploymentId);
-            agileProcessDefinition.setDefinitionId(definitionId);
+            agileProcessDefinition.setId(definitionId);
             agileProcessDefinition.setModelId(agileProcessModel.getId());
-            agileProcessDefinition.setId(null);
             agileProcessDefinitionService.saveModel(agileProcessDefinition);
 
             return this.updateById(agileProcessModel);

@@ -8,7 +8,7 @@ export const selectProcessDefinitionPage = data => postApi('/process/definition/
 /**
  * 查看流程定义
  */
-export const detailProcessDefinition = definitionId => postApi('/process/definition/detail', definitionId)
+export const detailProcessDefinition = definitionId => postApi('/process/definition/info', definitionId)
 
 /**
  * 删除流程定义

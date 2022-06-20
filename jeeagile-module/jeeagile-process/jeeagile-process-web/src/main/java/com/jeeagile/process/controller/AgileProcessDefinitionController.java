@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
+
 /**
  * @author JeeAgile
  * @date 2022-06-06
@@ -33,7 +35,14 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
     @PostMapping(value = "/selectMainVersion")
     @ApiOperation(value = "查询可发起流程列表", notes = "查询可发起流程列表")
     public AgileResult<AgilePage<AgileProcessDefinition>> selectMainVersion(@RequestBody AgilePageable<AgileProcessDefinition> agilePageable) {
-        return AgileResult.success(this.getAgileBaseService().selectMainVersionPage(agilePageable));
+        return AgileResult.success(agileBaseService.selectMainVersionPage(agilePageable));
+    }
+
+    @PostMapping("/info")
+    @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
+    @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
+    public AgileResult<AgileProcessDefinition> info(@SingleRequestBody Serializable id) {
+        return AgileResult.success(agileBaseService.selectModel(id));
     }
 
     @PostMapping("/active")
@@ -42,7 +51,7 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
     @ApiOperation(value = "流程定义激活", notes = "流程定义激活")
     public AgileResult<AgileProcessDefinition> active(@SingleRequestBody String id) {
         try {
-            return AgileResult.success(this.getAgileBaseService().processDefinitionActive(id));
+            return AgileResult.success(agileBaseService.processDefinitionActive(id));
         } catch (Exception ex) {
             return AgileResult.error(ex, "流程定义激活异常！");
         }
@@ -54,7 +63,7 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
     @ApiOperation(value = "流程定义挂起", notes = "流程定义挂起")
     public AgileResult<AgileProcessDefinition> suspend(@SingleRequestBody String id) {
         try {
-            return AgileResult.success(this.getAgileBaseService().processDefinitionSuspend(id));
+            return AgileResult.success(agileBaseService.processDefinitionSuspend(id));
         } catch (Exception ex) {
             return AgileResult.error(ex, "流程定义挂起异常！");
         }
@@ -66,7 +75,7 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
     @ApiOperation(value = "设置主版本", notes = "设置主版本")
     public AgileResult<AgileProcessDefinition> updateMainVersion(@SingleRequestBody String id) {
         try {
-            return AgileResult.success(this.getAgileBaseService().updateMainVersion(id));
+            return AgileResult.success(agileBaseService.updateMainVersion(id));
         } catch (Exception ex) {
             return AgileResult.error(ex, "流程定义设置主版本异常！");
         }
