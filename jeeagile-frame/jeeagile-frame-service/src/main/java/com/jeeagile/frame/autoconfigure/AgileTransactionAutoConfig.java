@@ -62,13 +62,17 @@ public class AgileTransactionAutoConfig {
         source.addTransactionalMethod("create*", txAttrRequired);
         source.addTransactionalMethod("insert*", txAttrRequired);
         source.addTransactionalMethod("submit*", txAttrRequired);
-        source.addTransactionalMethod("del*", txAttrRequired);
+        source.addTransactionalMethod("delete*", txAttrRequired);
         source.addTransactionalMethod("remove*", txAttrRequired);
         source.addTransactionalMethod("update*", txAttrRequired);
         source.addTransactionalMethod("set*", txAttrRequired);
         source.addTransactionalMethod("exec*", txAttrRequired);
         source.addTransactionalMethod("change*", txAttrRequired);
         source.addTransactionalMethod("import*", txAttrRequired);
+        source.addTransactionalMethod("start*", txAttrRequired);
+        source.addTransactionalMethod("apply*", txAttrRequired);
+        source.addTransactionalMethod("cancel*", txAttrRequired);
+
 
         //对于查询方法，根据实际情况添加事务管理 可能存在查询多个数据时，已查询出来的数据刚好被改变的情况
         source.addTransactionalMethod("get*", txAttrRequiredReadOnly);
