@@ -25,9 +25,27 @@ public class AgileProcessTaskController extends AgileBaseController {
     private IAgileProcessTaskService agileProcessTaskService;
 
     @PostMapping(value = "/todo")
-    @ApiOperation(value = "查询我的代办", notes = "查询我的代办")
-    public AgileResult<AgilePage<AgileProcessTask>> selectMainVersion(@RequestBody AgilePageable<AgileProcessTask> agilePageable) {
+    @ApiOperation(value = "查询我的待办", notes = "查询我的待办")
+    public AgileResult<AgilePage<AgileProcessTask>> todo(@RequestBody AgilePageable<AgileProcessTask> agilePageable) {
         return AgileResult.success(agileProcessTaskService.selectTodo(agilePageable));
+    }
+
+    @PostMapping(value = "/done")
+    @ApiOperation(value = "查询我的已办", notes = "查询我的已办")
+    public AgileResult<AgilePage<AgileProcessTask>> done(@RequestBody AgilePageable<AgileProcessTask> agilePageable) {
+        return AgileResult.success(agileProcessTaskService.selectDone(agilePageable));
+    }
+
+    @PostMapping(value = "/approve")
+    @ApiOperation(value = "通过任务", notes = "通过任务")
+    public AgileResult<AgilePage<AgileProcessTask>> approve(@RequestBody AgileProcessTask agileProcessTask) {
+        return AgileResult.success(agileProcessTaskService.approveProcessTask(agileProcessTask));
+    }
+
+    @PostMapping(value = "/reject")
+    @ApiOperation(value = "驳回任务", notes = "驳回任务")
+    public AgileResult<AgilePage<AgileProcessTask>> reject(@RequestBody AgileProcessTask agileProcessTask) {
+        return AgileResult.success(agileProcessTaskService.rejectProcessTask(agileProcessTask));
     }
 
 }

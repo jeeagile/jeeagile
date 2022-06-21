@@ -48,5 +48,15 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
         return null;
     }
 
+    @Override
+    public AgileProcessTask approveProcessTask(AgileProcessTask agileProcessTask) {
+        return null;
+    }
+
+    @Override
+    public AgileProcessTask rejectProcessTask(AgileProcessTask agileProcessTask) {
+        return null;
+    }
+
 
 }

@@ -11,7 +11,7 @@ import com.jeeagile.process.entity.AgileProcessTask;
  * @date 2022-06-10
  * @description 我的事务
  */
-public interface IAgileProcessTaskService  extends IAgileBaseService<AgileProcessTask> {
+public interface IAgileProcessTaskService extends IAgileBaseService<AgileProcessTask> {
     /**
      * 查询我的代办
      *
@@ -28,4 +28,17 @@ public interface IAgileProcessTaskService  extends IAgileBaseService<AgileProces
      */
     AgilePage<AgileProcessTask> selectDone(AgilePageable<AgileProcessTask> agilePageable);
 
+    /**
+     * 通过任务
+     * @param agileProcessTask
+     * @return
+     */
+    AgileProcessTask approveProcessTask(AgileProcessTask agileProcessTask);
+
+    /**
+     * 驳回任务
+     * @param agileProcessTask
+     * @return
+     */
+    AgileProcessTask rejectProcessTask(AgileProcessTask agileProcessTask);
 }
