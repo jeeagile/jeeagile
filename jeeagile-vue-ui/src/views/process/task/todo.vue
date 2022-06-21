@@ -81,8 +81,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleApprove">同 意</el-button>
-        <el-button type="danger" @click="handleReject">驳 回</el-button>
+        <el-button type="primary" @click="handleApproveProcessTask">同 意</el-button>
+        <el-button type="danger" @click="handleRejectProcessTask">驳 回</el-button>
       </div>
     </el-dialog>
   </div>
@@ -234,7 +234,7 @@
           })
         }
       },
-      handleApprove() {
+      handleApproveProcessTask() {
         this.$refs.taskForm.validate(valid => {
           if (valid) {
             approveProcessTask({
@@ -248,7 +248,7 @@
           }
         })
       },
-      handleReject() {
+      handleRejectProcessTask() {
         this.$refs.taskForm.validate(valid => {
           if (valid) {
             rejectProcessTask({
