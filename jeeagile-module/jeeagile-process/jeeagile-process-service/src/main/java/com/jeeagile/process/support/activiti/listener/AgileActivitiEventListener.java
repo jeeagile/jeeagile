@@ -84,7 +84,6 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
     }
 
 
-
     private void processStarted(ActivitiProcessStartedEventImpl processStartedEvent) {
         AgileProcessDefinition agileProcessDefinition = agileProcessDefinitionService.getById(processStartedEvent.getProcessDefinitionId());
         if (agileProcessDefinition == null || agileProcessDefinition.isEmptyPk()) {
@@ -110,6 +109,7 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
         }
         AgileProcessTask agileProcessTask = new AgileProcessTask();
         AgileBeanUtils.copyProperties(agileProcessInstance, agileProcessTask);
+        agileProcessTask.setInstanceId(agileProcessInstance.getId());
         Task task = (Task) activitiEntityEvent.getEntity();
         agileProcessTask.setId(task.getId());
         agileProcessTask.setTaskName(task.getName());
@@ -129,7 +129,7 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
     }
 
     private void processCancelled(ActivitiProcessCancelledEventImpl processCancelledEvent) {
-        AgileProcessInstance agileProcessInstance =agileProcessInstanceService.getById(processCancelledEvent.getProcessInstanceId());
+        AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(processCancelledEvent.getProcessInstanceId());
         if (agileProcessInstance == null || agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例不存在！");
         }

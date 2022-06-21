@@ -37,10 +37,10 @@
       <el-table-column label="操作" width="200px" align="center" class-name="small-padding">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleProcessTask(scope.row)">
-            办理
+            流程办理
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleProcessView(scope.row)">
-            进度
+            流程进度
           </el-button>
         </template>
       </el-table-column>
@@ -53,16 +53,56 @@
     <el-dialog title="流程进度" :visible.sync="openView" width="700px" append-to-body>
       <process-view key="designer" v-model="processXml" :high-line-data="highLineData"/>
     </el-dialog>
+    <el-dialog title="流程办理" :visible.sync="handleProcess.openProcess" width="750px" append-to-body>
+      <el-tabs v-model="handleProcess.activeName" @tab-click="handleClick">
+        <el-tab-pane label="表单信息" name="formInfo">
+          <form-parser :key="new Date().getTime()" :form-conf="handleProcess.parserForm"
+                       :form-data="handleProcess.formData"/>
+        </el-tab-pane>
+        <el-tab-pane label="流程视图" name="processView">
+          <process-view key="designer" v-model="handleProcess.processXml" :high-line-data="handleProcess.highLineData"/>
+        </el-tab-pane>
+        <el-tab-pane label="流转信息" name="flowInfo">
+          <el-table v-loading="handleProcess.loading" :data="handleProcess.flowInfoList">
+            <el-table-column label="执行环节" align="center" prop="activityName" :show-overflow-tooltip="true"/>
+            <el-table-column label="执行人" align="center" prop="assigneeName" :show-overflow-tooltip="true"/>
+            <el-table-column label="开始时间" width="150" align="center" prop="startTime"/>
+            <el-table-column label="结束时间" width="150" align="center" prop="endTime"/>
+            <el-table-column label="办理状态" align="center" prop="status"/>
+            <el-table-column label="审批意见" align="center" prop="message"/>
+            <el-table-column label="任务历时" align="center" prop="durationTime"/>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+      <el-divider/>
+      <el-form ref="taskForm" :model="taskForm" :rules="taskRules" label-width="80px">
+        <el-form-item label="审批意见" prop="approvalMessage">
+          <el-input v-model="taskForm.approvalMessage" type="textarea" placeholder="请输入内容"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleApprove">同 意</el-button>
+        <el-button type="danger" @click="handleReject">驳 回</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import {
-    selectTodoPage
+    selectTodoPage,
+    approveProcessTask,
+    rejectProcessTask
   } from '@/api/process/task'
+  import {
+    detailProcessInstance,
+    detailProcessHistory
+  } from '@/api/process/instance'
+  import FormParser from '@/components/FormDesigner/parser/Parser'
 
   export default {
     name: 'Apply',
+    components: { FormParser },
     data() {
       return {
         // 遮罩层
@@ -84,8 +124,30 @@
             startUserName: undefined
           }
         },
+        openView: false,
         processXml: undefined,
-        highLineData: []
+        highLineData: [],
+        handleProcess: {
+          loading: true,
+          openProcess: false,
+          processInstances: undefined,
+          processTask: undefined,
+          activeName: 'formInfo',
+          formView: false,
+          parserForm: undefined,
+          formData: undefined,
+          processXml: undefined,
+          flowInfoList: undefined,
+          highLineData: undefined
+        },
+        taskForm: {
+          approvalMessage: undefined
+        },
+        taskRules: {
+          approvalMessage: [
+            { required: true, message: '审批意见不能为空', trigger: 'blur' }
+          ]
+        }
       }
     },
     created() {
@@ -110,14 +172,39 @@
       },
       /** 流程办理 */
       handleProcessTask(row) {
-
+        this.handleProcess.openProcess = false
+        detailProcessInstance(row.instanceId).then(response => {
+          this.handleProcess.processInstances = response.data
+          this.handleProcess.processTask = row
+          if (this.handleProcess.processInstances.formConf && this.handleProcess.processInstances.formFields) {
+            let formConf = JSON.parse(this.handleProcess.processInstances.formConf)
+            formConf.formBtns = false
+            formConf.disabled = true
+            this.handleProcess.parserForm = {
+              fields: JSON.parse(this.handleProcess.processInstances.formFields),
+              ...formConf
+            }
+            this.fillFormData(this.handleProcess.parserForm, JSON.parse(this.handleProcess.processInstances.formData))
+            this.handleProcess.openProcess = true
+          }
+        })
+      },
+      fillFormData(form, data) {
+        form.fields.forEach(item => {
+          const val = data[item.__vModel__]
+          if (val) {
+            item.__config__.defaultValue = val
+          }
+        })
       },
       /** 流程进度 */
       handleProcessView(row) {
-        detailProcessInstance(row.id).then(response => {
+        this.openView = false
+        detailProcessInstance(row.instanceId).then(response => {
           this.$nextTick(() => {
-            this.processXml = response.data().modelXml
-            this.highLineData = response.data().highLineData
+            this.processXml = response.data.modelXml
+            this.highLineData = response.data.highLineData
+            this.openView = true
           })
         })
       },
@@ -130,6 +217,50 @@
       resetQuery() {
         this.resetForm('queryForm')
         this.handleQuery()
+      },
+      handleClick(tab, event) {
+        if (tab.name == 'processView' && !this.processXml) {
+          this.handleProcess.processXml = this.handleProcess.processInstances.modelXml
+          this.handleProcess.highLineData = this.handleProcess.processInstances.highLineData
+        }
+
+        if (tab.name == 'flowInfo' && !this.flowInfoList) {
+          this.handleProcess.loading = true
+          detailProcessHistory(this.handleProcess.processInstances.id).then(response => {
+            this.$nextTick(() => {
+              this.handleProcess.flowInfoList = response.data
+              this.handleProcess.loading = false
+            })
+          })
+        }
+      },
+      handleApprove() {
+        this.$refs.taskForm.validate(valid => {
+          if (valid) {
+            approveProcessTask({
+              taskId: this.handleProcess.processTask.taskId,
+              approvalComment: this.taskForm.approvalComment
+            }).then(response => {
+              this.messageSuccess('任务执行成功！')
+              this.handleProcess.openProcess = false
+              this.getProcessTodoList()
+            })
+          }
+        })
+      },
+      handleReject() {
+        this.$refs.taskForm.validate(valid => {
+          if (valid) {
+            rejectProcessTask({
+              taskId: this.handleProcess.processTask.taskId,
+              approvalComment: this.taskForm.approvalComment
+            }).then(response => {
+              this.messageSuccess('任务驳回成功！')
+              this.handleProcess.openProcess = false
+              this.getProcessTodoList()
+            })
+          }
+        })
       }
     }
   }
