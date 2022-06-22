@@ -33,12 +33,12 @@ public interface IAgileProcessTaskService extends IAgileBaseService<AgileProcess
      * @param agileProcessTask
      * @return
      */
-    AgileProcessTask approveProcessTask(AgileProcessTask agileProcessTask);
+    boolean approveProcessTask(AgileProcessTask agileProcessTask);
 
     /**
      * 驳回任务
      * @param agileProcessTask
      * @return
      */
-    AgileProcessTask rejectProcessTask(AgileProcessTask agileProcessTask);
+    boolean rejectProcessTask(AgileProcessTask agileProcessTask);
 }

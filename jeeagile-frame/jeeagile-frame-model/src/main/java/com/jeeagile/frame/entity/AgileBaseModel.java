@@ -78,7 +78,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
      */
     public void setUpdateValue() {
         this.setUpdateUser(AgileSecurityUtil.getUserId());
-        this.setUpdateTime(null);
+        this.setUpdateTime(new Date());
     }
 
     /**

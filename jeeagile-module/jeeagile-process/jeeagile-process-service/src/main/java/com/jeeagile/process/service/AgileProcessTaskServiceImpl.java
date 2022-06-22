@@ -3,6 +3,7 @@ package com.jeeagile.process.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -11,6 +12,10 @@ import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.process.entity.AgileProcessTask;
 import com.jeeagile.process.mapper.AgileProcessTaskMapper;
+import com.jeeagile.process.support.IAgileProcessService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
 
 /**
  * @author JeeAgile
@@ -19,6 +24,9 @@ import com.jeeagile.process.mapper.AgileProcessTaskMapper;
  */
 @AgileService
 public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProcessTaskMapper, AgileProcessTask> implements IAgileProcessTaskService {
+    @Autowired
+    private IAgileProcessService agileProcessService;
+
     @Override
     public AgilePage<AgileProcessTask> selectTodo(AgilePageable<AgileProcessTask> agilePageable) {
         AgilePage<AgileProcessTask> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
@@ -38,6 +46,8 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
                 lambdaQueryWrapper.like(AgileProcessTask::getFormName, agileProcessTask.getFormName());
             }
         }
+        lambdaQueryWrapper.eq(AgileProcessTask::getTaskStatus, "1");
+        lambdaQueryWrapper.isNull(AgileProcessTask::getEndTime);
         lambdaQueryWrapper.eq(AgileProcessTask::getTaskUser, AgileSecurityUtil.getUserId());
         lambdaQueryWrapper.orderByDesc(AgileProcessTask::getCreateTime);
         return this.page(agilePage, lambdaQueryWrapper);
@@ -49,14 +59,23 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
     }
 
     @Override
-    public AgileProcessTask approveProcessTask(AgileProcessTask agileProcessTask) {
-        return null;
+    public boolean approveProcessTask(AgileProcessTask agileProcessTask) {
+        String approveMessage = agileProcessTask.getApproveMessage();
+        agileProcessTask = this.getById(agileProcessTask.getId());
+        if (agileProcessTask == null || agileProcessTask.isEmptyPk()) {
+            throw new AgileFrameException("流程任务已不存在！");
+        }
+        agileProcessTask.setApproveMessage(approveMessage);
+        agileProcessTask.setUpdateNullValue();
+        agileProcessTask.setEndTime(new Date());
+        agileProcessTask.setTaskStatus("2");
+        agileProcessService.approveProcessTask(agileProcessTask.getInstanceId(), agileProcessTask.getId(), approveMessage);
+        return this.updateById(agileProcessTask);
     }
 
     @Override
-    public AgileProcessTask rejectProcessTask(AgileProcessTask agileProcessTask) {
-        return null;
+    public boolean rejectProcessTask(AgileProcessTask agileProcessTask) {
+        return false;
     }
-
 
 }

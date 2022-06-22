@@ -23,6 +23,7 @@ import org.activiti.engine.impl.persistence.entity.SuspensionState;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -237,6 +238,29 @@ public class AgileActivitiProcessService implements IAgileProcessService {
         return true;
     }
 
+    @Override
+    public boolean approveProcessTask(String instanceId, String taskId, String approveMessage) {
+        // 校验流程实例存在
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(instanceId).singleResult();
+        if (processInstance == null) {
+            throw new AgileFrameException("流程实例已不存在！");
+        }
+        // 校验任务存在
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (task == null) {
+            throw new AgileFrameException("任务已不存在！");
+        }
+        taskService.addComment(task.getId(), processInstance.getId(), approveMessage);
+        taskService.complete(task.getId(), processInstance.getProcessVariables());
+        return true;
+    }
+
+    @Override
+    public boolean rejectProcessTask(String instanceId, String taskId, String approveMessage) {
+        return false;
+    }
+
+
     /**
      * 修改流程定义激活挂起状态
      */
@@ -245,10 +269,10 @@ public class AgileActivitiProcessService implements IAgileProcessService {
             ProcessDefinition processDefinition = repositoryService.getProcessDefinition(definitionId);
             if (processDefinition != null) {
                 if (SuspensionState.ACTIVE.equals(suspensionState)) {
-                    repositoryService.activateProcessDefinitionById(processDefinition.getId(), false, null);
+                    repositoryService.activateProcessDefinitionById(processDefinition.getId(), false, new Date());
                 }
                 if (SuspensionState.SUSPENDED.equals(suspensionState)) {
-                    repositoryService.suspendProcessDefinitionById(processDefinition.getId(), false, null);
+                    repositoryService.suspendProcessDefinitionById(processDefinition.getId(), false, new Date());
                 }
                 return true;
             } else {

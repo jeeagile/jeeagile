@@ -76,8 +76,8 @@
       </el-tabs>
       <el-divider/>
       <el-form ref="taskForm" :model="taskForm" :rules="taskRules" label-width="80px">
-        <el-form-item label="审批意见" prop="approvalMessage">
-          <el-input v-model="taskForm.approvalMessage" type="textarea" placeholder="请输入内容"/>
+        <el-form-item label="审批意见" prop="approveMessage">
+          <el-input v-model="taskForm.approveMessage" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -141,10 +141,10 @@
           highLineData: undefined
         },
         taskForm: {
-          approvalMessage: undefined
+          approveMessage: undefined
         },
         taskRules: {
-          approvalMessage: [
+          approveMessage: [
             { required: true, message: '审批意见不能为空', trigger: 'blur' }
           ]
         }
@@ -219,7 +219,7 @@
         this.handleQuery()
       },
       handleClick(tab, event) {
-        if (tab.name == 'processView' && !this.processXml) {
+        if (tab.name == 'processView' && !this.handleProcess.processXml) {
           this.handleProcess.processXml = this.handleProcess.processInstances.modelXml
           this.handleProcess.highLineData = this.handleProcess.processInstances.highLineData
         }
@@ -238,8 +238,8 @@
         this.$refs.taskForm.validate(valid => {
           if (valid) {
             approveProcessTask({
-              taskId: this.handleProcess.processTask.taskId,
-              approvalComment: this.taskForm.approvalComment
+              id: this.handleProcess.processTask.id,
+              approveMessage: this.taskForm.approveMessage
             }).then(response => {
               this.messageSuccess('任务执行成功！')
               this.handleProcess.openProcess = false
@@ -252,8 +252,8 @@
         this.$refs.taskForm.validate(valid => {
           if (valid) {
             rejectProcessTask({
-              taskId: this.handleProcess.processTask.taskId,
-              approvalComment: this.taskForm.approvalComment
+              id: this.handleProcess.processTask.id,
+              approveMessage: this.taskForm.approveMessage
             }).then(response => {
               this.messageSuccess('任务驳回成功！')
               this.handleProcess.openProcess = false

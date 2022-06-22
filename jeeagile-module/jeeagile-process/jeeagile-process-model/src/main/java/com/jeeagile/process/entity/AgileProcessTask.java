@@ -49,7 +49,7 @@ public class AgileProcessTask extends AgileBaseModel<AgileProcessTask> {
      */
     private String taskUserName;
     /**
-     * 流程任务状态(0:已撤销 1:办理中 2：已完成)
+     * 流程任务状态(0:已撤销 1:办理中 2：审批通过 3：审批驳回)
      */
     private String taskStatus;
     /**

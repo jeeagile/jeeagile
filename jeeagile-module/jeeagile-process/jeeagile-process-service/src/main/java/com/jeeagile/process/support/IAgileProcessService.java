@@ -87,4 +87,23 @@ public interface IAgileProcessService {
      * @return
      */
     boolean cancelProcessInstance(String instanceId, String deleteReason);
+
+
+    /**
+     * 审批流程
+     * @param instanceId
+     * @param taskId
+     * @param approveMessage
+     * @return
+     */
+    boolean approveProcessTask(String instanceId, String taskId, String approveMessage);
+
+    /**
+     * 审核驳回
+     * @param instanceId
+     * @param taskId
+     * @param approveMessage
+     * @return
+     */
+    boolean rejectProcessTask(String instanceId, String taskId, String approveMessage);
 }

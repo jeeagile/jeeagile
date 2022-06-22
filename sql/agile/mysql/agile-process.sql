@@ -92,7 +92,7 @@ CREATE TABLE agile_process_instance (
   form_url                      varchar(32) DEFAULT NULL COMMENT '流程表单地址',
   deployment_time               datetime DEFAULT NULL COMMENT '流程部署时间',
   definition_id                 varchar(100) DEFAULT NULL COMMENT '流程定义ID',
-  instance_status               varchar(2) DEFAULT NULL COMMENT '流程实例状态（1：正在办理中）',
+  instance_status               varchar(2) DEFAULT NULL COMMENT '流程实例状态(0:已撤销 1:办理中 2:已完成)',
   suspension_state              int NOT NULL COMMENT '挂起状态',
   start_user                    varchar(32) NOT NULL COMMENT '流程实例发起人',
   start_user_name               varchar(100) NOT NULL COMMENT '流程发起人名称',

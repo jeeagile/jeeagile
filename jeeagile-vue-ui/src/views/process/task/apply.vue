@@ -35,12 +35,12 @@
       <el-table-column label="提交时间" width="150" align="center" prop="startTime"/>
       <el-table-column label="结束时间" width="150" align="center" prop="endTime"/>
       <el-table-column label="流程状态" align="center" :formatter="instanceStatusFormat"/>
-      <el-table-column label="操作" width="300px" align="center" class-name="small-padding">
+      <el-table-column label="操作" width="200px" align="center" class-name="small-padding">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleDetailInstance(scope.row)">
             查看详细
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleCancelInstance(scope.row)">
+          <el-button v-if="scope.row.instanceStatus == 1" size="mini" type="text" icon="el-icon-delete" @click="handleCancelInstance(scope.row)">
             撤销流程
           </el-button>
         </template>

@@ -9,7 +9,6 @@ import com.jeeagile.frame.service.system.IAgileSysUserService;
 import com.jeeagile.frame.user.AgileUserData;
 import com.jeeagile.frame.util.AgileBeanUtils;
 import com.jeeagile.process.entity.AgileProcessDefinition;
-import com.jeeagile.process.entity.AgileProcessForm;
 import com.jeeagile.process.entity.AgileProcessInstance;
 import com.jeeagile.process.entity.AgileProcessTask;
 import com.jeeagile.process.service.IAgileProcessDefinitionService;
@@ -18,7 +17,6 @@ import com.jeeagile.process.service.IAgileProcessTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.delegate.event.ActivitiEvent;
 import org.activiti.engine.delegate.event.ActivitiEventListener;
-import org.activiti.engine.delegate.event.impl.ActivitiActivityCancelledEventImpl;
 import org.activiti.engine.delegate.event.impl.ActivitiEntityEventImpl;
 import org.activiti.engine.delegate.event.impl.ActivitiProcessCancelledEventImpl;
 import org.activiti.engine.delegate.event.impl.ActivitiProcessStartedEventImpl;
@@ -57,7 +55,9 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
             //流程结束
             case PROCESS_COMPLETED:
                 log.debug("流程结束");
+                this.processCompleted((ActivitiEntityEventImpl) activitiEvent);
                 break;
+
             case ACTIVITY_CANCELLED:
                 log.debug("节点取消");
                 break;
@@ -65,10 +65,6 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
             case TASK_CREATED:
                 log.debug("任务开始");
                 this.taskCreated((ActivitiEntityEventImpl) activitiEvent);
-                break;
-            //任务完成
-            case TASK_COMPLETED:
-                log.debug("任务完成");
                 break;
             //进程取消，删除实例
             case PROCESS_CANCELLED:
@@ -103,14 +99,16 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
     }
 
     private void taskCreated(ActivitiEntityEventImpl activitiEntityEvent) {
+
         AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(activitiEntityEvent.getProcessInstanceId());
         if (agileProcessInstance == null || agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例不存在！");
         }
+        Task task = (Task) activitiEntityEvent.getEntity();
+
         AgileProcessTask agileProcessTask = new AgileProcessTask();
         AgileBeanUtils.copyProperties(agileProcessInstance, agileProcessTask);
         agileProcessTask.setInstanceId(agileProcessInstance.getId());
-        Task task = (Task) activitiEntityEvent.getEntity();
         agileProcessTask.setId(task.getId());
         agileProcessTask.setTaskName(task.getName());
         agileProcessTask.setStartTime(task.getCreateTime());
@@ -124,18 +122,19 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
         agileProcessTaskService.saveModel(agileProcessTask);
     }
 
-    private void taskCompleted() {
-
+    private void processCompleted(ActivitiEntityEventImpl activitiEntityEvent) {
+        AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(activitiEntityEvent.getProcessInstanceId());
+        agileProcessInstance.setInstanceStatus("2");
+        agileProcessInstance.setEndTime(new Date());
+        agileProcessInstance.setUpdateNullValue();
+        agileProcessInstanceService.updateById(agileProcessInstance);
     }
 
     private void processCancelled(ActivitiProcessCancelledEventImpl processCancelledEvent) {
         AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(processCancelledEvent.getProcessInstanceId());
-        if (agileProcessInstance == null || agileProcessInstance.isEmptyPk()) {
-            throw new AgileFrameException("流程实例不存在！");
-        }
         agileProcessInstance.setInstanceStatus("0");
         agileProcessInstance.setEndTime(new Date());
-        agileProcessInstance.setUpdateValue();
+        agileProcessInstance.setUpdateNullValue();
         agileProcessInstanceService.updateById(agileProcessInstance);
     }
 }

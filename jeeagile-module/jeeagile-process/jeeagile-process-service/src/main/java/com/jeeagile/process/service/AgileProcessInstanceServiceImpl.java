@@ -113,7 +113,7 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
     @Override
     public boolean cancelProcessInstance(String processInstanceId) {
         AgileProcessInstance agileProcessInstance = this.getById(processInstanceId);
-        if (agileProcessInstance == null && agileProcessInstance.isEmptyPk()) {
+        if (agileProcessInstance == null || agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例已不存在！");
         }
         return agileProcessService.cancelProcessInstance(processInstanceId, "发起人撤销流程");
