@@ -29,6 +29,15 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
 
     @Override
     public AgilePage<AgileProcessTask> selectTodo(AgilePageable<AgileProcessTask> agilePageable) {
+        return selectProcessTaskPage(agilePageable, true);
+    }
+
+    @Override
+    public AgilePage<AgileProcessTask> selectDone(AgilePageable<AgileProcessTask> agilePageable) {
+        return selectProcessTaskPage(agilePageable, false);
+    }
+
+    private AgilePage<AgileProcessTask> selectProcessTaskPage(AgilePageable<AgileProcessTask> agilePageable, boolean todoFlag) {
         AgilePage<AgileProcessTask> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         LambdaQueryWrapper<AgileProcessTask> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         AgileProcessTask agileProcessTask = agilePageable.getQueryCond();
@@ -46,16 +55,15 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
                 lambdaQueryWrapper.like(AgileProcessTask::getFormName, agileProcessTask.getFormName());
             }
         }
-        lambdaQueryWrapper.eq(AgileProcessTask::getTaskStatus, "1");
-        lambdaQueryWrapper.isNull(AgileProcessTask::getEndTime);
+        if (todoFlag) {
+            lambdaQueryWrapper.eq(AgileProcessTask::getTaskStatus, "1");
+            lambdaQueryWrapper.isNull(AgileProcessTask::getEndTime);
+        } else {
+            lambdaQueryWrapper.in(AgileProcessTask::getTaskStatus, "2", "3");
+        }
         lambdaQueryWrapper.eq(AgileProcessTask::getTaskUser, AgileSecurityUtil.getUserId());
         lambdaQueryWrapper.orderByDesc(AgileProcessTask::getCreateTime);
         return this.page(agilePage, lambdaQueryWrapper);
-    }
-
-    @Override
-    public AgilePage<AgileProcessTask> selectDone(AgilePageable<AgileProcessTask> agilePageable) {
-        return null;
     }
 
     @Override

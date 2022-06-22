@@ -168,7 +168,7 @@
       },
       // 参数系统内置字典翻译
       taskStatusFormat(row, column) {
-        return this.handleDictLabel(this.instanceStatusOptionList, row.instanceStatus)
+        return this.handleDictLabel(this.instanceStatusOptionList, row.taskStatus)
       },
       /** 流程办理 */
       handleProcessTask(row) {
