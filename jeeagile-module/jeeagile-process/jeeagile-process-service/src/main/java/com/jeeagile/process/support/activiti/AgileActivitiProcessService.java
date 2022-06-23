@@ -15,7 +15,6 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -233,7 +232,6 @@ public class AgileActivitiProcessService implements IAgileProcessService {
 
     @Override
     public boolean cancelProcessInstance(String instanceId, String deleteReason) {
-        Authentication.setAuthenticatedUserId(AgileSecurityUtil.getUserId());
         runtimeService.deleteProcessInstance(instanceId, deleteReason);
         return true;
     }

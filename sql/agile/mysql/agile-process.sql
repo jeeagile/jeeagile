@@ -121,7 +121,7 @@ CREATE TABLE agile_process_task (
   instance_id                   varchar(100) DEFAULT NULL COMMENT '流程实例ID',
   task_name                     varchar(100) DEFAULT NULL COMMENT '流程任务名称',
   task_user                     varchar(32) NOT NULL COMMENT '流程任务执行人',
-  task_user_name               varchar(100) NOT NULL COMMENT '流程任务执行人名称',
+  task_user_name                varchar(100) NOT NULL COMMENT '流程任务执行人名称',
   task_status                   varchar(2) NOT NULL COMMENT '流程任务状态(0:已撤销 1:办理中 2：已完成)',
   start_user                    varchar(32) NOT NULL COMMENT '流程发起人',
   start_user_name               varchar(100) NOT NULL COMMENT '流程发起人名称',
