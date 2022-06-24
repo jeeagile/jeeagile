@@ -13,6 +13,7 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.core.util.spring.AgileServletUtil;
 import com.jeeagile.core.util.spring.AgileSpringUtil;
+import com.jeeagile.core.util.tenant.AgileTenantUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.util.DigestUtils;
 
@@ -89,16 +90,19 @@ public class AgileSecurityUtil {
      * 获取用户租户ID
      */
     public static String getTenantId() {
-        AgileBaseUser agileBaseUser = getUserData();
-        if (agileBaseUser != null) {
-            return agileBaseUser.getTenantId();
-        } else {
-            String agileTenant = AgileServletUtil.getCookieValue("AGILE_TENANT");
-            if (AgileStringUtil.isNotEmpty(agileTenant)) {
-
+        if (AgileTenantUtil.isTenantEnable()) {
+            AgileBaseUser agileBaseUser = getUserData();
+            if (agileBaseUser != null) {
+                return agileBaseUser.getTenantId();
+            } else {
+                String agileTenant = AgileServletUtil.getCookieValue("AGILE_TENANT");
+                if (AgileStringUtil.isNotEmpty(agileTenant)) {
+                    agileTenant = AgileTenantUtil.getDefaultTenant();
+                }
+                return agileTenant;
             }
-            return agileTenant;
         }
+        return null;
     }
 
     /**

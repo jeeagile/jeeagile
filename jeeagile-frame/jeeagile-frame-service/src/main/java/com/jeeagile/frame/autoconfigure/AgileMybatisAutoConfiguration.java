@@ -7,11 +7,14 @@ import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
+import com.jeeagile.core.util.tenant.AgileTenantUtil;
 import com.jeeagile.frame.annotation.AgileDataScope;
 import com.jeeagile.frame.annotation.AgileMapper;
 import com.jeeagile.frame.handler.AgileMetaObjectHandler;
 import com.jeeagile.frame.plugins.datascope.AgileDataScopeInterceptor;
 import com.jeeagile.frame.plugins.injector.AgileCustomSqlInjector;
+import com.jeeagile.frame.plugins.tenant.AgileTenantLineHandler;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -51,6 +54,10 @@ public class AgileMybatisAutoConfiguration implements ApplicationListener<Contex
     @ConditionalOnMissingBean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
+        if (AgileTenantUtil.isTenantEnable()) {
+            AgileTenantLineHandler agileTenantLineHandler = new AgileTenantLineHandler();
+            mybatisPlusInterceptor.addInnerInterceptor(new TenantLineInnerInterceptor(agileTenantLineHandler));
+        }
         mybatisPlusInterceptor.addInnerInterceptor(new AgileDataScopeInterceptor());
         mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return mybatisPlusInterceptor;
