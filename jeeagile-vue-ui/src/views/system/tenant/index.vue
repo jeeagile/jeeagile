@@ -55,8 +55,12 @@
       <el-table-column label="启用状态" align="center" prop="enableStatus" :formatter="enableStatusFormat"/>
       <el-table-column label="审核状态" align="center" prop="auditStatus" :formatter="auditStatusFormat"/>
       <el-table-column label="有效期" align="center" prop="expirationDate" :formatter="expirationDateFormat"/>
-      <el-table-column label="操作" align="center" width="150px">
+      <el-table-column label="操作" align="center" width="200px">
         <template slot-scope="scope">
+          <el-button size="mini" type="text" icon="el-icon-tickets" @click="handleAudit(scope.row)"
+                     v-hasPerm="['system:tenant:audit']">
+            审核
+          </el-button>
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
                      v-hasPerm="['system:tenant:update']">
             修改
@@ -108,6 +112,28 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加或修改租户对话框 -->
+    <el-dialog title="租户审核" :visible.sync="auditDialog" width="500px" append-to-body>
+      <el-form ref="form" :model="auditForm" :rules="rules" label-width="80px">
+        <el-form-item label="租户名称" prop="tenantName">
+          <el-input v-model="auditForm.tenantName" placeholder="请输入租户名称" disabled="true"/>
+        </el-form-item>
+        <el-form-item label="租户编码" prop="tenantCode">
+          <el-input v-model="auditForm.tenantCode" placeholder="请输入编码名称" disabled="true"/>
+        </el-form-item>
+        <el-form-item label="租户类型" prop="tenantCode">
+          <el-select v-model="auditForm.tenantType" style="width: 100%">
+            <el-option label="本地" value="0"/>
+            <el-option label="远程" value="1"/>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleAuditPass">审核通过</el-button>
+        <el-button type="info" @click="handleAuditReject">审核拒绝</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -136,6 +162,7 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
+        auditDialog: false,
         // 状态数据字典
         enableStatusOptionList: [],
         // 审核状态字典
@@ -167,6 +194,13 @@
           tenantCode: [
             { required: true, message: '租户编码不能为空', trigger: 'blur' }
           ]
+        },
+        // 表单参数
+        auditForm: {
+          id: undefined,
+          tenantCode: undefined,
+          tenantName: undefined,
+          tenantType: '0'
         }
       }
     },
@@ -276,6 +310,13 @@
           this.dialogTitle = '修改租户'
         })
       },
+      handleAudit(row) {
+        row = undefined === row.id ? this.selectRowList[0] : row
+        detailTenant(row.id).then(response => {
+          this.auditForm = response.data
+          this.auditDialog = true
+        })
+      },
       /** 提交按钮 */
       submitForm: function () {
         this.$refs.form.validate(valid => {
@@ -295,6 +336,12 @@
             }
           }
         })
+      },
+      handleAuditPass() {
+
+      },
+      handleAuditReject() {
+
       },
       /** 删除按钮操作 */
       handleDelete(row) {

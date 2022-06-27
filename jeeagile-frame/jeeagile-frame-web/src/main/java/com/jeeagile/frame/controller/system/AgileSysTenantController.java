@@ -2,6 +2,7 @@ package com.jeeagile.frame.controller.system;
 
 import com.jeeagile.core.enums.AgileAuditStatus;
 import com.jeeagile.core.enums.AgileEnableStatus;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
@@ -33,20 +34,31 @@ import java.util.Map;
 @AgilePermissionsPrefix("system:tenant")
 @Api(value = "租户管理", tags = "租户管理")
 public class AgileSysTenantController extends AgileCrudController<IAgileSysTenantService, AgileSysTenant> {
+    @PostMapping("/audit")
+    @AgileRequiresGuest
+    @AgileLogger(notes = "租户审核", type = AgileLoggerType.UPDATE)
+    @ApiOperation(value = "租户审核", notes = "租户审核")
+    public AgileResult<AgileSysTenant> audit(@RequestBody AgileSysTenant agileSysTenant) {
+        if (agileSysTenant.getTenantType().equals("1")) {
+            throw new AgileFrameException("正在努力建设中，敬请期待！");
+        }
+        return AgileResult.success(this.agileBaseService.audit(agileSysTenant));
+    }
+
     @PostMapping("/info")
     @AgileRequiresGuest
     @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<AgileSysTenant> info(@RequestBody Map param) {
-        String tenantCode = (String) param.get("tenantId");
+        String tenantId = (String) param.get("tenantId");
         String tenantSign = (String) param.get("tenantSign");
-        if (AgileStringUtil.isEmpty(tenantCode)) {
+        if (AgileStringUtil.isEmpty(tenantId)) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
         }
         if (AgileStringUtil.isEmpty(tenantSign)) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
         }
-        AgileSysTenant agileSysTenant = this.agileBaseService.getAgileSysTenant(tenantCode);
+        AgileSysTenant agileSysTenant = this.agileBaseService.selectModel(tenantId);
         if (agileSysTenant == null || AgileStringUtil.isEmpty(agileSysTenant.getId())) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
         }

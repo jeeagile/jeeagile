@@ -9,5 +9,10 @@ import com.jeeagile.frame.service.IAgileBaseService;
  * @description 租户管理
  */
 public interface IAgileSysTenantService extends IAgileBaseService<AgileSysTenant> {
-    AgileSysTenant getAgileSysTenant(String tenantCode);
+    /**
+     * 审核
+     * @param agileSysTenant
+     * @return
+     */
+    boolean audit(AgileSysTenant agileSysTenant);
 }

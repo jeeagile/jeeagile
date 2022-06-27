@@ -2,12 +2,15 @@ package com.jeeagile.frame.service.system;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.enums.AgileAuditStatus;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.entity.system.AgileSysTenant;
 import com.jeeagile.frame.mapper.system.AgileSysTenantMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+
+import java.io.Serializable;
 
 /**
  * @author JeeAgile
@@ -61,10 +64,45 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         }
     }
 
+
     @Override
-    public AgileSysTenant getAgileSysTenant(String tenantCode) {
-        LambdaQueryWrapper<AgileSysTenant> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileSysTenant::getTenantCode, tenantCode);
-        return this.getOne(lambdaQueryWrapper);
+    public boolean audit(AgileSysTenant agileSysTenant) {
+        AgileSysTenant agileSysTenantOld = this.getById(agileSysTenant.getId());
+        if (agileSysTenantOld == null || agileSysTenantOld.isEmptyPk()) {
+            throw new AgileFrameException("租户信息已不存在！");
+        }
+        if (agileSysTenant.getAuditStatus().equals("0")) {
+            this.initTenantInfo(agileSysTenantOld);
+        }
+        return this.updateModel(agileSysTenant);
     }
+
+    @Override
+    public void deleteModelValidate(Serializable id) {
+        AgileSysTenant agileSysTenant = this.getById(id);
+        if (agileSysTenant == null || agileSysTenant.isEmptyPk()) {
+            throw new AgileFrameException("租户信息已不存在！");
+        }
+        this.deleteTenantInfo(agileSysTenant);
+    }
+
+    /**
+     * 删除租户信息
+     *
+     * @param agileSysTenant
+     */
+    private void deleteTenantInfo(AgileSysTenant agileSysTenant) {
+
+    }
+
+
+    /**
+     * 初始化租户基础信息
+     *
+     * @param agileSysTenant
+     */
+    private void initTenantInfo(AgileSysTenant agileSysTenant) {
+
+    }
+
 }
