@@ -116,11 +116,11 @@
     <!-- 添加或修改租户对话框 -->
     <el-dialog title="租户审核" :visible.sync="auditDialog" width="500px" append-to-body>
       <el-form ref="form" :model="auditForm" :rules="rules" label-width="80px">
-        <el-form-item label="租户名称" prop="tenantName">
-          <el-input v-model="auditForm.tenantName" placeholder="请输入租户名称" disabled="true"/>
-        </el-form-item>
         <el-form-item label="租户编码" prop="tenantCode">
           <el-input v-model="auditForm.tenantCode" placeholder="请输入编码名称" disabled="true"/>
+        </el-form-item>
+        <el-form-item label="租户名称" prop="tenantName">
+          <el-input v-model="auditForm.tenantName" placeholder="请输入租户名称" disabled="true"/>
         </el-form-item>
         <el-form-item label="租户类型" prop="tenantCode">
           <el-select v-model="auditForm.tenantType" style="width: 100%">
@@ -138,7 +138,14 @@
 </template>
 
 <script>
-  import { selectTenantPage, detailTenant, deleteTenant, addTenant, updateTenant } from '@/api/system/tenant'
+  import {
+    selectTenantPage,
+    detailTenant,
+    deleteTenant,
+    addTenant,
+    updateTenant,
+    auditTenant
+  } from '@/api/system/tenant'
 
   export default {
     name: 'Tenant',
@@ -200,7 +207,8 @@
           id: undefined,
           tenantCode: undefined,
           tenantName: undefined,
-          tenantType: '0'
+          tenantType: '0',
+          auditStatus: undefined
         }
       }
     },
@@ -338,10 +346,20 @@
         })
       },
       handleAuditPass() {
-
+        this.auditForm.auditStatus = 1
+        auditTenant(this.auditForm).then(() => {
+          this.messageSuccess('租户审批成功！')
+          this.auditDialog = false
+          this.getTenantList()
+        })
       },
       handleAuditReject() {
-
+        this.auditForm.auditStatus = 2
+        auditTenant(this.auditForm).then(() => {
+          this.messageSuccess('租户审批已拒绝！')
+          this.auditDialog = false
+          this.getTenantList()
+        })
       },
       /** 删除按钮操作 */
       handleDelete(row) {

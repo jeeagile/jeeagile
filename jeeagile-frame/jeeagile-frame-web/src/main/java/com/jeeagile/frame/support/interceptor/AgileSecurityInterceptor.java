@@ -114,6 +114,6 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
-        AgileSecurityContext.remove();
+        AgileSecurityContext.removeUser();
     }
 }

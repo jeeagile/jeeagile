@@ -1,5 +1,6 @@
 package com.jeeagile.frame.entity.system;
 
+import com.jeeagile.frame.entity.AgileTenantTreeModel;
 import com.jeeagile.frame.entity.AgileTreeModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
@@ -16,7 +17,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileSysMenu extends AgileTreeModel<AgileSysMenu> {
+public class AgileSysMenu extends AgileTenantTreeModel<AgileSysMenu> {
     /**
      * 菜单名称
      */

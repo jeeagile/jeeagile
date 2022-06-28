@@ -13,29 +13,22 @@ import java.util.Set;
 public interface IAgileUserDetailsService {
 
     /**
-     * 根据用户名、密码获取用户登录信息
-     *
-     * @param loginName
-     * @param password
-     * @return
-     */
-    AgileBaseUser userLogin(String loginName, String password);
-
-    /**
      * 根据用户名加载用户信息
      *
      * @param loginName
      * @return
      */
-    AgileBaseUser getUserDataByLoginName(String loginName);
+    AgileBaseUser getUserData(String loginName);
 
     /**
-     * 根据用户ID获取用户信息
+     * 租户模式获取用户信息
      *
-     * @param userId
+     * @param loginName
+     * @param tenantId
+     * @param tenantSign
      * @return
      */
-    AgileBaseUser getUserDataByUserId(String userId);
+    AgileBaseUser getUserData(String loginName, String tenantId, String tenantSign);
 
     /**
      * 获取用户权限

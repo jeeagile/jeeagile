@@ -25,7 +25,9 @@ public class AgileSecurityContext {
     }
 
     //存储当前线程用户信息
-    protected static final ThreadLocal<AgileBaseUser> threadLocal = new InheritableThreadLocal<>();
+    protected static final ThreadLocal<AgileBaseUser> userThreadLocal = new InheritableThreadLocal<>();
+
+    protected static final ThreadLocal<String> tenantThreadLocal = new InheritableThreadLocal<>();
 
     /**
      * 存放当前用户信息
@@ -33,7 +35,16 @@ public class AgileSecurityContext {
      * @param agileBaseUser
      */
     public static void putUserData(AgileBaseUser agileBaseUser) {
-        threadLocal.set(agileBaseUser);
+        userThreadLocal.set(agileBaseUser);
+    }
+
+    /**
+     * 存放当前租户ID
+     *
+     * @param tenantId
+     */
+    public static void putTenantId(String tenantId) {
+        tenantThreadLocal.set(tenantId);
     }
 
     /**
@@ -45,7 +56,7 @@ public class AgileSecurityContext {
         if (agileProtocolProperties.getType() == AgileProtocolType.LOCAL) {
             return getAgileSecurity();
         } else {
-            return threadLocal.get();
+            return userThreadLocal.get();
         }
     }
 
@@ -108,11 +119,18 @@ public class AgileSecurityContext {
         }
     }
 
+    public static String getTenantId() {
+        return tenantThreadLocal.get();
+    }
+
     /**
      * 移除当前线程
      */
-    public static void remove() {
-        threadLocal.remove();
+    public static void removeUser() {
+        userThreadLocal.remove();
     }
 
+    public static void removeTenant() {
+        tenantThreadLocal.remove();
+    }
 }

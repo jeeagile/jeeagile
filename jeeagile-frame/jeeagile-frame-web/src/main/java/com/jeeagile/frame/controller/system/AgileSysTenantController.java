@@ -47,7 +47,6 @@ public class AgileSysTenantController extends AgileCrudController<IAgileSysTenan
 
     @PostMapping("/info")
     @AgileRequiresGuest
-    @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<AgileSysTenant> info(@RequestBody Map param) {
         String tenantId = (String) param.get("tenantId");
@@ -62,10 +61,13 @@ public class AgileSysTenantController extends AgileCrudController<IAgileSysTenan
         if (agileSysTenant == null || AgileStringUtil.isEmpty(agileSysTenant.getId())) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
         }
-        if (!AgileEnableStatus.ENABLE.equals(agileSysTenant.getEnableStatus())) {
+        if (!agileSysTenant.getTenantSign().equals(tenantSign)) {
+            return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法租户签名！");
+        }
+        if (!AgileEnableStatus.ENABLE.getCode().equals(agileSysTenant.getEnableStatus())) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "租户已被停用！");
         }
-        if (!AgileAuditStatus.PASS.equals(agileSysTenant.getAuditStatus())) {
+        if (!AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "租户未审核通过，不能使用！");
         }
         if (agileSysTenant.getExpirationDate() != null) {

@@ -12,6 +12,8 @@ import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.tenant.AgileTenantUtil;
+import com.jeeagile.shiro.authc.AgileUsernamePasswordToken;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
@@ -43,9 +45,13 @@ public class AgileShiroSecurity implements IAgileSecurity {
     @Override
     public void userLogin(AgileLoginUser agileLoginUser) {
         try {
-            UsernamePasswordToken token = new UsernamePasswordToken(agileLoginUser.getUserName(), agileLoginUser.getPassword());
-            token.setRememberMe(agileLoginUser.isRememberMe());
-            SecurityUtils.getSubject().login(token);
+            AgileUsernamePasswordToken agileUsernamePasswordToken = new AgileUsernamePasswordToken(agileLoginUser.getUserName(), agileLoginUser.getPassword());
+            agileUsernamePasswordToken.setRememberMe(agileLoginUser.isRememberMe());
+            if (AgileTenantUtil.isTenantEnable()) {
+                agileUsernamePasswordToken.setTenantId(agileLoginUser.getTenantId());
+                agileUsernamePasswordToken.setTenantSign(agileLoginUser.getTenantSign());
+            }
+            SecurityUtils.getSubject().login(agileUsernamePasswordToken);
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {

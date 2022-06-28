@@ -7,6 +7,7 @@ import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.AgileUtil;
+import com.jeeagile.core.util.tenant.AgileTenantUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.frame.entity.system.AgileSysDept;
 import com.jeeagile.frame.entity.system.AgileSysUser;
@@ -79,7 +80,12 @@ public class AgileSysUserServiceImpl extends AgileBaseServiceImpl<AgileSysUserMa
                 lambdaQueryWrapper.eq(AgileSysUser::getUserStatus, agileSysUser.getUserStatus());
             }
         }
-        lambdaQueryWrapper.ne(AgileSysUser::getUserName, AgileUtil.getSuperAdmin());
+        if (AgileTenantUtil.isTenantEnable()) {
+            lambdaQueryWrapper.ne(AgileSysUser::getUserName, AgileUtil.getSuperAdmin());
+            lambdaQueryWrapper.ne(AgileSysUser::getUserName, AgileSecurityUtil.getTenantCode());
+        } else {
+            lambdaQueryWrapper.ne(AgileSysUser::getUserName, AgileUtil.getSuperAdmin());
+        }
         lambdaQueryWrapper.orderByAsc(AgileSysUser::getUserSort);
         return lambdaQueryWrapper;
     }

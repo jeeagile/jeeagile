@@ -95,6 +95,14 @@ public abstract class AgileBaseUser implements Serializable {
      * 租户ID
      */
     private String tenantId;
+    /**
+     * 租户编码
+     */
+    private String tenantCode;
+    /**
+     * 租户名称
+     */
+    private String tenantName;
 
     /**
      * 判断用户是否为超管用户

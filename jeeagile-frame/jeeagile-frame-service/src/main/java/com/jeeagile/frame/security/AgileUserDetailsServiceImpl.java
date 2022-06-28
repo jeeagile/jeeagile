@@ -3,11 +3,15 @@ package com.jeeagile.frame.security;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.constants.AgileConstants;
+import com.jeeagile.core.enums.AgileAuditStatus;
+import com.jeeagile.core.enums.AgileEnableStatus;
 import com.jeeagile.core.enums.AgileUserStatus;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
+import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.result.AgileResultCode;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
@@ -17,6 +21,7 @@ import com.jeeagile.frame.entity.system.*;
 import com.jeeagile.frame.service.system.*;
 import com.jeeagile.frame.user.AgileUserData;
 import com.jeeagile.frame.util.AgileBeanUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -27,6 +32,7 @@ import java.util.stream.Collectors;
  * @date 2021-03-21
  * @description
  */
+@Slf4j
 @AgileService
 public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
 
@@ -44,29 +50,11 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     private IAgileSysDeptService agileSysDeptService;
     @Autowired
     private IAgileSysRoleDeptService agileSysRoleDeptService;
+    @Autowired
+    private IAgileSysTenantService agileSysTenantService;
 
     @Override
-    public AgileBaseUser userLogin(String loginName, String userPassword) {
-        try {
-            AgileSysUser agileSysUser = this.getAgileSysUser(loginName);
-            if (agileSysUser == null) {
-                throw new AgileAuthException("用户《" + loginName + "》不存在，请核实！");
-            }
-            this.checkAgileSysUser(agileSysUser);
-            String md5Password = AgileSecurityUtil.encryptPassword(userPassword);
-            if (!md5Password.equals(agileSysUser.getUserPwd())) {
-                throw new AgileAuthException(AgileResultCode.FAIL_USER_PWD, "用户密码错误！");
-            }
-            return getAgileUserData(agileSysUser);
-        } catch (AgileBaseException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new AgileAuthException("用户登录异常！");
-        }
-    }
-
-    @Override
-    public AgileUserData getUserDataByLoginName(String loginName) {
+    public AgileUserData getUserData(String loginName) {
         try {
             AgileSysUser agileSysUser = this.getAgileSysUser(loginName);
             if (agileSysUser == null) {
@@ -77,21 +65,43 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
+            log.error("加载用户信息异常！", ex);
             throw new AgileAuthException("加载用户信息异常！");
         }
     }
 
     @Override
-    public AgileBaseUser getUserDataByUserId(String userId) {
-        try {
-            AgileSysUser agileSysUser = agileSysUserService.getById(userId);
-            this.checkAgileSysUser(agileSysUser);
-            return getAgileUserData(agileSysUserService.getById(userId));
-        } catch (AgileBaseException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new AgileAuthException("加载用户信息异常！");
+    public AgileBaseUser getUserData(String loginName, String tenantId, String tenantSign) {
+        AgileSysTenant agileSysTenant = agileSysTenantService.selectModel(tenantId);
+        this.checkAgileSysTenant(agileSysTenant, tenantSign);
+        AgileSecurityContext.putTenantId(agileSysTenant.getId());
+        AgileUserData agileUserData = getUserData(loginName);
+        agileUserData.setTenantId(agileSysTenant.getId());
+        agileUserData.setTenantCode(agileSysTenant.getTenantCode());
+        agileUserData.setTenantName(agileSysTenant.getTenantName());
+        AgileSecurityContext.removeTenant();
+        return agileUserData;
+    }
+
+    private void checkAgileSysTenant(AgileSysTenant agileSysTenant, String tenantSign) {
+        if (agileSysTenant == null || agileSysTenant.isEmptyPk()) {
+            throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
         }
+        if (!agileSysTenant.getTenantSign().equals(tenantSign)) {
+            throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "非法租户签名！");
+        }
+        if (!AgileEnableStatus.ENABLE.getCode().equals(agileSysTenant.getEnableStatus())) {
+            throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "租户已被停用！");
+        }
+        if (!AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
+            throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "租户未审核通过，不能使用！");
+        }
+        if (agileSysTenant.getExpirationDate() != null) {
+            if (new Date().after(agileSysTenant.getExpirationDate())) {
+                throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "租户已过使用期！");
+            }
+        }
+
     }
 
     private AgileSysUser getAgileSysUser(String userName) {
@@ -121,7 +131,8 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     public List<String> getUserPerm(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
-                if (agileBaseUser.isSuperAdmin()) {
+                //是否为系统超级管理员或者租户管理员
+                if (agileBaseUser.isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {
                     List<String> userPermList = new ArrayList<>();
                     userPermList.add("*:*:*");
                     return userPermList;
@@ -134,6 +145,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
+            log.error("加载用户权限信息异常！", ex);
             throw new AgileAuthException("加载用户权限信息异常！");
         }
     }
@@ -142,7 +154,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     public List<String> getUserRole(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
-                if (agileBaseUser.isSuperAdmin()) {
+                if (agileBaseUser.isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {
                     List<String> userRoleList = new ArrayList<>();
                     userRoleList.add("admin");
                     return userRoleList;
@@ -155,6 +167,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
+            log.error("加载用户角色信息异常！", ex);
             throw new AgileAuthException("加载用户角色信息异常！");
         }
     }
@@ -163,8 +176,8 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     public List getUserMenu(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
-                if (agileBaseUser.isSuperAdmin()) {
-                    return this.getSuperAdminMenu();
+                if (agileBaseUser.isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {
+                    return this.getAdminMenu();
                 } else {
                     return this.getUserMenuByUserId(agileBaseUser.getUserId());
                 }
@@ -174,7 +187,8 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new AgileAuthException("加载用户菜单信息异常！");
+            log.error("加载用户菜单信息异常！", ex);
+            throw new AgileAuthException("加载用户菜单信息异常！", ex);
         }
     }
 
@@ -197,6 +211,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
+            log.error("获取用户权限类型异常！", ex);
             throw new AgileAuthException("获取用户权限类型异常！");
         }
     }
@@ -220,7 +235,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         } catch (AgileBaseException ex) {
             throw ex;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("获取用户部门权限异常！", ex);
             throw new AgileAuthException("获取用户部门权限异常！");
         }
     }
@@ -245,7 +260,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
      *
      * @return
      */
-    private List<AgileSysMenu> getSuperAdminMenu() {
+    private List<AgileSysMenu> getAdminMenu() {
         LambdaQueryWrapper<AgileSysMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(AgileSysMenu::getMenuStatus, "0");
         lambdaQueryWrapper.in(AgileSysMenu::getMenuType, "M", "C");
@@ -317,6 +332,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
 
     /**
      * 获取用户角色ID列表
+     *
      * @param userId
      * @return
      */

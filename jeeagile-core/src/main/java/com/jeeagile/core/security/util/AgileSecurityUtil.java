@@ -6,6 +6,7 @@ import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.IAgileSecurity;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
@@ -90,17 +91,21 @@ public class AgileSecurityUtil {
      * 获取用户租户ID
      */
     public static String getTenantId() {
-        if (AgileTenantUtil.isTenantEnable()) {
-            AgileBaseUser agileBaseUser = getUserData();
-            if (agileBaseUser != null) {
-                return agileBaseUser.getTenantId();
-            } else {
-                String agileTenant = AgileServletUtil.getCookieValue("AGILE_TENANT");
-                if (AgileStringUtil.isNotEmpty(agileTenant)) {
-                    agileTenant = AgileTenantUtil.getDefaultTenant();
-                }
-                return agileTenant;
-            }
+        AgileBaseUser agileBaseUser = getUserData();
+        if (agileBaseUser != null) {
+            return agileBaseUser.getTenantId();
+        } else {
+            return AgileSecurityContext.getTenantId();
+        }
+    }
+
+    /**
+     * 获取用户租户编码
+     */
+    public static String getTenantCode() {
+        AgileBaseUser agileBaseUser = getUserData();
+        if (agileBaseUser != null) {
+            return agileBaseUser.getTenantCode();
         }
         return null;
     }

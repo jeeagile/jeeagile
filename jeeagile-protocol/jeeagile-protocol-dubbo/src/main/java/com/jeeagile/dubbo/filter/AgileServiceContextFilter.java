@@ -24,8 +24,7 @@ public class AgileServiceContextFilter implements Filter {
             }
             return invoker.invoke(invocation);
         } finally {
-            AgileSecurityContext.remove();
+            AgileSecurityContext.removeUser();
         }
-
     }
 }

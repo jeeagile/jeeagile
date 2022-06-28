@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import { Message, MessageBox } from 'element-ui'
 import { getUserToken } from '@/utils/cookie'
+
 // api 的 base_url
 const baseURL = process.env.VUE_APP_BASE_API
 
@@ -19,7 +20,7 @@ service.interceptors.request.use(config => {
     // 是否需要设置 token
     const isToken = (config.headers || {}).isToken === false
     if (getUserToken() && !isToken) {
-      config.headers['AGILE_TOKEN'] = getUserToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+      config.headers.AGILE_TOKEN = getUserToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     return config
   },

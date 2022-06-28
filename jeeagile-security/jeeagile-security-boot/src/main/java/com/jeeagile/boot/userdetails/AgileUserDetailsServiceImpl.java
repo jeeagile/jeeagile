@@ -37,7 +37,7 @@ public class AgileUserDetailsServiceImpl implements UserDetailsService {
             if (agileUserDetailsService == null) {
                 throw new AgileFrameException(AgileResultCode.FAIL_SERVER_EXCEPTION, "请设置用户验证接口实现类！");
             }
-            AgileBaseUser userData = agileUserDetailsService.getUserDataByLoginName(loginName);
+            AgileBaseUser userData = agileUserDetailsService.getUserData(loginName);
             if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
                 userData.setUserToken(AgileStringUtil.getUuid());
                 userData.setUserPerm(agileUserDetailsService.getUserPerm(userData));

@@ -2,7 +2,12 @@
   <div class="login_container">
     <div class="login_box">
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-        <h3 class="title">{{title}}</h3>
+        <h3 class="title">
+          JeeAgile 敏捷快速开发平台
+          <template v-if="tenantName">
+            --{{tenantName}}
+          </template>
+        </h3>
         <el-form-item prop="userName">
           <el-input v-model="loginForm.userName" type="text" auto-complete="off" placeholder="账号">
             <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon"/>
@@ -61,14 +66,17 @@
 <script>
   import { getCodeImage } from '@/api/system/kaptcha'
   import Cookies from 'js-cookie'
+  import { getTenantInfo } from '@/api/system/tenant'
 
   export default {
     name: 'Login',
     data() {
       return {
         codeUrl: '',
-        title: '',
+        title: this.$store.state.settings.title,
         loginForm: {
+          tenantId: undefined,
+          tenantSign: undefined,
           userName: 'admin',
           password: '123456',
           uuid: undefined,
@@ -85,7 +93,8 @@
           captchaCode: [{ required: true, trigger: 'change', message: '验证码不能为空' }]
         },
         loading: false,
-        redirect: undefined
+        redirect: undefined,
+        tenantName: undefined
       }
     },
     watch: {
@@ -97,11 +106,24 @@
       }
     },
     created() {
-      this.title = this.$store.state.settings.title
+      this.getAgileTenantInfo()
       this.getCodeImage()
       this.getCookie()
     },
     methods: {
+      /** 获取租户信息 */
+      getAgileTenantInfo() {
+        const tenantId = this.$route.query?.tenantId
+        const tenantSign = this.$route.query?.tenantSign
+        if (tenantId && tenantSign) {
+          getTenantInfo({ tenantId: tenantId, tenantSign: tenantSign }).then(res => {
+            this.loginForm.tenantId = tenantId
+            this.loginForm.tenantSign = tenantSign
+            this.tenantName = res.data?.tenantName
+          })
+        }
+      },
+      /** 获取验证码 */
       getCodeImage() {
         getCodeImage().then(res => {
           this.codeUrl = 'data:image/gif;base64,' + res.data.image

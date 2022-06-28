@@ -110,5 +110,4 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
         return new HttpSessionEventPublisher();
     }
 
-
 }

@@ -14,6 +14,14 @@ import java.io.Serializable;
 @Accessors
 public class AgileLoginUser implements Serializable {
     /**
+     * 租户ID
+     */
+    private String tenantId;
+    /**
+     * 租户签名
+     */
+    private String tenantSign;
+    /**
      * 用户名
      */
     private String userName;

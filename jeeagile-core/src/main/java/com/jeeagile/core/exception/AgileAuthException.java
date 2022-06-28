@@ -22,6 +22,14 @@ public class AgileAuthException extends AgileBaseException {
     /**
      * 构造函数
      *
+     * @param message
+     */
+    public AgileAuthException(String message,Throwable throwable) {
+        super(AgileResultCode.FAIL_AUTH_EXCEPTION, message);
+    }
+    /**
+     * 构造函数
+     *
      * @param agileResultCode
      */
     public AgileAuthException(IAgileResultCode agileResultCode) {

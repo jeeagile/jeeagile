@@ -12,6 +12,8 @@ import com.jeeagile.core.util.AgileAgentUtil;
 import com.jeeagile.core.util.AgileNetUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.spring.AgileServletUtil;
+import com.jeeagile.core.util.tenant.AgileTenantUtil;
+import com.jeeagile.shiro.authc.AgileUsernamePasswordToken;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -49,7 +51,13 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
         }
         String password = new String(credentials);// 把字符数组转换为String类型(用户输入的密码)
         try {
-            AgileBaseUser userData = agileUserDetailsService.getUserDataByLoginName(loginName);
+            AgileBaseUser userData;
+            if (AgileTenantUtil.isTenantEnable()) {
+                AgileUsernamePasswordToken agileUsernamePasswordToken = (AgileUsernamePasswordToken) authenticationToken;
+                userData = agileUserDetailsService.getUserData(loginName, agileUsernamePasswordToken.getTenantId(), agileUsernamePasswordToken.getTenantSign());
+            } else {
+                userData = agileUserDetailsService.getUserData(loginName);
+            }
             if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
                 if (AgileSecurityUtil.encryptPassword(password).equals(userData.getPassword())) {
                     userData.setUserToken(SecurityUtils.getSubject().getSession().getId().toString());

@@ -76,4 +76,6 @@ public class AgileSysTenant extends AgileBaseModel<AgileSysTenant> {
     @Size(max = 150, message = "备注信息长度最大值为150！")
     private String remark;
 
+    @TableField(exist = false)
+    private String tenantSign;
 }
