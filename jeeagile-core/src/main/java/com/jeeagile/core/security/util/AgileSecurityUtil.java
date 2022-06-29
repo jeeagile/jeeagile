@@ -91,12 +91,14 @@ public class AgileSecurityUtil {
      * 获取用户租户ID
      */
     public static String getTenantId() {
-        AgileBaseUser agileBaseUser = getUserData();
-        if (agileBaseUser != null) {
-            return agileBaseUser.getTenantId();
-        } else {
-            return AgileSecurityContext.getTenantId();
+        String tenantId = AgileSecurityContext.getTenantId();
+        if (AgileStringUtil.isEmpty(tenantId)) {
+            AgileBaseUser agileBaseUser = getUserData();
+            if (agileBaseUser != null) {
+                tenantId = agileBaseUser.getTenantId();
+            }
         }
+        return tenantId;
     }
 
     /**
