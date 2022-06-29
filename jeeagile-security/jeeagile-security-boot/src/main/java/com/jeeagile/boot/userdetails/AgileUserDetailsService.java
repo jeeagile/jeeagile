@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @date 2021-07-09
  * @description
  */
-public class AgileUserDetailsServiceImpl implements UserDetailsService {
+public class AgileUserDetailsService implements UserDetailsService {
     @Lazy
     @AgileReference
     private IAgileUserDetailsService agileUserDetailsService;
@@ -37,7 +37,30 @@ public class AgileUserDetailsServiceImpl implements UserDetailsService {
             if (agileUserDetailsService == null) {
                 throw new AgileFrameException(AgileResultCode.FAIL_SERVER_EXCEPTION, "请设置用户验证接口实现类！");
             }
-            AgileBaseUser userData = agileUserDetailsService.getUserData(loginName);
+            return this.loadUserDetails(agileUserDetailsService.getUserData(loginName));
+        } catch (AgileBaseException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AgileAuthException(AgileResultCode.FAIL_AUTH_EXCEPTION, ex);
+        }
+    }
+
+
+    public UserDetails loadUserByUsername(String loginName, String tenantId, String tenantSign) throws UsernameNotFoundException {
+        try {
+            if (agileUserDetailsService == null) {
+                throw new AgileFrameException(AgileResultCode.FAIL_SERVER_EXCEPTION, "请设置用户验证接口实现类！");
+            }
+            return this.loadUserDetails(agileUserDetailsService.getUserData(loginName, tenantId, tenantSign));
+        } catch (AgileBaseException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AgileAuthException(AgileResultCode.FAIL_AUTH_EXCEPTION, ex);
+        }
+    }
+
+    private UserDetails loadUserDetails(AgileBaseUser userData) {
+        try {
             if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
                 userData.setUserToken(AgileStringUtil.getUuid());
                 userData.setUserPerm(agileUserDetailsService.getUserPerm(userData));
