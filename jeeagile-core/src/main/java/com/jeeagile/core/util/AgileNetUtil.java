@@ -19,7 +19,7 @@ public class AgileNetUtil {
     private static final Logger log = LoggerFactory.getLogger(AgileNetUtil.class);
     //http://ip.aliyun.com/outGetIpInfo?&accessKey=alibaba-inc
     //http://whois.pconline.com.cn/ipJson.jsp
-    public static final String IP_URL = "http://ip.aliyun.com/outGetIpInfo?&accessKey=alibaba-inc";
+    public static final String IP_URL = "https://ip.aliyun.com/service/getIpInfo.php?";
     public static final String UNKNOWN_IP = "XX XX";
 
     /**
@@ -36,7 +36,8 @@ public class AgileNetUtil {
             }
             if (AgileUtil.isAddressEnabled()) {
                 RestTemplate restTemplate = new RestTemplate();
-                JSONObject rtnObj = restTemplate.getForObject(IP_URL + "&ip=" + ip, JSONObject.class);
+                String rtnStr = restTemplate.getForObject(IP_URL + "ip=" + ip, String.class);
+                JSONObject rtnObj = JSONObject.parseObject(rtnStr);
                 if (rtnObj.getString("code").equals("0")) {
                     JSONObject dataObj = rtnObj.getJSONObject("data");
                     String country = dataObj.getString("country");
