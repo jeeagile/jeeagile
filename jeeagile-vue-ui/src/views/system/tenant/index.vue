@@ -55,9 +55,15 @@
       <el-table-column label="启用状态" align="center" prop="enableStatus" :formatter="enableStatusFormat"/>
       <el-table-column label="审核状态" align="center" prop="auditStatus" :formatter="auditStatusFormat"/>
       <el-table-column label="有效期" align="center" prop="expirationDate" :formatter="expirationDateFormat"/>
-      <el-table-column label="操作" align="center" width="200px">
+      <el-table-column label="操作" align="center" width="250px">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-tickets" @click="handleAudit(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-tickets"
+                     @click="handleView(scope.row)"
+                     v-hasPerm="['system:tenant:audit']">
+            详细
+          </el-button>
+          <el-button v-if="scope.row.auditStatus==0" size="mini" type="text" icon="el-icon-tickets"
+                     @click="handleAudit(scope.row)"
                      v-hasPerm="['system:tenant:audit']">
             审核
           </el-button>
@@ -80,11 +86,11 @@
     <!-- 添加或修改租户对话框 -->
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="租户编码" prop="tenantCode">
+          <el-input v-model="form.tenantCode" placeholder="请输入租户编码" :disabled="form.id != undefined"/>
+        </el-form-item>
         <el-form-item label="租户名称" prop="tenantName">
           <el-input v-model="form.tenantName" placeholder="请输入租户名称"/>
-        </el-form-item>
-        <el-form-item label="租户编码" prop="tenantCode">
-          <el-input v-model="form.tenantCode" placeholder="请输入编码名称"/>
         </el-form-item>
         <el-form-item label="有效日期" prop="expirationDate">
           <el-date-picker
@@ -112,17 +118,16 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-
     <!-- 添加或修改租户对话框 -->
     <el-dialog title="租户审核" :visible.sync="auditDialog" width="500px" append-to-body>
-      <el-form ref="form" :model="auditForm" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="auditForm" :rules="auditRules" label-width="80px">
         <el-form-item label="租户编码" prop="tenantCode">
-          <el-input v-model="auditForm.tenantCode" placeholder="请输入编码名称" disabled="true"/>
+          <el-input v-model="auditForm.tenantCode" placeholder="请输入租户编码" disabled="true"/>
         </el-form-item>
         <el-form-item label="租户名称" prop="tenantName">
           <el-input v-model="auditForm.tenantName" placeholder="请输入租户名称" disabled="true"/>
         </el-form-item>
-        <el-form-item label="租户类型" prop="tenantCode">
+        <el-form-item label="租户类型" prop="tenantType">
           <el-select v-model="auditForm.tenantType" style="width: 100%">
             <el-option label="本地" value="0"/>
             <el-option label="远程" value="1"/>
@@ -134,6 +139,58 @@
         <el-button type="info" @click="handleAuditReject">审核拒绝</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="租户详细信息" :visible.sync="viewDialog" width="500px" append-to-body>
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="租户编码：" prop="tenantCode">
+              {{ form.tenantCode }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="租户名称：">
+              {{ form.tenantName }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="租户类型：">
+              {{ tenantTypeFormat(form.tenantType) }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="有效日期：">
+              {{form.expirationDate}}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="启用状态：">
+              {{ enableStatusFormat(form) }}
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="审核状态：">
+              {{ auditStatusFormat(form) }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item v-if="form.auditStatus==1" label="访问地址：">
+              {{ tenantLoginUrl(form) }}
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="viewDialog = false">关 闭</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -170,6 +227,7 @@
         // 是否显示弹出层
         openDialog: false,
         auditDialog: false,
+        viewDialog: false,
         // 状态数据字典
         enableStatusOptionList: [],
         // 审核状态字典
@@ -209,6 +267,11 @@
           tenantName: undefined,
           tenantType: '0',
           auditStatus: undefined
+        },
+        auditRules: {
+          tenantType: [
+            { required: true, message: '租户类型不能为空', trigger: 'blur' }
+          ]
         }
       }
     },
@@ -239,11 +302,24 @@
       auditStatusFormat(row, column) {
         return this.handleDictLabel(this.auditStatusOptionList, row.auditStatus)
       },
+      /** 租户类型翻译 */
+      tenantTypeFormat(tenantType) {
+        if (tenantType === '0') {
+          return '本地'
+        }
+        if (tenantType === '1') {
+          return '远程'
+        }
+      },
+      /** 租户登录地址 */
+      tenantLoginUrl(form) {
+        return location.protocol + '//' + location.host + '/login?tenantId=' + form.id + '&tenantSign=' + form.tenantSign
+      },
+      /** 有效期格式化 */
       expirationDateFormat(row, column) {
         if (!row.expirationDate) {
           return '永久有效'
         } else {
-          debugger
           const expirationDate = Date.parse(row.expirationDate)
           const currentDate = Date.now()
           const millisecond = expirationDate - currentDate
@@ -269,6 +345,7 @@
           }
         }
       },
+
       /** 取消按钮 */
       cancel() {
         this.openDialog = false
@@ -316,6 +393,14 @@
           this.form = response.data
           this.openDialog = true
           this.dialogTitle = '修改租户'
+        })
+      },
+      handleView(row) {
+        this.reset()
+        row = undefined === row.id ? this.selectRowList[0] : row
+        detailTenant(row.id).then(response => {
+          this.form = response.data
+          this.viewDialog = true
         })
       },
       handleAudit(row) {

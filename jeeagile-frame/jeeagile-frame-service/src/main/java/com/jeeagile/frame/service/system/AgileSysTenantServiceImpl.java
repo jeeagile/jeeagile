@@ -7,6 +7,7 @@ import com.jeeagile.core.enums.AgileUserStatus;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.tenant.AgileTenantUtil;
@@ -70,9 +71,11 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         this.updateModelValidate(agileSysTenant);
         AgileSysTenant agileSysTenantOld = this.getById(agileSysTenant.getId());
         if (AgileAuditStatus.PASS.getCode().equals(agileSysTenantOld.getAuditStatus())) {
+            AgileSecurityContext.putTenantId(agileSysTenantOld.getId());
             if (!agileSysTenant.getTenantName().equals(agileSysTenantOld.getTenantName())) {
                 this.updateTenantAdminUser(agileSysTenant);
             }
+            AgileSecurityContext.removeTenant();
         }
         if (this.updateById(agileSysTenant)) {
             return true;
@@ -108,8 +111,11 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         if (agileSysTenantOld == null || agileSysTenantOld.isEmptyPk()) {
             throw new AgileFrameException("租户信息已不存在！");
         }
-        if (agileSysTenant.getAuditStatus().equals("0")) {
+
+        if (AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
+            AgileSecurityContext.putTenantId(agileSysTenantOld.getId());
             this.initTenantInfo(agileSysTenantOld);
+            AgileSecurityContext.removeTenant();
         }
         return this.updateModel(agileSysTenant);
     }
@@ -121,8 +127,10 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
             throw new AgileFrameException("租户信息已不存在！");
         }
         if (AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
+            AgileSecurityContext.putTenantId(agileSysTenant.getId());
             this.deleteTenantAdminUser(agileSysTenant);
             this.deleteTenantInfo(agileSysTenant);
+            AgileSecurityContext.removeTenant();
         }
         this.removeById(id);
         return true;

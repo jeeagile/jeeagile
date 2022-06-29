@@ -5,7 +5,7 @@
         <h3 class="title">
           JeeAgile 敏捷快速开发平台
           <template v-if="tenantName">
-            --{{tenantName}}
+            -- {{tenantName}}
           </template>
         </h3>
         <el-form-item prop="userName">
