@@ -11,6 +11,7 @@ import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.tenant.AgileTenantUtil;
+import com.jeeagile.frame.entity.system.AgileSysMenu;
 import com.jeeagile.frame.entity.system.AgileSysTenant;
 import com.jeeagile.frame.entity.system.AgileSysUser;
 import com.jeeagile.frame.mapper.system.AgileSysTenantMapper;
@@ -29,6 +30,8 @@ import java.io.Serializable;
 public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTenantMapper, AgileSysTenant> implements IAgileSysTenantService {
     @Autowired
     private IAgileSysUserService agileSysUserService;
+    @Autowired
+    private IAgileSysMenuService agileSysMenuService;
 
     @Override
     public LambdaQueryWrapper<AgileSysTenant> queryWrapper(AgileSysTenant agileSysTenant) {
@@ -83,6 +86,18 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         return false;
     }
 
+    /**
+     * 更新租户管理员名称
+     *
+     * @param agileSysTenant
+     */
+    private void updateTenantAdminUser(AgileSysTenant agileSysTenant) {
+        LambdaUpdateWrapper<AgileSysUser> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.set(AgileSysUser::getNickName, agileSysTenant.getTenantName());
+        lambdaUpdateWrapper.eq(AgileSysUser::getUserName, agileSysTenant.getTenantCode());
+        agileSysUserService.update(lambdaUpdateWrapper);
+    }
+
     @Override
     public void updateModelValidate(AgileSysTenant agileSysTenant) {
         this.validateData(agileSysTenant);
@@ -104,6 +119,38 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         }
     }
 
+    @Override
+    public boolean deleteModel(Serializable id) {
+        AgileSysTenant agileSysTenant = this.getById(id);
+        if (agileSysTenant == null || agileSysTenant.isEmptyPk()) {
+            throw new AgileFrameException("租户信息已不存在！");
+        }
+        if (AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
+            AgileSecurityContext.putTenantId(agileSysTenant.getId());
+            this.deleteTenantUser();
+            this.deleteTenantMenu();
+            AgileSecurityContext.removeTenant();
+        }
+        this.removeById(id);
+        return true;
+    }
+
+    /**
+     * 租户模式删除租户下所有用户
+     */
+    private void deleteTenantUser() {
+        LambdaQueryWrapper<AgileSysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysUserService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 租户模式删除租户分配菜单
+     */
+    private void deleteTenantMenu() {
+        LambdaQueryWrapper<AgileSysMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysMenuService.remove(lambdaQueryWrapper);
+    }
+
 
     @Override
     public boolean audit(AgileSysTenant agileSysTenant) {
@@ -114,60 +161,11 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
 
         if (AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
             AgileSecurityContext.putTenantId(agileSysTenantOld.getId());
-            this.initTenantInfo(agileSysTenantOld);
+            this.initTenantAdminUser(agileSysTenant);
+            this.initTenantMenu(agileSysTenant);
             AgileSecurityContext.removeTenant();
         }
         return this.updateModel(agileSysTenant);
-    }
-
-    @Override
-    public boolean deleteModel(Serializable id) {
-        AgileSysTenant agileSysTenant = this.getById(id);
-        if (agileSysTenant == null || agileSysTenant.isEmptyPk()) {
-            throw new AgileFrameException("租户信息已不存在！");
-        }
-        if (AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
-            AgileSecurityContext.putTenantId(agileSysTenant.getId());
-            this.deleteTenantAdminUser(agileSysTenant);
-            this.deleteTenantInfo(agileSysTenant);
-            AgileSecurityContext.removeTenant();
-        }
-        this.removeById(id);
-        return true;
-    }
-
-    private void deleteTenantAdminUser(AgileSysTenant agileSysTenant) {
-        LambdaQueryWrapper<AgileSysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileSysUser::getUserName, agileSysTenant.getTenantCode());
-        agileSysUserService.remove(lambdaQueryWrapper);
-    }
-
-    /**
-     * 删除租户信息
-     *
-     * @param agileSysTenant
-     */
-    private void deleteTenantInfo(AgileSysTenant agileSysTenant) {
-
-    }
-
-
-
-    /**
-     * 初始化租户基础信息
-     *
-     * @param agileSysTenant
-     */
-    private void initTenantInfo(AgileSysTenant agileSysTenant) {
-        this.createTenantAdminUser(agileSysTenant);
-    }
-
-
-    private void updateTenantAdminUser(AgileSysTenant agileSysTenant) {
-        LambdaUpdateWrapper<AgileSysUser> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        lambdaUpdateWrapper.set(AgileSysUser::getNickName, agileSysTenant.getTenantName());
-        lambdaUpdateWrapper.eq(AgileSysUser::getUserName, agileSysTenant.getTenantCode());
-        agileSysUserService.update(lambdaUpdateWrapper);
     }
 
     /**
@@ -175,7 +173,7 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
      *
      * @param agileSysTenant
      */
-    private void createTenantAdminUser(AgileSysTenant agileSysTenant) {
+    private void initTenantAdminUser(AgileSysTenant agileSysTenant) {
         AgileSysUser agileSysUser = new AgileSysUser();
         agileSysUser.setUserName(agileSysTenant.getTenantCode());
         agileSysUser.setNickName(agileSysTenant.getTenantName());
@@ -183,5 +181,14 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysUser.setUserSort(0);
         agileSysUser.setUserPwd(AgileSecurityUtil.encryptPassword(agileSysTenant.getTenantCode()));
         agileSysUserService.save(agileSysUser);
+    }
+
+    /**
+     * 初始化租户菜单
+     *
+     * @param agileSysTenant
+     */
+    private void initTenantMenu(AgileSysTenant agileSysTenant) {
+
     }
 }
