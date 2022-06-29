@@ -6,6 +6,7 @@ import com.jeeagile.core.exception.AgileDemoException;
 import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.annotation.*;
 import com.jeeagile.core.security.context.AgileSecurityContext;
+import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
@@ -53,8 +54,6 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
                 throw new AgileAuthException("请设置用户安全接口类《UserSecurity》");
             }
 
-            //当前线程存放用户信息
-            AgileSecurityContext.putUserData(agileSecurity.getUserData());
 
             //演示模式拦截
             AgileDemo agileDemo = handlerMethod.getMethodAnnotation(AgileDemo.class);
@@ -72,8 +71,13 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
                 return;
             }
 
-            //如果为超管用户则不在进行权限校验
-            if (agileSecurity.getUserData().isSuperAdmin()) {
+            //获取用户信息
+            AgileBaseUser agileBaseUser = agileSecurity.getUserData();
+            //当前线程存放用户信息
+            AgileSecurityContext.putUserData(agileBaseUser);
+
+            //如果为超管用户则不在进行权限校验 或者为租户管理员
+            if (agileSecurity.getUserData().isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {
                 return;
             }
 
