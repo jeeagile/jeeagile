@@ -5,8 +5,9 @@ import com.jeeagile.boot.access.AgileAccessDeniedHandler;
 import com.jeeagile.boot.access.AgileAuthenticationEntryPoint;
 import com.jeeagile.boot.crypto.AgilePasswordEncoder;
 import com.jeeagile.boot.filter.AgileUserTokenFilter;
+import com.jeeagile.boot.provider.AgileAuthenticationProvider;
 import com.jeeagile.boot.security.AgileBootSecurity;
-import com.jeeagile.boot.userdetails.AgileUserDetailsServiceImpl;
+import com.jeeagile.boot.userdetails.AgileUserDetailsService;
 import com.jeeagile.core.security.properties.AgileSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -63,12 +64,13 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
 
         // 过滤请求 对于登录login 允许匿名访问
         httpSecurity.authorizeRequests().antMatchers(
-                "/system/auth/login" ,
-                "/system/kaptcha/image" ,
+                "/system/auth/login",
+                "/system/tenant/info",
+                "/system/kaptcha/image",
                 "/system/kaptcha/valid")
                 .permitAll();
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET,
-                "/static/**" ,
+                "/static/**",
                 "/index.html")
                 .permitAll();
 
@@ -88,8 +90,13 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return new AgileUserDetailsServiceImpl();
+    public AgileUserDetailsService agileUserDetailsService() {
+        return new AgileUserDetailsService();
+    }
+
+    @Bean
+    public AgileAuthenticationProvider agileAuthenticationProvider() {
+        return new AgileAuthenticationProvider();
     }
 
     /**
@@ -97,7 +104,8 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(agilePasswordEncoder());
+        authenticationManagerBuilder.authenticationProvider(agileAuthenticationProvider());
+//        authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(agilePasswordEncoder());
     }
 
     @Bean

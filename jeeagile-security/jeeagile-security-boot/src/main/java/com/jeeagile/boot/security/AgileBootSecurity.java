@@ -1,6 +1,7 @@
 package com.jeeagile.boot.security;
 
 
+import com.jeeagile.boot.authc.AgileUsernamePasswordToken;
 import com.jeeagile.boot.userdetails.AgileUserDetails;
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
 import com.jeeagile.core.cache.util.AgileCacheUtil;
@@ -16,6 +17,7 @@ import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.tenant.AgileTenantUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
@@ -46,8 +48,12 @@ public class AgileBootSecurity implements IAgileSecurity {
     @Override
     public void userLogin(AgileLoginUser agileLoginUser) {
         try {
-            UsernamePasswordAuthenticationToken passwordAuthenticationToken = new UsernamePasswordAuthenticationToken(agileLoginUser.getUserName(), agileLoginUser.getPassword());
-            Authentication authentication = authenticationManager.authenticate(passwordAuthenticationToken);
+            AgileUsernamePasswordToken agileUsernamePasswordToken = new AgileUsernamePasswordToken(agileLoginUser.getUserName(), agileLoginUser.getPassword());
+            if (AgileTenantUtil.isTenantEnable()) {
+                agileUsernamePasswordToken.setTenantId(agileLoginUser.getTenantId());
+                agileUsernamePasswordToken.setTenantSign(agileLoginUser.getTenantSign());
+            }
+            Authentication authentication = authenticationManager.authenticate(agileUsernamePasswordToken);
             AgileUserDetails agileUserDetails = (AgileUserDetails) authentication.getPrincipal();
             if (agileUserDetails != null && AgileStringUtil.isNotEmpty(agileUserDetails.getUsername())) {
                 String userToken = agileUserDetails.getUserData().getUserToken();
@@ -258,6 +264,7 @@ public class AgileBootSecurity implements IAgileSecurity {
         try {
             return (AgileUserDetails) getAuthentication().getPrincipal();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new AgileAuthException("获取用户信息异常");
         }
     }
