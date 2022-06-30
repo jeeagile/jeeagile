@@ -4,7 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ContentRowHeight;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 @HeadRowHeight(value = 20)
 @ContentRowHeight(value = 18)
-public class AgileSysDictType extends AgileBaseModel<AgileSysDictType> {
+public class AgileSysDictType extends AgileBaseTenantModel<AgileSysDictType> {
     /**
      * 字典类型
      */

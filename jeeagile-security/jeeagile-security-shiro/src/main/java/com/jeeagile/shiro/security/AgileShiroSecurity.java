@@ -11,11 +11,11 @@ import com.jeeagile.core.security.annotation.AgileRequiresRoles;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
+import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.tenant.AgileTenantUtil;
 import com.jeeagile.shiro.authc.AgileUsernamePasswordToken;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -173,6 +173,9 @@ public class AgileShiroSecurity implements IAgileSecurity {
             if (pc instanceof PrincipalCollection) {
                 AgileBaseUser userData = (AgileBaseUser) ((PrincipalCollection) pc).getPrimaryPrincipal();
                 if (userData == null || AgileStringUtil.isEmpty(userData.getUserName())) {
+                    continue;
+                }
+                if(AgileTenantUtil.isTenantEnable() && !userData.getTenantId().equals(AgileSecurityUtil.getTenantId())){
                     continue;
                 }
                 AgileOnlineUser agileOnlineUser = new AgileOnlineUser();

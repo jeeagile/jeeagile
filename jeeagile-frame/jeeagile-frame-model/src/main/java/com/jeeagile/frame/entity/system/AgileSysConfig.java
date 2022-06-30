@@ -2,7 +2,7 @@ package com.jeeagile.frame.entity.system;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileSysConfig extends AgileBaseModel<AgileSysConfig> {
+public class AgileSysConfig extends AgileBaseTenantModel<AgileSysConfig> {
     /**
      * 参数名称
      */

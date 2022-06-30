@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public abstract class AgileTreeModel<T extends AgileTreeModel<T>> extends AgileBaseModel<T> {
+public abstract class AgileBaseTreeModel<T extends AgileBaseTreeModel<T>> extends AgileBaseModel<T> {
     /**
      * 父级ID
      */

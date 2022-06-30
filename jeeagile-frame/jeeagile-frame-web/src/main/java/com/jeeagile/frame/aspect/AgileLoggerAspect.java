@@ -127,7 +127,10 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                     AgileSysLogin agileSysLogin = getAgileSysLogin(httpServletRequest, throwable);
                     agileSysLogin.setLoginName(agileLoginUser.getUserName());
                     agileSysLogin.setLoginModule(getModuleName(joinPoint, agileLogger));
+                    //登录失败情况下无法记录租户ID 此处需进行存放
+                    AgileSecurityContext.putTenantId(agileLoginUser.getTenantId());
                     agileLoggerAsyncTask.saveAgileSysLogin(agileSysLogin);
+                    AgileSecurityContext.removeTenant();
                 } else {
                     AgileSysLogger agileSysLogger = getAgileSysLogger(httpServletRequest, throwable);
                     agileSysLogger.setOperateModule(getModuleName(joinPoint, agileLogger));
@@ -140,7 +143,10 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                     if (this.isSaveParam(joinPoint, agileLogger)) {
                         this.putParam(joinPoint, rtnObject, agileSysLogger);
                     }
+//                    //todo 此处需要考虑异步线程下是否存在问题
+//                    AgileSecurityContext.putTenantId(AgileSecurityContext.getUserData().getTenantId());
                     agileLoggerAsyncTask.saveAgileSysLogger(agileSysLogger);
+//                    AgileSecurityContext.removeTenant();
                 }
             }
         } catch (Exception ex) {

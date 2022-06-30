@@ -4,7 +4,7 @@ import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ContentRowHeight;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 @HeadRowHeight(value = 20)
 @ContentRowHeight(value = 18)
-public class AgileSysGroup extends AgileBaseModel<AgileSysGroup> {
+public class AgileSysGroup extends AgileBaseTenantModel<AgileSysGroup> {
     /**
      * 用户分组编码
      */

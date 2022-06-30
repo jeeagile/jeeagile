@@ -21,3 +21,74 @@ create table agile_sys_tenant
 );
 
 alter table agile_sys_tenant comment '租户信息表';
+
+
+ALTER TABLE `agile`.`agile_sys_config`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_sys_config` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_dept`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_sys_dept` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_dict_type`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_sys_dict_type` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_dict_data`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_sys_dict_data` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_menu`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_sys_menu` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_post`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_sys_post` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_role`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_sys_role` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_role_dept`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `dept_id`;
+
+update `agile`.`agile_sys_role_dept` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_role_menu`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `menu_id`;
+
+update `agile`.`agile_sys_role_menu` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_user`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_sys_user` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_user_post`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `post_id`;
+
+update `agile`.`agile_sys_user_post` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_user_role`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `role_id`;
+
+update `agile`.`agile_sys_user_role` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_login`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `message`;
+
+update `agile`.`agile_sys_login` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_sys_logger`
+ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `message`;
+
+update `agile`.`agile_sys_logger` set tenant_id='jeeagile';

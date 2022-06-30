@@ -6,8 +6,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ContentRowHeight;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.jeeagile.frame.entity.AgileBaseModel;
-import com.jeeagile.frame.entity.AgileTenantModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +26,7 @@ import java.util.List;
 @Data
 @HeadRowHeight(value = 20)
 @ContentRowHeight(value = 18)
-public class AgileSysUser extends AgileTenantModel<AgileSysUser> {
+public class AgileSysUser extends AgileBaseTenantModel<AgileSysUser> {
     /**
      * 用户名
      */

@@ -2,21 +2,14 @@ package com.jeeagile.frame.entity.system;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.jeeagile.core.util.AgileDateUtil;
 import com.jeeagile.frame.entity.AgileBaseModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.Date;
 
 /**

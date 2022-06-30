@@ -1,6 +1,6 @@
 package com.jeeagile.frame.entity.system;
 
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileSysRoleDept extends AgileBaseModel<AgileSysRoleDept> {
+public class AgileSysRoleDept extends AgileBaseTenantModel<AgileSysRoleDept> {
     /**
      * 角色uuid
      */

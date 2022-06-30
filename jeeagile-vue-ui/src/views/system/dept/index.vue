@@ -28,11 +28,11 @@
 
     <el-table v-loading="loading" :data="deptTreeList" row-key="id" DEFAULT-EXPAND-ALL
               :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
-      <el-table-column prop="deptCode" label="部门编码" width="260"></el-table-column>
-      <el-table-column prop="deptSort" label="排序" width="200"></el-table-column>
-      <el-table-column prop="deptStatus" label="状态" :formatter="deptStatusFormat" width="100"></el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column prop="deptName" label="部门名称"/>
+      <el-table-column prop="deptCode" label="部门编码"/>
+      <el-table-column prop="deptSort" label="排序"/>
+      <el-table-column prop="deptStatus" label="状态" :formatter="deptStatusFormat"/>
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="250">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)"
                      v-hasPerm="['system:dept:add']">

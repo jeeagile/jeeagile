@@ -1,7 +1,7 @@
 package com.jeeagile.frame.entity.system;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileSysLogger extends AgileBaseModel<AgileSysLogger> {
+public class AgileSysLogger extends AgileBaseTenantModel<AgileSysLogger> {
     /**
      * 操作模块
      */

@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public abstract class AgileTenantTreeModel<T extends AgileTenantTreeModel<T>> extends AgileTreeModel<T> {
+public abstract class AgileBaseTenantModel<T extends AgileBaseTenantModel<T>> extends AgileBaseModel<T> {
     /**
      * 租户ID
      */

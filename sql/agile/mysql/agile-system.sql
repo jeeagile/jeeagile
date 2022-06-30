@@ -9,8 +9,9 @@ drop table if exists agile_sys_role_dept;
 drop table if exists agile_sys_role_menu;
 drop table if exists agile_sys_user;
 drop table if exists agile_sys_user_post;
-drop table if exists agile_logger_login;
-drop table if exists agile_logger_operate;
+drop table if exists agile_sys_user_role;
+drop table if exists agile_sys_login;
+drop table if exists agile_sys_logger;
 
 
 /*==============================================================*/
@@ -45,6 +46,7 @@ create table agile_sys_dept
   dept_code         varchar(20) not null comment '部门编码',
   dept_sort         int not null default '0' comment '显示顺序',
   dept_status       char(1) not null default '0' comment '部门状态（0:正常 1:停用）',
+  remark            varchar(300) default null comment '备注',
   create_user       varchar(32) default null comment '创建人',
   create_time       datetime default null comment '创建时间',
   update_user       varchar(32) default null comment '修改人',
@@ -399,7 +401,7 @@ alter table agile_sys_role comment '角色信息表';
 INSERT INTO agile_sys_role VALUES ('1','jeeagile','JeeAgile',0,'0','02',NULL,NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
-/* table: agile_sys_role_menu 角色部门关联表                     */
+/* table: agile_sys_role_dept 角色部门关联表                     */
 /*==============================================================*/
 create table agile_sys_role_dept
 (

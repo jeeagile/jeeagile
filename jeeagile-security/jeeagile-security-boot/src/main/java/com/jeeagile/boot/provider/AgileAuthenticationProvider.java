@@ -7,27 +7,13 @@ import com.jeeagile.boot.userdetails.AgileUserDetailsService;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.exception.AgileFrameException;
-import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResultCode;
-import com.jeeagile.core.security.user.AgileBaseUser;
-import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
-import com.jeeagile.core.util.AgileAgentUtil;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.util.spring.AgileServletUtil;
 import com.jeeagile.core.util.tenant.AgileTenantUtil;
-import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class AgileAuthenticationProvider implements AuthenticationProvider {
     @Autowired

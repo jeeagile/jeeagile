@@ -104,7 +104,7 @@ public class AgileDataScopeInterceptor extends AgileSqlParserSupport implements 
             throw new AgileAuthException("获取用户信息发生异常!");
         }
         IAgileUserDetailsService agileUserDetailsService = AgileSpringUtil.getBean(IAgileUserDetailsService.class);
-        if (agileBaseUser.isSuperAdmin()) {
+        if (agileBaseUser.isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {
             return null;
         }
         List<String> dataScopeList = agileUserDetailsService.getUserDataScope(agileBaseUser);

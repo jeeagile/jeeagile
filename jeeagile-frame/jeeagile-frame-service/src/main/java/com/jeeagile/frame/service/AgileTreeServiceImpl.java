@@ -1,7 +1,7 @@
 package com.jeeagile.frame.service;
 
 import com.jeeagile.core.util.AgileCollectionUtil;
-import com.jeeagile.frame.entity.AgileTreeModel;
+import com.jeeagile.frame.entity.AgileBaseTreeModel;
 import com.jeeagile.frame.mapper.AgileTreeMapper;
 
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2021-03-21
  * @description
  */
-public abstract class AgileTreeServiceImpl<M extends AgileTreeMapper<T>, T extends AgileTreeModel> extends AgileBaseServiceImpl<M, T> implements IAgileTreeService<T> {
+public abstract class AgileTreeServiceImpl<M extends AgileTreeMapper<T>, T extends AgileBaseTreeModel> extends AgileBaseServiceImpl<M, T> implements IAgileTreeService<T> {
 
     @Override
     public List<T> selectChild(Serializable parentId) {

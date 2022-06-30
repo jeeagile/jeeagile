@@ -1,6 +1,6 @@
 package com.jeeagile.frame.service;
 
-import com.jeeagile.frame.entity.AgileTreeModel;
+import com.jeeagile.frame.entity.AgileBaseTreeModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  * @date 2021-03-21
  * @description
  */
-public interface IAgileTreeService<T extends AgileTreeModel> extends IAgileBaseService<T> {
+public interface IAgileTreeService<T extends AgileBaseTreeModel> extends IAgileBaseService<T> {
 
     /**
      * 根据父节点获取下级节点

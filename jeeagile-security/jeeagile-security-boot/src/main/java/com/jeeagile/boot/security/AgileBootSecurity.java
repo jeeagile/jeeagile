@@ -16,6 +16,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresRoles;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.user.AgileLoginUser;
 import com.jeeagile.core.security.user.AgileOnlineUser;
+import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.tenant.AgileTenantUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -232,6 +233,9 @@ public class AgileBootSecurity implements IAgileSecurity {
             AgileUserDetails agileUserDetails = (AgileUserDetails) AgileCacheUtil.get(AgileCacheConstants.AGILE_CACHE_SESSION_NAME, sessionId.toString());
             if (agileUserDetails == null || AgileStringUtil.isEmpty(agileUserDetails.getUsername())) {
                 sessionRegistry.removeSessionInformation(sessionId.toString());
+                continue;
+            }
+            if (AgileTenantUtil.isTenantEnable() && !agileUserDetails.getUserData().getTenantId().equals(AgileSecurityUtil.getTenantId())) {
                 continue;
             }
             SessionInformation sessionInformation = sessionRegistry.getSessionInformation(sessionId.toString());
