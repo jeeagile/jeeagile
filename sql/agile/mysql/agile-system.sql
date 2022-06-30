@@ -154,6 +154,7 @@ INSERT INTO agile_sys_dict_data VALUES ('99','0',9,'清空数据','CLEAR','sys_l
 INSERT INTO agile_sys_dict_data VALUES ('910','0',10,'用户强退','FORCE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('911','0',11,'代码生成','GENERATOR','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('912','0',12,'其他操作','OTHER','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+
 INSERT INTO agile_sys_dict_data VALUES ('101', '0', 0, '已发布', '1', 'process_deployment_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('102', '0', 1, '未发布', '2', 'process_deployment_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('111', '0', 0, '流程表单', '1', 'process_form_type', '0', '0', NULL,NULL,NULL,NULL,NULL);
@@ -327,7 +328,7 @@ INSERT INTO agile_sys_menu VALUES ('50201','502','删除',1,'','#','#','F','0','
 INSERT INTO agile_sys_menu VALUES ('50202','502','清空',2,'','','','F','0','0','1','logger:login:clear','',NULL,NULL,NULL,NULL);
 
 
-INSERT INTO agile_sys_menu VALUES ('6', '0', '流程管理', '6', '', 'process', 'process', 'M', '0', '0', '1', '', '', ,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('6', '0', '流程管理', '6', '', 'process', 'process', 'M', '0', '0', '1', '', '', NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('601', '6', '流程表单', '0', 'process/form/index', 'form', 'form', 'C', '0', '0', '1', 'process:form:page', '' ,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('60101','601','流程表单明细',1,'','','#','F','0','0','1','process:form:detail','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('60102','601','流程表单新增',2,'','','#','F','0','0','1','process:form:add','',NULL,NULL,NULL,NULL);
@@ -338,7 +339,7 @@ INSERT INTO agile_sys_menu VALUES ('60106','601','流程表单导出',6,'','','#
 INSERT INTO agile_sys_menu VALUES ('60107','601','流程表单预览',7,'','','#','F','0','0','1','process:form:view','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('60108','601','流程表单设计',8,'','','#','F','0','0','1','process:form:designer','',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('602', '6', '流程模型', '1', 'process/model/index', 'model', 'example', 'C', '0', '0', '0', 'process:model:page,process:model:list', '', ,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('602', '6', '流程模型', '1', 'process/model/index', 'model', 'example', 'C', '0', '0', '0', 'process:model:page,process:model:list', '', NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('60201','602','流程模型明细',1,'','','#','F','0','0','1','process:model:detail','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('60202','602','流程模型新增',2,'','','#','F','0','0','1','process:model:add','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('60203','602','流程模型修改',3,'','','#','F','0','0','1','process:model:update','',NULL,NULL,NULL,NULL);
