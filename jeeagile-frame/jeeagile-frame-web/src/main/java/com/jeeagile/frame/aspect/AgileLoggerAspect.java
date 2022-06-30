@@ -128,7 +128,11 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                     agileSysLogin.setLoginName(agileLoginUser.getUserName());
                     agileSysLogin.setLoginModule(getModuleName(joinPoint, agileLogger));
                     //登录失败情况下无法记录租户ID 此处需进行存放
-                    AgileSecurityContext.putTenantId(agileLoginUser.getTenantId());
+                    String tenantId = agileLoginUser.getTenantId();
+                    if (AgileStringUtil.isEmpty(tenantId)) {
+                        tenantId = "非法租户";
+                    }
+                    AgileSecurityContext.putTenantId(tenantId);
                     agileLoggerAsyncTask.saveAgileSysLogin(agileSysLogin);
                     AgileSecurityContext.removeTenant();
                 } else {
