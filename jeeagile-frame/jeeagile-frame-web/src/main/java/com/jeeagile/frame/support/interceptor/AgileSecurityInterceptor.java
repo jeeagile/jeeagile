@@ -9,6 +9,7 @@ import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileUtil;
+import com.jeeagile.core.util.tenant.AgileTenantUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.controller.AgileCrudController;
 import org.slf4j.Logger;
@@ -56,10 +57,11 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
 
 
             //演示模式拦截
-            AgileDemo agileDemo = handlerMethod.getMethodAnnotation(AgileDemo.class);
-            if (agileDemo != null && AgileUtil.isDemoEnabled()) {
-                throw new AgileDemoException();
-            }
+//            AgileDemo agileDemo = handlerMethod.getMethodAnnotation(AgileDemo.class);
+//            if (agileDemo != null && AgileUtil.isDemoEnabled()) {
+//                throw new AgileDemoException();
+//            }
+
 
             AgileRequiresGuest agileRequiresGuest = handlerMethod.getBeanType().getAnnotation(AgileRequiresGuest.class);
             if (agileRequiresGuest != null) {
@@ -75,6 +77,21 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             AgileBaseUser agileBaseUser = agileSecurity.getUserData();
             //当前线程存放用户信息
             AgileSecurityContext.putUserData(agileBaseUser);
+
+            if (AgileUtil.isDemoEnabled()) {
+                AgileDemo agileDemo = handlerMethod.getMethodAnnotation(AgileDemo.class);
+                if (AgileTenantUtil.isTenantEnable()) {
+                    if (AgileTenantUtil.getDefaultTenant().equals(agileBaseUser.getTenantId())) {
+                        if (agileDemo != null) {
+                            throw new AgileDemoException();
+                        }
+                    }
+                } else {
+                    if (agileDemo != null) {
+                        throw new AgileDemoException();
+                    }
+                }
+            }
 
             //如果为超管用户则不在进行权限校验 或者为租户管理员
             if (agileSecurity.getUserData().isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {
