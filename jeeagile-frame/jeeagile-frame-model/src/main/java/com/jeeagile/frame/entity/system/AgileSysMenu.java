@@ -4,6 +4,7 @@ import com.jeeagile.frame.entity.AgileBaseTenantTreeModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -30,7 +31,7 @@ public class AgileSysMenu extends AgileBaseTenantTreeModel<AgileSysMenu> {
      */
     @ApiModelProperty("显示顺序")
     @NotEmpty(message = "显示顺序不能为空!")
-    private String menuSort;
+    private Integer menuSort;
 
     /**
      * 组件地址
@@ -94,4 +95,25 @@ public class AgileSysMenu extends AgileBaseTenantTreeModel<AgileSysMenu> {
     @ApiModelProperty("备注")
     @Size(max = 150, message = "备注长度最大值为150！")
     private String remark;
+
+    public AgileSysMenu() {
+    }
+
+    @Builder
+    public AgileSysMenu(String id, String parentId, String menuName, Integer menuSort,
+                        String menuComp, String menuPath, String menuIcon, String menuType,
+                        String menuVisible, String menuStatus, String menuFrame, String menuPerm) {
+        this.id = id;
+        this.parentId = parentId;
+        this.menuName = menuName;
+        this.menuSort = menuSort;
+        this.menuComp = menuComp;
+        this.menuPath = menuPath;
+        this.menuIcon = menuIcon;
+        this.menuType = menuType;
+        this.menuVisible = menuVisible;
+        this.menuStatus = menuStatus;
+        this.menuFrame = menuFrame;
+        this.menuPerm = menuPerm;
+    }
 }

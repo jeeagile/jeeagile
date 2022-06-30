@@ -18,6 +18,6 @@ public abstract class AgileBaseTreeModel<T extends AgileBaseTreeModel<T>> extend
      * 父级ID
      */
     @ExcelIgnore
-    private String parentId;
+    protected String parentId;
 
 }

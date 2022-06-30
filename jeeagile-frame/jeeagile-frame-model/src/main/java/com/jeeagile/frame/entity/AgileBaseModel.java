@@ -24,7 +24,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
     @ExcelIgnore
     @ApiModelProperty(value = "主键ID")
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
+    protected String id;
 
     /**
      * 创建人

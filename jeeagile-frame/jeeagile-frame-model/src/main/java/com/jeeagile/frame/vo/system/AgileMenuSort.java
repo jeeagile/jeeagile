@@ -15,5 +15,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AgileMenuSort extends AgileBaseVo {
     private String id;
-    private String menuSort;
+    private Integer menuSort;
 }
