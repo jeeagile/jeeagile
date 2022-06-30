@@ -109,10 +109,10 @@
           <el-col :span="24">
             <el-form-item label="操作方法：">{{ form.executeMethod }}</el-form-item>
           </el-col>
-          <el-col :span="24">
+          <el-col :span="24" v-if="form.requestParam">
             <el-form-item label="请求参数：">{{ form.requestParam }}</el-form-item>
           </el-col>
-          <el-col :span="24">
+          <el-col :span="24" v-if="form.responseParam">
             <el-form-item label="返回参数：">{{ form.responseParam }}</el-form-item>
           </el-col>
           <el-col :span="12">
