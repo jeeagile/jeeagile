@@ -72,7 +72,7 @@ public class AgileSecurityUtil {
      * @return
      */
     public static <T extends AgileBaseUser> T getUserData() {
-        return (T)AgileSecurityContext.getUserData();
+        return (T) getAgileSecurity().getUserData();
     }
 
     /**
@@ -93,7 +93,7 @@ public class AgileSecurityUtil {
     public static String getTenantId() {
         String tenantId = AgileSecurityContext.getTenantId();
         if (AgileStringUtil.isEmpty(tenantId)) {
-            AgileBaseUser agileBaseUser = getUserData();
+            AgileBaseUser agileBaseUser = AgileSecurityContext.getUserData();
             if (agileBaseUser != null) {
                 tenantId = agileBaseUser.getTenantId();
             }
