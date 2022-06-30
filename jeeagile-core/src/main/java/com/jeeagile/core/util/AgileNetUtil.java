@@ -34,24 +34,27 @@ public class AgileNetUtil {
             if (isInnerIp(ip)) {
                 return "内网IP";
             }
-            if (AgileUtil.isAddressEnabled()) {
-                RestTemplate restTemplate = new RestTemplate();
-                String rtnStr = restTemplate.getForObject(IP_URL + "ip=" + ip, String.class);
-                JSONObject rtnObj = JSONObject.parseObject(rtnStr);
-                if (rtnObj.getString("code").equals("0")) {
-                    JSONObject dataObj = rtnObj.getJSONObject("data");
-                    String country = dataObj.getString("country");
-                    String region = dataObj.getString("region");
-                    String city = dataObj.getString("city");
-                    region = region.replace("XX", "");
-                    city = city.replace("XX", "");
-                    if (country.equals("中国")) {
-                        return String.format("%s %s", region, city);
-                    } else {
-                        return String.format("%s %s", country, region);
+//            if (AgileUtil.isAddressEnabled()) {
+            RestTemplate restTemplate = new RestTemplate();
+            String rtnStr = restTemplate.getForObject(IP_URL + "ip=" + ip, String.class);
+            JSONObject rtnObj = JSONObject.parseObject(rtnStr);
+            if (rtnObj.getString("code").equals("0")) {
+                JSONObject dataObj = rtnObj.getJSONObject("data");
+                String country = dataObj.getString("country");
+                String region = dataObj.getString("region");
+                String city = dataObj.getString("city");
+                region = region.replace("XX", "");
+                city = city.replace("XX", "");
+                if (country.equals("中国")) {
+                    if (AgileStringUtil.isEmpty(region) && AgileStringUtil.isEmpty(city)) {
+                        return country;
                     }
+                    return String.format("%s %s", region, city);
+                } else {
+                    return String.format("%s %s", country, region);
                 }
             }
+//            }
         } catch (Exception e) {
             log.error("获取地理位置异常 {}", ip);
         }
@@ -65,7 +68,7 @@ public class AgileNetUtil {
      * @return
      */
     public static boolean isInnerIp(String ip) {
-        String regex = "^(127\\.0\\.0\\.1)|(localhost)|(10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(172\\.((1[6-9])|(2\\d)|(3[01]))\\.\\d{1,3}\\.\\d{1,3})|(192\\.168\\.\\d{1,3}\\.\\d{1,3})$";
+        String regex = "^(127\\.0\\.0\\.1)|(localhost)|(172\\.((1[6-9])|(2\\d)|(3[01]))\\.\\d{1,3}\\.\\d{1,3})|(192\\.168\\.\\d{1,3}\\.\\d{1,3})$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(ip);
         return matcher.find();
