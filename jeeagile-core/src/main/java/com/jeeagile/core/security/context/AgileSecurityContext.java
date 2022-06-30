@@ -53,28 +53,7 @@ public class AgileSecurityContext {
      * @return
      */
     public static AgileBaseUser getUserData() {
-        if (agileProtocolProperties.getType() == AgileProtocolType.LOCAL) {
-            return getAgileSecurity();
-        } else {
-            return userThreadLocal.get();
-        }
-    }
-
-    /**
-     * 从安全认证接口类中获取用户信息
-     *
-     * @return
-     */
-    private static AgileBaseUser getAgileSecurity() {
-        try {
-            IAgileSecurity agileSecurity = (IAgileSecurity) AgileSpringUtil.getBean("AgileSecurity");
-            if (agileSecurity != null) {
-                return agileSecurity.getUserData();
-            }
-        } catch (BeansException ex) {
-            log.warn("未获取到安全接口《IAgileSecurity》配置Bean！");
-        }
-        return null;
+        return userThreadLocal.get();
     }
 
     /**

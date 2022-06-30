@@ -147,10 +147,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                     if (this.isSaveParam(joinPoint, agileLogger)) {
                         this.putParam(joinPoint, rtnObject, agileSysLogger);
                     }
-//                    //todo 此处需要考虑异步线程下是否存在问题
-//                    AgileSecurityContext.putTenantId(AgileSecurityContext.getUserData().getTenantId());
                     agileLoggerAsyncTask.saveAgileSysLogger(agileSysLogger);
-//                    AgileSecurityContext.removeTenant();
                 }
             }
         } catch (Exception ex) {

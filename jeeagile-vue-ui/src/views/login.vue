@@ -119,8 +119,10 @@
           getTenantInfo({ tenantId: tenantId, tenantSign: tenantSign }).then(res => {
             this.loginForm.tenantId = tenantId
             this.loginForm.tenantSign = tenantSign
-            this.loginForm.userName = res.data?.tenantCode
-            this.loginForm.password = res.data?.tenantCode
+            if (res.data?.tenantCode != 'jeeagile') {
+              this.loginForm.userName = res.data?.tenantCode
+              this.loginForm.password = res.data?.tenantCode
+            }
             this.tenantName = res.data?.tenantName
           })
         }
