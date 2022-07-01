@@ -268,7 +268,6 @@ public class AgileBootSecurity implements IAgileSecurity {
         try {
             return (AgileUserDetails) getAuthentication().getPrincipal();
         } catch (Exception e) {
-            e.printStackTrace();
             throw new AgileAuthException("获取用户信息异常");
         }
     }

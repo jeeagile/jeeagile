@@ -132,9 +132,4 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             throw new AgileAuthException("用户权限验证异常！");
         }
     }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
-        AgileSecurityContext.removeUser();
-    }
 }

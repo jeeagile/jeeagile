@@ -360,8 +360,8 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         String loggerId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(loggerId).parentId("0").menuName("日志管理").menuSort(5).menuPath("logger").menuIcon("logger").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loggerId).menuName("定时任务").menuSort(1).menuComp("logger/operate/index").menuPath("operate").menuIcon("operate").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loggerId).menuName("执行日志").menuSort(2).menuComp("logger/login/index").menuPath("login").menuIcon("login").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loggerId).menuName("操作日志").menuSort(1).menuComp("logger/operate/index").menuPath("operate").menuIcon("operate").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loggerId).menuName("登录日志").menuSort(2).menuComp("logger/login/index").menuPath("login").menuIcon("login").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
 
         String processId = AgileStringUtil.getUuid();
