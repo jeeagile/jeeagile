@@ -336,13 +336,13 @@ INSERT INTO agile_sys_menu VALUES ('40203','402','清空',3,'','','','F','0','0'
 
 INSERT INTO agile_sys_menu VALUES ('5','0','日志管理',5,'','logger','logger','M','0','0','1','','日志管理目录',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('501','5','操作日志',1,'logger/operate/index','operate','operate','C','0','0','1','logger:operate:list','操作日志菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('501','5','操作日志',1,'logger/operate/index','operate','operate','C','0','0','1','logger:operate:page','操作日志菜单',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50101','501','查看',1,'','','','F','0','0','1','logger:operate:detail','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50102','501','删除',2,'','#','#','F','0','0','1','logger:operate:delete','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50103','501','清空',3,'','','','F','0','0','1','logger:operate:clear','',NULL,NULL,NULL,NULL);
 
 
-INSERT INTO agile_sys_menu VALUES ('502','5','登录日志',2,'logger/login/index','login','login','C','0','0','1','logger:login:list','登录日志菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('502','5','登录日志',2,'logger/login/index','login','login','C','0','0','1','logger:login:page','登录日志菜单',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50201','502','删除',1,'','#','#','F','0','0','1','logger:login:delete','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50202','502','清空',2,'','','','F','0','0','1','logger:login:clear','',NULL,NULL,NULL,NULL);
 
