@@ -67,7 +67,7 @@
   import { getCodeImage } from '@/api/system/kaptcha'
   import Cookies from 'js-cookie'
   import { getTenantInfo } from '@/api/system/tenant'
-
+  import { setUserTenantId, setUserTenantSign } from '@/utils/cookie'
   export default {
     name: 'Login',
     data() {
@@ -124,6 +124,8 @@
               this.loginForm.password = res.data?.tenantCode
             }
             this.tenantName = res.data?.tenantName
+            setUserTenantId(tenantId)
+            setUserTenantSign(tenantSign)
           })
         }
       },

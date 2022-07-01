@@ -95,8 +95,8 @@
         <el-form-item label="有效日期" prop="expirationDate">
           <el-date-picker
             v-model="form.expirationDate"
-            type="date"
             placeholder="选择日期"
+            value-format="yyyy-MM-dd"
             :picker-options="datePickerOptions"
           >
           </el-date-picker>
@@ -234,7 +234,7 @@
         auditStatusOptionList: [],
         datePickerOptions: {
           disabledDate(time) {
-            return time.getTime() <= Date.now()
+            return time.getTime() < Date.now()
           }
         },
         // 查询参数

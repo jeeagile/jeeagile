@@ -8,7 +8,7 @@ import 'nprogress/nprogress.css'
 
 import { Message } from 'element-ui'
 
-import { getUserToken } from '@/utils/cookie'
+import { getUserToken, getUserTenantId, getUserTenantSign } from '@/utils/cookie'
 
 import Layout from '@/layout/index'
 
@@ -186,7 +186,13 @@ router.beforeEach((to, from, next) => {
         }).catch(err => {
           store.dispatch('auth/fedLogOut').then(() => {
             Message.error(err)
-            next({ path: '/login' })
+            const tenantId = getUserTenantId()
+            const tenantSign = getUserTenantSign()
+            if (tenantId && tenantSign) {
+              next({ path: `/login?tenantId=${tenantId}&tenantSign=${tenantSign}` })
+            } else {
+              next({ path: '/login' })
+            }
           })
         })
       } else {
@@ -198,7 +204,13 @@ router.beforeEach((to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      next(`/login?redirect=${to.fullPath}`) // 否则全部重定向到登录页
+      const tenantId = getUserTenantId()
+      const tenantSign = getUserTenantSign()
+      if (tenantId && tenantSign) {
+        next(`/login?tenantId=${tenantId}&tenantSign=${tenantSign}`)
+      } else {
+        next(`/login?redirect=${to.fullPath}`)
+      }
       NProgress.done()
     }
   }

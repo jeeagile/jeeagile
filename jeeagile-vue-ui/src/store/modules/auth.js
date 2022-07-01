@@ -1,5 +1,5 @@
 import { getUserInfo, getUserMenu, login, logout } from '@/api/auth'
-import { getUserToken, removeUserToken, setUserToken } from '@/utils/cookie'
+import { getUserToken, removeUserToken, setUserToken, removeUserTenantId, removeUserTenantSign } from '@/utils/cookie'
 import { agileRouter } from '@/router'
 import Layout from '@/layout/index'
 import { handleTree } from '@/utils/agile'
