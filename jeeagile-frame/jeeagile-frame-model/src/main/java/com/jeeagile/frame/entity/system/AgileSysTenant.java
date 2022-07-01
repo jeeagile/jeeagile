@@ -3,6 +3,7 @@ package com.jeeagile.frame.entity.system;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -20,7 +21,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileSysTenant extends AgileBaseModel<AgileSysTenant> {
+public class AgileSysTenant extends AgileBaseTenantModel<AgileSysTenant> {
     /**
      * 租户编码
      */

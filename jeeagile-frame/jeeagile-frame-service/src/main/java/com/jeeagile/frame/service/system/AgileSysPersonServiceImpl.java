@@ -119,6 +119,4 @@ public class AgileSysPersonServiceImpl implements IAgileSysPersonService {
         }
         return userPostNameList;
     }
-
-
 }

@@ -11,9 +11,7 @@ import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.tenant.AgileTenantUtil;
-import com.jeeagile.frame.entity.system.AgileSysMenu;
-import com.jeeagile.frame.entity.system.AgileSysTenant;
-import com.jeeagile.frame.entity.system.AgileSysUser;
+import com.jeeagile.frame.entity.system.*;
 import com.jeeagile.frame.mapper.system.AgileSysTenantMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -34,6 +32,27 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
     private IAgileSysUserService agileSysUserService;
     @Autowired
     private IAgileSysMenuService agileSysMenuService;
+    @Autowired
+    private IAgileSysDictTypeService agileSysDictTypeService;
+    @Autowired
+    private IAgileSysDictDataService agileSysDictDataService;
+    @Autowired
+    private IAgileSysRoleService agileSysRoleService;
+    @Autowired
+    private IAgileSysPostService agileSysPostService;
+    @Autowired
+    private IAgileSysDeptService agileSysDeptService;
+    @Autowired
+    private IAgileSysConfigService agileSysConfigService;
+    @Autowired
+    private IAgileSysRoleDeptService agileSysRoleDeptService;
+    @Autowired
+    private IAgileSysRoleMenuService agileSysRoleMenuService;
+    @Autowired
+    private IAgileSysUserRoleService agileSysUserRoleService;
+    @Autowired
+    private IAgileSysUserPostService agileSysUserPostService;
+
 
     @Override
     public LambdaQueryWrapper<AgileSysTenant> queryWrapper(AgileSysTenant agileSysTenant) {
@@ -128,13 +147,27 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
             throw new AgileFrameException("租户信息已不存在！");
         }
         if (AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
-            AgileSecurityContext.putTenantId(agileSysTenant.getId());
-            this.deleteTenantUser();
-            this.deleteTenantMenu();
-            AgileSecurityContext.removeTenant();
+            this.deleteTenantInfo(agileSysTenant);
         }
         this.removeById(id);
         return true;
+    }
+
+    private void deleteTenantInfo(AgileSysTenant agileSysTenant) {
+        AgileSecurityContext.putTenantId(agileSysTenant.getId());
+        this.deleteTenantUser();
+        this.deleteTenantPost();
+        this.deleteTenantDept();
+        this.deleteTenantUserRole();
+        this.deleteTenantUserPost();
+        this.deleteTenantMenu();
+        this.deleteTenantRole();
+        this.deleteTenantRoleMenu();
+        this.deleteTenantRoleDept();
+        this.deleteTenantDictType();
+        this.deleteTenantDictData();
+        this.deleteTenantConfig();
+        AgileSecurityContext.removeTenant();
     }
 
     /**
@@ -145,6 +178,31 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysUserService.remove(lambdaQueryWrapper);
     }
 
+    private void deleteTenantPost() {
+        LambdaQueryWrapper<AgileSysPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysPostService.remove(lambdaQueryWrapper);
+    }
+
+    private void deleteTenantDept() {
+        LambdaQueryWrapper<AgileSysDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysDeptService.remove(lambdaQueryWrapper);
+    }
+
+    private void deleteTenantConfig() {
+        LambdaQueryWrapper<AgileSysConfig> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysConfigService.remove(lambdaQueryWrapper);
+    }
+
+    private void deleteTenantUserRole() {
+        LambdaQueryWrapper<AgileSysUserRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysUserRoleService.remove(lambdaQueryWrapper);
+    }
+
+    private void deleteTenantUserPost() {
+        LambdaQueryWrapper<AgileSysUserPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysUserPostService.remove(lambdaQueryWrapper);
+    }
+
     /**
      * 租户模式删除租户分配菜单
      */
@@ -153,6 +211,38 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysMenuService.remove(lambdaQueryWrapper);
     }
 
+    private void deleteTenantRole() {
+        LambdaQueryWrapper<AgileSysRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysRoleService.remove(lambdaQueryWrapper);
+    }
+
+    private void deleteTenantRoleMenu() {
+        LambdaQueryWrapper<AgileSysRoleMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysRoleMenuService.remove(lambdaQueryWrapper);
+    }
+
+    private void deleteTenantRoleDept() {
+        LambdaQueryWrapper<AgileSysRoleDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysRoleDeptService.remove(lambdaQueryWrapper);
+    }
+
+    private void deleteTenantDictType() {
+        LambdaQueryWrapper<AgileSysDictType> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysDictTypeService.remove(lambdaQueryWrapper);
+    }
+
+    private void deleteTenantDictData() {
+        LambdaQueryWrapper<AgileSysDictData> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysDictDataService.remove(lambdaQueryWrapper);
+    }
+
+    @Override
+    public AgileSysTenant agileSysTenantInfo(Serializable tenantId) {
+        AgileSecurityContext.putDisableTenant(true);
+        AgileSysTenant agileSysTenant = this.selectModel(tenantId);
+        AgileSecurityContext.removeDisableTenant();
+        return agileSysTenant;
+    }
 
     @Override
     public boolean audit(AgileSysTenant agileSysTenant) {
@@ -162,12 +252,19 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         }
 
         if (AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
-            AgileSecurityContext.putTenantId(agileSysTenantOld.getId());
-            this.initTenantAdminUser(agileSysTenant);
-            this.initTenantMenu();
-            AgileSecurityContext.removeTenant();
+            initTenantInfo(agileSysTenantOld);
         }
         return this.updateModel(agileSysTenant);
+    }
+
+    private void initTenantInfo(AgileSysTenant agileSysTenant) {
+        AgileSecurityContext.putTenantId(agileSysTenant.getId());
+        this.initTenantAdminUser(agileSysTenant);
+        this.initTenantMenu();
+        this.initTenantDictType();
+        this.initTenantDictData();
+        this.initTenantConfig();
+        AgileSecurityContext.removeTenant();
     }
 
     /**
@@ -203,6 +300,10 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
 
         String systemId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(systemId).parentId("0").menuName("系统管理").menuSort(1).menuPath("system").menuIcon("system").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
+
+        String tenantId = AgileStringUtil.getUuid();
+        agileSysMenuList.add(AgileSysMenu.builder().id(tenantId).parentId(systemId).menuName("租户管理").menuSort(1).menuComp("system/tenant/index").menuPath("tenant").menuIcon("tenant").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+
 
         String userId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(userId).parentId(systemId).menuName("用户管理").menuSort(1).menuComp("system/user/index").menuPath("user").menuIcon("user").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
@@ -242,7 +343,7 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         String toolId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(toolId).parentId("0").menuName("系统工具").menuSort(3).menuPath("tool").menuIcon("tool").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
-        String generatorId=AgileStringUtil.getUuid();
+        String generatorId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(generatorId).parentId(toolId).menuName("代码生成").menuSort(1).menuComp("tool/generator/index").menuPath("generator").menuIcon("generator").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(toolId).menuName("系统接口").menuSort(2).menuComp("tool/swagger/index").menuPath("swagger").menuIcon("swagger").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
@@ -254,7 +355,6 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         String jobId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(jobId).parentId(quartzId).menuName("定时任务").menuSort(1).menuComp("quartz/job/index").menuPath("job").menuIcon("job").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzId).menuName("执行日志").menuSort(2).menuComp("quartz/logger/index").menuPath("quartzLogger").menuIcon("logger").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
-
 
 
         String loggerId = AgileStringUtil.getUuid();
@@ -274,5 +374,84 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
 
 
         agileSysMenuService.saveBatch(agileSysMenuList);
+    }
+
+    private void initTenantDictType() {
+        List<AgileSysDictType> agileSysDictTypeList = new ArrayList<>();
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_user_sex").dictName("用户性别").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_show_visible").dictName("菜单状态").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_normal_disable").dictName("系统开关").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_job_status").dictName("任务状态").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_yes_no").dictName("系统是否").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_data_scope").dictName("数据范围").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_common_status").dictName("系统状态").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_status").dictName("日志状态").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictName("日志类型").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_enable_status").dictName("启用开关").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_audit_status").dictName("系统审核状态").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("process_deployment_status").dictName("流程发布状态").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("process_form_type").dictName("流程表单类型").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("process_task_status").dictName("流程任务状态").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("process_instance_status").dictName("流程实例状态").dictStatus("0").systemFlag("0").build());
+        agileSysDictTypeService.saveBatch(agileSysDictTypeList);
+    }
+
+    private void initTenantDictData() {
+        List<AgileSysDictData> agileSysDictDataList = new ArrayList<>();
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_user_sex").dictLabel("男").dictValue("0").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_user_sex").dictLabel("女").dictValue("1").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_user_sex").dictLabel("未知").dictValue("2").dictSort(3).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_show_visible").dictLabel("显示").dictValue("0").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_show_visible").dictLabel("隐藏").dictValue("1").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_normal_disable").dictLabel("正常").dictValue("0").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_normal_disable").dictLabel("停用").dictValue("1").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_job_status").dictLabel("启用").dictValue("0").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_job_status").dictLabel("暂停").dictValue("1").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_yes_no").dictLabel("是").dictValue("1").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_yes_no").dictLabel("否").dictValue("0").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_data_scope").dictLabel("全部数据权限").dictValue("01").dictSort(0).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_data_scope").dictLabel("本部门数据权限").dictValue("02").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_data_scope").dictLabel("本部门及以下数据权限").dictValue("03").dictSort(3).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_data_scope").dictLabel("仅本人数据权限").dictValue("04").dictSort(4).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_data_scope").dictLabel("自定义部门数据权限").dictValue("05").dictSort(5).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_common_status").dictLabel("成功").dictValue("0").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_common_status").dictLabel("失败").dictValue("1").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_status").dictLabel("成功").dictValue("0").dictSort(0).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_status").dictLabel("失败").dictValue("1").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("查询数据").dictValue("SELECT").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("查看明细").dictValue("DETAIL").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("新增数据").dictValue("ADD").dictSort(3).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("修改数据").dictValue("UPDATE").dictSort(4).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("删除数据").dictValue("DELETE").dictSort(5).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("用户授权").dictValue("GRANT").dictSort(6).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("导出数据").dictValue("EXPORT").dictSort(7).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("导入数据").dictValue("IMPORT").dictSort(8).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("清空数据").dictValue("CLEAR").dictSort(9).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("用户强退").dictValue("FORCE").dictSort(10).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("代码生成").dictValue("GENERATOR").dictSort(11).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_logger_type").dictLabel("其他操作").dictValue("OTHER").dictSort(12).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_enable_status").dictLabel("启用").dictValue("0").dictSort(0).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_enable_status").dictLabel("停用").dictValue("1").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_audit_status").dictLabel("审核中").dictValue("0").dictSort(0).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_audit_status").dictLabel("审核通过").dictValue("1").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_audit_status").dictLabel("审核拒绝").dictValue("2").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_deployment_status").dictLabel("已发布").dictValue("1").dictSort(0).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_deployment_status").dictLabel("未发布").dictValue("2").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_form_type").dictLabel("流程表单").dictValue("1").dictSort(0).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_form_type").dictLabel("业务表单").dictValue("2").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_task_status").dictLabel("已撤销").dictValue("0").dictSort(0).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_task_status").dictLabel("审批中").dictValue("1").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_task_status").dictLabel("审批通过").dictValue("2").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_task_status").dictLabel("审批驳回").dictValue("3").dictSort(3).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_instance_status").dictLabel("已撤销").dictValue("0").dictSort(0).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_instance_status").dictLabel("处理中").dictValue("1").dictSort(1).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("process_instance_status").dictLabel("已完成").dictValue("2").dictSort(2).dictStatus("0").systemFlag("0").build());
+        agileSysDictDataService.saveBatch(agileSysDictDataList);
+    }
+
+    private void initTenantConfig() {
+        List<AgileSysConfig> agileSysConfigList = new ArrayList<>();
+        agileSysConfigList.add(AgileSysConfig.builder().id(AgileStringUtil.getUuid()).configName("用户管理-账号初始密码").configKey("sys.user.pwd").configValue("123456").systemFlag("1").build());
+        agileSysConfigService.saveBatch(agileSysConfigList);
     }
 }

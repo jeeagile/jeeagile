@@ -13,6 +13,7 @@ create table agile_sys_tenant
   tenant_type          char(1)  null comment '租户类型（0:本地 1:远程）',
   expiration_date      datetime  null comment '到期时间',
   remark               varchar(300) default null comment '备注',
+  tenant_id            varchar(32) not null comment '租户ID',
   create_user          varchar(32) default null comment '创建人',
   create_time          datetime default null comment '创建时间',
   update_user          varchar(32) default null comment '修改人',
@@ -24,71 +25,71 @@ alter table agile_sys_tenant comment '租户信息表';
 
 
 ALTER TABLE `agile`.`agile_sys_config`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
 
 update `agile`.`agile_sys_config` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_dept`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
 
 update `agile`.`agile_sys_dept` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_dict_type`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
 
 update `agile`.`agile_sys_dict_type` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_dict_data`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
 
 update `agile`.`agile_sys_dict_data` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_menu`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
 
 update `agile`.`agile_sys_menu` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_post`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
 
 update `agile`.`agile_sys_post` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_role`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
 
 update `agile`.`agile_sys_role` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_role_dept`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `dept_id`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `dept_id`;
 
 update `agile`.`agile_sys_role_dept` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_role_menu`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `menu_id`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `menu_id`;
 
 update `agile`.`agile_sys_role_menu` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_user`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `remark`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
 
 update `agile`.`agile_sys_user` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_user_post`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `post_id`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `post_id`;
 
 update `agile`.`agile_sys_user_post` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_user_role`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `role_id`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `role_id`;
 
 update `agile`.`agile_sys_user_role` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_login`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `message`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `message`;
 
 update `agile`.`agile_sys_login` set tenant_id='jeeagile';
 
 ALTER TABLE `agile`.`agile_sys_logger`
-ADD COLUMN `tenant_id` VARCHAR(32) NULL COMMENT '租户ID' AFTER `message`;
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `message`;
 
 update `agile`.`agile_sys_logger` set tenant_id='jeeagile';

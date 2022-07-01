@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 
 
@@ -78,4 +79,18 @@ public class AgileSysDictData extends AgileBaseTenantTreeModel<AgileSysDictData>
     @ApiModelProperty("备注")
     @Size(max = 150, message = "备注长度最大值为150！")
     private String remark;
+
+    public AgileSysDictData() {
+    }
+
+    @Builder
+    public AgileSysDictData(String id, String dictType, String dictLabel, String dictValue, Integer dictSort, String dictStatus, String systemFlag) {
+        this.id = id;
+        this.dictType = dictType;
+        this.dictLabel = dictLabel;
+        this.dictValue = dictValue;
+        this.dictSort = dictSort;
+        this.dictStatus = dictStatus;
+        this.systemFlag = systemFlag;
+    }
 }

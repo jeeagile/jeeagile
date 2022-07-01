@@ -4,6 +4,7 @@ import com.jeeagile.core.protocol.enums.AgileProtocolType;
 import com.jeeagile.core.protocol.properties.AgileProtocolProperties;
 import com.jeeagile.core.security.IAgileSecurity;
 import com.jeeagile.core.security.user.AgileBaseUser;
+import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.spring.AgileSpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -27,7 +28,11 @@ public class AgileSecurityContext {
     //存储当前线程用户信息
     protected static final ThreadLocal<AgileBaseUser> userThreadLocal = new InheritableThreadLocal<>();
 
+    //存储当前线程租户ID
     protected static final ThreadLocal<String> tenantThreadLocal = new InheritableThreadLocal<>();
+
+    //存储当前线程租户禁用标志
+    protected static final ThreadLocal<Boolean> disableTenantThreadLocal = new InheritableThreadLocal<>();
 
     /**
      * 存放当前用户信息
@@ -47,13 +52,21 @@ public class AgileSecurityContext {
         tenantThreadLocal.set(tenantId);
     }
 
+    public static void putDisableTenant(boolean flag) {
+        disableTenantThreadLocal.set(flag);
+    }
+
     /**
      * 获取当前线程用户信息
      *
      * @return
      */
     public static AgileBaseUser getUserData() {
-        return userThreadLocal.get();
+        if (agileProtocolProperties.getType() == AgileProtocolType.LOCAL) {
+            return AgileSecurityUtil.getUserData();
+        } else {
+            return userThreadLocal.get();
+        }
     }
 
     /**
@@ -102,6 +115,10 @@ public class AgileSecurityContext {
         return tenantThreadLocal.get();
     }
 
+    public static boolean getDisableTenant() {
+        return disableTenantThreadLocal.get() == null ? false : disableTenantThreadLocal.get();
+    }
+
     /**
      * 移除当前线程
      */
@@ -111,5 +128,9 @@ public class AgileSecurityContext {
 
     public static void removeTenant() {
         tenantThreadLocal.remove();
+    }
+
+    public static void removeDisableTenant() {
+        disableTenantThreadLocal.remove();
     }
 }

@@ -57,7 +57,7 @@ public class AgileSysTenantController extends AgileCrudController<IAgileSysTenan
         if (AgileStringUtil.isEmpty(tenantSign)) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
         }
-        AgileSysTenant agileSysTenant = this.agileBaseService.selectModel(tenantId);
+        AgileSysTenant agileSysTenant = this.agileBaseService.agileSysTenantInfo(tenantId);
         if (agileSysTenant == null || AgileStringUtil.isEmpty(agileSysTenant.getId())) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
         }

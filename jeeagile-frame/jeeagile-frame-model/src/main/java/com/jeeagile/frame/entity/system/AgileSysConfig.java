@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -63,4 +64,15 @@ public class AgileSysConfig extends AgileBaseTenantModel<AgileSysConfig> {
     @Size(max = 150, message = "备注信息长度最大值为150！")
     private String remark;
 
+    public AgileSysConfig() {
+    }
+
+    @Builder
+    public AgileSysConfig(String id, String configKey, String configName, String configValue, String systemFlag) {
+        this.id = id;
+        this.configKey = configKey;
+        this.configName = configName;
+        this.configValue = configValue;
+        this.systemFlag = systemFlag;
+    }
 }

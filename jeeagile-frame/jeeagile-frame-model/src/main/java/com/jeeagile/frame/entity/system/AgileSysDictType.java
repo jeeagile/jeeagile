@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 
 
@@ -62,4 +63,15 @@ public class AgileSysDictType extends AgileBaseTenantModel<AgileSysDictType> {
     @Size(max = 150, message = "备注长度最大值为150！")
     private String remark;
 
+    public AgileSysDictType() {
+    }
+
+    @Builder
+    public AgileSysDictType(String id, String dictType, String dictName, String dictStatus, String systemFlag) {
+        this.id = id;
+        this.dictType = dictType;
+        this.dictName = dictName;
+        this.dictStatus = dictStatus;
+        this.systemFlag = systemFlag;
+    }
 }

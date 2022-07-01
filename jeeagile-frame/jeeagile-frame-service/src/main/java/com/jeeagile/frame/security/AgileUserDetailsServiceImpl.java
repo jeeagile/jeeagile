@@ -72,7 +72,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
 
     @Override
     public AgileBaseUser getUserData(String loginName, String tenantId, String tenantSign) {
-        AgileSysTenant agileSysTenant = agileSysTenantService.selectModel(tenantId);
+        AgileSysTenant agileSysTenant = agileSysTenantService.agileSysTenantInfo(tenantId);
         this.checkAgileSysTenant(agileSysTenant, tenantSign);
         AgileSecurityContext.putTenantId(agileSysTenant.getId());
         AgileUserData agileUserData = getUserData(loginName);
