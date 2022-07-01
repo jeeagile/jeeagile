@@ -155,18 +155,18 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
 
     private void deleteTenantInfo(AgileSysTenant agileSysTenant) {
         AgileSecurityContext.putTenantId(agileSysTenant.getId());
-        this.deleteTenantUser();
-        this.deleteTenantPost();
-        this.deleteTenantDept();
         this.deleteTenantUserRole();
         this.deleteTenantUserPost();
-        this.deleteTenantMenu();
-        this.deleteTenantRole();
         this.deleteTenantRoleMenu();
         this.deleteTenantRoleDept();
         this.deleteTenantDictType();
         this.deleteTenantDictData();
         this.deleteTenantConfig();
+        this.deleteTenantPost();
+        this.deleteTenantDept();
+        this.deleteTenantUser();
+        this.deleteTenantMenu();
+        this.deleteTenantRole();
         AgileSecurityContext.removeTenant();
     }
 
@@ -302,49 +302,113 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysMenuList.add(AgileSysMenu.builder().id(systemId).parentId("0").menuName("系统管理").menuSort(1).menuPath("system").menuIcon("system").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String tenantId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(tenantId).parentId(systemId).menuName("租户管理").menuSort(1).menuComp("system/tenant/index").menuPath("tenant").menuIcon("tenant").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(tenantId).parentId(systemId).menuName("租户管理").menuPerm("system:tenant:page").menuSort(1).menuComp("system/tenant/index").menuPath("tenant").menuIcon("tenant").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(tenantId).menuName("租户明细").menuPerm("system:tenant:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(tenantId).menuName("租户新增").menuPerm("system:tenant:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(tenantId).menuName("租户修改").menuPerm("system:tenant:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(tenantId).menuName("租户删除").menuPerm("system:tenant:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(tenantId).menuName("租户导入").menuPerm("system:tenant:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(tenantId).menuName("租户导出").menuPerm("system:tenant:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
 
         String userId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(userId).parentId(systemId).menuName("用户管理").menuSort(1).menuComp("system/user/index").menuPath("user").menuIcon("user").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(userId).parentId(systemId).menuName("用户管理").menuPerm("system:user:page").menuSort(1).menuComp("system/user/index").menuPath("user").menuIcon("user").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(userId).menuName("用户明细").menuPerm("system:user:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(userId).menuName("用户新增").menuPerm("system:user:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(userId).menuName("用户修改").menuPerm("system:user:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(userId).menuName("用户删除").menuPerm("system:user:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(userId).menuName("重置密码").menuPerm("system:user:password").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(userId).menuName("用户导入").menuPerm("system:user:import").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(userId).menuName("用户导出").menuPerm("system:user:export").menuSort(7).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String roleId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(roleId).parentId(systemId).menuName("角色管理").menuSort(2).menuComp("system/role/index").menuPath("role").menuIcon("role").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(roleId).parentId(systemId).menuName("角色管理").menuPerm("system:role:page").menuSort(2).menuComp("system/role/index").menuPath("role").menuIcon("role").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(roleId).menuName("角色明细").menuPerm("system:role:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(roleId).menuName("角色新增").menuPerm("system:role:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(roleId).menuName("角色修改").menuPerm("system:role:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(roleId).menuName("角色删除").menuPerm("system:role:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(roleId).menuName("角色导入").menuPerm("system:role:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(roleId).menuName("角色导出").menuPerm("system:role:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String menuId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(menuId).parentId(systemId).menuName("菜单管理").menuSort(3).menuComp("system/menu/index").menuPath("menu").menuIcon("menu").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(menuId).parentId(systemId).menuName("菜单管理").menuPerm("system:menu:list").menuSort(3).menuComp("system/menu/index").menuPath("menu").menuIcon("menu").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(menuId).menuName("菜单明细").menuPerm("system:menu:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(menuId).menuName("菜单新增").menuPerm("system:menu:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(menuId).menuName("菜单修改").menuPerm("system:menu:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(menuId).menuName("菜单删除").menuPerm("system:menu:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(menuId).menuName("菜单导入").menuPerm("system:menu:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(menuId).menuName("菜单导出").menuPerm("system:menu:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(menuId).menuName("菜单排序").menuPerm("system:menu:sort").menuSort(7).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String deptId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(deptId).parentId(systemId).menuName("部门管理").menuSort(4).menuComp("system/dept/index").menuPath("dept").menuIcon("dept").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(deptId).parentId(systemId).menuName("部门管理").menuPerm("system:dept:list").menuSort(4).menuComp("system/dept/index").menuPath("dept").menuIcon("dept").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(deptId).menuName("部门明细").menuPerm("system:dept:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(deptId).menuName("部门新增").menuPerm("system:dept:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(deptId).menuName("部门修改").menuPerm("system:dept:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(deptId).menuName("部门删除").menuPerm("system:dept:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(deptId).menuName("部门导入").menuPerm("system:dept:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(deptId).menuName("部门导出").menuPerm("system:dept:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String postId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(postId).parentId(systemId).menuName("岗位管理").menuSort(5).menuComp("system/post/index").menuPath("post").menuIcon("post").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(postId).parentId(systemId).menuName("岗位管理").menuPerm("system:post:page").menuSort(5).menuComp("system/post/index").menuPath("post").menuIcon("post").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(postId).menuName("岗位明细").menuPerm("system:post:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(postId).menuName("岗位新增").menuPerm("system:post:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(postId).menuName("岗位修改").menuPerm("system:post:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(postId).menuName("岗位删除").menuPerm("system:post:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(postId).menuName("岗位导入").menuPerm("system:post:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(postId).menuName("岗位导出").menuPerm("system:post:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String dictId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(dictId).parentId(systemId).menuName("字典管理").menuSort(6).menuComp("system/dict/index").menuPath("dict").menuIcon("dict").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(dictId).parentId(systemId).menuName("字典管理").menuPerm("system:dict:type:page").menuSort(6).menuComp("system/dict/index").menuPath("dict").menuIcon("dict").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典明细").menuPerm("system:dict:type:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典新增").menuPerm("system:dict:type:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典修改").menuPerm("system:dict:type:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典删除").menuPerm("system:dict:type:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典导入").menuPerm("system:dict:type:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典导出").menuPerm("system:dict:type:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典数据列表").menuPerm("system:dict:data:list").menuSort(7).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典数据明细").menuPerm("system:dict:data:detail").menuSort(8).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典数据新增").menuPerm("system:dict:data:add").menuSort(9).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典数据修改").menuPerm("system:dict:data:update").menuSort(10).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典数据删除").menuPerm("system:dict:data:delete").menuSort(11).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典数据导入").menuPerm("system:dict:data:import").menuSort(12).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(dictId).menuName("字典数据导出").menuPerm("system:dict:data:export").menuSort(13).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String configId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(configId).parentId(systemId).menuName("参数设置").menuSort(7).menuComp("system/config/index").menuPath("config").menuIcon("config").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
-
+        agileSysMenuList.add(AgileSysMenu.builder().id(configId).parentId(systemId).menuName("参数设置").menuPerm("system:config:page").menuSort(7).menuComp("system/config/index").menuPath("config").menuIcon("config").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(configId).menuName("参数明细").menuPerm("system:config:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(configId).menuName("参数新增").menuPerm("system:config:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(configId).menuName("参数修改").menuPerm("system:config:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(configId).menuName("参数删除").menuPerm("system:config:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(configId).menuName("参数导入").menuPerm("system:config:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(configId).menuName("参数导出").menuPerm("system:config:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String monitorId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(monitorId).parentId("0").menuName("系统监控").menuSort(2).menuPath("monitor").menuIcon("monitor").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String onlineId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(onlineId).parentId(monitorId).menuName("在线用户").menuSort(1).menuComp("monitor/online/index").menuPath("online").menuIcon("online").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(onlineId).parentId(monitorId).menuName("在线用户").menuPerm("monitor:online:list").menuSort(1).menuComp("monitor/online/index").menuPath("online").menuIcon("online").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(onlineId).menuName("批量强退").menuPerm("monitor:online:batchLogout").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(onlineId).menuName("单户强退").menuPerm("monitor:online:forceLogout").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String druidId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(druidId).parentId(monitorId).menuName("数据监控").menuSort(2).menuComp("monitor/druid/index").menuPath("druid").menuIcon("druid").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(druidId).parentId(monitorId).menuName("数据监控").menuPerm("'monitor:druid:list").menuSort(2).menuComp("monitor/druid/index").menuPath("druid").menuIcon("druid").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String serverId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(serverId).parentId(monitorId).menuName("服务监控").menuSort(3).menuComp("monitor/server/index").menuPath("server").menuIcon("server").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(serverId).parentId(monitorId).menuName("服务监控").menuPerm("monitor:server:info").menuSort(3).menuComp("monitor/server/index").menuPath("server").menuIcon("server").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
 
         String toolId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(toolId).parentId("0").menuName("系统工具").menuSort(3).menuPath("tool").menuIcon("tool").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String generatorId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(generatorId).parentId(toolId).menuName("代码生成").menuSort(1).menuComp("tool/generator/index").menuPath("generator").menuIcon("generator").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(generatorId).parentId(toolId).menuName("代码生成").menuPerm("tool:generator:page").menuSort(1).menuComp("tool/generator/index").menuPath("generator").menuIcon("generator").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(generatorId).menuName("生成修改").menuPerm("tool:generator:update").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(generatorId).menuName("生成删除").menuPerm("tool:generator:delete").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(generatorId).menuName("导入代码").menuPerm("tool:generator:import").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(generatorId).menuName("同步信息").menuPerm("tool:generator:sync").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(generatorId).menuName("预览代码").menuPerm("tool:generator:preview").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(generatorId).menuName("生成代码").menuPerm("tool:generator:code").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(toolId).menuName("系统接口").menuSort(2).menuComp("tool/swagger/index").menuPath("swagger").menuIcon("swagger").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(toolId).menuName("表单构建").menuSort(3).menuComp("tool/form/index").menuPath("form").menuIcon("form").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
@@ -352,26 +416,60 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
 
         String quartzId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(quartzId).parentId("0").menuName("任务管理").menuSort(4).menuPath("quartz").menuIcon("quartz").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        String jobId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(jobId).parentId(quartzId).menuName("定时任务").menuSort(1).menuComp("quartz/job/index").menuPath("job").menuIcon("job").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzId).menuName("执行日志").menuSort(2).menuComp("quartz/logger/index").menuPath("quartzLogger").menuIcon("logger").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        String quartzJobId = AgileStringUtil.getUuid();
+        agileSysMenuList.add(AgileSysMenu.builder().id(quartzJobId).parentId(quartzId).menuName("定时任务").menuPerm("quartz:job:page").menuSort(1).menuComp("quartz/job/index").menuPath("job").menuIcon("job").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzJobId).menuName("任务明细").menuPerm("quartz:job:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzJobId).menuName("任务新增").menuPerm("quartz:job:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzJobId).menuName("任务修改").menuPerm("quartz:job:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzJobId).menuName("任务删除").menuPerm("quartz:job:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzJobId).menuName("任务导入").menuPerm("quartz:job:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzJobId).menuName("任务导出").menuPerm("quartz:job:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzJobId).menuName("任务执行").menuPerm("quartz:job:execute").menuSort(7).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
+        String quartzLoggerId = AgileStringUtil.getUuid();
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzId).menuName("执行日志").menuPerm("job:logger:page").menuSort(2).menuComp("quartz/logger/index").menuPath("quartzLogger").menuIcon("logger").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzLoggerId).menuName("查看").menuPerm("quartz:logger:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzLoggerId).menuName("删除").menuPerm("quartz:logger:delete").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzLoggerId).menuName("清空").menuPerm("quartz:logger:clear").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String loggerId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(loggerId).parentId("0").menuName("日志管理").menuSort(5).menuPath("logger").menuIcon("logger").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loggerId).menuName("操作日志").menuSort(1).menuComp("logger/operate/index").menuPath("operate").menuIcon("operate").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loggerId).menuName("登录日志").menuSort(2).menuComp("logger/login/index").menuPath("login").menuIcon("login").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        String operateLoggerId = AgileStringUtil.getUuid();
+        agileSysMenuList.add(AgileSysMenu.builder().id(operateLoggerId).parentId(loggerId).menuName("操作日志").menuPerm("logger:operate:page").menuSort(1).menuComp("logger/operate/index").menuPath("operate").menuIcon("operate").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(operateLoggerId).menuName("查看").menuPerm("logger:operate:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(operateLoggerId).menuName("删除").menuPerm("logger:operate:delete").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(operateLoggerId).menuName("清空").menuPerm("logger:operate:clear").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
+        String loginLoggerId = AgileStringUtil.getUuid();
+        agileSysMenuList.add(AgileSysMenu.builder().id(loginLoggerId).parentId(loggerId).menuName("登录日志").menuPerm("logger:login:page").menuSort(2).menuComp("logger/login/index").menuPath("login").menuIcon("login").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loginLoggerId).menuName("删除").menuPerm("logger:login:delete").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loginLoggerId).menuName("清空").menuPerm("logger:login:clear").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String processId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(processId).parentId("0").menuName("流程管理").menuSort(6).menuPath("process").menuIcon("process").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String formId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(formId).parentId(processId).menuName("流程表单").menuSort(1).menuComp("process/form/index").menuPath("form").menuIcon("form").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        String modelId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(modelId).parentId(processId).menuName("流程模型").menuSort(2).menuComp("process/model/index").menuPath("model").menuIcon("example").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(formId).parentId(processId).menuName("流程表单").menuPerm("process:form:page").menuSort(1).menuComp("process/form/index").menuPath("form").menuIcon("form").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(formId).menuName("流程表单明细").menuPerm("process:form:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(formId).menuName("流程表单新增").menuPerm("process:form:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(formId).menuName("流程表单修改").menuPerm("process:form:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(formId).menuName("流程表单删除").menuPerm("process:form:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(formId).menuName("流程表单导入").menuPerm("process:form:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(formId).menuName("流程表单导出").menuPerm("process:form:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(formId).menuName("流程表单预览").menuPerm("process:form:view").menuSort(7).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(formId).menuName("流程表单设计").menuPerm("process:form:designer").menuSort(8).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
+        String modelId = AgileStringUtil.getUuid();
+        agileSysMenuList.add(AgileSysMenu.builder().id(modelId).parentId(processId).menuName("流程模型").menuPerm("process:model:page").menuSort(2).menuComp("process/model/index").menuPath("model").menuIcon("example").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(modelId).menuName("流程模型明细").menuPerm("process:model:detail").menuSort(1).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(modelId).menuName("流程模型新增").menuPerm("process:model:add").menuSort(2).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(modelId).menuName("流程模型修改").menuPerm("process:model:update").menuSort(3).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(modelId).menuName("流程模型删除").menuPerm("process:model:delete").menuSort(4).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(modelId).menuName("流程模型导入").menuPerm("process:model:import").menuSort(5).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(modelId).menuName("流程模型导出").menuPerm("process:model:export").menuSort(6).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(modelId).menuName("流程模型预览").menuPerm("process:model:view").menuSort(7).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(modelId).menuName("流程模型设计").menuPerm("process:model:designer").menuSort(8).menuIcon("#").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         agileSysMenuService.saveBatch(agileSysMenuList);
     }
