@@ -3,6 +3,7 @@ package com.jeeagile.frame.controller.system;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
+import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
@@ -41,7 +42,8 @@ public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleSer
     }
 
     @AgileDemo
-    @PostMapping(value = "/dataScope")
+    @PostMapping(value = "/scope")
+    @AgileRequiresPermissions("scope")
     @ApiOperation(value = "更新角色权限范围", notes = "更新角色权限范围")
     @AgileLogger(notes = "更新角色权限范围", type = AgileLoggerType.UPDATE)
     public AgileResult<String> dataScope(@RequestBody AgileSysRole agileSysRole) {

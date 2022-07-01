@@ -122,10 +122,10 @@
     <el-dialog title="租户审核" :visible.sync="auditDialog" width="500px" append-to-body>
       <el-form ref="form" :model="auditForm" :rules="auditRules" label-width="80px">
         <el-form-item label="租户编码" prop="tenantCode">
-          <el-input v-model="auditForm.tenantCode" placeholder="请输入租户编码" disabled="true"/>
+          <el-input v-model="auditForm.tenantCode" placeholder="请输入租户编码" disabled/>
         </el-form-item>
         <el-form-item label="租户名称" prop="tenantName">
-          <el-input v-model="auditForm.tenantName" placeholder="请输入租户名称" disabled="true"/>
+          <el-input v-model="auditForm.tenantName" placeholder="请输入租户名称" disabled/>
         </el-form-item>
         <el-form-item label="租户类型" prop="tenantType">
           <el-select v-model="auditForm.tenantType" style="width: 100%">
@@ -407,6 +407,7 @@
         row = undefined === row.id ? this.selectRowList[0] : row
         detailTenant(row.id).then(response => {
           this.auditForm = response.data
+          this.auditForm.tenantType = '0'
           this.auditDialog = true
         })
       },

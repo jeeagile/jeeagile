@@ -233,8 +233,9 @@ INSERT INTO agile_sys_menu VALUES ('10201','102','角色明细',1,'','','#','F',
 INSERT INTO agile_sys_menu VALUES ('10202','102','角色新增',2,'','','#','F','0','0','1','system:role:add','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10203','102','角色修改',3,'','','#','F','0','0','1','system:role:update','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10204','102','角色删除',4,'','','#','F','0','0','1','system:role:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10205','102','角色导入',5,'','','#','F','0','0','1','system:role:import','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10206','102','角色导出',6,'','','#','F','0','0','1','system:role:export','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10205','102','数据权限',5,'','','#','F','0','0','1','system:role:scope','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10205','102','角色导入',6,'','','#','F','0','0','1','system:role:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10206','102','角色导出',7,'','','#','F','0','0','1','system:role:export','',NULL,NULL,NULL,NULL);
 
 INSERT INTO agile_sys_menu VALUES ('103','1','菜单管理',3,'system/menu/index','menu','menu','C','0','0','1','system:menu:list','菜单管理菜单',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10301','103','菜单明细',1,'','','#','F','0','0','1','system:menu:detail','',NULL,NULL,NULL,NULL);
@@ -270,13 +271,14 @@ INSERT INTO agile_sys_menu VALUES ('10603','106','字典修改',3,'','','#','F',
 INSERT INTO agile_sys_menu VALUES ('10604','106','字典删除',4,'','','#','F','0','0','1','system:dict:type:delete','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10605','106','字典导入',5,'','','#','F','0','0','1','system:dict:type:import','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10606','106','字典导出',6,'','','#','F','0','0','1','system:dict:type:export','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10607','106','字典数据列表',7,'','','#','F','0','0','1','system:dict:data:detail','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10608','106','字典数据明细',8,'','','#','F','0','0','1','system:dict:data:detail','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10609','106','字典数据新增',9,'','','#','F','0','0','1','system:dict:data:add','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10610','106','字典数据修改',10,'','','#','F','0','0','1','system:dict:data:update','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10611','106','字典数据删除',11,'','','#','F','0','0','1','system:dict:data:delete','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10612','106','字典数据导入',12,'','','#','F','0','0','1','system:dict:data:import','',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('10613','106','字典数据导出',13,'','','#','F','0','0','1','system:dict:data:export','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10607','106','字典数据分页',7,'','','#','F','0','0','1','system:dict:data:page','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10607','106','字典数据列表',8,'','','#','F','0','0','1','system:dict:data:list','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10608','106','字典数据明细',9,'','','#','F','0','0','1','system:dict:data:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10609','106','字典数据新增',10,'','','#','F','0','0','1','system:dict:data:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10610','106','字典数据修改',11,'','','#','F','0','0','1','system:dict:data:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10611','106','字典数据删除',12,'','','#','F','0','0','1','system:dict:data:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10612','106','字典数据导入',13,'','','#','F','0','0','1','system:dict:data:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10613','106','字典数据导出',14,'','','#','F','0','0','1','system:dict:data:export','',NULL,NULL,NULL,NULL);
 
 
 INSERT INTO agile_sys_menu VALUES ('107','1','参数设置',7,'system/config/index','config','config','C','0','0','1','system:config:page','参数设置菜单',NULL,NULL,NULL,NULL);

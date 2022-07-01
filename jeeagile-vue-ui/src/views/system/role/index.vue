@@ -67,7 +67,7 @@
             修改
           </el-button>
           <el-button ize="mini" type="text" icon="el-icon-circle-check" @click="handleDataScope(scope.row)"
-                     v-hasPerm="['system:role:dataScope']">
+                     v-hasPerm="['system:role:scope']">
             数据权限
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"

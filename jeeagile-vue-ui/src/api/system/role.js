@@ -43,7 +43,7 @@ export const changeRoleStatus = data => postApi('/system/role/changeStatus', dat
 /**
  * 修改角色数据范围
  */
-export const updateDataScope = data => postApi('/system/role/dataScope', data)
+export const updateDataScope = data => postApi('/system/role/scope', data)
 
 /**
  * 导出角色
