@@ -153,89 +153,6 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         return true;
     }
 
-    private void deleteTenantInfo(AgileSysTenant agileSysTenant) {
-        AgileSecurityContext.putTenantId(agileSysTenant.getId());
-        this.deleteTenantUserRole();
-        this.deleteTenantUserPost();
-        this.deleteTenantRoleMenu();
-        this.deleteTenantRoleDept();
-        this.deleteTenantDictType();
-        this.deleteTenantDictData();
-        this.deleteTenantConfig();
-        this.deleteTenantPost();
-        this.deleteTenantDept();
-        this.deleteTenantUser();
-        this.deleteTenantMenu();
-        this.deleteTenantRole();
-        AgileSecurityContext.removeTenant();
-    }
-
-    /**
-     * 租户模式删除租户下所有用户
-     */
-    private void deleteTenantUser() {
-        LambdaQueryWrapper<AgileSysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysUserService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantPost() {
-        LambdaQueryWrapper<AgileSysPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysPostService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantDept() {
-        LambdaQueryWrapper<AgileSysDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysDeptService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantConfig() {
-        LambdaQueryWrapper<AgileSysConfig> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysConfigService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantUserRole() {
-        LambdaQueryWrapper<AgileSysUserRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysUserRoleService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantUserPost() {
-        LambdaQueryWrapper<AgileSysUserPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysUserPostService.remove(lambdaQueryWrapper);
-    }
-
-    /**
-     * 租户模式删除租户分配菜单
-     */
-    private void deleteTenantMenu() {
-        LambdaQueryWrapper<AgileSysMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysMenuService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantRole() {
-        LambdaQueryWrapper<AgileSysRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysRoleService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantRoleMenu() {
-        LambdaQueryWrapper<AgileSysRoleMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysRoleMenuService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantRoleDept() {
-        LambdaQueryWrapper<AgileSysRoleDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysRoleDeptService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantDictType() {
-        LambdaQueryWrapper<AgileSysDictType> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysDictTypeService.remove(lambdaQueryWrapper);
-    }
-
-    private void deleteTenantDictData() {
-        LambdaQueryWrapper<AgileSysDictData> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        agileSysDictDataService.remove(lambdaQueryWrapper);
-    }
-
     @Override
     public AgileSysTenant agileSysTenantInfo(Serializable tenantId) {
         AgileSecurityContext.putDisableTenant(true);
@@ -257,14 +174,33 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         return this.updateModel(agileSysTenant);
     }
 
+    /**
+     * 初始化租户信息
+     *
+     * @param agileSysTenant
+     */
     private void initTenantInfo(AgileSysTenant agileSysTenant) {
         AgileSecurityContext.putTenantId(agileSysTenant.getId());
         this.initTenantAdminUser(agileSysTenant);
+        this.initTenantDept(agileSysTenant);
         this.initTenantMenu();
         this.initTenantDictType();
         this.initTenantDictData();
         this.initTenantConfig();
         AgileSecurityContext.removeTenant();
+    }
+
+    /**
+     * 初始化租户默认部门
+     *
+     * @param agileSysTenant
+     */
+    private void initTenantDept(AgileSysTenant agileSysTenant) {
+        AgileSysDept agileSysDept = new AgileSysDept();
+        agileSysDept.setDeptCode(agileSysTenant.getTenantCode());
+        agileSysDept.setDeptName(agileSysTenant.getTenantName());
+        agileSysDept.setDeptStatus("0");
+        agileSysDeptService.save(agileSysDept);
     }
 
     /**
@@ -476,6 +412,9 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysMenuService.saveBatch(agileSysMenuList);
     }
 
+    /**
+     * 初始化租户字典类型
+     */
     private void initTenantDictType() {
         List<AgileSysDictType> agileSysDictTypeList = new ArrayList<>();
         agileSysDictTypeList.add(AgileSysDictType.builder().id(AgileStringUtil.getUuid()).dictType("sys_user_sex").dictName("用户性别").dictStatus("0").systemFlag("0").build());
@@ -496,6 +435,9 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysDictTypeService.saveBatch(agileSysDictTypeList);
     }
 
+    /**
+     * 初始化租户字典数据
+     */
     private void initTenantDictData() {
         List<AgileSysDictData> agileSysDictDataList = new ArrayList<>();
         agileSysDictDataList.add(AgileSysDictData.builder().id(AgileStringUtil.getUuid()).dictType("sys_user_sex").dictLabel("男").dictValue("0").dictSort(1).dictStatus("0").systemFlag("0").build());
@@ -549,9 +491,131 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysDictDataService.saveBatch(agileSysDictDataList);
     }
 
+    /**
+     * 初始化租户系统配置
+     */
     private void initTenantConfig() {
         List<AgileSysConfig> agileSysConfigList = new ArrayList<>();
         agileSysConfigList.add(AgileSysConfig.builder().id(AgileStringUtil.getUuid()).configName("用户管理-账号初始密码").configKey("sys.user.pwd").configValue("123456").systemFlag("1").build());
         agileSysConfigService.saveBatch(agileSysConfigList);
     }
+
+    /**
+     * 删除租户信息
+     *
+     * @param agileSysTenant
+     */
+    private void deleteTenantInfo(AgileSysTenant agileSysTenant) {
+        AgileSecurityContext.putTenantId(agileSysTenant.getId());
+        this.deleteTenantUserRole();
+        this.deleteTenantUserPost();
+        this.deleteTenantRoleMenu();
+        this.deleteTenantRoleDept();
+        this.deleteTenantDictType();
+        this.deleteTenantDictData();
+        this.deleteTenantConfig();
+        this.deleteTenantPost();
+        this.deleteTenantDept();
+        this.deleteTenantUser();
+        this.deleteTenantMenu();
+        this.deleteTenantRole();
+        AgileSecurityContext.removeTenant();
+    }
+
+    /**
+     * 删除租户用户
+     */
+    private void deleteTenantUser() {
+        LambdaQueryWrapper<AgileSysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysUserService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户岗位
+     */
+    private void deleteTenantPost() {
+        LambdaQueryWrapper<AgileSysPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysPostService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户部门
+     */
+    private void deleteTenantDept() {
+        LambdaQueryWrapper<AgileSysDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysDeptService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户系统配置
+     */
+    private void deleteTenantConfig() {
+        LambdaQueryWrapper<AgileSysConfig> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysConfigService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户用户角色
+     */
+    private void deleteTenantUserRole() {
+        LambdaQueryWrapper<AgileSysUserRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysUserRoleService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户用户岗位
+     */
+    private void deleteTenantUserPost() {
+        LambdaQueryWrapper<AgileSysUserPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysUserPostService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户菜单
+     */
+    private void deleteTenantMenu() {
+        LambdaQueryWrapper<AgileSysMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysMenuService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户角色
+     */
+    private void deleteTenantRole() {
+        LambdaQueryWrapper<AgileSysRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysRoleService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户角色菜单
+     */
+    private void deleteTenantRoleMenu() {
+        LambdaQueryWrapper<AgileSysRoleMenu> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysRoleMenuService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户角色部门
+     */
+    private void deleteTenantRoleDept() {
+        LambdaQueryWrapper<AgileSysRoleDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysRoleDeptService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户字典类型
+     */
+    private void deleteTenantDictType() {
+        LambdaQueryWrapper<AgileSysDictType> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysDictTypeService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除租户字典数据
+     */
+    private void deleteTenantDictData() {
+        LambdaQueryWrapper<AgileSysDictData> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        agileSysDictDataService.remove(lambdaQueryWrapper);
+    }
+
 }
