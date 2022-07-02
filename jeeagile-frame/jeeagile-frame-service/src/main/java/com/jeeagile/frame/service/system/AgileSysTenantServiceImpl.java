@@ -84,6 +84,9 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
 
     @Override
     public void saveModelValidate(AgileSysTenant agileSysTenant) {
+        if(!AgileTenantUtil.isTenantEnable()){
+            throw new AgileFrameException("租户模式未开启请勿创建租户！");
+        }
         agileSysTenant.setAuditStatus(AgileAuditStatus.AUDIT.getCode());
         this.validateData(agileSysTenant);
     }
@@ -91,7 +94,6 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
     @Override
     public boolean updateModel(AgileSysTenant agileSysTenant) {
         agileSysTenant.setTenantCode(null);
-
         this.updateModelValidate(agileSysTenant);
         AgileSysTenant agileSysTenantOld = this.getById(agileSysTenant.getId());
         if (AgileAuditStatus.PASS.getCode().equals(agileSysTenantOld.getAuditStatus())) {
