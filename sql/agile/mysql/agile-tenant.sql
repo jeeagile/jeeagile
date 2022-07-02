@@ -23,6 +23,14 @@ create table agile_sys_tenant
 
 alter table agile_sys_tenant comment '租户信息表';
 
+INSERT INTO agile_sys_menu VALUES ('100','1','租户管理',1,'system/tenant/index','tenant','tenant','C','0','0','1','system:tenant:page','租户管理菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10001','100','租户明细',1,'','','#','F','0','0','1','system:tenant:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10002','100','租户新增',2,'','','#','F','0','0','1','system:tenant:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10003','100','租户修改',3,'','','#','F','0','0','1','system:tenant:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10004','100','租户删除',4,'','','#','F','0','0','1','system:tenant:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10005','100','租户导入',5,'','','#','F','0','0','1','system:tenant:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10006','100','租户导出',6,'','','#','F','0','0','1','system:tenant:export','',NULL,NULL,NULL,NULL);
+
 
 ALTER TABLE `agile`.`agile_sys_config`
 ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
