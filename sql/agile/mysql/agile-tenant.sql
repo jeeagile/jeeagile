@@ -23,6 +23,9 @@ create table agile_sys_tenant
 
 alter table agile_sys_tenant comment '租户信息表';
 
+INSERT INTO agile_sys_tenant VALUES ('jeeagile', 'jeeagile', '默认租户', '0', '1', '0', null, '', 'jeeagile', NULL,NULL,NULL,NULL);
+
+
 INSERT INTO agile_sys_menu VALUES ('100','1','租户管理',1,'system/tenant/index','tenant','tenant','C','0','0','1','system:tenant:page','租户管理菜单',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10001','100','租户明细',1,'','','#','F','0','0','1','system:tenant:detail','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10002','100','租户新增',2,'','','#','F','0','0','1','system:tenant:add','',NULL,NULL,NULL,NULL);
