@@ -1,7 +1,7 @@
 package com.jeeagile.quartz.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileQuartzJob extends AgileBaseModel<AgileQuartzJob> {
+public class AgileQuartzJob extends AgileBaseTenantModel<AgileQuartzJob> {
 
     /**
      * 任务名称

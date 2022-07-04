@@ -1,5 +1,6 @@
 package com.jeeagile.quartz.runner;
 
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.quartz.entity.AgileQuartzJob;
 import com.jeeagile.quartz.schedule.AgileScheduleUtil;
 import com.jeeagile.quartz.service.IAgileQuartzJobService;
@@ -18,7 +19,9 @@ public class AgileQuartzRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments applicationArguments) {
         AgileScheduleUtil.clear();
+        AgileSecurityContext.putDisableTenant(true);
         List<AgileQuartzJob> agileQuartzJobList = agileQuartzJobService.list();
+        AgileSecurityContext.removeDisableTenant();
         agileQuartzJobList.forEach(agileQuartzJob -> AgileScheduleUtil.createScheduleJob(agileQuartzJob));
     }
 }

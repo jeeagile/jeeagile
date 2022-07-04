@@ -104,3 +104,14 @@ ALTER TABLE `agile`.`agile_sys_logger`
 ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `message`;
 
 update `agile`.`agile_sys_logger` set tenant_id='jeeagile';
+
+
+ALTER TABLE `agile`.`agile_quartz_job`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_quartz_job` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_quartz_logger`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `message`;
+
+update `agile`.`agile_quartz_logger` set tenant_id='jeeagile';
