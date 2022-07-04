@@ -1,7 +1,7 @@
 package com.jeeagile.process.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @description 流程模型
  */
 @Data
-public class AgileProcessInstance extends AgileBaseModel<AgileProcessInstance> {
+public class AgileProcessInstance extends AgileBaseTenantModel<AgileProcessInstance> {
     /**
      * 流程模型编码
      */

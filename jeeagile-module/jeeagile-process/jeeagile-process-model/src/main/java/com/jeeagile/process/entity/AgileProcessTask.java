@@ -1,6 +1,6 @@
 package com.jeeagile.process.entity;
 
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,7 +11,7 @@ import java.util.Date;
  * @description 流程任务
  */
 @Data
-public class AgileProcessTask extends AgileBaseModel<AgileProcessTask> {
+public class AgileProcessTask extends AgileBaseTenantModel<AgileProcessTask> {
     /**
      * 流程模型编码
      */

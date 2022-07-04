@@ -1,6 +1,6 @@
 package com.jeeagile.process.entity;
 
-import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.util.Date;
  * @description 流程模型
  */
 @Data
-public class AgileProcessDefinition extends AgileBaseModel<AgileProcessDefinition> {
+public class AgileProcessDefinition extends AgileBaseTenantModel<AgileProcessDefinition> {
     /**
      * 流程模型编码
      */

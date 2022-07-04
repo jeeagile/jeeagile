@@ -1,8 +1,6 @@
 package com.jeeagile.process.entity;
 
-import com.jeeagile.frame.entity.AgileBaseModel;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import lombok.Data;
 
 /**
@@ -11,6 +9,6 @@ import lombok.Data;
  * @description 流程脚本
  */
 @Data
-public class AgileProcessScript extends AgileBaseModel<AgileProcessScript> {
+public class AgileProcessScript extends AgileBaseTenantModel<AgileProcessScript> {
 
 }

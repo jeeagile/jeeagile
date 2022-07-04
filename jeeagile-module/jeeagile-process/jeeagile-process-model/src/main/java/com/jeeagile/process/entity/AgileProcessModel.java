@@ -3,6 +3,7 @@ package com.jeeagile.process.entity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseModel;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.util.Date;
  * @description 流程模型
  */
 @Data
-public class AgileProcessModel extends AgileBaseModel<AgileProcessModel> {
+public class AgileProcessModel extends AgileBaseTenantModel<AgileProcessModel> {
     /**
      * 流程模型编码
      */

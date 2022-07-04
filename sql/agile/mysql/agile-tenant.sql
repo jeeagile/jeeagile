@@ -115,3 +115,31 @@ ALTER TABLE `agile`.`agile_quartz_logger`
 ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `message`;
 
 update `agile`.`agile_quartz_logger` set tenant_id='jeeagile';
+
+
+ALTER TABLE `agile`.`agile_process_form`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_process_form` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_process_model`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_process_model` set tenant_id='jeeagile';
+
+
+ALTER TABLE `agile`.`agile_process_definition`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `suspension_state`;
+
+update `agile`.`agile_process_model` set tenant_id='jeeagile';
+
+
+ALTER TABLE `agile`.`agile_process_instance`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `end_time`;
+
+update `agile`.`agile_process_instance` set tenant_id='jeeagile';
+
+ALTER TABLE `agile`.`agile_process_task`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `approve_message`;
+
+update `agile`.`agile_process_task` set tenant_id='jeeagile';
