@@ -181,7 +181,9 @@
         <el-row>
           <el-col :span="24">
             <el-form-item v-if="form.auditStatus==1" label="访问地址：">
-              {{ tenantLoginUrl(form) }}
+              <el-tooltip class="item" effect="dark" content="点击复制" placement="top">
+                <sapn @click="copyTenantUrl(form)">{{ tenantLoginUrl(form) }}</sapn>
+              </el-tooltip>
             </el-form-item>
           </el-col>
         </el-row>
@@ -314,6 +316,16 @@
       /** 租户登录地址 */
       tenantLoginUrl(form) {
         return location.protocol + '//' + location.host + '/login?tenantId=' + form.id + '&tenantSign=' + form.tenantSign
+      },
+      /** 复制租户登录地址 */
+      copyTenantUrl(form) {
+        let input = document.createElement('input')
+        input.value = this.tenantLoginUrl(form)
+        document.body.appendChild(input)
+        input.select()
+        document.execCommand('Copy')
+        this.messageSuccess('租户地址已成功复制到剪切板')
+        input.remove()
       },
       /** 有效期格式化 */
       expirationDateFormat(row, column) {
