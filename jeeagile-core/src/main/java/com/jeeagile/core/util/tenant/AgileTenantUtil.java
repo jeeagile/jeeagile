@@ -1,9 +1,6 @@
 package com.jeeagile.core.util.tenant;
 
-import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.properties.AgileTenantProperties;
-import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.util.spring.AgileServletUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -57,18 +54,5 @@ public class AgileTenantUtil {
      */
     public static Set<String> getTenantTables() {
         return getAgileTenantProperties().getTables();
-    }
-
-    /**
-     * 校验租户
-     */
-    public static void checkAgileTenant() {
-        if (isTenantEnable()) {
-            String tenantId = AgileServletUtil.getHeaderValue("AGILE_TENANT");
-            String tenantSign = AgileServletUtil.getHeaderValue("AGILE_TENANT_SIGN");
-            if (AgileStringUtil.isEmpty(tenantId) || AgileStringUtil.isEmpty(tenantSign)) {
-                throw new AgileFrameException("非法访问！！！");
-            }
-        }
     }
 }
