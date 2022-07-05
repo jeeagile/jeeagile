@@ -38,7 +38,7 @@ import java.util.Properties;
 @EnableConfigurationProperties({MybatisPlusProperties.class})
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
 @InterceptorIgnore
-public class AgileMybatisAutoConfiguration implements ApplicationListener<ContextRefreshedEvent> {
+public class AgileMybatisAutoConfiguration {
 
     @Bean
     public static MapperScannerConfigurer mapperScannerConfigurer(MybatisPlusProperties mybatisPlusProperties) {
@@ -84,13 +84,5 @@ public class AgileMybatisAutoConfiguration implements ApplicationListener<Contex
         properties.put("SQLServer", "sqlServer");
         databaseIdProvider.setProperties(properties);
         return databaseIdProvider;
-    }
-
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (event.getApplicationContext().getParent() == null) {
-            Map<String, Object> beans = event.getApplicationContext().getBeansWithAnnotation(AgileDataScope.class);
-            System.out.println("");
-        }
     }
 }

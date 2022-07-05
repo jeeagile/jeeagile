@@ -92,7 +92,6 @@ public class AgileMonitorOnlineController extends AgileBaseController {
                 onlineUserList.add(agileOnlineUser);
             }
         }
-
         return AgilePageUtil.startPage(onlineUserList, agilePageable);
     }
 }
