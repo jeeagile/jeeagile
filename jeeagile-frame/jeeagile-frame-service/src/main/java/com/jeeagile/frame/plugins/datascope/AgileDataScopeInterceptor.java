@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.exception.AgileAuthException;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
@@ -99,7 +100,7 @@ public class AgileDataScopeInterceptor extends AgileSqlParserSupport implements 
     }
 
     private Expression getInnerExpression(AgileDataScopeProperty agileDataScopeProperty) {
-        AgileBaseUser agileBaseUser = AgileSecurityUtil.getUserData();
+        AgileBaseUser agileBaseUser = AgileSecurityContext.getUserData();
         if (agileBaseUser == null && AgileStringUtil.isEmpty(agileBaseUser.getUserId())) {
             throw new AgileAuthException("获取用户信息发生异常!");
         }

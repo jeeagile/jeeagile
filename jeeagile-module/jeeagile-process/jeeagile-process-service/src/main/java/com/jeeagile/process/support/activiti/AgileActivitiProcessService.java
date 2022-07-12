@@ -2,7 +2,7 @@ package com.jeeagile.process.support.activiti;
 
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
-import com.jeeagile.core.security.util.AgileSecurityUtil;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.util.AgileDateUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.util.AgileBeanUtils;
@@ -168,7 +168,7 @@ public class AgileActivitiProcessService implements IAgileProcessService {
         Set<String> handlePoint = new HashSet<>(); //存放 高亮 我的办理节点
         //当前用户已完成的任务
         List<HistoricTaskInstance> taskInstanceList = historyService.createHistoricTaskInstanceQuery()
-                .taskAssignee(AgileSecurityUtil.getUserId())
+                .taskAssignee(AgileSecurityContext.getUserId())
                 .finished()
                 .processInstanceId(instanceId).list();
 

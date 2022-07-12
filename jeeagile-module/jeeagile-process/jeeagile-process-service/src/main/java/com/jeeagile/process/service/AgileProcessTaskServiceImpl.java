@@ -3,7 +3,7 @@ package com.jeeagile.process.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.security.util.AgileSecurityUtil;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
@@ -59,7 +59,7 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
         } else {
             lambdaQueryWrapper.in(AgileProcessTask::getTaskStatus, "2", "3");
         }
-        lambdaQueryWrapper.eq(AgileProcessTask::getTaskUser, AgileSecurityUtil.getUserId());
+        lambdaQueryWrapper.eq(AgileProcessTask::getTaskUser, AgileSecurityContext.getUserId());
         lambdaQueryWrapper.orderByDesc(AgileProcessTask::getCreateTime);
         return this.page(agilePage, lambdaQueryWrapper);
     }

@@ -1,9 +1,8 @@
 package com.jeeagile.process.support.activiti.listener;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
-import com.jeeagile.core.security.util.AgileSecurityUtil;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.frame.entity.system.AgileSysUser;
 import com.jeeagile.frame.service.system.IAgileSysUserService;
 import com.jeeagile.frame.user.AgileUserData;
@@ -89,7 +88,7 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
         AgileBeanUtils.copyProperties(agileProcessDefinition, agileProcessInstance);
         agileProcessInstance.setId(processStartedEvent.getProcessInstanceId());
         agileProcessInstance.setDefinitionId(agileProcessDefinition.getId());
-        AgileUserData agileUserData = AgileSecurityUtil.getUserData();
+        AgileUserData agileUserData = (AgileUserData) AgileSecurityContext.getUserData();
         agileProcessInstance.setStartUser(agileUserData.getUserId());
         agileProcessInstance.setStartUserName(agileUserData.getNickName());
         agileProcessInstance.setStartTime(new Date());

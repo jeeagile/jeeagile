@@ -3,6 +3,7 @@ package com.jeeagile.frame.entity;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -69,7 +70,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
      * 设置当前创建人和创建时间
      */
     public void setCreatValue() {
-        this.setCreateUser(AgileSecurityUtil.getUserId());
+        this.setCreateUser(AgileSecurityContext.getUserId());
         this.setCreateTime(new Date());
     }
 
@@ -77,7 +78,7 @@ public abstract class AgileBaseModel<T extends AgileBaseModel<T>> extends AgileM
      * 设置当前更新人和更新时间
      */
     public void setUpdateValue() {
-        this.setUpdateUser(AgileSecurityUtil.getUserId());
+        this.setUpdateUser(AgileSecurityContext.getUserId());
         this.setUpdateTime(new Date());
     }
 
