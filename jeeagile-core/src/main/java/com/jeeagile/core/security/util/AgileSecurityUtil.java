@@ -145,7 +145,7 @@ public class AgileSecurityUtil {
         try {
             agileSecurity = (IAgileSecurity) AgileSpringUtil.getBean("AgileSecurity");
         } catch (BeansException ex) {
-            throw new AgileAuthException("请检查安全接口实现类《IAgileSecurity》是否配置正确！");
+            throw new AgileAuthException("请检查安全接口实现类《IAgileSecurity》配置或用法是否正确，！");
         }
         if (agileSecurity == null) {
             throw new AgileAuthException("请检查安全接口实现类《IAgileSecurity》是否配置正确！");
