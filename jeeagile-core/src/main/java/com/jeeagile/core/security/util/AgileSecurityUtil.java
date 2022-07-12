@@ -72,7 +72,7 @@ public class AgileSecurityUtil {
      * @return
      */
     public static <T extends AgileBaseUser> T getUserData() {
-        return (T) getAgileSecurity().getUserData();
+        return (T) AgileSecurityContext.getUserData();
     }
 
     /**
