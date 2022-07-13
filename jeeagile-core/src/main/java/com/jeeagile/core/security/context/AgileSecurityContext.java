@@ -65,7 +65,10 @@ public class AgileSecurityContext {
         if (agileProtocolProperties.getType() == AgileProtocolType.LOCAL) {
             AgileBaseUser agileBaseUser;
             try {
-                agileBaseUser = AgileSecurityUtil.getUserData();
+                agileBaseUser = getAgileSecurity();
+                if (agileBaseUser == null) {
+                    agileBaseUser = userThreadLocal.get();
+                }
             } catch (Exception ex) {
                 agileBaseUser = userThreadLocal.get();
             }
