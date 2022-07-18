@@ -8,6 +8,9 @@
       <template v-if="device!=='mobile'">
         <search id="header-search" class="right-menu-item" />
 
+        <el-tooltip content="源码地址" effect="dark" placement="bottom">
+          <agile-git id="AgileGit" class="right-menu-item hover-effect" />
+        </el-tooltip>
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
@@ -45,7 +48,7 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
-
+import AgileGit from '@/components/Agile/Git'
 
 export default {
   components: {
@@ -53,7 +56,8 @@ export default {
     Hamburger,
     Screenfull,
     SizeSelect,
-    Search
+    Search,
+    AgileGit
   },
   computed: {
     ...mapGetters([
