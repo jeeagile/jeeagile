@@ -40,10 +40,10 @@ public class AgilePermissionEvaluator implements PermissionEvaluator {
             userData = agileUserDetails.getUserData();
         }
 
-        if (AgileStringUtil.isEmpty(userData) || CollectionUtils.isEmpty(userData.getUserPerm())) {
+        if (AgileStringUtil.isEmpty(userData) || CollectionUtils.isEmpty(userData.getUserPermList())) {
             return false;
         }
 
-        return userData.getUserPerm().contains("*:*:*") || userData.getUserPerm().contains(permission);
+        return userData.getUserPermList().contains("*:*:*") || userData.getUserPermList().contains(permission);
     }
 }

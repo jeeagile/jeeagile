@@ -61,8 +61,8 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
             if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
                 if (AgileSecurityUtil.encryptPassword(password).equals(userData.getPassword())) {
                     userData.setUserToken(SecurityUtils.getSubject().getSession().getId().toString());
-                    userData.setUserPerm(agileUserDetailsService.getUserPerm(userData));
-                    userData.setUserRole(agileUserDetailsService.getUserRole(userData));
+                    userData.setUserPermList(agileUserDetailsService.getUserPermList(userData));
+                    userData.setUserRoleList(agileUserDetailsService.getUserRoleList(userData));
                     HttpServletRequest httpServletRequest = AgileServletUtil.getHttpServletRequest();
                     if (httpServletRequest != null) {
                         UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
@@ -101,17 +101,17 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
                 throw new AgileAuthException(AgileResultCode.FAIL_USER_INFO);
             }
             SimpleAuthorizationInfo authenticationInfo = new SimpleAuthorizationInfo();
-            List<String> userPermList = userData.getUserPerm();
+            List<String> userPermList = userData.getUserPermList();
             if (userPermList == null || userPermList.isEmpty()) {
-                userPermList = agileUserDetailsService.getUserPerm(userData);
-                userData.setUserPerm(userPermList);
+                userPermList = agileUserDetailsService.getUserPermList(userData);
+                userData.setUserPermList(userPermList);
             }
             authenticationInfo.addStringPermissions(userPermList);
 
-            List<String> userRoleList = userData.getUserRole();
+            List<String> userRoleList = userData.getUserRoleList();
             if (userRoleList == null || userRoleList.isEmpty()) {
-                userRoleList = agileUserDetailsService.getUserRole(userData);
-                userData.setUserRole(userRoleList);
+                userRoleList = agileUserDetailsService.getUserRoleList(userData);
+                userData.setUserRoleList(userRoleList);
             }
             authenticationInfo.addRoles(userRoleList);
             return authenticationInfo;

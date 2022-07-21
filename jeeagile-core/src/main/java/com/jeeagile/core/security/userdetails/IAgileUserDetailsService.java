@@ -36,15 +36,15 @@ public interface IAgileUserDetailsService {
      * @param userData
      * @return
      */
-    List<String> getUserPerm(AgileBaseUser userData);
+    List<String> getUserPermList(AgileBaseUser userData);
 
     /**
      * 获取用户角色列表
      *
      * @param userData
-     * @return
+     * @return 返回用户角色编码列表
      */
-    List<String> getUserRole(AgileBaseUser userData);
+    List<String> getUserRoleList(AgileBaseUser userData);
 
     /**
      * 获取用户权限菜单
@@ -52,7 +52,7 @@ public interface IAgileUserDetailsService {
      * @param userData
      * @return
      */
-    List<Object> getUserMenu(AgileBaseUser userData);
+    List<Object> getUserMenuList(AgileBaseUser userData);
 
     /**
      * 获取用户数据权限类型
@@ -60,7 +60,7 @@ public interface IAgileUserDetailsService {
      * @param agileBaseUser
      * @return
      */
-    List<String> getUserDataScope(AgileBaseUser agileBaseUser);
+    List<String> getUserDataScopeList(AgileBaseUser agileBaseUser);
 
     /**
      * 获取用户部门权限

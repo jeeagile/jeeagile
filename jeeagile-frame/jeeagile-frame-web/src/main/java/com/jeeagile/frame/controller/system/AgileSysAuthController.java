@@ -73,7 +73,7 @@ public class AgileSysAuthController extends AgileBaseController {
     public AgileResult<AgileSysMenu> getUserMenu() {
         try {
             AgileBaseUser userData = AgileSecurityUtil.getUserData();
-            return this.success(agileUserDetailsService.getUserMenu(userData));
+            return this.success(agileUserDetailsService.getUserMenuList(userData));
         } catch (Exception ex) {
             return this.error(ex, "获取用户菜单异常！");
         }

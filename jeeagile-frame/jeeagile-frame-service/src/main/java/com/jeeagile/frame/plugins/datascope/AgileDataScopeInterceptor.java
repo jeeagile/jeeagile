@@ -108,7 +108,7 @@ public class AgileDataScopeInterceptor extends AgileSqlParserSupport implements 
         if (agileBaseUser.isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {
             return null;
         }
-        List<String> dataScopeList = agileUserDetailsService.getUserDataScope(agileBaseUser);
+        List<String> dataScopeList = agileUserDetailsService.getUserDataScopeList(agileBaseUser);
         Parenthesis parenthesis = new Parenthesis();
         if (AgileCollectionUtil.isNotEmpty(dataScopeList)) {
             if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_01)) {

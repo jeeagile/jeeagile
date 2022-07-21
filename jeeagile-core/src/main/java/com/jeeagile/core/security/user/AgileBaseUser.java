@@ -82,14 +82,14 @@ public abstract class AgileBaseUser implements Serializable {
     private Date loginTime = new Date();
 
     /**
-     * 用户权限编码
+     * 用户权限
      */
-    private List<String> userPerm;
+    private List<String> userPermList;
 
     /**
      * 用户角色编码
      */
-    private List<String> userRole;
+    private List<String> userRoleList;
 
     /**
      * 租户ID

@@ -63,8 +63,8 @@ public class AgileUserDetailsService implements UserDetailsService {
         try {
             if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
                 userData.setUserToken(AgileStringUtil.getUuid());
-                userData.setUserPerm(agileUserDetailsService.getUserPerm(userData));
-                userData.setUserRole(agileUserDetailsService.getUserRole(userData));
+                userData.setUserPermList(agileUserDetailsService.getUserPermList(userData));
+                userData.setUserRoleList(agileUserDetailsService.getUserRoleList(userData));
                 HttpServletRequest httpServletRequest = AgileServletUtil.getHttpServletRequest();
                 if (httpServletRequest != null) {
                     UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
@@ -73,7 +73,7 @@ public class AgileUserDetailsService implements UserDetailsService {
                     userData.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
                     userData.setBrowserName(userAgent.getBrowser().getName());
                 }
-                List<SimpleGrantedAuthority> authorities = userData.getUserRole().stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+                List<SimpleGrantedAuthority> authorities = userData.getUserRoleList().stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
                 AgileUserDetails agileUserDetails = new AgileUserDetails();
                 agileUserDetails.setUserData(userData);
                 agileUserDetails.setAuthorities(authorities);

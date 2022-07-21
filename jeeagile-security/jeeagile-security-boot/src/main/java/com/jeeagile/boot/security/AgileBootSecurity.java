@@ -196,7 +196,7 @@ public class AgileBootSecurity implements IAgileSecurity {
     }
 
     private boolean hasPermission(String permission) {
-        List<String> permissionList = this.getUserData().getUserPerm();
+        List<String> permissionList = this.getUserData().getUserPermList();
         for (String userPermission : permissionList) {
             if (userPermission.contains(permission)) {
                 return true;
@@ -214,7 +214,7 @@ public class AgileBootSecurity implements IAgileSecurity {
     }
 
     private boolean hasRole(String role) {
-        return ArrayUtils.contains(this.getUserData().getUserRole().toArray(), role);
+        return ArrayUtils.contains(this.getUserData().getUserRoleList().toArray(), role);
     }
 
     private void checkRoles(String... roles) {

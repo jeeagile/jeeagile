@@ -128,7 +128,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     }
 
     @Override
-    public List<String> getUserPerm(AgileBaseUser agileBaseUser) {
+    public List<String> getUserPermList(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
                 //是否为系统超级管理员或者租户管理员
@@ -151,7 +151,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     }
 
     @Override
-    public List<String> getUserRole(AgileBaseUser agileBaseUser) {
+    public List<String> getUserRoleList(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
                 if (agileBaseUser.isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {
@@ -159,7 +159,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
                     userRoleList.add("admin");
                     return userRoleList;
                 } else {
-                    return this.getUserRoleIdList(agileBaseUser.getUserId());
+                    return this.getUserRoleCodeList(agileBaseUser.getUserId());
                 }
             } else {
                 throw new AgileAuthException(AgileResultCode.FAIL_USER_INFO);
@@ -173,7 +173,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     }
 
     @Override
-    public List getUserMenu(AgileBaseUser agileBaseUser) {
+    public List getUserMenuList(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
                 if (agileBaseUser.isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {
@@ -193,7 +193,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     }
 
     @Override
-    public List<String> getUserDataScope(AgileBaseUser agileBaseUser) {
+    public List<String> getUserDataScopeList(AgileBaseUser agileBaseUser) {
         try {
             if (agileBaseUser != null) {
                 List<String> userDataScopeList = new ArrayList<>();
@@ -328,6 +328,23 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
             agileSysRoleMenuList.forEach(agileSysRoleMenu -> userMenuIdList.add(agileSysRoleMenu.getMenuId()));
         }
         return userMenuIdList;
+    }
+
+    /**
+     * 获取用户角色ID列表
+     *
+     * @param userId
+     * @return
+     */
+    private List<String> getUserRoleCodeList(String userId) {
+        List<String> userRoleCodeList = new ArrayList<>();
+        List<AgileSysRole> agileSysRoleList = this.getUserRoleList(userId);
+        agileSysRoleList.forEach(agileSysRole -> {
+            if (agileSysRole.getRoleStatus().equals("0")) {
+                userRoleCodeList.add(agileSysRole.getRoleCode());
+            }
+        });
+        return userRoleCodeList;
     }
 
     /**
