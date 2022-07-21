@@ -1,5 +1,5 @@
 import { getUserInfo, getUserMenu, login, logout } from '@/api/auth'
-import { getUserToken, removeUserToken, setUserToken, removeUserTenantId, removeUserTenantSign } from '@/utils/cookie'
+import { getUserToken, removeUserToken, setUserToken } from '@/utils/cookie'
 import { agileRouter } from '@/router'
 import Layout from '@/layout/index'
 import { handleTree } from '@/utils/agile'
@@ -54,9 +54,9 @@ const actions = {
       getUserInfo(state.userToken).then(response => {
         const userInfo = response.data
         const userAvatar = userInfo.userAvatar === '' ? require('@/assets/images/person.jpg') : process.env.VUE_APP_BASE_API + userInfo.userAvatar
-        if (userInfo.userRole && userInfo.userRole.length > 0) {
-          commit('SET_USER_ROLE', userInfo.userRole)
-          commit('SET_USER_PERM', userInfo.userPerm)
+        if (userInfo.userPermList && userInfo.userPermList.length > 0) {
+          commit('SET_USER_ROLE', userInfo.userRoleList)
+          commit('SET_USER_PERM', userInfo.userPermList)
         } else {
           commit('SET_USER_ROLE', ['ROLE_DEFAULT'])
         }

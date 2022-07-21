@@ -32,7 +32,7 @@ public class AgilePageable<T> implements Serializable {
      *
      * @return
      */
-    public int getSize() {
+    public int getPageSize() {
         if (pageSize < 1) {
             return 20;
         } else {
