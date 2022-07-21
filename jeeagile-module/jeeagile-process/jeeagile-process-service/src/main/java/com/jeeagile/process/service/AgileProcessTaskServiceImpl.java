@@ -59,7 +59,7 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
         } else {
             lambdaQueryWrapper.in(AgileProcessTask::getTaskStatus, "2", "3");
         }
-        lambdaQueryWrapper.eq(AgileProcessTask::getTaskUser, AgileSecurityContext.getUserId());
+        lambdaQueryWrapper.eq(AgileProcessTask::getAssigneeUser, AgileSecurityContext.getUserId());
         lambdaQueryWrapper.orderByDesc(AgileProcessTask::getCreateTime);
         return this.page(agilePage, lambdaQueryWrapper);
     }

@@ -3,6 +3,7 @@ package com.jeeagile.process.support.activiti.listener;
 import com.alibaba.fastjson.JSON;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.security.context.AgileSecurityContext;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.entity.system.AgileSysUser;
 import com.jeeagile.frame.service.system.IAgileSysUserService;
 import com.jeeagile.frame.user.AgileUserData;
@@ -14,6 +15,7 @@ import com.jeeagile.process.service.IAgileProcessDefinitionService;
 import com.jeeagile.process.service.IAgileProcessInstanceService;
 import com.jeeagile.process.service.IAgileProcessTaskService;
 import lombok.extern.slf4j.Slf4j;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.event.ActivitiEvent;
 import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.activiti.engine.delegate.event.impl.ActivitiEntityEventImpl;
@@ -42,6 +44,11 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
     @Lazy
     @Autowired
     private IAgileSysUserService agileSysUserService;
+
+    @Lazy
+    @Autowired
+    private TaskService taskService;
+
 
     @Override
     public void onEvent(ActivitiEvent activitiEvent) {
@@ -111,12 +118,25 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
         agileProcessTask.setId(task.getId());
         agileProcessTask.setTaskName(task.getName());
         agileProcessTask.setStartTime(task.getCreateTime());
-        AgileSysUser agileSysUser = agileSysUserService.getById(task.getAssignee());
-        if (agileSysUser == null || agileSysUser.isEmptyPk()) {
-            throw new AgileFrameException("流程任务执行人不存在，请核实!");
+
+
+        if (AgileStringUtil.isNotEmpty(task.getAssignee())) {
+            AgileSysUser agileSysUser = agileSysUserService.getById(task.getAssignee());
+            if (agileSysUser == null || agileSysUser.isEmptyPk()) {
+                throw new AgileFrameException("流程任务执行人不存在，请联系管理员核实!");
+            }
+            agileProcessTask.setAssigneeUser(agileSysUser.getId());
+            agileProcessTask.setAssigneeUserName(agileSysUser.getNickName());
         }
-        agileProcessTask.setTaskUser(agileSysUser.getId());
-        agileProcessTask.setTaskUserName(agileSysUser.getNickName());
+
+//        List<IdentityLink> identityLinkList = taskService.getIdentityLinksForTask(task.getId());
+//        if (AgileCollectionUtil.isNotEmpty(identityLinkList)) {
+//            identityLinkList.forEach(identityLink -> {
+//                System.out.println(identityLink.getType() + " " + identityLink.getUserId() + "  " + identityLink.getGroupId());
+//            });
+//        }
+
+
         agileProcessTask.setTaskStatus("1");
         agileProcessTaskService.saveModel(agileProcessTask);
     }

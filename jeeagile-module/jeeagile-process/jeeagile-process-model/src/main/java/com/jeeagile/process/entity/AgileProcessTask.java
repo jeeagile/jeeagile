@@ -43,11 +43,11 @@ public class AgileProcessTask extends AgileBaseTenantModel<AgileProcessTask> {
     /**
      * 流程任务执行人
      */
-    private String taskUser;
+    private String assigneeUser;
     /**
      * 流程任务执行人名称
      */
-    private String taskUserName;
+    private String assigneeUserName;
     /**
      * 流程任务状态(0:用户撤销 1:审批中 2：审批通过 3：审批拒绝)
      */

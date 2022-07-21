@@ -2,6 +2,7 @@ package com.jeeagile.process.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
+import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.frame.entity.system.*;
@@ -58,7 +59,7 @@ public class AgileProcessDesignerServiceImpl implements IAgileProcessDesignerSer
     public AgilePage<AgileSysRole> selectRolePage(AgilePageable<AgileSysRole> agilePageable) {
         AgilePage<AgileSysRole> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         LambdaQueryWrapper<AgileSysRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.select(AgileSysRole::getRoleCode, AgileSysRole::getRoleName);
+        lambdaQueryWrapper.select(AgileSysRole::getId, AgileSysRole::getRoleCode, AgileSysRole::getRoleName);
         AgileSysRole agileSysRole = agilePageable.getQueryCond();
         if (agileSysRole != null) {
             if (AgileStringUtil.isNotEmpty(agileSysRole.getRoleCode())) {
@@ -77,7 +78,7 @@ public class AgileProcessDesignerServiceImpl implements IAgileProcessDesignerSer
     public AgilePage<AgileSysDept> selectDeptPage(AgilePageable<AgileSysDept> agilePageable) {
         AgilePage<AgileSysDept> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         LambdaQueryWrapper<AgileSysDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.select(AgileSysDept::getDeptCode, AgileSysDept::getDeptName);
+        lambdaQueryWrapper.select(AgileSysDept::getId, AgileSysDept::getDeptCode, AgileSysDept::getDeptName);
         AgileSysDept agileSysDept = agilePageable.getQueryCond();
         if (agileSysDept != null) {
             if (AgileStringUtil.isNotEmpty(agileSysDept.getDeptCode())) {
@@ -96,7 +97,7 @@ public class AgileProcessDesignerServiceImpl implements IAgileProcessDesignerSer
     public AgilePage<AgileSysPost> selectPostPage(AgilePageable<AgileSysPost> agilePageable) {
         AgilePage<AgileSysPost> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         LambdaQueryWrapper<AgileSysPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.select(AgileSysPost::getPostCode, AgileSysPost::getPostName);
+        lambdaQueryWrapper.select(AgileSysPost::getId, AgileSysPost::getPostCode, AgileSysPost::getPostName);
         AgileSysPost agileSysPost = agilePageable.getQueryCond();
         if (agileSysPost != null) {
             if (AgileStringUtil.isNotEmpty(agileSysPost.getPostCode())) {
@@ -122,68 +123,68 @@ public class AgileProcessDesignerServiceImpl implements IAgileProcessDesignerSer
     }
 
     @Override
-    public List<String> detailUserNickName(String userIds) {
+    public List<String> detailUserNickName(List<String> userIds) {
         List<String> nickNameList = new ArrayList<>();
-        if (AgileStringUtil.isNotEmpty(userIds)) {
-            LambdaQueryWrapper<AgileSysUser> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper.select(AgileSysUser::getNickName);
-            lambdaQueryWrapper.in(AgileSysUser::getId, userIds.split(","));
-            agileSysUserService.list(lambdaQueryWrapper).forEach(agileSysUser -> {
-                nickNameList.add(agileSysUser.getNickName());
+        if (AgileCollectionUtil.isNotEmpty(userIds)) {
+            userIds.forEach(id -> {
+                AgileSysUser agileSysUser = agileSysUserService.getById(id);
+                if (agileSysUser != null && agileSysUser.isNotEmptyPk()) {
+                    nickNameList.add(agileSysUser.getNickName());
+                }
             });
         }
         return nickNameList;
     }
 
     @Override
-    public List<String> detailRoleName(String roleCodes) {
+    public List<String> detailRoleName(List<String> roleIds) {
         List<String> roleNameList = new ArrayList<>();
-        if (AgileStringUtil.isNotEmpty(roleCodes)) {
-            LambdaQueryWrapper<AgileSysRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper.select(AgileSysRole::getRoleName);
-            lambdaQueryWrapper.in(AgileSysRole::getRoleCode, roleCodes.split(","));
-            agileSysRoleService.list(lambdaQueryWrapper).forEach(agileSysRole -> {
-                roleNameList.add(agileSysRole.getRoleName());
+        if (AgileCollectionUtil.isNotEmpty(roleIds)) {
+            roleIds.forEach(id -> {
+                AgileSysRole agileSysRole = agileSysRoleService.getById(id);
+                if (agileSysRole != null && agileSysRole.isNotEmptyPk()) {
+                    roleNameList.add(agileSysRole.getRoleName());
+                }
             });
         }
         return roleNameList;
     }
 
     @Override
-    public List<String> detailDeptName(String deptCodes) {
+    public List<String> detailDeptName(List<String> deptIds) {
         List<String> deptNameList = new ArrayList<>();
-        if (AgileStringUtil.isNotEmpty(deptCodes)) {
-            LambdaQueryWrapper<AgileSysDept> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper.select(AgileSysDept::getDeptName);
-            lambdaQueryWrapper.in(AgileSysDept::getDeptCode, deptCodes.split(","));
-            agileSysDeptService.list(lambdaQueryWrapper).forEach(agileSysDept -> {
-                deptNameList.add(agileSysDept.getDeptName());
+        if (AgileCollectionUtil.isNotEmpty(deptIds)) {
+            deptIds.forEach(id -> {
+                AgileSysDept agileSysDept = agileSysDeptService.getById(id);
+                if (agileSysDept != null && agileSysDept.isNotEmptyPk()) {
+                    deptNameList.add(agileSysDept.getDeptName());
+                }
             });
         }
         return deptNameList;
     }
 
     @Override
-    public List<String> detailPostName(String postCodes) {
+    public List<String> detailPostName(List<String> postIds) {
         List<String> postNameList = new ArrayList<>();
-        if (AgileStringUtil.isNotEmpty(postCodes)) {
-            LambdaQueryWrapper<AgileSysPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper.select(AgileSysPost::getPostName);
-            lambdaQueryWrapper.in(AgileSysPost::getPostCode, postCodes.split(","));
-            agileSysPostService.list(lambdaQueryWrapper).forEach(agileSysPost -> {
-                postNameList.add(agileSysPost.getPostName());
+        if (AgileCollectionUtil.isNotEmpty(postIds)) {
+            postIds.forEach(id -> {
+                AgileSysPost agileSysPost = agileSysPostService.getById(id);
+                if (agileSysPost != null && agileSysPost.isNotEmptyPk()) {
+                    postNameList.add(agileSysPost.getPostName());
+                }
             });
         }
         return postNameList;
     }
 
     @Override
-    public List<String> detailGroupName(String groupCodes) {
+    public List<String> detailGroupName(List<String> groupCodes) {
         return null;
     }
 
     @Override
-    public List<String> detailScriptName(String scriptCodes) {
+    public List<String> detailScriptName(List<String> scriptCodes) {
         return null;
     }
 }

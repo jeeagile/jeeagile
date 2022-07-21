@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'JeeAgileGit',
+  name: 'AgileGit',
   data() {
     return {
       url: 'https://gitee.com/jeeagile/jeeagile'

@@ -52,14 +52,14 @@ public class AgileSysTenantController extends AgileCrudController<IAgileSysTenan
         String tenantId = (String) param.get("tenantId");
         String tenantSign = (String) param.get("tenantSign");
         if (AgileStringUtil.isEmpty(tenantId)) {
-            return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
+            return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "租户模式，非法访问！");
         }
         if (AgileStringUtil.isEmpty(tenantSign)) {
-            return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
+            return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "租户模式，非法访问！");
         }
         AgileSysTenant agileSysTenant = this.agileBaseService.agileSysTenantInfo(tenantId);
         if (agileSysTenant == null || AgileStringUtil.isEmpty(agileSysTenant.getId())) {
-            return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
+            return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "租户模式，非法访问！");
         }
         if (!agileSysTenant.getTenantSign().equals(tenantSign)) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "非法租户签名！");

@@ -330,7 +330,7 @@
     methods: {
       initAssigneeUser() {
         if (this.userTaskInfo.assignee) {
-          detailUserNickName(this.userTaskInfo.assignee).then(response => {
+          detailUserNickName({ userIds: this.userTaskInfo.assignee.split(',') }).then(response => {
               this.assigneeNickName = response.data.toString()
             }
           )
@@ -340,7 +340,7 @@
       },
       initCandidateUsers() {
         if (this.userTaskInfo.candidateUsers) {
-          detailUserNickName(this.userTaskInfo.candidateUsers).then(response => {
+          detailUserNickName({ userIds: this.userTaskInfo.candidateUsers.split(',') }).then(response => {
               this.candidateNickName = response.data.toString()
             }
           )
@@ -349,32 +349,32 @@
         }
       },
       initCandidateGroups() {
-        if (this.userTaskInfo.candidateGroups) {
+        if (this.userTaskInfo.candidateGroups && this.userTaskInfo.candidateGroups.indexOf(':') != -1) {
           this.groupType = this.userTaskInfo.candidateGroups.split(':')[0]
-          const candidateGroups = this.userTaskInfo.candidateGroups.split(':')[1]
+          const candidateGroups = this.userTaskInfo.candidateGroups.split(',').map(item => item.split(':')[1])
           switch (this.groupType) {
           case 'role':
-            detailRoleName(candidateGroups).then(response => {
+            detailRoleName({ roleIds: candidateGroups }).then(response => {
               this.candidateGroupsName = response.data.toString()
             })
             break
           case 'post':
-            detailPostName(candidateGroups).then(response => {
+            detailPostName({ postIds: candidateGroups }).then(response => {
               this.candidateGroupsName = response.data.toString()
             })
             break
           case 'dept':
-            detailDeptName(candidateGroups).then(response => {
+            detailDeptName({ deptIds: candidateGroups }).then(response => {
               this.candidateGroupsName = response.data.toString()
             })
             break
           case 'group':
-            detailGroupName(candidateGroups).then(response => {
+            detailGroupName({ groupIds: candidateGroups }).then(response => {
               this.candidateGroupsName = response.data.toString()
             })
             break
           case 'script':
-            detailScriptName(candidateGroups).then(response => {
+            detailScriptName({ scriptIds: candidateGroups }).then(response => {
               this.candidateGroupsName = response.data.toString()
             })
             break
@@ -382,7 +382,7 @@
             this.candidateGroupsName = undefined
           }
         } else {
-          this.candidateGroupsName = undefined
+          this.candidateGroupsName = this.userTaskInfo.candidateGroups
         }
       },
       /** 查询用户列表 */
@@ -398,9 +398,6 @@
       updateUserTaskInfo(key) {
         const properties = Object.create(null)
         properties[key] = this.userTaskInfo[key]
-        if (key === 'candidateGroups' && this.groupType?.length > 0) {
-          properties[key] = this.groupType + ':' + this.userTaskInfo[key]
-        }
         processHelper.updateProperties(this.activeElement, properties)
       },
       handleSelectUser(userType) {
@@ -503,7 +500,7 @@
         this.groupLoading = true
         selectRolePage(this.queryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
-              return { ...item, tableKey: item.roleCode, label: item.roleName }
+              return { ...item, tableKey: item.id, label: item.roleName }
             })
             this.groupQueryParam.pageTotal = response.data?.pageTotal
             this.groupLoading = false
@@ -514,7 +511,7 @@
         this.groupLoading = true
         selectDeptPage(this.queryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
-              return { ...item, tableKey: item.deptCode, label: item.deptName }
+              return { ...item, tableKey: item.id, label: item.deptName }
             })
             this.groupQueryParam.pageTotal = response.data?.pageTotal
             this.groupLoading = false
@@ -525,7 +522,7 @@
         this.groupLoading = true
         selectPostPage(this.queryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
-              return { ...item, tableKey: item.postCode, label: item.postName }
+              return { ...item, tableKey: item.id, label: item.postName }
             })
             this.groupQueryParam.pageTotal = response.data?.pageTotal
             this.groupLoading = false
@@ -536,7 +533,7 @@
         this.groupLoading = true
         selectGroupPage(this.queryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
-              return { ...item, tableKey: item.groupCode, label: item.groupName }
+              return { ...item, tableKey: item.id, label: item.groupName }
             })
             this.groupQueryParam.pageTotal = response.data?.pageTotal
             this.groupLoading = false
@@ -547,7 +544,7 @@
         this.groupLoading = true
         selectScriptPage(this.queryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
-              return { ...item, tableKey: item.scriptCode, label: item.scriptName }
+              return { ...item, tableKey: item.id, label: item.scriptName }
             })
             this.groupQueryParam.pageTotal = response.data?.pageTotal
             this.groupLoading = false
@@ -562,7 +559,7 @@
       },
       submitSelectGroup() {
         this.candidateGroupsName = this.selectGroupList.map(item => item.label).toString()
-        this.userTaskInfo.candidateGroups = this.selectGroupList.map(item => item.tableKey).toString()
+        this.userTaskInfo.candidateGroups = this.selectGroupList.map(item => this.groupType + ':' + item.tableKey).toString()
         this.updateUserTaskInfo('candidateGroups')
         this.groupVisible = false
       },

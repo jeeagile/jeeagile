@@ -67,41 +67,41 @@ public interface IAgileProcessDesignerService {
      * @param userIds 逗号隔开
      * @return
      */
-    List<String> detailUserNickName(String userIds);
+    List<String> detailUserNickName(List<String> userIds);
 
     /**
      * 根据角色编码获取角色名称
      *
-     * @param roleCodes 逗号隔开
+     * @param roleIds 逗号隔开
      * @return
      */
-    List<String> detailRoleName(String roleCodes);
+    List<String> detailRoleName(List<String> roleIds);
 
     /**
      * 根据部门编码获取部门名称
      *
-     * @param deptCodes 逗号隔开
+     * @param deptIds 逗号隔开
      * @return
      */
-    List<String> detailDeptName(String deptCodes);
+    List<String> detailDeptName(List<String> deptIds);
 
 
     /**
      * 根据岗位编码获取岗位名称
      *
-     * @param postCodes 逗号隔开
+     * @param postIds 逗号隔开
      * @return
      */
-    List<String> detailPostName(String postCodes);
+    List<String> detailPostName(List<String> postIds);
 
 
     /**
      * 根据用户分组编码获取用户分组名称
      *
-     * @param groupCodes 逗号隔开
+     * @param groupIds 逗号隔开
      * @return
      */
-    List<String> detailGroupName(String groupCodes);
+    List<String> detailGroupName(List<String> groupIds);
 
 
     /**
@@ -110,5 +110,5 @@ public interface IAgileProcessDesignerService {
      * @param scriptCodes 逗号隔开
      * @return
      */
-    List<String> detailScriptName(String scriptCodes);
+    List<String> detailScriptName(List<String> scriptCodes);
 }

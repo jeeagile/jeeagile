@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @AgileLogger("流程设计")
 @RequestMapping("/process/designer")
@@ -64,37 +66,37 @@ public class AgileProcessDesignerController extends AgileBaseController {
 
     @PostMapping(value = "/detailUserNickName")
     @ApiOperation(value = "获取用户昵称", notes = "获取用户昵称")
-    public AgileResult<AgilePage<AgileSysUser>> detailUserNickName(@SingleRequestBody String userIds) {
+    public AgileResult<AgilePage<AgileSysUser>> detailUserNickName(@SingleRequestBody List<String> userIds) {
         return AgileResult.success(agileProcessDesignerService.detailUserNickName(userIds));
     }
 
     @PostMapping(value = "/detailRoleName")
     @ApiOperation(value = "获取用户昵称", notes = "获取用户昵称")
-    public AgileResult<AgilePage<String>> detailRoleName(@SingleRequestBody String roleCodes) {
-        return AgileResult.success(agileProcessDesignerService.detailRoleName(roleCodes));
+    public AgileResult<AgilePage<String>> detailRoleName(@SingleRequestBody List<String> roleIds) {
+        return AgileResult.success(agileProcessDesignerService.detailRoleName(roleIds));
     }
 
     @PostMapping(value = "/detailDeptName")
     @ApiOperation(value = "获取用户昵称", notes = "获取用户昵称")
-    public AgileResult<AgilePage<String>> detailDeptName(@SingleRequestBody String deptCodes) {
-        return AgileResult.success(agileProcessDesignerService.detailDeptName(deptCodes));
+    public AgileResult<AgilePage<String>> detailDeptName(@SingleRequestBody List<String> deptIds) {
+        return AgileResult.success(agileProcessDesignerService.detailDeptName(deptIds));
     }
 
     @PostMapping(value = "/detailPostName")
     @ApiOperation(value = "获取用户昵称", notes = "获取用户昵称")
-    public AgileResult<AgilePage<String>> detailPostName(@SingleRequestBody String postCodes) {
-        return AgileResult.success(agileProcessDesignerService.detailPostName(postCodes));
+    public AgileResult<AgilePage<String>> detailPostName(@SingleRequestBody List<String> postIds) {
+        return AgileResult.success(agileProcessDesignerService.detailPostName(postIds));
     }
 
     @PostMapping(value = "/detailGroupName")
     @ApiOperation(value = "获取用户昵称", notes = "获取用户昵称")
-    public AgileResult<AgilePage<String>> detailGroupName(@SingleRequestBody String groupCodes) {
-        return AgileResult.success(agileProcessDesignerService.detailGroupName(groupCodes));
+    public AgileResult<AgilePage<String>> detailGroupName(@SingleRequestBody List<String> groupIds) {
+        return AgileResult.success(agileProcessDesignerService.detailGroupName(groupIds));
     }
 
     @PostMapping(value = "/detailScriptName")
     @ApiOperation(value = "获取用户昵称", notes = "获取用户昵称")
-    public AgileResult<AgilePage<String>> detailScriptName(@SingleRequestBody String scriptCodes) {
-        return AgileResult.success(agileProcessDesignerService.detailScriptName(scriptCodes));
+    public AgileResult<AgilePage<String>> detailScriptName(@SingleRequestBody List<String> scriptIds) {
+        return AgileResult.success(agileProcessDesignerService.detailScriptName(scriptIds));
     }
 }

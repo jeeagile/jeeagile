@@ -85,7 +85,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
 
     private void checkAgileSysTenant(AgileSysTenant agileSysTenant, String tenantSign) {
         if (agileSysTenant == null || agileSysTenant.isEmptyPk()) {
-            throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "非法访问！");
+            throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "租户模式，非法访问！");
         }
         if (!agileSysTenant.getTenantSign().equals(tenantSign)) {
             throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "非法租户签名！");
