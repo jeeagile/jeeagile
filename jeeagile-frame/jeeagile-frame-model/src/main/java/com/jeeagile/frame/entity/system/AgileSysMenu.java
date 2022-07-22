@@ -3,6 +3,7 @@ package com.jeeagile.frame.entity.system;
 import com.jeeagile.frame.entity.AgileBaseTenantTreeModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +31,7 @@ public class AgileSysMenu extends AgileBaseTenantTreeModel<AgileSysMenu> {
      * 显示顺序
      */
     @ApiModelProperty("显示顺序")
-    @NotEmpty(message = "显示顺序不能为空!")
+    @NotNull(message = "显示顺序不能为空!")
     private Integer menuSort;
 
     /**

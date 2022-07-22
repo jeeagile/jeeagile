@@ -59,7 +59,7 @@
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-tickets"
                      @click="handleView(scope.row)"
-                     v-hasPerm="['system:tenant:audit']">
+                     v-hasPerm="['system:tenant:detail']">
             详细
           </el-button>
           <el-button v-if="scope.row.auditStatus==0" size="mini" type="text" icon="el-icon-tickets"

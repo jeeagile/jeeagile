@@ -33,6 +33,8 @@ INSERT INTO agile_sys_menu VALUES ('10003','100','租户修改',3,'','','#','F',
 INSERT INTO agile_sys_menu VALUES ('10004','100','租户删除',4,'','','#','F','0','0','1','system:tenant:delete','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10005','100','租户导入',5,'','','#','F','0','0','1','system:tenant:import','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('10006','100','租户导出',6,'','','#','F','0','0','1','system:tenant:export','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('10007','100','租户审核',7,'','','#','F','0','0','1','system:tenant:audit','',NULL,NULL,NULL,NULL);
+
 
 
 ALTER TABLE `agile`.`agile_sys_config`
