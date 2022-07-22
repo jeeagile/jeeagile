@@ -11,11 +11,16 @@ export const selectTodoPage = data => postApi('/process/task/todo', data)
 export const selectDonePage = data => postApi('/process/task/done', data)
 
 /**
- * 同意审核
+ * 审核同意
  */
 export const approveProcessTask = data => postApi('/process/task/approve', data)
 
 /**
- * 拒绝审核
+ * 审核驳回
  */
 export const rejectProcessTask = data => postApi('/process/task/reject', data)
+
+/**
+ * 审核拒绝
+ */
+export const refuseProcessTask = data => postApi('/process/task/refuse', data)

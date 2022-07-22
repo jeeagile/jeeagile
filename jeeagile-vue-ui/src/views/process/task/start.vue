@@ -194,6 +194,7 @@
       handleSubmitProcess(formData) {
         startProcessInstance({ processDefinitionId: this.processDefinition.id, formData: formData }).then(response => {
             this.messageSuccess('业务流程《' + this.processDefinition.modelName + '》发起成功')
+            this.selectProcess = true
           }
         )
       },

@@ -1,6 +1,9 @@
 package com.jeeagile.process.support;
 
+import com.jeeagile.frame.page.AgilePage;
+import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.process.entity.AgileProcessModel;
+import com.jeeagile.process.entity.AgileProcessTask;
 import com.jeeagile.process.vo.AgileProcessHistory;
 
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.Map;
  * @description 流程操作接口（对接流程组件）
  */
 public interface IAgileProcessService {
+
     /**
      * 流程发布
      *
@@ -80,6 +84,13 @@ public interface IAgileProcessService {
     List<AgileProcessHistory> getProcessInstanceHistoric(String instanceId);
 
     /**
+     * 获取用户代办列表
+     *
+     * @return
+     */
+    AgilePage<AgileProcessTask> getUserTodoTask(AgilePageable<AgileProcessTask> agilePageable);
+
+    /**
      * 撤销流程实例
      *
      * @param instanceId   流程实例ID
@@ -91,6 +102,7 @@ public interface IAgileProcessService {
 
     /**
      * 审批流程
+     *
      * @param instanceId
      * @param taskId
      * @param approveMessage
@@ -100,10 +112,11 @@ public interface IAgileProcessService {
 
     /**
      * 审核驳回
+     *
      * @param instanceId
      * @param taskId
      * @param approveMessage
      * @return
      */
-    boolean rejectProcessTask(String instanceId, String taskId, String approveMessage);
+    boolean refuseProcessTask(String instanceId, String taskId, String approveMessage);
 }

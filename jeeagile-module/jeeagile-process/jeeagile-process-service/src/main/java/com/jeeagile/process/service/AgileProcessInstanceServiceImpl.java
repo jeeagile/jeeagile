@@ -115,6 +115,10 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
         if (agileProcessInstance == null || agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例已不存在！");
         }
-        return agileProcessService.cancelProcessInstance(processInstanceId, "发起人撤销流程");
+        agileProcessService.cancelProcessInstance(processInstanceId, "发起人撤销流程");
+        agileProcessInstance.setInstanceStatus("0");
+        agileProcessInstance.setEndTime(new Date());
+        agileProcessInstance.setUpdateNullValue();
+        return this.updateById(agileProcessInstance);
     }
 }

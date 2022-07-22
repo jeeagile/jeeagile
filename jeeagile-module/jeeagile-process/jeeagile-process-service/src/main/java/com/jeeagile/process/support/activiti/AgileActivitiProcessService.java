@@ -1,12 +1,26 @@
 package com.jeeagile.process.support.activiti;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.security.context.AgileSecurityContext;
+import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.util.AgileDateUtil;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.entity.system.AgileSysUserPost;
+import com.jeeagile.frame.entity.system.AgileSysUserRole;
+import com.jeeagile.frame.page.AgilePage;
+import com.jeeagile.frame.page.AgilePageable;
+import com.jeeagile.frame.service.system.IAgileSysUserPostService;
+import com.jeeagile.frame.service.system.IAgileSysUserRoleService;
+import com.jeeagile.frame.user.AgileUserData;
 import com.jeeagile.frame.util.AgileBeanUtils;
+import com.jeeagile.process.entity.AgileProcessInstance;
 import com.jeeagile.process.entity.AgileProcessModel;
+import com.jeeagile.process.entity.AgileProcessTask;
+import com.jeeagile.process.service.IAgileProcessInstanceService;
 import com.jeeagile.process.support.IAgileProcessService;
 import com.jeeagile.process.vo.AgileProcessHistory;
 import org.activiti.bpmn.model.*;
@@ -23,7 +37,9 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -38,6 +54,14 @@ public class AgileActivitiProcessService implements IAgileProcessService {
     private HistoryService historyService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private IAgileSysUserRoleService agileSysUserRoleService;
+    @Autowired
+    private IAgileSysUserPostService agileSysUserPostService;
+
+    @Lazy
+    @Autowired
+    private IAgileProcessInstanceService agileProcessInstanceService;
 
     @Override
     public String processDeployment(AgileProcessModel agileProcessModel) {
@@ -232,6 +256,87 @@ public class AgileActivitiProcessService implements IAgileProcessService {
     }
 
     @Override
+    public AgilePage<AgileProcessTask> getUserTodoTask(AgilePageable<AgileProcessTask> agilePageable) {
+        List<String> userCandidateGroupList = getUserCandidateGroupList();
+        TaskQuery taskQuery = taskService.createTaskQuery()
+                .taskCandidateOrAssigned(AgileSecurityContext.getUserId(), userCandidateGroupList);
+        AgileProcessTask agileProcessTaskCond = agilePageable.getQueryCond();
+        if (agileProcessTaskCond != null) {
+            if (AgileStringUtil.isNotEmpty(agileProcessTaskCond.getModelName())) {
+                taskQuery.processDefinitionNameLike("%" + agileProcessTaskCond.getModelName() + "%");
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessTaskCond.getModelCode())) {
+                taskQuery.processDefinitionKeyLike("%" + agileProcessTaskCond.getModelCode() + "%");
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessTaskCond.getStartUser())) {
+                taskQuery.taskOwner(agileProcessTaskCond.getStartUser());
+            }
+        }
+        long totalCount = taskQuery.count();
+        AgilePage<AgileProcessTask> agileProcessTaskPage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
+        agileProcessTaskPage.setTotal(totalCount);
+        if (totalCount > 0) {
+            taskQuery.orderByTaskCreateTime().desc();
+            if (agilePageable.getCurrentPage() < 1) {
+                agilePageable.setCurrentPage(1);
+            }
+            int firstResult = (agilePageable.getCurrentPage() - 1) * agilePageable.getPageSize();
+            int maxResults = (agilePageable.getCurrentPage()) * agilePageable.getPageSize();
+            List<Task> taskList = taskQuery.listPage(firstResult, maxResults);
+            List<AgileProcessTask> agileProcessTaskList = new ArrayList<>();
+            taskList.forEach(task -> {
+                AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(task.getProcessInstanceId());
+                if (agileProcessInstance != null && agileProcessInstance.isNotEmptyPk()) {
+                    AgileProcessTask agileProcessTask = new AgileProcessTask();
+                    agileProcessTask.setId(task.getId());
+                    agileProcessTask.setInstanceId(agileProcessInstance.getId());
+                    agileProcessTask.setModelCode(agileProcessInstance.getModelCode());
+                    agileProcessTask.setModelName(agileProcessInstance.getModelName());
+                    agileProcessTask.setFormName(agileProcessInstance.getFormName());
+                    agileProcessTask.setTaskName(task.getName());
+                    agileProcessTask.setTaskStatus("1");
+                    agileProcessTask.setStartUser(agileProcessInstance.getStartUser());
+                    agileProcessTask.setStartUserName(agileProcessInstance.getStartUserName());
+                    agileProcessTask.setStartTime(task.getCreateTime());
+                    agileProcessTaskList.add(agileProcessTask);
+                }
+            });
+            agileProcessTaskPage.setRecords(agileProcessTaskList);
+        }
+
+        return agileProcessTaskPage;
+    }
+
+    private List<String> getUserCandidateGroupList() {
+        List<String> userCandidateGroupList = new ArrayList<>();
+        AgileBaseUser agileUserData = AgileSecurityContext.getUserData();
+        userCandidateGroupList.add("dept:" + agileUserData.getDeptId());
+        userCandidateGroupList.addAll(this.getUserRoleList(agileUserData.getUserId()));
+        userCandidateGroupList.addAll(this.getUserPostList(agileUserData.getUserId()));
+        return userCandidateGroupList;
+    }
+
+    private List<String> getUserRoleList(String userId) {
+        List<String> userRoleList = new ArrayList<>();
+        LambdaQueryWrapper<AgileSysUserRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysUserRole::getUserId, userId);
+        agileSysUserRoleService.list(lambdaQueryWrapper).forEach(agileSysUserRole ->
+                userRoleList.add("role:" + agileSysUserRole.getRoleId())
+        );
+        return userRoleList;
+    }
+
+    private List<String> getUserPostList(String userId) {
+        List<String> userPostList = new ArrayList<>();
+        LambdaQueryWrapper<AgileSysUserPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysUserPost::getUserId, userId);
+        agileSysUserPostService.list(lambdaQueryWrapper).forEach(agileSysUserPost ->
+                userPostList.add("post:" + agileSysUserPost.getPostId())
+        );
+        return userPostList;
+    }
+
+    @Override
     public boolean cancelProcessInstance(String instanceId, String deleteReason) {
         runtimeService.deleteProcessInstance(instanceId, deleteReason);
         return true;
@@ -239,6 +344,15 @@ public class AgileActivitiProcessService implements IAgileProcessService {
 
     @Override
     public boolean approveProcessTask(String instanceId, String taskId, String approveMessage) {
+        return handlerProcessTask(instanceId, taskId, approveMessage, true);
+    }
+
+    @Override
+    public boolean refuseProcessTask(String instanceId, String taskId, String approveMessage) {
+        return handlerProcessTask(instanceId, taskId, approveMessage, false);
+    }
+
+    private boolean handlerProcessTask(String instanceId, String taskId, String approveMessage, boolean flag) {
         // 校验流程实例存在
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(instanceId).singleResult();
         if (processInstance == null) {
@@ -247,18 +361,19 @@ public class AgileActivitiProcessService implements IAgileProcessService {
         // 校验任务存在
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         if (task == null) {
-            throw new AgileFrameException("任务已不存在！");
+            throw new AgileFrameException("流程任务已不存在！");
+        }
+        if (AgileStringUtil.isEmpty(task.getAssignee())) {
+            taskService.claim(task.getId(), AgileSecurityContext.getUserId());
         }
         taskService.addComment(task.getId(), processInstance.getId(), approveMessage);
-        taskService.complete(task.getId(), processInstance.getProcessVariables());
+        if (flag) {
+            taskService.complete(task.getId(), processInstance.getProcessVariables());
+        } else {
+            runtimeService.deleteProcessInstance(processInstance.getId(), approveMessage);
+        }
         return true;
     }
-
-    @Override
-    public boolean rejectProcessTask(String instanceId, String taskId, String approveMessage) {
-        return false;
-    }
-
 
     /**
      * 修改流程定义激活挂起状态

@@ -71,7 +71,7 @@ public class AgileProcessInstance extends AgileBaseTenantModel<AgileProcessInsta
      */
     private int suspensionState;
     /**
-     * 流程实例状态(0:已撤销 1:办理中 2:已完成)
+     * 流程实例状态(0:用户撤销 1:审批中 2:审批完成 3:审批拒绝)
      */
     private String instanceStatus;
     /**

@@ -42,10 +42,10 @@ public class AgileProcessTaskController extends AgileBaseController {
         return AgileResult.success(agileProcessTaskService.approveProcessTask(agileProcessTask));
     }
 
-    @PostMapping(value = "/reject")
-    @ApiOperation(value = "驳回任务", notes = "驳回任务")
+    @PostMapping(value = "/refuse")
+    @ApiOperation(value = "拒绝任务", notes = "拒绝任务")
     public AgileResult<AgilePage<AgileProcessTask>> reject(@RequestBody AgileProcessTask agileProcessTask) {
-        return AgileResult.success(agileProcessTaskService.rejectProcessTask(agileProcessTask));
+        return AgileResult.success(agileProcessTaskService.refuseProcessTask(agileProcessTask));
     }
 
 }

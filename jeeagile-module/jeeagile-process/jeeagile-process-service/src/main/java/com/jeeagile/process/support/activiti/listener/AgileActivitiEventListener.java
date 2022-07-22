@@ -75,7 +75,7 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
             //进程取消，删除实例
             case PROCESS_CANCELLED:
                 log.debug("进程取消，删除实例");
-                this.processCancelled((ActivitiProcessCancelledEventImpl) activitiEvent);
+//                this.processCancelled((ActivitiProcessCancelledEventImpl) activitiEvent);
             default:
         }
     }
@@ -149,11 +149,11 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
         agileProcessInstanceService.updateById(agileProcessInstance);
     }
 
-    private void processCancelled(ActivitiProcessCancelledEventImpl processCancelledEvent) {
-        AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(processCancelledEvent.getProcessInstanceId());
-        agileProcessInstance.setInstanceStatus("0");
-        agileProcessInstance.setEndTime(new Date());
-        agileProcessInstance.setUpdateNullValue();
-        agileProcessInstanceService.updateById(agileProcessInstance);
-    }
+//    private void processCancelled(ActivitiProcessCancelledEventImpl processCancelledEvent) {
+//        AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(processCancelledEvent.getProcessInstanceId());
+//        agileProcessInstance.setInstanceStatus("0");
+//        agileProcessInstance.setEndTime(new Date());
+//        agileProcessInstance.setUpdateNullValue();
+//        agileProcessInstanceService.updateById(agileProcessInstance);
+//    }
 }

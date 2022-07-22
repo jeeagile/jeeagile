@@ -33,7 +33,7 @@
       <el-table-column label="表单名称" align="center" prop="formName" :show-overflow-tooltip="true"/>
       <el-table-column label="发起人" width="150" align="center" prop="startUserName"/>
       <el-table-column label="创建时间" width="150" align="center" prop="startTime"/>
-      <el-table-column label="流程状态" align="center" :formatter="taskStatusFormat"/>
+      <el-table-column label="任务状态" align="center" :formatter="taskStatusFormat"/>
       <el-table-column label="操作" width="200px" align="center" class-name="small-padding">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleProcessTask(scope.row)">
@@ -82,7 +82,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleApproveProcessTask">同 意</el-button>
-        <el-button type="danger" @click="handleRejectProcessTask">驳 回</el-button>
+        <el-button type="danger" @click="handleRefuseProcessTask">拒 绝</el-button>
       </div>
     </el-dialog>
   </div>
@@ -92,7 +92,7 @@
   import {
     selectTodoPage,
     approveProcessTask,
-    rejectProcessTask
+    refuseProcessTask
   } from '@/api/process/task'
   import {
     detailProcessInstance,
@@ -168,7 +168,7 @@
       },
       // 参数系统内置字典翻译
       taskStatusFormat(row, column) {
-        return this.handleDictLabel(this.instanceStatusOptionList, row.taskStatus)
+        return this.handleDictLabel(this.taskStatusOptionList, row.taskStatus)
       },
       /** 流程办理 */
       handleProcessTask(row) {
@@ -248,14 +248,14 @@
           }
         })
       },
-      handleRejectProcessTask() {
+      handleRefuseProcessTask() {
         this.$refs.taskForm.validate(valid => {
           if (valid) {
-            rejectProcessTask({
+            refuseProcessTask({
               id: this.handleProcess.processTask.id,
               approveMessage: this.taskForm.approveMessage
             }).then(response => {
-              this.messageSuccess('任务驳回成功！')
+              this.messageSuccess('任务拒绝成功！')
               this.handleProcess.openProcess = false
               this.getProcessTodoList()
             })
