@@ -174,11 +174,12 @@ INSERT INTO agile_sys_dict_data VALUES ('132', '0', 1, '业务表单', '2', 'pro
 INSERT INTO agile_sys_dict_data VALUES ('141', '0', 0, '已撤销', '0', 'process_task_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('142', '0', 1, '审批中', '1', 'process_task_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('143', '0', 2, '审批通过', '2', 'process_task_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('144', '0', 3, '审批驳回', '3', 'process_task_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('144', '0', 3, '审批拒绝', '3', 'process_task_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
 
 INSERT INTO agile_sys_dict_data VALUES ('151', '0', 0, '已撤销', '0', 'process_instance_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('152', '0', 1, '处理中', '1', 'process_instance_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('153', '0', 2, '已完成', '2', 'process_instance_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('152', '0', 1, '审批中', '1', 'process_instance_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('153', '0', 2, '审批完成', '2', 'process_instance_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('154', '0', 3, '审批拒绝', '3', 'process_instance_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
 /* table: agile_sys_menu 菜单权限表                              */
