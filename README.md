@@ -79,6 +79,19 @@
 - 工作流表单设计
 - 工作流模型设计
 
+#### 租户开启
+1、配置文件开启租户
+```
+agile.tenant.enable=true
+```
+2、执行数据库脚本
+```
+ agile-tenant.sql
+```
+3、默认租户访问地址
+```
+http://localhost/login?tenantId=jeeagile&tenantSign=08ba7d68a2e24774ced85c281ac830de
+```
 
 #### 目录说明
 -----------------------------------
