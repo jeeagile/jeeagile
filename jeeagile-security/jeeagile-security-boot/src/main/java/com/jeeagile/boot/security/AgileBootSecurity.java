@@ -243,9 +243,14 @@ public class AgileBootSecurity implements IAgileSecurity {
                 sessionRegistry.removeSessionInformation(sessionId.toString());
                 continue;
             }
+            AgileBaseUser agileBaseUser = agileUserDetails.getUserData();
+            if (agileBaseUser == null || AgileStringUtil.isEmpty(agileBaseUser.getUserId())) {
+                sessionRegistry.removeSessionInformation(sessionId.toString());
+                continue;
+            }
             AgileOnlineUser agileOnlineUser = new AgileOnlineUser();
-            BeanUtils.copyProperties(agileUserDetails.getUserData(), agileOnlineUser);
-            agileOnlineUser.setStartAccessTime(agileUserDetails.getUserData().getLoginTime());
+            BeanUtils.copyProperties(agileBaseUser, agileOnlineUser);
+            agileOnlineUser.setStartAccessTime(agileBaseUser.getLoginTime());
             agileOnlineUser.setLastAccessTime(sessionInformation.getLastRequest());
             onlineUserList.add(agileOnlineUser);
         }
