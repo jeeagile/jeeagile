@@ -67,7 +67,6 @@
               <el-radio label="dept">部门</el-radio>
               <el-radio label="post">岗位</el-radio>
               <el-radio label="group">分组</el-radio>
-              <el-radio label="script">脚本</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-row>
@@ -206,10 +205,6 @@
         <template v-if="groupType=='group'">
           <el-table-column label="分组编码" align="center" prop="groupCode" :show-overflow-tooltip="true"/>
           <el-table-column label="分组名称" align="center" prop="groupName" :show-overflow-tooltip="true"/>
-        </template>
-        <template v-if="groupType=='script'">
-          <el-table-column label="脚本编码" align="center" prop="scriptCode" :show-overflow-tooltip="true"/>
-          <el-table-column label="脚本名称" align="center" prop="scriptName" :show-overflow-tooltip="true"/>
         </template>
       </el-table>
       <pagination v-show="groupQueryParam.pageTotal>0" :total-page="groupQueryParam.pageTotal"

@@ -27,6 +27,7 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
     private IAgileProcessService agileProcessService;
     @Autowired
     private IAgileProcessInstanceService agileProcessInstanceService;
+
     @Override
     public AgilePage<AgileProcessTask> selectTodo(AgilePageable<AgileProcessTask> agilePageable) {
         return agileProcessService.getUserTodoTask(agilePageable);
@@ -34,37 +35,7 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
 
     @Override
     public AgilePage<AgileProcessTask> selectDone(AgilePageable<AgileProcessTask> agilePageable) {
-        return selectProcessTaskPage(agilePageable, false);
-    }
-
-    private AgilePage<AgileProcessTask> selectProcessTaskPage(AgilePageable<AgileProcessTask> agilePageable, boolean todoFlag) {
-        AgilePage<AgileProcessTask> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
-        LambdaQueryWrapper<AgileProcessTask> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        AgileProcessTask agileProcessTask = agilePageable.getQueryCond();
-        if (agileProcessTask != null) {
-            if (AgileStringUtil.isNotEmpty(agileProcessTask.getModelCode())) {
-                lambdaQueryWrapper.eq(AgileProcessTask::getModelCode, agileProcessTask.getModelCode());
-            }
-            if (AgileStringUtil.isNotEmpty(agileProcessTask.getStartUserName())) {
-                lambdaQueryWrapper.like(AgileProcessTask::getStartUserName, agileProcessTask.getStartUserName());
-            }
-            if (AgileStringUtil.isNotEmpty(agileProcessTask.getModelName())) {
-                lambdaQueryWrapper.like(AgileProcessTask::getModelName, agileProcessTask.getModelName());
-            }
-            if (AgileStringUtil.isNotEmpty(agileProcessTask.getFormName())) {
-                lambdaQueryWrapper.like(AgileProcessTask::getFormName, agileProcessTask.getFormName());
-            }
-        }
-        if (todoFlag) {
-            lambdaQueryWrapper.eq(AgileProcessTask::getTaskStatus, "1");
-            lambdaQueryWrapper.isNull(AgileProcessTask::getEndTime);
-        } else {
-            lambdaQueryWrapper.in(AgileProcessTask::getTaskStatus, "2", "3");
-        }
-
-        lambdaQueryWrapper.eq(AgileProcessTask::getAssigneeUser, AgileSecurityContext.getUserId());
-        lambdaQueryWrapper.orderByDesc(AgileProcessTask::getCreateTime);
-        return this.page(agilePage, lambdaQueryWrapper);
+        return agileProcessService.getUserDoneTask(agilePageable);
     }
 
     @Override

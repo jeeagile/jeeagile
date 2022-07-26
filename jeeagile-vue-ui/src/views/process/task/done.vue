@@ -9,10 +9,6 @@
         <el-input v-model="queryParam.queryCond.modelName" placeholder="请输入模型名称" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="表单名称" prop="modelName">
-        <el-input v-model="queryParam.queryCond.formName" placeholder="请输入表单名称" clearable size="small"
-                  @keyup.enter.native="handleQuery"/>
-      </el-form-item>
       <el-form-item label="发起人" prop="modelName">
         <el-input v-model="queryParam.queryCond.startUserName" placeholder="请输入流程发起人名称" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
@@ -34,7 +30,6 @@
       <el-table-column label="发起人" width="150" align="center" prop="startUserName"/>
       <el-table-column label="提交时间" width="150" align="center" prop="startTime"/>
       <el-table-column label="结束时间" width="150" align="center" prop="endTime"/>
-      <el-table-column label="办理状态" align="center" :formatter="taskStatusFormat"/>
       <el-table-column label="操作" width="200px" align="center" class-name="small-padding">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleDetailInstance(scope.row)">
@@ -93,10 +88,6 @@
             this.loading = false
           }
         )
-      },
-      // 参数系统内置字典翻译
-      taskStatusFormat(row, column) {
-        return this.handleDictLabel(this.taskStatusOptionList, row.taskStatus)
       },
       /** 流程查看 */
       handleDetailInstance(row) {

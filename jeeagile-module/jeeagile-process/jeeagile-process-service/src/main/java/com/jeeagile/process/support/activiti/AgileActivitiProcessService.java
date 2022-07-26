@@ -29,7 +29,8 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.task.Comment;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
+import org.activiti.engine.task.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.persistence.entity.SuspensionState;
@@ -37,7 +38,6 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -260,18 +260,7 @@ public class AgileActivitiProcessService implements IAgileProcessService {
         List<String> userCandidateGroupList = getUserCandidateGroupList();
         TaskQuery taskQuery = taskService.createTaskQuery()
                 .taskCandidateOrAssigned(AgileSecurityContext.getUserId(), userCandidateGroupList);
-        AgileProcessTask agileProcessTaskCond = agilePageable.getQueryCond();
-        if (agileProcessTaskCond != null) {
-            if (AgileStringUtil.isNotEmpty(agileProcessTaskCond.getModelName())) {
-                taskQuery.processDefinitionNameLike("%" + agileProcessTaskCond.getModelName() + "%");
-            }
-            if (AgileStringUtil.isNotEmpty(agileProcessTaskCond.getModelCode())) {
-                taskQuery.processDefinitionKeyLike("%" + agileProcessTaskCond.getModelCode() + "%");
-            }
-            if (AgileStringUtil.isNotEmpty(agileProcessTaskCond.getStartUser())) {
-                taskQuery.taskOwner(agileProcessTaskCond.getStartUser());
-            }
-        }
+        this.buildTaskInfoQuery(taskQuery, agilePageable.getQueryCond());
         long totalCount = taskQuery.count();
         AgilePage<AgileProcessTask> agileProcessTaskPage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         agileProcessTaskPage.setTotal(totalCount);
@@ -285,19 +274,9 @@ public class AgileActivitiProcessService implements IAgileProcessService {
             List<Task> taskList = taskQuery.listPage(firstResult, maxResults);
             List<AgileProcessTask> agileProcessTaskList = new ArrayList<>();
             taskList.forEach(task -> {
-                AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(task.getProcessInstanceId());
-                if (agileProcessInstance != null && agileProcessInstance.isNotEmptyPk()) {
-                    AgileProcessTask agileProcessTask = new AgileProcessTask();
-                    agileProcessTask.setId(task.getId());
-                    agileProcessTask.setInstanceId(agileProcessInstance.getId());
-                    agileProcessTask.setModelCode(agileProcessInstance.getModelCode());
-                    agileProcessTask.setModelName(agileProcessInstance.getModelName());
-                    agileProcessTask.setFormName(agileProcessInstance.getFormName());
-                    agileProcessTask.setTaskName(task.getName());
+                AgileProcessTask agileProcessTask = this.buildAgileProcessTask(task);
+                if (agileProcessTask != null && agileProcessTask.isNotEmptyPk()) {
                     agileProcessTask.setTaskStatus("1");
-                    agileProcessTask.setStartUser(agileProcessInstance.getStartUser());
-                    agileProcessTask.setStartUserName(agileProcessInstance.getStartUserName());
-                    agileProcessTask.setStartTime(task.getCreateTime());
                     agileProcessTaskList.add(agileProcessTask);
                 }
             });
@@ -305,6 +284,80 @@ public class AgileActivitiProcessService implements IAgileProcessService {
         }
 
         return agileProcessTaskPage;
+    }
+
+    @Override
+    public AgilePage<AgileProcessTask> getUserDoneTask(AgilePageable<AgileProcessTask> agilePageable) {
+        HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery()
+                .finished()
+                .taskAssignee(AgileSecurityContext.getUserId());
+        this.buildTaskInfoQuery(historicTaskInstanceQuery, agilePageable.getQueryCond());
+        long totalCount = historicTaskInstanceQuery.count();
+        AgilePage<AgileProcessTask> agileProcessTaskPage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
+        agileProcessTaskPage.setTotal(totalCount);
+        if (totalCount > 0) {
+            historicTaskInstanceQuery.orderByHistoricTaskInstanceEndTime().desc();
+            if (agilePageable.getCurrentPage() < 1) {
+                agilePageable.setCurrentPage(1);
+            }
+            int firstResult = (agilePageable.getCurrentPage() - 1) * agilePageable.getPageSize();
+            int maxResults = (agilePageable.getCurrentPage()) * agilePageable.getPageSize();
+            List<HistoricTaskInstance> historicTaskInstanceList = historicTaskInstanceQuery.listPage(firstResult, maxResults);
+            List<AgileProcessTask> agileProcessTaskList = new ArrayList<>();
+            historicTaskInstanceList.forEach(historicTaskInstance -> {
+                AgileProcessTask agileProcessTask = this.buildAgileProcessTask(historicTaskInstance);
+                if (agileProcessTask != null && agileProcessTask.isNotEmptyPk()) {
+                    agileProcessTask.setEndTime(historicTaskInstance.getEndTime());
+                    agileProcessTaskList.add(agileProcessTask);
+                }
+            });
+            agileProcessTaskPage.setRecords(agileProcessTaskList);
+        }
+        return agileProcessTaskPage;
+    }
+
+    /**
+     * 组装查询条件
+     *
+     * @param taskInfoQuery
+     * @param agileProcessTask
+     */
+    private void buildTaskInfoQuery(TaskInfoQuery taskInfoQuery, AgileProcessTask agileProcessTask) {
+        if (agileProcessTask != null) {
+            if (AgileStringUtil.isNotEmpty(agileProcessTask.getModelName())) {
+                taskInfoQuery.processDefinitionNameLike("%" + agileProcessTask.getModelName() + "%");
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessTask.getModelCode())) {
+                taskInfoQuery.processDefinitionKeyLike("%" + agileProcessTask.getModelCode() + "%");
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessTask.getStartUser())) {
+                taskInfoQuery.taskOwner(agileProcessTask.getStartUser());
+            }
+        }
+    }
+
+    /**
+     * 组装流程任务信息
+     *
+     * @param taskInfo
+     * @return
+     */
+    private AgileProcessTask buildAgileProcessTask(TaskInfo taskInfo) {
+        AgileProcessTask agileProcessTask = null;
+        AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(taskInfo.getProcessInstanceId());
+        if (agileProcessInstance != null && agileProcessInstance.isNotEmptyPk()) {
+            agileProcessTask = new AgileProcessTask();
+            agileProcessTask.setId(taskInfo.getId());
+            agileProcessTask.setInstanceId(agileProcessInstance.getId());
+            agileProcessTask.setModelCode(agileProcessInstance.getModelCode());
+            agileProcessTask.setModelName(agileProcessInstance.getModelName());
+            agileProcessTask.setFormName(agileProcessInstance.getFormName());
+            agileProcessTask.setTaskName(taskInfo.getName());
+            agileProcessTask.setStartUser(agileProcessInstance.getStartUser());
+            agileProcessTask.setStartUserName(agileProcessInstance.getStartUserName());
+            agileProcessTask.setStartTime(taskInfo.getCreateTime());
+        }
+        return agileProcessTask;
     }
 
     private List<String> getUserCandidateGroupList() {

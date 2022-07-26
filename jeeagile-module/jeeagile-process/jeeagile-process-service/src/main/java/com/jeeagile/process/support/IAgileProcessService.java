@@ -91,6 +91,13 @@ public interface IAgileProcessService {
     AgilePage<AgileProcessTask> getUserTodoTask(AgilePageable<AgileProcessTask> agilePageable);
 
     /**
+     * 获取用户代办列表
+     *
+     * @return
+     */
+    AgilePage<AgileProcessTask> getUserDoneTask(AgilePageable<AgileProcessTask> agilePageable);
+
+    /**
      * 撤销流程实例
      *
      * @param instanceId   流程实例ID

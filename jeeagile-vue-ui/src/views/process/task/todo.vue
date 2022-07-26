@@ -9,10 +9,6 @@
         <el-input v-model="queryParam.queryCond.modelName" placeholder="请输入模型名称" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="表单名称" prop="modelName">
-        <el-input v-model="queryParam.queryCond.formName" placeholder="请输入表单名称" clearable size="small"
-                  @keyup.enter.native="handleQuery"/>
-      </el-form-item>
       <el-form-item label="发起人" prop="modelName">
         <el-input v-model="queryParam.queryCond.startUserName" placeholder="请输入流程发起人名称" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
