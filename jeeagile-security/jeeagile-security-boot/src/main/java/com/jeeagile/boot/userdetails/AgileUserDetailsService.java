@@ -8,6 +8,7 @@ import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.util.AgileAgentUtil;
+import com.jeeagile.core.util.AgileNetUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.spring.AgileServletUtil;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -69,6 +70,7 @@ public class AgileUserDetailsService implements UserDetailsService {
                 if (httpServletRequest != null) {
                     UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
                     userData.setLoginIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
+                    userData.setLoginAddress(AgileNetUtil.getAddressByIp(userData.getLoginIp()));
                     userData.setOsName(userAgent.getOperatingSystem().getName());
                     userData.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
                     userData.setBrowserName(userAgent.getBrowser().getName());
