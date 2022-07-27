@@ -164,7 +164,7 @@ public class AgileShiroAutoConfigure {
         filterChainMap.put("/index.html", "anon");
         filterChainMap.put("/system/kaptcha/**", "anon");
         filterChainMap.put("/system/auth/login", "anon");
-
+        filterChainMap.put("/system/tenant/info", "anon");
         for (String strUrl : agileSecurityProperties.getAnonUrl()) {
             filterChainMap.put(strUrl, "anon");
         }

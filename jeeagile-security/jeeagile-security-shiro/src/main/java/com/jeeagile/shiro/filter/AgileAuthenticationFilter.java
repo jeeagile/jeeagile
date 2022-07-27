@@ -5,6 +5,7 @@ import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgileRequiresGuest;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.springframework.boot.actuate.endpoint.web.servlet.ControllerEndpointHandlerMapping;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
@@ -27,7 +28,7 @@ public class AgileAuthenticationFilter extends FormAuthenticationFilter {
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object object) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         WebApplicationContext webApplicationContext = RequestContextUtils.findWebApplicationContext(httpServletRequest);
-        RequestMappingHandlerMapping requestMappingHandlerMapping = webApplicationContext.getBean(RequestMappingHandlerMapping.class);
+        RequestMappingHandlerMapping requestMappingHandlerMapping = webApplicationContext.getBean(ControllerEndpointHandlerMapping.class);
         try {
             HandlerExecutionChain handlerExecutionChain = requestMappingHandlerMapping.getHandler(httpServletRequest);
             if (handlerExecutionChain == null) {
