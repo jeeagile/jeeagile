@@ -168,7 +168,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
     /**
      * 处理发布状态 如果已处于发布状态则修改状态为未发布，且将版本号加一
      */
-    private void handlerDeploymentStatus(AgileProcessModel agileProcessModel) {
+    private synchronized void handlerDeploymentStatus(AgileProcessModel agileProcessModel) {
         String deploymentStatus = agileProcessModel.getDeploymentStatus();
         if (AgileStringUtil.isNotEmpty(deploymentStatus) && deploymentStatus.equals("1")) {
             agileProcessModel.setDeploymentStatus("2");

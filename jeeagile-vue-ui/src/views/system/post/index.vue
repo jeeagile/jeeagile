@@ -75,11 +75,11 @@
     <!-- 添加或修改岗位对话框 -->
     <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="岗位名称" prop="postName">
-          <el-input v-model="form.postName" placeholder="请输入岗位名称"/>
-        </el-form-item>
         <el-form-item label="岗位编码" prop="postCode">
           <el-input v-model="form.postCode" placeholder="请输入编码名称"/>
+        </el-form-item>
+        <el-form-item label="岗位名称" prop="postName">
+          <el-input v-model="form.postName" placeholder="请输入岗位名称"/>
         </el-form-item>
         <el-form-item label="岗位顺序" prop="postSort">
           <el-input-number v-model="form.postSort" controls-position="right" :min="0"/>

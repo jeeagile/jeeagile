@@ -362,11 +362,21 @@ INSERT INTO agile_sys_menu VALUES ('60206','602','流程模型导出',6,'','','#
 INSERT INTO agile_sys_menu VALUES ('60207','602','流程模型预览',7,'','','#','F','0','0','1','process:model:view','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('60208','602','流程模型设计',8,'','','#','F','0','0','1','process:model:designer','',NULL,NULL,NULL,NULL);
 
+INSERT INTO agile_sys_menu VALUES ('603', '6', '流程表达式', '1', 'process/expression/index', 'expression', 'expression', 'C', '0', '0', '0', 'process:expression:page,process:expression:list', '', NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60301','603','流程表达式明细',1,'','','#','F','0','0','1','process:expression:detail','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60302','603','流程表达式新增',2,'','','#','F','0','0','1','process:expression:add','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60303','603','流程表达式修改',3,'','','#','F','0','0','1','process:expression:update','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60304','603','流程表达式删除',4,'','','#','F','0','0','1','process:expression:delete','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60305','603','流程表达式导入',5,'','','#','F','0','0','1','process:expression:import','',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('60306','603','流程表达式导出',6,'','','#','F','0','0','1','process:expression:export','',NULL,NULL,NULL,NULL);
+
+
 INSERT INTO agile_sys_menu VALUES ('7', '0', '我的事务', '0', '', 'process/task', 'education', 'M', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('701', '7', '流程发起', '1', 'process/task/start', 'start', 'edit', 'C', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('702', '7', '我的代办', '2', 'process/task/todo', 'todo', 'message', 'C', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('703', '7', '我的已办', '3', 'process/task/done', 'done', 'clipboard', 'C', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('704', '7', '我的发起', '4', 'process/task/apply', 'apply', 'button', 'C', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
+
 
 
 /*==============================================================*/

@@ -3,6 +3,7 @@ drop table if exists agile_process_model;
 drop table if exists agile_process_definition;
 drop table if exists agile_process_instance;
 drop table if exists agile_process_task;
+drop table if exists agile_process_expression;
 /*==============================================================*/
 /* table: agile_process_form 流程表单表                          */
 /*==============================================================*/
@@ -135,3 +136,22 @@ CREATE TABLE agile_process_task (
   PRIMARY KEY (id)
 );
 alter table agile_process_task comment '流程任务表';
+
+
+/*==============================================================*/
+/* table: agile_process_expression 流程表达式配置表              */
+/*==============================================================*/
+CREATE TABLE agile_process_expression (
+  id                            varchar(32) NOT NULL COMMENT '表达式主键ID',
+  expression_code               varchar(20) NOT NULL COMMENT '表达式编码',
+  expression_name               varchar(50) NOT NULL COMMENT '表达式名称',
+  expression_value              varchar(100) NOT NULL COMMENT '表达式',
+  expression_status             varchar(1) NOT NULL COMMENT '表达式状态（0:正常 1:停用）',
+  remark                        varchar(300) DEFAULT NULL COMMENT '备注',
+  create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',
+  create_time                   datetime DEFAULT NULL COMMENT '创建时间',
+  update_user                   varchar(32) DEFAULT NULL COMMENT '修改人',
+  update_time                   datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (id)
+);
+alter table agile_process_expression comment '流程表达式配置表';

@@ -145,3 +145,9 @@ ALTER TABLE `agile`.`agile_process_task`
 ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `approve_message`;
 
 update `agile`.`agile_process_task` set tenant_id='jeeagile';
+
+
+ALTER TABLE `agile`.`agile_process_expression`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+
+update `agile`.`agile_process_expression` set tenant_id='jeeagile';

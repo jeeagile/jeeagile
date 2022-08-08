@@ -45,7 +45,7 @@ public class AgileProcessFormServiceImpl extends AgileBaseServiceImpl<AgileProce
     }
 
     /**
-     * 校验岗位编码、岗位名称是否存在
+     * 校验编码和名称是否存在
      */
     private void validateProcessForm(AgileProcessForm agileProcessForm) {
         LambdaQueryWrapper<AgileProcessForm> lambdaQueryWrapper = new LambdaQueryWrapper<>();
