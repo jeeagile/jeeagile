@@ -3,6 +3,7 @@ package com.jeeagile.process.service;
 import com.jeeagile.frame.entity.system.*;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
+import com.jeeagile.process.entity.AgileProcessExpression;
 import com.jeeagile.process.entity.AgileProcessScript;
 
 import java.util.List;
@@ -52,6 +53,14 @@ public interface IAgileProcessDesignerService {
      * @return
      */
     AgilePage<AgileSysGroup> selectGroupPage(AgilePageable<AgileSysGroup> agilePageable);
+
+    /**
+     * 分页查询流程表达式列表
+     *
+     * @param agilePageable
+     * @return
+     */
+    AgilePage<AgileProcessExpression> selectExpressionPage(AgilePageable<AgileProcessExpression> agilePageable);
 
     /**
      * 分页查询流程脚本列表

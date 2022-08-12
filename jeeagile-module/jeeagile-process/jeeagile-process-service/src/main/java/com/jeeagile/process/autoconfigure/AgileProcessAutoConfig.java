@@ -20,17 +20,17 @@ public class AgileProcessAutoConfig implements ProcessEngineConfigurationConfigu
 
     @Autowired
     private AgileActivitiEventListener agileActivitiEventListener;
-    /**
-     * 临时解决用户安全问题
-     * TODO 如果使用shiro需放开此处代码，如果使用SpringSecurity此处代码需屏蔽
-     */
-    @Bean
-    public SecurityFilterChain agileSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.authorizeRequests()
-                .anyRequest().permitAll().and().logout().permitAll()
-                .and().headers().frameOptions().sameOrigin()
-                .and().csrf().disable().build();
-    }
+//    /**
+//     * 临时解决用户安全问题
+//     * TODO 如果使用shiro需放开此处代码，如果使用SpringSecurity此处代码需屏蔽
+//     */
+//    @Bean
+//    public SecurityFilterChain agileSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity.authorizeRequests()
+//                .anyRequest().permitAll().and().logout().permitAll()
+//                .and().headers().frameOptions().sameOrigin()
+//                .and().csrf().disable().build();
+//    }
 
     @Override
     public void configure(SpringProcessEngineConfiguration springProcessEngineConfiguration) {

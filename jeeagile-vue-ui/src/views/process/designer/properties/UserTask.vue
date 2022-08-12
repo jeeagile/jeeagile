@@ -4,16 +4,26 @@
       <el-form-item label="执行用户:">
         <el-input v-model="assigneeNickName">
           <i slot="append" class="el-icon-user" @click="handleSelectUser('assignee')"/>
+          <el-divider slot="append" direction="vertical"/>
+          <svg-icon slot="append" icon-class="expression-grey" class="el-input__icon input-icon"
+                    @click="handleSelectExpression('assignee')"/>
         </el-input>
       </el-form-item>
       <el-form-item label="候选用户:">
         <el-input v-model="candidateNickName">
-          <i slot="append" class="el-icon-user" @click="handleSelectUser('candidateUsers')"/>
+          <svg-icon slot="append" icon-class="role" class="el-input__icon input-icon"
+                    @click="handleSelectUser('candidateUsers')"/>
+          <el-divider slot="append" direction="vertical"/>
+          <svg-icon slot="append" icon-class="expression-grey" class="el-input__icon input-icon"
+                    @click="handleSelectExpression('candidateUsers')"/>
         </el-input>
       </el-form-item>
       <el-form-item label="候选分组:">
         <el-input v-model="candidateGroupsName">
           <i slot="append" class="el-icon-s-check" @click="handleSelectGroup"/>
+          <el-divider slot="append" direction="vertical"/>
+          <svg-icon slot="append" icon-class="expression-grey" class="el-input__icon input-icon"
+                    @click="handleSelectExpression('candidateGroups')"/>
         </el-input>
       </el-form-item>
       <el-form-item label="到期时间:">
@@ -26,8 +36,9 @@
         <el-input v-model="userTaskInfo.priority" @change="updateUserTaskInfo('priority')"/>
       </el-form-item>
     </el-form>
+
     <el-dialog :visible.sync="userVisible" v-if="userVisible" title="选择用户" width="800px" append-to-body>
-      <el-form :model="userQueryParam" ref="queryForm" :inline="true">
+      <el-form :model="userQueryParam" ref="userQueryParam" :inline="true">
         <el-form-item label="用户名称:" prop="userName">
           <el-input v-model="userQueryParam.queryCond.userName" clearable size="small" style="width: 150px"
                     placeholder="请输入用户名称" @keyup.enter.native="handleUserQuery"/>
@@ -74,7 +85,7 @@
           <template v-if="groupType=='role'">
             <el-form-item label="角色编码:" prop="roleCode">
               <el-input
-                v-model="groupQueryParam.data.roleCode"
+                v-model="groupQueryParam.queryCond.roleCode"
                 placeholder="请输入角色编码"
                 clearable
                 size="small"
@@ -84,7 +95,7 @@
             </el-form-item>
             <el-form-item label="角色名称:" prop="roleName">
               <el-input
-                v-model="groupQueryParam.data.roleName"
+                v-model="groupQueryParam.queryCond.roleName"
                 placeholder="请输入角色名称"
                 clearable
                 size="small"
@@ -96,7 +107,7 @@
           <template v-if="groupType=='post'">
             <el-form-item label="岗位编码:" prop="postCode">
               <el-input
-                v-model="groupQueryParam.data.postCode"
+                v-model="groupQueryParam.queryCond.postCode"
                 placeholder="请输入岗位编码"
                 clearable
                 size="small"
@@ -106,7 +117,7 @@
             </el-form-item>
             <el-form-item label="岗位名称:" prop="postName">
               <el-input
-                v-model="groupQueryParam.data.postName"
+                v-model="groupQueryParam.queryCond.postName"
                 placeholder="请输入岗位名称"
                 clearable
                 size="small"
@@ -118,7 +129,7 @@
           <template v-if="groupType=='dept'">
             <el-form-item label="部门编码:" prop="deptCode">
               <el-input
-                v-model="groupQueryParam.data.deptCode"
+                v-model="groupQueryParam.queryCond.deptCode"
                 placeholder="请输入部门编码"
                 clearable
                 size="small"
@@ -128,7 +139,7 @@
             </el-form-item>
             <el-form-item label="部门名称:" prop="deptName">
               <el-input
-                v-model="groupQueryParam.data.deptName"
+                v-model="groupQueryParam.queryCond.deptName"
                 placeholder="请输入部门名称"
                 clearable
                 size="small"
@@ -140,7 +151,7 @@
           <template v-if="groupType=='group'">
             <el-form-item label="用户分组编码:" prop="groupCode">
               <el-input
-                v-model="groupQueryParam.data.groupCode"
+                v-model="groupQueryParam.queryCond.groupCode"
                 placeholder="请输入用户分组编码"
                 clearable
                 size="small"
@@ -150,7 +161,7 @@
             </el-form-item>
             <el-form-item label="用户分组名称:" prop="groupName">
               <el-input
-                v-model="groupQueryParam.data.groupName"
+                v-model="groupQueryParam.queryCond.groupName"
                 placeholder="请输入用户分组名称"
                 clearable
                 size="small"
@@ -162,7 +173,7 @@
           <template v-if="groupType=='script'">
             <el-form-item label="脚本编码:" prop="scriptCode">
               <el-input
-                v-model="groupQueryParam.data.userName"
+                v-model="groupQueryParam.queryCond.userName"
                 placeholder="请输入脚本编码"
                 clearable
                 size="small"
@@ -172,7 +183,7 @@
             </el-form-item>
             <el-form-item label="脚本名称:" prop="scriptName">
               <el-input
-                v-model="groupQueryParam.data.scriptName"
+                v-model="groupQueryParam.queryCond.scriptName"
                 placeholder="请输入脚本名称"
                 clearable
                 size="small"
@@ -215,6 +226,41 @@
         <el-button size="mini" type="primary" @click="submitSelectGroup">确 认</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog :visible.sync="expressionVisible" v-if="expressionVisible" title="选择表达式" width="800px" append-to-body>
+      <el-form :model="expressionQueryParam" ref="expressionQueryParam" :inline="true">
+        <el-form-item label="表达式编码:" prop="expressionCode">
+          <el-input v-model="expressionQueryParam.queryCond.expressionCode" clearable size="small" style="width: 150px"
+                    placeholder="请输入表达式编码" @keyup.enter.native="handleUserQuery"/>
+        </el-form-item>
+        <el-form-item label="表达式名称:" prop="expressionName">
+          <el-input v-model="expressionQueryParam.queryCond.expressionName" clearable size="small" style="width: 150px"
+                    placeholder="请输入表达式名称" @keyup.enter.native="handleUserQuery"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleExpressionQuery">搜索</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetExpressionQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <el-table v-loading="expressionLoading" ref="expressionTable" :data="expressionList"
+                @selection-change="handleSelectionExpressionChange">
+        <el-table-column type="selection" :reserve-selection="true" width="50" align="center"/>
+        <el-table-column label="表达式编码" align="center" prop="expressionCode" :show-overflow-tooltip="true"/>
+        <el-table-column label="表达式名称" align="center" prop="expressionName" :show-overflow-tooltip="true"/>
+        <el-table-column label="表达式" align="center" prop="expressionValue" :show-overflow-tooltip="true"/>
+      </el-table>
+
+      <pagination v-show="expressionQueryParam.pageTotal>0" :total-page="expressionQueryParam.pageTotal"
+                  :current-page.sync="expressionQueryParam.currentPage" :limit.sync="expressionQueryParam.pageSize"
+                  :page-size="expressionQueryParam.pageSize" :page-sizes="[5,10]" @pagination="getExpressionList"
+      />
+      <div slot="footer">
+        <el-button size="mini" type="primary" @click="submitSelectExpression">确 认</el-button>
+      </div>
+    </el-dialog>
+
+
   </div>
 </template>
 
@@ -226,6 +272,7 @@
     selectDeptPage,
     selectPostPage,
     selectGroupPage,
+    selectExpressionPage,
     selectScriptPage,
     detailUserNickName,
     detailRoleName,
@@ -267,6 +314,7 @@
         userLoading: false,
         userType: 'assignee',
         userList: [],
+
         assigneeNickName: undefined,
         candidateNickName: undefined,
         candidateGroupsName: undefined,
@@ -276,11 +324,28 @@
         groupType: 'post',
         groupList: [],
         selectGroupList: [],
+
+
+        expressionQueryParam: {
+          pageTotal: 0,
+          pageSize: 5,
+          currentPage: 1,
+          queryCond: {
+            expressionCode: undefined,
+            expressionName: undefined
+          }
+        },
+        expressionVisible: false,
+        expressionLoading: false,
+        expressionType: 'assignee',
+        expressionList: [],
+        selectExpressionList: [],
+
         groupQueryParam: {
           pageTotal: 0,
           pageSize: 5,
           currentPage: 1,
-          data: {
+          queryCond: {
             roleCode: undefined,
             roleName: undefined,
             postCode: undefined,
@@ -288,9 +353,7 @@
             deptCode: undefined,
             deptName: undefined,
             groupCode: undefined,
-            groupName: undefined,
-            scriptCode: undefined,
-            scriptName: undefined
+            groupName: undefined
           }
         },
 
@@ -399,6 +462,7 @@
         this.userType = userType
         this.selectUserList = []
         this.userVisible = true
+        this.resetUserQuery()
         this.$nextTick(() => {
           this.$refs.userTable.clearSelection()
           if (this.userType === 'assignee') {
@@ -456,6 +520,10 @@
       },
       /** 重置按钮操作 */
       resetUserQuery() {
+        this.userQueryParam.queryCond = {
+          userName: undefined,
+          nickName: undefined
+        }
         this.resetForm('userQueryParam')
         this.handleUserQuery()
       },
@@ -493,7 +561,7 @@
       },
       getRoleList() {
         this.groupLoading = true
-        selectRolePage(this.queryParam).then(response => {
+        selectRolePage(this.groupQueryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
               return { ...item, tableKey: item.id, label: item.roleName }
             })
@@ -504,7 +572,7 @@
       },
       getDeptList() {
         this.groupLoading = true
-        selectDeptPage(this.queryParam).then(response => {
+        selectDeptPage(this.groupQueryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
               return { ...item, tableKey: item.id, label: item.deptName }
             })
@@ -515,7 +583,7 @@
       },
       getPostList() {
         this.groupLoading = true
-        selectPostPage(this.queryParam).then(response => {
+        selectPostPage(this.groupQueryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
               return { ...item, tableKey: item.id, label: item.postName }
             })
@@ -526,7 +594,7 @@
       },
       getUsrGroupList() {
         this.groupLoading = true
-        selectGroupPage(this.queryParam).then(response => {
+        selectGroupPage(this.groupQueryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
               return { ...item, tableKey: item.id, label: item.groupName }
             })
@@ -537,7 +605,7 @@
       },
       getScriptList() {
         this.groupLoading = true
-        selectScriptPage(this.queryParam).then(response => {
+        selectScriptPage(this.groupQueryParam).then(response => {
             this.groupList = response.data?.records.map(item => {
               return { ...item, tableKey: item.id, label: item.scriptName }
             })
@@ -565,8 +633,56 @@
       },
       /** 重置按钮操作 */
       resetGroupQuery() {
-        this.resetForm('userGroupParam')
+        this.groupQueryParam.queryCond = {
+          roleCode: undefined,
+          roleName: undefined,
+          postCode: undefined,
+          postName: undefined,
+          deptCode: undefined,
+          deptName: undefined,
+          groupCode: undefined,
+          groupName: undefined
+        }
+        this.resetForm('groupQueryParam')
         this.handleGroupQuery()
+      },
+      getExpressionList() {
+        this.expressionLoading = true
+        selectExpressionPage(this.expressionQueryParam).then(response => {
+            this.expressionQueryParam.pageTotal = response.data.pageTotal
+            this.expressionList = response.data.records
+            this.expressionLoading = false
+          }
+        )
+      },
+      /** 选择表达式 */
+      handleSelectExpression(expressionType) {
+        this.expressionVisible = true
+        this.expressionType = expressionType
+        this.resetExpressionQuery()
+      },
+      /** 搜索按钮操作 */
+      handleExpressionQuery() {
+        this.expressionQueryParam.page = 1
+        this.getExpressionList()
+      },
+      /** 重置按钮操作 */
+      resetExpressionQuery() {
+        this.expressionQueryParam.queryCond = {
+          expressionCode: undefined,
+          expressionName: undefined
+        }
+        this.resetForm('expressionQueryParam')
+        this.handleExpressionQuery()
+      },
+      handleSelectionExpressionChange(selection) {
+        this.selectExpressionList = selection
+      },
+      submitSelectExpression() {
+        this.candidateGroupsName = this.selectGroupList.map(item => item.label).toString()
+        this.userTaskInfo.candidateGroups = this.selectGroupList.map(item => this.groupType + ':' + item.tableKey).toString()
+        this.updateUserTaskInfo('candidateGroups')
+        this.groupVisible = false
       }
     }
   }

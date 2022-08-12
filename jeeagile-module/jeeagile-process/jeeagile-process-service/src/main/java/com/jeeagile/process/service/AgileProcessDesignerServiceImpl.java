@@ -12,6 +12,7 @@ import com.jeeagile.frame.service.system.IAgileSysDeptService;
 import com.jeeagile.frame.service.system.IAgileSysPostService;
 import com.jeeagile.frame.service.system.IAgileSysRoleService;
 import com.jeeagile.frame.service.system.IAgileSysUserService;
+import com.jeeagile.process.entity.AgileProcessExpression;
 import com.jeeagile.process.entity.AgileProcessScript;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,7 +35,8 @@ public class AgileProcessDesignerServiceImpl implements IAgileProcessDesignerSer
     private IAgileSysDeptService agileSysDeptService;
     @Autowired
     private IAgileSysPostService agileSysPostService;
-
+    @Autowired
+    private IAgileProcessExpressionService agileProcessExpressionService;
     @Override
     public AgilePage<AgileSysUser> selectUserPage(AgilePageable<AgileSysUser> agilePageable) {
         AgilePage<AgileSysUser> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
@@ -115,6 +117,25 @@ public class AgileProcessDesignerServiceImpl implements IAgileProcessDesignerSer
     @Override
     public AgilePage<AgileSysGroup> selectGroupPage(AgilePageable<AgileSysGroup> agilePageable) {
         return null;
+    }
+
+    @Override
+    public AgilePage<AgileProcessExpression> selectExpressionPage(AgilePageable<AgileProcessExpression> agilePageable) {
+        AgilePage<AgileProcessExpression> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
+        LambdaQueryWrapper<AgileProcessExpression> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.select(AgileProcessExpression::getId, AgileProcessExpression::getExpressionCode, AgileProcessExpression::getExpressionName,AgileProcessExpression::getExpressionValue);
+        AgileProcessExpression agileProcessExpression = agilePageable.getQueryCond();
+        if (agileProcessExpression != null) {
+            if (AgileStringUtil.isNotEmpty(agileProcessExpression.getExpressionCode())) {
+                lambdaQueryWrapper.eq(AgileProcessExpression::getExpressionCode, agileProcessExpression.getExpressionCode());
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessExpression.getExpressionName())) {
+                lambdaQueryWrapper.like(AgileProcessExpression::getExpressionName, agileProcessExpression.getExpressionName());
+            }
+        }
+        lambdaQueryWrapper.eq(AgileProcessExpression::getExpressionStatus, "0");
+        lambdaQueryWrapper.orderByAsc(AgileProcessExpression::getExpressionCode);
+        return agileProcessExpressionService.page(agilePage, lambdaQueryWrapper);
     }
 
     @Override

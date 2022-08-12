@@ -26,6 +26,11 @@ export const selectPostPage = data => postApi('/process/designer/selectPostPage'
 export const selectGroupPage = data => postApi('/process/designer/selectGroupPage', data)
 
 /**
+ * 查询流程表达式列表
+ */
+export const selectExpressionPage = data => postApi('/process/designer/selectExpressionPage', data)
+
+/**
  * 查询流程脚本列表
  */
 export const selectScriptPage = data => postApi('/process/designer/selectScriptPage', data)

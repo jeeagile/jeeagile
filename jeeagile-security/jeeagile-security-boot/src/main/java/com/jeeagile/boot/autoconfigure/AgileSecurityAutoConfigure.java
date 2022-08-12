@@ -7,6 +7,7 @@ import com.jeeagile.boot.crypto.AgilePasswordEncoder;
 import com.jeeagile.boot.filter.AgileUserTokenFilter;
 import com.jeeagile.boot.provider.AgileAuthenticationProvider;
 import com.jeeagile.boot.security.AgileBootSecurity;
+import com.jeeagile.boot.strategy.AgileInvalidSessionStrategy;
 import com.jeeagile.boot.userdetails.AgileUserDetailsService;
 import com.jeeagile.core.security.properties.AgileSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,7 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
         }
 
         httpSecurity.authorizeRequests().anyRequest().authenticated().and().headers().frameOptions().disable();
+        httpSecurity.sessionManagement().invalidSessionStrategy(new AgileInvalidSessionStrategy()).sessionFixation();
         httpSecurity.addFilterBefore(agileUserTokenFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity.exceptionHandling().accessDeniedHandler(agileAccessDeniedHandler);
         httpSecurity.exceptionHandling().authenticationEntryPoint(agileAuthenticationEntryPoint);

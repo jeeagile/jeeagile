@@ -9,6 +9,7 @@ import com.jeeagile.frame.entity.system.*;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
+import com.jeeagile.process.entity.AgileProcessExpression;
 import com.jeeagile.process.entity.AgileProcessScript;
 import com.jeeagile.process.service.IAgileProcessDesignerService;
 import io.swagger.annotations.Api;
@@ -56,6 +57,12 @@ public class AgileProcessDesignerController extends AgileBaseController {
     @ApiOperation(value = "获取用户分组列表", notes = "获取用户分组列表")
     public AgileResult<AgilePage<AgileSysGroup>> selectGroupPage(@RequestBody AgilePageable<AgileSysGroup> agilePageable) {
         return AgileResult.success(agileProcessDesignerService.selectGroupPage(agilePageable));
+    }
+
+    @PostMapping(value = "/selectExpressionPage")
+    @ApiOperation(value = "获取表达式列表", notes = "获取表达式列表")
+    public AgileResult<AgilePage<AgileProcessExpression>> selectExpressionPage(@RequestBody AgilePageable<AgileProcessExpression> agilePageable) {
+        return AgileResult.success(agileProcessDesignerService.selectExpressionPage(agilePageable));
     }
 
     @PostMapping(value = "/selectScriptPage")
