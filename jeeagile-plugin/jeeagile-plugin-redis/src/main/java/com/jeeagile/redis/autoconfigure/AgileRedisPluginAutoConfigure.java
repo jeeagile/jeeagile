@@ -21,7 +21,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 @Configuration
 @AutoConfigureBefore(RedisAutoConfiguration.class)
 @ComponentScan("com.jeeagile.redis.util")
-public class AgileRedisAutoConfigure {
+public class AgileRedisPluginAutoConfigure {
 
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
