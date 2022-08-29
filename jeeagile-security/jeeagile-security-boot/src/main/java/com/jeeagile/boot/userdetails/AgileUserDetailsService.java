@@ -5,6 +5,7 @@ import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResultCode;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.util.AgileAgentUtil;
@@ -79,6 +80,7 @@ public class AgileUserDetailsService implements UserDetailsService {
                 AgileUserDetails agileUserDetails = new AgileUserDetails();
                 agileUserDetails.setUserData(userData);
                 agileUserDetails.setAuthorities(authorities);
+                AgileSecurityContext.putUserData(userData);
                 return agileUserDetails;
             } else {
                 throw new AgileAuthException(AgileResultCode.FAIL_USER_NAME);

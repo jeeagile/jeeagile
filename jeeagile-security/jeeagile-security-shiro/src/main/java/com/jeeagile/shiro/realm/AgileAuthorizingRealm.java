@@ -5,6 +5,7 @@ import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResultCode;
+import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
 import com.jeeagile.core.security.util.AgileSecurityUtil;
@@ -72,6 +73,7 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
                         userData.setDeviceName(userAgent.getOperatingSystem().getDeviceType().getName());
                         userData.setBrowserName(userAgent.getBrowser().getName());
                     }
+                    AgileSecurityContext.putUserData(userData);
                     return new SimpleAuthenticationInfo(userData, password, userData.getUserName());
                 } else {
                     throw new AgileAuthException(AgileResultCode.FAIL_USER_PWD);
