@@ -7,6 +7,7 @@
         where table_schema = (select database())
         and table_name not in (select table_name from agile_generator_table)
         and table_name not like 'act_%'
+        and table_name not like 'qrtz_%'
         <if test="agileGeneratorTable.tableName != null and agileGeneratorTable.tableName != ''">
             and table_name like concat('%', #{agileGeneratorTable.tableName}, '%')
         </if>

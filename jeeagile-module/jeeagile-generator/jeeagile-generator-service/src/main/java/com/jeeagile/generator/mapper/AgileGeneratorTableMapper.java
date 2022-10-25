@@ -1,5 +1,6 @@
 package com.jeeagile.generator.mapper;
 
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.jeeagile.frame.annotation.AgileMapper;
 import com.jeeagile.frame.mapper.AgileBaseMapper;
 import com.jeeagile.frame.page.AgilePage;
@@ -16,6 +17,7 @@ import java.util.List;
  * @description
  */
 @AgileMapper
+@InterceptorIgnore(tenantLine = "true")
 public interface AgileGeneratorTableMapper extends AgileBaseMapper<AgileGeneratorTable> {
     /**
      * 分页查询当前用户下所有表信息

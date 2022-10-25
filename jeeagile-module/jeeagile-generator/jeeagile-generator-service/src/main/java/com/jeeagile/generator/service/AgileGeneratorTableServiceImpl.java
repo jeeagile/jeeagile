@@ -8,13 +8,13 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
-import com.jeeagile.frame.util.AgileBeanUtils;
 import com.jeeagile.generator.entity.AgileGeneratorTable;
 import com.jeeagile.generator.entity.AgileGeneratorTableColumn;
 import com.jeeagile.generator.mapper.AgileGeneratorTableMapper;
 import com.jeeagile.generator.util.AgileGeneratorUtil;
 import com.jeeagile.generator.vo.AgileGeneratorTableInfo;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
@@ -70,7 +70,7 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
     public AgileGeneratorTableInfo selectTableInfoById(String agileGeneratorTableId) {
         AgileGeneratorTableInfo agileGeneratorTableInfo = new AgileGeneratorTableInfo();
         AgileGeneratorTable agileGeneratorTable = this.getById(agileGeneratorTableId);
-        AgileBeanUtils.copyProperties(agileGeneratorTable, agileGeneratorTableInfo);
+        BeanUtils.copyProperties(agileGeneratorTable, agileGeneratorTableInfo);
         if (agileGeneratorTable != null && !AgileStringUtil.isEmpty(agileGeneratorTable.getId())) {
             agileGeneratorTableInfo.setAgileGeneratorTableColumnList(agileGeneratorTableColumnService.selectListByTableId(agileGeneratorTableId));
         }
