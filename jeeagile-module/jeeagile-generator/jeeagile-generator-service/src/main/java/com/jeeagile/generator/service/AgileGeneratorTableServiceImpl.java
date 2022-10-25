@@ -12,7 +12,6 @@ import com.jeeagile.generator.entity.AgileGeneratorTable;
 import com.jeeagile.generator.entity.AgileGeneratorTableColumn;
 import com.jeeagile.generator.mapper.AgileGeneratorTableMapper;
 import com.jeeagile.generator.util.AgileGeneratorUtil;
-import com.jeeagile.generator.vo.AgileGeneratorTableInfo;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,22 +66,20 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
     }
 
     @Override
-    public AgileGeneratorTableInfo selectTableInfoById(String agileGeneratorTableId) {
-        AgileGeneratorTableInfo agileGeneratorTableInfo = new AgileGeneratorTableInfo();
+    public AgileGeneratorTable selectTableInfoById(String agileGeneratorTableId) {
         AgileGeneratorTable agileGeneratorTable = this.getById(agileGeneratorTableId);
-        BeanUtils.copyProperties(agileGeneratorTable, agileGeneratorTableInfo);
         if (agileGeneratorTable != null && !AgileStringUtil.isEmpty(agileGeneratorTable.getId())) {
-            agileGeneratorTableInfo.setAgileGeneratorTableColumnList(agileGeneratorTableColumnService.selectListByTableId(agileGeneratorTableId));
+            agileGeneratorTable.setAgileGeneratorTableColumnList(agileGeneratorTableColumnService.selectListByTableId(agileGeneratorTableId));
         }
-        return agileGeneratorTableInfo;
+        return agileGeneratorTable;
     }
 
     @Override
-    public boolean updateTableInfoById(AgileGeneratorTableInfo agileGeneratorTableInfo) {
+    public boolean updateTableInfoById(AgileGeneratorTable agileGeneratorTable) {
         //更新主表信息
-        boolean updateFlag = this.updateById(agileGeneratorTableInfo);
+        boolean updateFlag = this.updateById(agileGeneratorTable);
         if (updateFlag) {
-            List<AgileGeneratorTableColumn> agileGeneratorTableColumnList = agileGeneratorTableInfo.getAgileGeneratorTableColumnList();
+            List<AgileGeneratorTableColumn> agileGeneratorTableColumnList = agileGeneratorTable.getAgileGeneratorTableColumnList();
             if (agileGeneratorTableColumnList != null && !agileGeneratorTableColumnList.isEmpty()) {
                 updateFlag = agileGeneratorTableColumnService.saveOrUpdateBatch(agileGeneratorTableColumnList);
             }
@@ -98,15 +95,15 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
 
     @Override
     public boolean syncTableById(String agileGeneratorTableId) {
-        AgileGeneratorTableInfo tableInfo = this.selectTableInfoById(agileGeneratorTableId);
-        if (tableInfo != null) {
-            List<AgileGeneratorTableColumn> tableColumnList = tableInfo.getAgileGeneratorTableColumnList();
+        AgileGeneratorTable agileGeneratorTable = this.selectTableInfoById(agileGeneratorTableId);
+        if (agileGeneratorTable != null) {
+            List<AgileGeneratorTableColumn> tableColumnList = agileGeneratorTable.getAgileGeneratorTableColumnList();
             List<String> tableColumnNameList = tableColumnList.stream().map(AgileGeneratorTableColumn::getColumnName).collect(Collectors.toList());
-            List<AgileGeneratorTableColumn> dbTableColumnList = this.getBaseMapper().selectDbTableColumnByTableName(tableInfo.getTableName());
+            List<AgileGeneratorTableColumn> dbTableColumnList = this.getBaseMapper().selectDbTableColumnByTableName(agileGeneratorTable.getTableName());
             List<String> dbTableColumnNameList = dbTableColumnList.stream().map(AgileGeneratorTableColumn::getColumnName).collect(Collectors.toList());
             for (AgileGeneratorTableColumn agileGeneratorTableColumn : dbTableColumnList) {
                 if (!tableColumnNameList.contains(agileGeneratorTableColumn.getColumnName())) {
-                    AgileGeneratorUtil.initColumnField(tableInfo, agileGeneratorTableColumn);
+                    AgileGeneratorUtil.initColumnField(agileGeneratorTable, agileGeneratorTableColumn);
                     agileGeneratorTableColumnService.save(agileGeneratorTableColumn);
                 }
             }
@@ -123,9 +120,9 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
     @Override
     public Map<String, String> previewCode(String agileGeneratorTableId) {
         // 查询表信息
-        AgileGeneratorTableInfo agileGeneratorTableInfo = this.selectTableInfoById(agileGeneratorTableId);
-        if (agileGeneratorTableInfo != null && AgileStringUtil.isNotEmpty(agileGeneratorTableInfo.getId())) {
-            return AgileGeneratorUtil.generatorCode(agileGeneratorTableInfo);
+        AgileGeneratorTable agileGeneratorTable = this.selectTableInfoById(agileGeneratorTableId);
+        if (agileGeneratorTable != null && AgileStringUtil.isNotEmpty(agileGeneratorTable.getId())) {
+            return AgileGeneratorUtil.generatorCode(agileGeneratorTable);
         } else {
             throw new AgileFrameException("生成表信息已不存在无法生成预览文件！");
         }
@@ -137,9 +134,9 @@ public class AgileGeneratorTableServiceImpl extends AgileBaseServiceImpl<AgileGe
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
             for (String agileGeneratorTableId : agileGeneratorTableIdList) {
-                AgileGeneratorTableInfo agileGeneratorTableInfo = this.selectTableInfoById(agileGeneratorTableId);
-                if (agileGeneratorTableInfo != null && AgileStringUtil.isNotEmpty(agileGeneratorTableInfo.getId())) {
-                    AgileGeneratorUtil.generatorCode(agileGeneratorTableInfo, zipOutputStream);
+                AgileGeneratorTable agileGeneratorTable = this.selectTableInfoById(agileGeneratorTableId);
+                if (agileGeneratorTable != null && AgileStringUtil.isNotEmpty(agileGeneratorTable.getId())) {
+                    AgileGeneratorUtil.generatorCode(agileGeneratorTable, zipOutputStream);
                 }
             }
             IOUtils.close(zipOutputStream);

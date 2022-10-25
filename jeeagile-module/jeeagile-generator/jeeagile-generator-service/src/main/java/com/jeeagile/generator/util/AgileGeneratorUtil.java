@@ -10,7 +10,6 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.generator.constants.AgileGeneratorConstants;
 import com.jeeagile.generator.entity.AgileGeneratorTable;
 import com.jeeagile.generator.entity.AgileGeneratorTableColumn;
-import com.jeeagile.generator.vo.AgileGeneratorTableInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
@@ -233,12 +232,12 @@ public class AgileGeneratorUtil {
     /**
      * 生成代码
      */
-    public static Map<String, String> generatorCode(AgileGeneratorTableInfo agileGeneratorTableInfo) {
+    public static Map<String, String> generatorCode(AgileGeneratorTable agileGeneratorTable) {
         Map<String, String> generatorCodeDataMap = new LinkedHashMap<>();
         AgileGeneratorUtil.initVelocity();
-        VelocityContext velocityContext = prepareVelocityContext(agileGeneratorTableInfo);
+        VelocityContext velocityContext = prepareVelocityContext(agileGeneratorTable);
         // 获取模板列表
-        List<String> templateList = getTemplateList(agileGeneratorTableInfo.getTableType());
+        List<String> templateList = getTemplateList(agileGeneratorTable.getTableType());
         for (String templateName : templateList) {
             StringWriter stringWriter = new StringWriter();
             Template template = Velocity.getTemplate(templateName, AgileConstants.UTF8);
@@ -248,45 +247,45 @@ public class AgileGeneratorUtil {
         return generatorCodeDataMap;
     }
 
-    public static void generatorCode(AgileGeneratorTableInfo agileGeneratorTableInfo, ZipOutputStream zipOutputStream) {
+    public static void generatorCode(AgileGeneratorTable agileGeneratorTable, ZipOutputStream zipOutputStream) {
         try {
             AgileGeneratorUtil.initVelocity();
-            VelocityContext velocityContext = prepareVelocityContext(agileGeneratorTableInfo);
+            VelocityContext velocityContext = prepareVelocityContext(agileGeneratorTable);
             // 获取模板列表
-            List<String> templateList = getTemplateList(agileGeneratorTableInfo.getTableType());
+            List<String> templateList = getTemplateList(agileGeneratorTable.getTableType());
             for (String templateName : templateList) {
                 // 渲染模板
                 StringWriter stringWriter = new StringWriter();
                 Template template = Velocity.getTemplate(templateName, AgileConstants.UTF8);
                 template.merge(velocityContext, stringWriter);
                 // 添加到zip
-                zipOutputStream.putNextEntry(new ZipEntry(getFileName(templateName, agileGeneratorTableInfo)));
+                zipOutputStream.putNextEntry(new ZipEntry(getFileName(templateName, agileGeneratorTable)));
                 IOUtils.write(stringWriter.toString(), zipOutputStream, StandardCharsets.UTF_8);
                 IOUtils.close(stringWriter);
                 zipOutputStream.flush();
                 zipOutputStream.closeEntry();
             }
         } catch (IOException e) {
-            log.error("渲染模板失败，表名：{}" , agileGeneratorTableInfo.getTableName(), e);
+            log.error("渲染模板失败，表名：{}" , agileGeneratorTable.getTableName(), e);
         }
     }
 
     /**
      * 获取文件名
      */
-    public static String getFileName(String template, AgileGeneratorTableInfo agileGeneratorTableInfo) {
+    public static String getFileName(String template, AgileGeneratorTable agileGeneratorTable) {
         // 文件名称
         String fileName = "";
         //父项目名称
-        String projectName = agileGeneratorTableInfo.getProjectName();
+        String projectName = agileGeneratorTable.getProjectName();
         // 包路径
-        String packageName = agileGeneratorTableInfo.getPackageName();
+        String packageName = agileGeneratorTable.getPackageName();
         // 模块名
-        String moduleName = agileGeneratorTableInfo.getModuleName();
+        String moduleName = agileGeneratorTable.getModuleName();
         // 大写类名
-        String className = agileGeneratorTableInfo.getClassName();
+        String className = agileGeneratorTable.getClassName();
         // 业务名称
-        String businessName = agileGeneratorTableInfo.getBusinessName();
+        String businessName = agileGeneratorTable.getBusinessName();
         String vuePath = projectName + "-ui/src";
         String packagePath = org.apache.commons.lang.StringUtils.replace(packageName, "." , "/");
         if (template.contains("entity.java.vm")) {
@@ -347,35 +346,35 @@ public class AgileGeneratorUtil {
      *
      * @return 模板列表
      */
-    public static VelocityContext prepareVelocityContext(AgileGeneratorTableInfo agileGeneratorTableInfo) {
-        String moduleName = agileGeneratorTableInfo.getModuleName();
-        String businessName = agileGeneratorTableInfo.getBusinessName();
-        String packageName = agileGeneratorTableInfo.getPackageName();
-        String tableType = agileGeneratorTableInfo.getTableType();
-        String functionName = agileGeneratorTableInfo.getFunctionName();
-        AgileGeneratorTableColumn tablePkColumn = getTablePkColumn(agileGeneratorTableInfo.getAgileGeneratorTableColumnList());
+    public static VelocityContext prepareVelocityContext(AgileGeneratorTable agileGeneratorTable) {
+        String moduleName = agileGeneratorTable.getModuleName();
+        String businessName = agileGeneratorTable.getBusinessName();
+        String packageName = agileGeneratorTable.getPackageName();
+        String tableType = agileGeneratorTable.getTableType();
+        String functionName = agileGeneratorTable.getFunctionName();
+        AgileGeneratorTableColumn tablePkColumn = getTablePkColumn(agileGeneratorTable.getAgileGeneratorTableColumnList());
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("tableType" , tableType);
-        velocityContext.put("tableName" , agileGeneratorTableInfo.getTableName());
+        velocityContext.put("tableName" , agileGeneratorTable.getTableName());
         velocityContext.put("functionName" , StringUtils.isNotEmpty(functionName) ? functionName : "【请填写功能名称】");
-        velocityContext.put("ClassName" , agileGeneratorTableInfo.getClassName());
-        velocityContext.put("className" , StringUtils.uncapitalize(agileGeneratorTableInfo.getClassName()));
-        velocityContext.put("moduleName" , agileGeneratorTableInfo.getModuleName());
-        velocityContext.put("BusinessName" , StringUtils.capitalize(agileGeneratorTableInfo.getBusinessName()));
-        velocityContext.put("businessName" , agileGeneratorTableInfo.getBusinessName());
+        velocityContext.put("ClassName" , agileGeneratorTable.getClassName());
+        velocityContext.put("className" , StringUtils.uncapitalize(agileGeneratorTable.getClassName()));
+        velocityContext.put("moduleName" , agileGeneratorTable.getModuleName());
+        velocityContext.put("BusinessName" , StringUtils.capitalize(agileGeneratorTable.getBusinessName()));
+        velocityContext.put("businessName" , agileGeneratorTable.getBusinessName());
         velocityContext.put("basePackage" , getPackagePrefix(packageName));
         velocityContext.put("packageName" , packageName);
-        velocityContext.put("author" , agileGeneratorTableInfo.getFunctionAuthor());
+        velocityContext.put("author" , agileGeneratorTable.getFunctionAuthor());
         velocityContext.put("datetime" , AgileDateUtil.getDateNow());
         velocityContext.put("pkColumn" , tablePkColumn);
-        velocityContext.put("importList" , getJavaImportList(agileGeneratorTableInfo.getAgileGeneratorTableColumnList()));
+        velocityContext.put("importList" , getJavaImportList(agileGeneratorTable.getAgileGeneratorTableColumnList()));
         velocityContext.put("permissionPrefix" , getPermissionPrefix(moduleName, businessName));
-        velocityContext.put("columnList" , agileGeneratorTableInfo.getAgileGeneratorTableColumnList());
-        velocityContext.put("table" , agileGeneratorTableInfo);
+        velocityContext.put("columnList" , agileGeneratorTable.getAgileGeneratorTableColumnList());
+        velocityContext.put("table" , agileGeneratorTable);
         velocityContext.put("StringUtil" , AgileStringUtil.class);
-        setMenuVelocityContext(velocityContext, agileGeneratorTableInfo);
+        setMenuVelocityContext(velocityContext, agileGeneratorTable);
         if (AgileGeneratorConstants.TABLE_TYPE_TREE.equals(tableType)) {
-            setTreeVelocityContext(velocityContext, agileGeneratorTableInfo);
+            setTreeVelocityContext(velocityContext, agileGeneratorTable);
         }
         return velocityContext;
     }
@@ -432,8 +431,8 @@ public class AgileGeneratorUtil {
     /**
      * 设置菜单
      */
-    public static void setMenuVelocityContext(VelocityContext velocityContext, AgileGeneratorTableInfo agileGeneratorTableInfo) {
-        String parentMenuId = agileGeneratorTableInfo.getParentMenuId();
+    public static void setMenuVelocityContext(VelocityContext velocityContext, AgileGeneratorTable agileGeneratorTable) {
+        String parentMenuId = agileGeneratorTable.getParentMenuId();
         String menuId = AgileStringUtil.getUuid();
         velocityContext.put("menuId" , menuId);
         velocityContext.put("parentMenuId" , parentMenuId);
@@ -442,9 +441,9 @@ public class AgileGeneratorUtil {
     /**
      * 设置树形结构表
      */
-    public static void setTreeVelocityContext(VelocityContext velocityContext, AgileGeneratorTableInfo agileGeneratorTableInfo) {
-        velocityContext.put("treeCode" , AgileStringUtil.toCamelCase(agileGeneratorTableInfo.getTreeCode()));
-        velocityContext.put("treeParentCode" , AgileStringUtil.toCamelCase(agileGeneratorTableInfo.getTreeParentCode()));
-        velocityContext.put("treeName" , AgileStringUtil.toCamelCase(agileGeneratorTableInfo.getTreeName()));
+    public static void setTreeVelocityContext(VelocityContext velocityContext, AgileGeneratorTable agileGeneratorTable) {
+        velocityContext.put("treeCode" , AgileStringUtil.toCamelCase(agileGeneratorTable.getTreeCode()));
+        velocityContext.put("treeParentCode" , AgileStringUtil.toCamelCase(agileGeneratorTable.getTreeParentCode()));
+        velocityContext.put("treeName" , AgileStringUtil.toCamelCase(agileGeneratorTable.getTreeName()));
     }
 }

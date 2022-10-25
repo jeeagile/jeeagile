@@ -1,9 +1,12 @@
 package com.jeeagile.generator.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  * @author JeeAgile
@@ -74,4 +77,10 @@ public class AgileGeneratorTable extends AgileBaseModel<AgileGeneratorTable> {
      * 备注
      */
     private String remark;
+
+    /**
+     * 表字段信息
+     */
+    @TableField(exist = false)
+    List<AgileGeneratorTableColumn> agileGeneratorTableColumnList;
 }

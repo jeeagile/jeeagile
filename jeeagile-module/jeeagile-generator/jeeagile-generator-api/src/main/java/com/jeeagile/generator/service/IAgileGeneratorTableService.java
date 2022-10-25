@@ -5,7 +5,6 @@ import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.IAgileBaseService;
 import com.jeeagile.generator.entity.AgileGeneratorTable;
-import com.jeeagile.generator.vo.AgileGeneratorTableInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -35,12 +34,12 @@ public interface IAgileGeneratorTableService extends IAgileBaseService<AgileGene
     /**
      * 查看代码生成表信息
      */
-    AgileGeneratorTableInfo selectTableInfoById(String agileGeneratorTableId);
+    AgileGeneratorTable selectTableInfoById(String agileGeneratorTableId);
 
     /**
      * 更新代码生成表信息
      */
-    boolean updateTableInfoById(AgileGeneratorTableInfo agileGeneratorTableInfo);
+    boolean updateTableInfoById(AgileGeneratorTable agileGeneratorTable);
 
     /**
      * 删除代码表生成信息

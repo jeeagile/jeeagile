@@ -10,7 +10,6 @@ import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.generator.entity.AgileGeneratorTable;
 import com.jeeagile.generator.service.IAgileGeneratorTableService;
-import com.jeeagile.generator.vo.AgileGeneratorTableInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.IOUtils;
@@ -58,15 +57,15 @@ public class AgileGeneratorController extends AgileBaseController {
 
     @PostMapping("/detailTable")
     @ApiOperation(value = "查看代码生成表信息", notes = "查看代码生成表信息")
-    public AgileResult<AgileGeneratorTableInfo> detailTable(@SingleRequestBody String agileGeneratorTableId) {
+    public AgileResult<AgileGeneratorTable> detailTable(@SingleRequestBody String agileGeneratorTableId) {
         return this.success(agileGeneratorTableService.selectTableInfoById(agileGeneratorTableId));
     }
 
     @PostMapping("/updateTable")
     @ApiOperation(value = "修改代码生成表信息", notes = "修改代码生成表信息")
     @AgileLogger(notes = "修改代码生成表信息", type = AgileLoggerType.UPDATE)
-    public AgileResult<Object> updateTable(@RequestBody AgileGeneratorTableInfo agileGeneratorTableInfo) {
-        agileGeneratorTableService.updateTableInfoById(agileGeneratorTableInfo);
+    public AgileResult<Object> updateTable(@RequestBody AgileGeneratorTable agileGeneratorTable) {
+        agileGeneratorTableService.updateTableInfoById(agileGeneratorTable);
         return this.success("代码生成表信息修改成功！");
     }
 
