@@ -1,12 +1,16 @@
 package ${packageName}.service.${moduleName};
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
+import com.jeeagile.core.util.AgileStringUtil;
 import ${packageName}.entity.${moduleName}.${ClassName};
 import ${packageName}.mapper.${moduleName}.${ClassName}Mapper;
 #if($tableType=="tree")
     #set($BaseServiceImpl="AgileTreeServiceImpl")
+import com.jeeagile.frame.service.AgileTreeServiceImpl;
 #elseif($tableType=="crud")
     #set($BaseServiceImpl="AgileBaseServiceImpl")
+import com.jeeagile.frame.service.AgileBaseServiceImpl;
 #end
 
 /**
@@ -16,47 +20,12 @@ import ${packageName}.mapper.${moduleName}.${ClassName}Mapper;
  */
 @AgileService
 public class ${ClassName}ServiceImpl extends ${BaseServiceImpl}<${ClassName}Mapper, ${ClassName}>  implements I${ClassName}Service {
-
-#if($tableType!="tree")
-    @Override
-    public AgilePage<${ClassName}> selectPage(AgilePageable<${ClassName}> agilePageable) {
-        return this.page(agilePageable, get${ClassName}QueryWrapper(agilePageable.getQueryCond()));
-    }
-#end
-    @Override
-    public List<${ClassName}> selectList(${ClassName} ${className}) {
-        return this.list(get${ClassName}QueryWrapper(${className}));
-    }
-
-    @Override
-    public ${ClassName} selectById(String ${className}Id) {
-        return this.getById(${className}Id);
-    }
-
-    @Override
-    public boolean save(${ClassName} ${className}) {
-        //校验业务数据
-        ${className}.validate();
-        return super.save(${className});
-    }
-
-    @Override
-    public boolean updateById(${ClassName} ${className}) {
-        //校验业务数据
-        ${className}.validate();
-        return super.updateById(${className});
-    }
-
-    @Override
-    public boolean deleteById(String ${className}Id) {
-        return super.removeById(${className}Id);
-    }
-
     /**
     * 拼装查询条件
     */
-    private QueryWrapper<${ClassName}> get${ClassName}QueryWrapper(${ClassName} ${className}) {
-        QueryWrapper<${ClassName}> queryWrapper = new QueryWrapper<>();
+    @Override
+    public LambdaQueryWrapper<${ClassName}> queryWrapper(${ClassName} ${className}) {
+        LambdaQueryWrapper<${ClassName}> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (${className} != null) {
 #foreach($column in $columnList)
 #set($queryType=$column.queryType)
@@ -66,40 +35,40 @@ public class ${ClassName}ServiceImpl extends ${BaseServiceImpl}<${ClassName}Mapp
 #set($JavaField=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
 #if($column.queryFlag=="1")
 #if($column.queryType == "EQ")
-            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
-                queryWrapper.lambda().eq(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            if (AgileStringUtil.isNotEmpty(${className}.get$JavaField())) {
+                lambdaQueryWrapper.eq(${ClassName}::get$JavaField, ${className}.get$JavaField());
             }
 #elseif($queryType == "NE")
-            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
-                queryWrapper.lambda().ne(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            if (AgileStringUtil.isNotEmpty(${className}.get$JavaField())) {
+                lambdaQueryWrapper.ne(${ClassName}::get$JavaField, ${className}.get$JavaField());
              }
 #elseif($queryType == "GT")
-            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
-                queryWrapper.lambda().gt(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            if (AgileStringUtil.isNotEmpty(${className}.get$JavaField())) {
+                lambdaQueryWrapper.gt(${ClassName}::get$JavaField, ${className}.get$JavaField());
             }
 #elseif($queryType == "GE")
-            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
-                queryWrapper.lambda().ge(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            if (AgileStringUtil.isNotEmpty(${className}.get$JavaField())) {
+                lambdaQueryWrapper.ge(${ClassName}::get$JavaField, ${className}.get$JavaField());
             }
 #elseif($queryType == "LT")
-            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
-                queryWrapper.lambda().lt(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            if (AgileStringUtil.isNotEmpty(${className}.get$JavaField())) {
+                lambdaQueryWrapper.lt(${ClassName}::get$JavaField, ${className}.get$JavaField());
             }
 #elseif($queryType == "LE")
-            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
-                queryWrapper.lambda().le(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            if (AgileStringUtil.isNotEmpty(${className}.get$JavaField())) {
+                lambdaQueryWrapper.le(${ClassName}::get$JavaField, ${className}.get$JavaField());
             }
 #elseif($queryType == "LIKE")
-            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
-                queryWrapper.lambda().like(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            if (AgileStringUtil.isNotEmpty(${className}.get$JavaField())) {
+                lambdaQueryWrapper.like(${ClassName}::get$JavaField, ${className}.get$JavaField());
             }
 #elseif($queryType == "LIKE_LEFT")
-            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
-                queryWrapper.lambda().likeLeft(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            if (AgileStringUtil.isNotEmpty(${className}.get$JavaField())) {
+                lambdaQueryWrapper.likeLeft(${ClassName}::get$JavaField, ${className}.get$JavaField());
             }
 #elseif($queryType == "LIKE_RIGHT")
-            if (StringUtil.isNotEmpty(${className}.get$JavaField())) {
-                queryWrapper.lambda().likeRight(${ClassName}::get$JavaField, ${className}.get$JavaField());
+            if (AgileStringUtil.isNotEmpty(${className}.get$JavaField())) {
+                lambdaQueryWrapper.likeRight(${ClassName}::get$JavaField, ${className}.get$JavaField());
             }
 #elseif($queryType == "BETWEEN")
 
@@ -107,6 +76,6 @@ public class ${ClassName}ServiceImpl extends ${BaseServiceImpl}<${ClassName}Mapp
 #end
 #end
         }
-        return queryWrapper;
+        return lambdaQueryWrapper;
     }
 }

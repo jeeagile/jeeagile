@@ -6,12 +6,8 @@ import com.jeeagile.frame.service.IAgileTreeService;
 #set($BaseService="IAgileTreeService")
 #elseif($tableType=="crud")
 import com.jeeagile.frame.service.IAgileBaseService;
-import com.jeeagile.frame.page.AgilePage;
-import com.jeeagile.frame.page.AgilePageable;
 #set($BaseService="IAgileBaseService")
 #end
-
-import java.util.List;
 
 /**
  * @author ${author}
@@ -19,38 +15,5 @@ import java.util.List;
  * @description ${functionName} Service接口
  */
 public interface I${ClassName}Service extends $BaseService<${ClassName}>  {
-#if($tableType!="tree")
 
-    /**
-     * 分页查询${functionName}列表
-     */
-    AgilePage<${ClassName}> selectPage(AgilePageable<${ClassName}> agilePageable);
-#end
-
-    /**
-     * 查询${functionName}列表
-     */
-    List<${ClassName}> selectList(${ClassName} ${className});
-
-    /**
-     * 查询${functionName}详细信息
-     */
-    ${ClassName} selectById(String ${className}Id);
-
-    /**
-     * 保存${functionName}
-     */
-    boolean save(${ClassName} ${className});
-
-    /**
-     * 修改${functionName}
-     *
-     */
-    boolean updateById(${ClassName} ${className});
-
-    /**
-     * 删除${functionName}
-     *
-     */
-    boolean deleteById(String ${className}Id);
 }

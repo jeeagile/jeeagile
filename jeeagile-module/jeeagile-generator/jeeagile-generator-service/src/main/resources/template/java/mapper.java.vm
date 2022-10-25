@@ -3,8 +3,10 @@ package ${packageName}.mapper.${moduleName};
 import com.jeeagile.frame.annotation.AgileMapper;
 #if($tableType=="tree")
 #set($BaseMapper="AgileTreeMapper")
+import com.jeeagile.frame.mapper.AgileTreeMapper;
 #elseif($tableType=="crud")
 #set($BaseMapper="AgileBaseMapper")
+import com.jeeagile.frame.mapper.AgileBaseMapper;
 #end
 import ${packageName}.entity.${moduleName}.${ClassName};
 /**
