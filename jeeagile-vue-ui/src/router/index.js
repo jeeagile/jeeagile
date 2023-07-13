@@ -63,7 +63,7 @@ export const agileRouter = [
       {
         path: 'person',
         name: 'Person',
-        component: () => import('@/views/person/index'),
+        component: () => import('@/views/system/person/index'),
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
