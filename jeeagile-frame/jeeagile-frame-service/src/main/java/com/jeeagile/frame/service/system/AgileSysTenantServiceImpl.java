@@ -323,6 +323,18 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(configId).menuName("参数导入").menuPerm("system:config:import").menuSort(5).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(configId).menuName("参数导出").menuPerm("system:config:export").menuSort(6).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
+        String operateLoggerId = AgileStringUtil.getUuid();
+        agileSysMenuList.add(AgileSysMenu.builder().id(operateLoggerId).parentId(systemId).menuName("操作日志").menuPerm("logger:operate:page").menuSort(1).menuComp("system/logger/operate").menuPath("operate").menuIcon("operate").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(operateLoggerId).menuName("查看").menuPerm("logger:operate:detail").menuSort(1).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(operateLoggerId).menuName("删除").menuPerm("logger:operate:delete").menuSort(2).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(operateLoggerId).menuName("清空").menuPerm("logger:operate:clear").menuSort(3).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
+
+        String loginLoggerId = AgileStringUtil.getUuid();
+        agileSysMenuList.add(AgileSysMenu.builder().id(loginLoggerId).parentId(systemId).menuName("登录日志").menuPerm("logger:login:page").menuSort(2).menuComp("system/logger/login").menuPath("login").menuIcon("login").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loginLoggerId).menuName("删除").menuPerm("logger:login:delete").menuSort(1).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
+        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loginLoggerId).menuName("清空").menuPerm("logger:login:clear").menuSort(2).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
+
+
         String monitorId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(monitorId).parentId("0").menuName("系统监控").menuSort(2).menuPath("monitor").menuIcon("monitor").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
@@ -372,19 +384,7 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzLoggerId).menuName("删除").menuPerm("quartz:logger:delete").menuSort(2).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzLoggerId).menuName("清空").menuPerm("quartz:logger:clear").menuSort(3).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
-        String loggerId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(loggerId).parentId("0").menuName("日志管理").menuSort(5).menuPath("logger").menuIcon("logger").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
-        String operateLoggerId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(operateLoggerId).parentId(loggerId).menuName("操作日志").menuPerm("logger:operate:page").menuSort(1).menuComp("logger/operate/index").menuPath("operate").menuIcon("operate").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(operateLoggerId).menuName("查看").menuPerm("logger:operate:detail").menuSort(1).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(operateLoggerId).menuName("删除").menuPerm("logger:operate:delete").menuSort(2).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(operateLoggerId).menuName("清空").menuPerm("logger:operate:clear").menuSort(3).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
-
-        String loginLoggerId = AgileStringUtil.getUuid();
-        agileSysMenuList.add(AgileSysMenu.builder().id(loginLoggerId).parentId(loggerId).menuName("登录日志").menuPerm("logger:login:page").menuSort(2).menuComp("logger/login/index").menuPath("login").menuIcon("login").menuType("C").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loginLoggerId).menuName("删除").menuPerm("logger:login:delete").menuSort(1).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
-        agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(loginLoggerId).menuName("清空").menuPerm("logger:login:clear").menuSort(2).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
 
         String processId = AgileStringUtil.getUuid();
         agileSysMenuList.add(AgileSysMenu.builder().id(processId).parentId("0").menuName("流程管理").menuSort(6).menuPath("process").menuIcon("process").menuType("M").menuVisible("0").menuStatus("0").menuFrame("1").build());
