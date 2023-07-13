@@ -117,7 +117,7 @@ public class AgileCodeCacheConfig {
                     optionValue.append(field.get(object).toString());
                 }
             } catch (Exception ex) {
-                log.error("获取《》代码名称异常！", this.getCacheDesc());
+                log.error("获取《{}》代码名称异常！", this.getCacheDesc());
             }
         }
         return optionValue.toString();

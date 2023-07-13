@@ -37,7 +37,7 @@ public class AgileTenantLineHandler implements TenantLineHandler {
         }
         // 如果实体类继承 AgileTenantModel 类，则为多租户表，不进行忽略
         TableInfo tableInfo = TableInfoHelper.getTableInfo(tableName);
-        if (tableInfo != null && (AgileBaseTenantModel.class.isAssignableFrom(tableInfo.getEntityType()) || AgileTenantModel.class.isAssignableFrom(tableInfo.getEntityType())) || AgileBaseTenantTreeModel.class.isAssignableFrom(tableInfo.getEntityType())) {
+        if (tableInfo != null && (AgileBaseTenantModel.class.isAssignableFrom(tableInfo.getEntityType()) || AgileTenantModel.class.isAssignableFrom(tableInfo.getEntityType()) || AgileBaseTenantTreeModel.class.isAssignableFrom(tableInfo.getEntityType()))) {
             return false;
         }
         Set<String> tenantTables = AgileTenantUtil.getTenantTables();

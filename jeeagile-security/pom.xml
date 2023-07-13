@@ -13,6 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>jeeagile-security-shiro</module>
-        <module>jeeagile-security-boot</module>
+        <module>jeeagile-security-spring</module>
     </modules>
 </project>

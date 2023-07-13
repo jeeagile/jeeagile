@@ -17,6 +17,4 @@
         <module>jeeagile-quartz-service</module>
         <module>jeeagile-quartz-web</module>
     </modules>
-
-
 </project>

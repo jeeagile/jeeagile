@@ -4,6 +4,7 @@ import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
+import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.enums.AgileLoggerType;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 @AgilePermissionsPrefix("process:model")
 @Api(value = "流程模型", tags = "流程模型")
 public class AgileProcessModelController extends AgileCrudController<IAgileProcessModelService, AgileProcessModel> {
+
+    @AgileDemo
     @PostMapping("/designer")
     @AgileRequiresPermissions("designer")
     @AgileLogger(notes = "保存流程设计", type = AgileLoggerType.UPDATE)
@@ -35,6 +38,7 @@ public class AgileProcessModelController extends AgileCrudController<IAgileProce
         return AgileResult.success(agileBaseService.saveProcessDesigner(modelId, modelXml));
     }
 
+    @AgileDemo
     @PostMapping("/deployment")
     @AgileRequiresPermissions("deployment")
     @AgileLogger(notes = "流程发布", type = AgileLoggerType.UPDATE)

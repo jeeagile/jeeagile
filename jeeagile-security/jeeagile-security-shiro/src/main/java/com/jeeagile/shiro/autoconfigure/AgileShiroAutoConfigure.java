@@ -2,6 +2,7 @@ package com.jeeagile.shiro.autoconfigure;
 
 import com.jeeagile.core.cache.constants.AgileCacheConstants;
 import com.jeeagile.core.security.properties.AgileSecurityProperties;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.shiro.cache.AgileShiroCacheManager;
 import com.jeeagile.shiro.filter.AgileAuthenticationFilter;
 import com.jeeagile.shiro.listener.AgileSessionListener;
@@ -20,10 +21,12 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
@@ -43,6 +46,16 @@ public class AgileShiroAutoConfigure {
 
     @Resource
     private AgileSecurityProperties agileSecurityProperties;
+    @Autowired
+    private Environment environment;
+
+    private String getContextPath() {
+        String contextPath = environment.getProperty("server.servlet.context-path");
+        if (AgileStringUtil.isNotEmpty(contextPath)) {
+            return contextPath;
+        }
+        return "";
+    }
 
     @Bean("AgileSecurity")
     @ConditionalOnMissingBean
@@ -162,14 +175,14 @@ public class AgileShiroAutoConfigure {
         Map<String, String> filterChainMap = new HashMap<>();
         filterChainMap.put("/static/**", "anon");
         filterChainMap.put("/index.html", "anon");
-        filterChainMap.put("/system/kaptcha/**", "anon");
-        filterChainMap.put("/system/auth/login", "anon");
-        filterChainMap.put("/system/tenant/info", "anon");
+        filterChainMap.put(getContextPath() + "/system/kaptcha/**", "anon");
+        filterChainMap.put(getContextPath() + "/system/auth/login", "anon");
+        filterChainMap.put(getContextPath() + "/system/tenant/info", "anon");
         for (String strUrl : agileSecurityProperties.getAnonUrl()) {
             filterChainMap.put(strUrl, "anon");
         }
 
-        filterChainMap.put("/**", "user");
+        filterChainMap.put(getContextPath() + "/**", "user");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainMap);
         return shiroFilterFactoryBean;

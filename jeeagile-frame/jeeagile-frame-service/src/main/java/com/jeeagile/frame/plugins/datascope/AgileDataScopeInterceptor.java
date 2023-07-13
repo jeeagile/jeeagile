@@ -102,7 +102,7 @@ public class AgileDataScopeInterceptor extends AgileSqlParserSupport implements 
     private Expression getInnerExpression(AgileDataScopeProperty agileDataScopeProperty) {
         AgileBaseUser agileBaseUser = AgileSecurityContext.getUserData();
         if (agileBaseUser == null && AgileStringUtil.isEmpty(agileBaseUser.getUserId())) {
-            throw new AgileAuthException("获取用户信息发生异常!");
+            throw new AgileAuthException("获取用户信息发生异常！");
         }
         IAgileUserDetailsService agileUserDetailsService = AgileSpringUtil.getBean(IAgileUserDetailsService.class);
         if (agileBaseUser.isSuperAdmin() || agileBaseUser.getUserName().equals(agileBaseUser.getTenantCode())) {

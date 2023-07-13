@@ -6,15 +6,18 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.jeeagile.core.constants.AgileConstants;
 import com.jeeagile.core.properties.AgileProperties;
 import com.jeeagile.core.security.properties.AgileSecurityProperties;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.core.util.file.AgileFileUtil;
 import com.jeeagile.frame.support.interceptor.AgileSecurityInterceptor;
 import com.jeeagile.frame.support.resolver.SingleRequestBodyResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -43,6 +46,18 @@ public class AgileWebAutoConfigure implements WebMvcConfigurer {
     @Resource
     private AgileSecurityProperties agileSecurityProperties;
 
+
+    @Autowired
+    private Environment environment;
+
+    private String getContextPath() {
+        String contextPath = environment.getProperty("server.servlet.context-path");
+        if (AgileStringUtil.isNotEmpty(contextPath)) {
+            return contextPath;
+        }
+        return "";
+    }
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new SingleRequestBodyResolver());
@@ -61,7 +76,7 @@ public class AgileWebAutoConfigure implements WebMvcConfigurer {
         if (agileSecurityProperties.getAnonUrl() != null && !agileSecurityProperties.getAnonUrl().isEmpty()) {
             interceptorRegistration.excludePathPatterns(agileSecurityProperties.getAnonUrl());
         }
-        interceptorRegistration.excludePathPatterns("/system/auth/login", "/system/kaptcha/**");
+        interceptorRegistration.excludePathPatterns(getContextPath() + "/system/auth/login", getContextPath() + "/system/kaptcha/**");
     }
 
     @Bean

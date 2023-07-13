@@ -1,8 +1,6 @@
 package com.jeeagile.process.support.activiti;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.security.context.AgileSecurityContext;
@@ -15,7 +13,6 @@ import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.system.IAgileSysUserPostService;
 import com.jeeagile.frame.service.system.IAgileSysUserRoleService;
-import com.jeeagile.frame.user.AgileUserData;
 import com.jeeagile.frame.util.AgileBeanUtils;
 import com.jeeagile.process.entity.AgileProcessInstance;
 import com.jeeagile.process.entity.AgileProcessModel;
@@ -65,7 +62,6 @@ public class AgileActivitiProcessService implements IAgileProcessService {
 
     @Override
     public String processDeployment(AgileProcessModel agileProcessModel) {
-
         Deployment deployment = repositoryService.createDeployment()
                 .addString(agileProcessModel.getId() + ".bpmn", agileProcessModel.getModelXml())
                 .name(agileProcessModel.getModelName())
@@ -215,6 +211,7 @@ public class AgileActivitiProcessService implements IAgileProcessService {
                 .asc()
                 .list();
         List<AgileProcessHistory> agileProcessHistoryList = new ArrayList<>();
+        AgileProcessHistory startAgileProcessHistory = new AgileProcessHistory();
         for (HistoricActivityInstance historicActivityInstance : historicActivityInstanceList) {
             AgileProcessHistory agileProcessHistory = new AgileProcessHistory();
             AgileBeanUtils.copyProperties(historicActivityInstance, agileProcessHistory);
@@ -224,6 +221,8 @@ public class AgileActivitiProcessService implements IAgileProcessService {
                 agileProcessHistory.setDurationTime("0秒");
                 agileProcessHistory.setStatus("已完成");
                 agileProcessHistory.setMessage("发起流程");
+                startAgileProcessHistory = agileProcessHistory;
+                continue;
             } else if (historicActivityInstance.getActivityType().equals("userTask")) {
                 if (AgileStringUtil.isNotEmpty(historicActivityInstance.getEndTime())) {
                     agileProcessHistory.setStatus("已完成");
@@ -252,6 +251,7 @@ public class AgileActivitiProcessService implements IAgileProcessService {
             }
             agileProcessHistoryList.add(agileProcessHistory);
         }
+        agileProcessHistoryList.add(0, startAgileProcessHistory);
         return agileProcessHistoryList;
     }
 

@@ -45,9 +45,9 @@
         <knife4j.version>3.0.3</knife4j.version>
 
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
-        <shiro-spring.version>1.9.0</shiro-spring.version>
+        <shiro-spring.version>1.8.0</shiro-spring.version>
 
-        <lombok.version>1.18.22</lombok.version>
+        <lombok.version>1.18.24</lombok.version>
 
         <google-format.version>1.10.0</google-format.version>
 
