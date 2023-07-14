@@ -27,7 +27,7 @@ public class AgileSysConfig extends AgileBaseTenantModel<AgileSysConfig> {
     @ExcelProperty(value = {"参数配置", "参数名称"}, index = 0)
     @ApiModelProperty("参数名称")
     @NotEmpty(message = "参数名称不能为空！")
-    @Size(max = 50, message = "参数名称长度最大值为50！")
+    @Size(max = 50, message = "参数名称最大长度为50！")
     private String configName;
 
     /**
@@ -36,7 +36,7 @@ public class AgileSysConfig extends AgileBaseTenantModel<AgileSysConfig> {
     @ExcelProperty(value = {"参数配置", "参数键名"}, index = 1)
     @ApiModelProperty("参数键名")
     @NotEmpty(message = "参数键名不能为空！")
-    @Size(max = 50, message = "参数键名长度最大值为50！")
+    @Size(max = 50, message = "参数键名最大长度为50！")
     private String configKey;
 
     /**
@@ -45,7 +45,7 @@ public class AgileSysConfig extends AgileBaseTenantModel<AgileSysConfig> {
     @ExcelProperty(value = {"参数配置", "参数键值"}, index = 2)
     @ApiModelProperty("参数键值")
     @NotEmpty(message = "参数键值不能为空！")
-    @Size(max = 150, message = "参数键值长度最大值为150！")
+    @Size(max = 150, message = "参数键值最大长度为150！")
     private String configValue;
 
     /**
@@ -61,7 +61,7 @@ public class AgileSysConfig extends AgileBaseTenantModel<AgileSysConfig> {
      */
     @ExcelIgnore
     @ApiModelProperty("备注")
-    @Size(max = 150, message = "备注信息长度最大值为150！")
+    @Size(max = 150, message = "备注信息最大长度为150！")
     private String remark;
 
     public AgileSysConfig() {

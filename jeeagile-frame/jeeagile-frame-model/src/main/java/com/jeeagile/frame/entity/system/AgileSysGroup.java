@@ -27,7 +27,7 @@ public class AgileSysGroup extends AgileBaseTenantModel<AgileSysGroup> {
     @ExcelProperty(value = {"用户分组信息", "用户分组编码"}, index = 0)
     @ApiModelProperty("用户分组编码")
     @NotEmpty(message = "用户分组编码不能为空！")
-    @Size(max = 20, message = "用户分组编码长度最大值为20！")
+    @Size(max = 20, message = "用户分组编码最大长度为20！")
     private String groupCode;
 
     /**
@@ -36,7 +36,7 @@ public class AgileSysGroup extends AgileBaseTenantModel<AgileSysGroup> {
     @ExcelProperty(value = {"用户分组信息", "用户分组名称"}, index = 1)
     @ApiModelProperty("用户分组名称")
     @NotEmpty(message = "用户分组名称不能为空！")
-    @Size(max = 50, message = "用户分组名称长度最大值为50！")
+    @Size(max = 50, message = "用户分组名称最大长度为50！")
     private String groupName;
 
     /**
@@ -60,7 +60,7 @@ public class AgileSysGroup extends AgileBaseTenantModel<AgileSysGroup> {
      */
     @ExcelIgnore
     @ApiModelProperty("备注")
-    @Size(max = 150, message = "备注长度最大值为150！")
+    @Size(max = 150, message = "备注最大长度为150！")
     private String remark;
 
 }

@@ -31,7 +31,7 @@ public class AgileSysRole extends AgileBaseTenantModel<AgileSysRole> {
     @ExcelProperty(value = {"角色信息", "角色编码"}, index = 0)
     @ApiModelProperty("角色编码")
     @NotEmpty(message = "角色编码不能为空！")
-    @Size(max = 30, message = "角色编码长度最大值为30！")
+    @Size(max = 30, message = "角色编码最大长度为30！")
     private String roleCode;
 
     /**
@@ -40,7 +40,7 @@ public class AgileSysRole extends AgileBaseTenantModel<AgileSysRole> {
     @ExcelProperty(value = {"角色信息", "角色名称"}, index = 1)
     @ApiModelProperty("角色名称")
     @NotEmpty(message = "角色名称不能为空！")
-    @Size(max = 50, message = "角色名称长度最大值为50！")
+    @Size(max = 50, message = "角色名称最大长度为50！")
     private String roleName;
 
     /**
@@ -71,7 +71,7 @@ public class AgileSysRole extends AgileBaseTenantModel<AgileSysRole> {
      */
     @ExcelIgnore
     @ApiModelProperty("备注")
-    @Size(max = 150, message = "备注长度最大值为150！")
+    @Size(max = 150, message = "备注最大长度为150！")
     private String remark;
 
     /**

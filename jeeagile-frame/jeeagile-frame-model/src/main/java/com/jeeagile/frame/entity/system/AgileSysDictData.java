@@ -29,7 +29,7 @@ public class AgileSysDictData extends AgileBaseTenantTreeModel<AgileSysDictData>
     @ExcelProperty(value = {"字典类型", "字典类型"}, index = 0)
     @ApiModelProperty("字典类型")
     @NotEmpty(message = "字典类型不能为空！")
-    @Size(max = 50, message = "字典类型长度最大值为50！")
+    @Size(max = 50, message = "字典类型最大长度为50！")
     private String dictType;
 
     /**
@@ -38,7 +38,7 @@ public class AgileSysDictData extends AgileBaseTenantTreeModel<AgileSysDictData>
     @ExcelProperty(value = {"字典类型", "字典标签"}, index = 1)
     @ApiModelProperty("字典标签")
     @NotEmpty(message = "字典标签不能为空！")
-    @Size(max = 50, message = "字典标签长度最大值为50！")
+    @Size(max = 50, message = "字典标签最大长度为50！")
     private String dictLabel;
 
     /**
@@ -47,7 +47,7 @@ public class AgileSysDictData extends AgileBaseTenantTreeModel<AgileSysDictData>
     @ExcelProperty(value = {"字典类型", "字典键值"}, index = 2)
     @ApiModelProperty("字典键值")
     @NotEmpty(message = "字典键值不能为空！")
-    @Size(max = 50, message = "字典键值长度最大值为50！")
+    @Size(max = 50, message = "字典键值最大长度为50！")
     private String dictValue;
 
     /**
@@ -77,7 +77,7 @@ public class AgileSysDictData extends AgileBaseTenantTreeModel<AgileSysDictData>
      */
     @ExcelIgnore
     @ApiModelProperty("备注")
-    @Size(max = 150, message = "备注长度最大值为150！")
+    @Size(max = 150, message = "备注最大长度为150！")
     private String remark;
 
     public AgileSysDictData() {

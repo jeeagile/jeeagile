@@ -27,7 +27,7 @@ public class AgileSysPost extends AgileBaseTenantModel<AgileSysPost> {
     @ExcelProperty(value = {"岗位信息", "岗位编码"}, index = 0)
     @ApiModelProperty("岗位编码")
     @NotEmpty(message = "岗位编码不能为空！")
-    @Size(max = 20, message = "岗位编码长度最大值为20！")
+    @Size(max = 20, message = "岗位编码最大长度为20！")
     private String postCode;
 
     /**
@@ -36,7 +36,7 @@ public class AgileSysPost extends AgileBaseTenantModel<AgileSysPost> {
     @ExcelProperty(value = {"岗位信息", "岗位名称"}, index = 1)
     @ApiModelProperty("岗位名称")
     @NotEmpty(message = "岗位名称不能为空！")
-    @Size(max = 50, message = "岗位名称长度最大值为50！")
+    @Size(max = 50, message = "岗位名称最大长度为50！")
     private String postName;
 
     /**
@@ -60,7 +60,7 @@ public class AgileSysPost extends AgileBaseTenantModel<AgileSysPost> {
      */
     @ExcelIgnore
     @ApiModelProperty("备注")
-    @Size(max = 150, message = "备注长度最大值为150！")
+    @Size(max = 150, message = "备注最大长度为150！")
     private String remark;
 
 }

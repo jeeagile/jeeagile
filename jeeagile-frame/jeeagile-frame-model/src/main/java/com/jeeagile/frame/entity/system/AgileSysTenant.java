@@ -67,7 +67,7 @@ public class AgileSysTenant extends AgileBaseTenantModel<AgileSysTenant> {
      * 备注信息
      */
     @ApiModelProperty(value = "备注")
-    @Size(max = 150, message = "备注信息长度最大值为150！")
+    @Size(max = 150, message = "备注信息最大长度为150！")
     private String remark;
 
     @TableField(exist = false)

@@ -119,7 +119,7 @@ public class AgileSysUser extends AgileBaseTenantModel<AgileSysUser> {
      */
     @ExcelIgnore
     @ApiModelProperty("备注")
-    @Size(max = 150, message = "备注长度最大值为150！")
+    @Size(max = 150, message = "备注最大长度为150！")
     private String remark;
 
 
