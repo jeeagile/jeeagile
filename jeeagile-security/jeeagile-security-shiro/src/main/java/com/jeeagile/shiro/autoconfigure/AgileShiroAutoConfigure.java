@@ -182,7 +182,7 @@ public class AgileShiroAutoConfigure {
             filterChainMap.put(strUrl, "anon");
         }
 
-        filterChainMap.put(getContextPath() + "/**", "user");
+        filterChainMap.put("/**", "user");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainMap);
         return shiroFilterFactoryBean;
