@@ -56,13 +56,6 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
             }
 
 
-            //演示模式拦截
-//            AgileDemo agileDemo = handlerMethod.getMethodAnnotation(AgileDemo.class);
-//            if (agileDemo != null && AgileUtil.isDemoEnabled()) {
-//                throw new AgileDemoException();
-//            }
-
-
             AgileRequiresGuest agileRequiresGuest = handlerMethod.getBeanType().getAnnotation(AgileRequiresGuest.class);
             if (agileRequiresGuest != null) {
                 return;
@@ -122,7 +115,6 @@ public class AgileSecurityInterceptor implements AsyncHandlerInterceptor {
                     if (!(handlerMethod.getBean() instanceof AgileCrudController)) {
                         agileSecurity.checkPermission(agileRequiresPermissions);
                     }
-
                 }
             }
         } catch (AgileBaseException ex) {

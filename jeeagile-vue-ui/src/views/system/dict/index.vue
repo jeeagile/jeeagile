@@ -9,7 +9,7 @@
         <el-input v-model="queryParam.queryCond.dictType" placeholder="请输入字典类型" clearable size="small"
                   style="width: 240px" @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="状态" prop="status">
+      <el-form-item label="字典状态" prop="status">
         <el-select v-model="queryParam.queryCond.dictStatus" placeholder="字典状态" clearable size="small"
                    style="width: 240px">
           <el-option v-for="dictStatusOption in dictStatusOptionList" :key="dictStatusOption.dictValue"
@@ -66,7 +66,7 @@
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="dictStatus" :formatter="dictStatusFormat"/>
+      <el-table-column label="字典状态" align="center" prop="dictStatus" :formatter="dictStatusFormat"/>
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

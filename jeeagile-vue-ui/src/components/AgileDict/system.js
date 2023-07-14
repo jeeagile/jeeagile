@@ -1,0 +1,34 @@
+import Vue from 'vue'
+import { AgileBaseDict } from './index'
+
+const SysUserStatus = new AgileBaseDict('用户状态', [
+  {
+    value: 0,
+    label: '启用',
+    symbol: 'ENABLE'
+  },
+  {
+    value: 1,
+    label: '停用',
+    symbol: 'DISABLE'
+  }
+])
+Vue.prototype.SysUserStatus = SysUserStatus
+const SysUserSex = new AgileBaseDict('用户性别', [
+  {
+    value: 0,
+    label: '男',
+    symbol: 'MAN'
+  },
+  {
+    value: 1,
+    label: '女',
+    symbol: 'WOMAN'
+  },
+  {
+    value: 2,
+    label: '未知',
+    symbol: 'UNKNOWN'
+  }
+])
+Vue.prototype.SysUserSex = SysUserSex

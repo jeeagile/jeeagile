@@ -80,7 +80,7 @@
           <el-table-column type="selection" width="50" align="center"/>
           <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true"/>
           <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true"/>
-          <el-table-column label="部门" align="center" prop="deptName" :show-overflow-tooltip="true"
+          <el-table-column label="所属部门" align="center" prop="deptName" :show-overflow-tooltip="true"
                            :formatter="deptNameFormat"
           />
           <el-table-column label="手机号码" align="center" prop="userPhone"/>
