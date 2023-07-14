@@ -17,20 +17,20 @@ public class AgileProcessExpression extends AgileBaseTenantModel<AgileProcessExp
      * 流程表达式编码
      */
     @NotNull(message = "流程表达式编码不能为空！")
-    @Size(max = 20, message = "流程表达式编码长度最大值为20！")
+    @Size(max = 20, message = "流程表达式编码最大长度为20！")
     private String expressionCode;
     /**
      * 流程表达式名称
      */
     @NotNull(message = "流程表达式名称不能为空！")
-    @Size(max = 50, message = "流程表达式名称长度最大值为50！")
+    @Size(max = 50, message = "流程表达式名称最大长度为50！")
     private String expressionName;
 
     /**
      * 流程表达式键值
      */
     @NotNull(message = "流程表达式不能为空！")
-    @Size(max = 150, message = "流程表达式长度最大值为150！")
+    @Size(max = 150, message = "流程表达式最大长度为150！")
     private String expressionValue;
     /**
      * 流程表达式状态 （0:正常 1:停用）
@@ -40,6 +40,6 @@ public class AgileProcessExpression extends AgileBaseTenantModel<AgileProcessExp
     /**
      * 备注信息
      */
-    @Size(max = 150, message = "备注信息长度最大值为150！")
+    @Size(max = 150, message = "备注信息最大长度为150！")
     private String remark;
 }
