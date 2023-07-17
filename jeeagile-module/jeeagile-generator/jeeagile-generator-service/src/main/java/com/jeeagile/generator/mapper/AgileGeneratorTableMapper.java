@@ -22,16 +22,19 @@ public interface AgileGeneratorTableMapper extends AgileBaseMapper<AgileGenerato
     /**
      * 分页查询当前用户下所有表信息
      */
+    @InterceptorIgnore(tenantLine = "true")
     AgilePage<AgileGeneratorTable> selectDbTablePage(AgilePage<AgileGeneratorTable> agilePage, @Param("agileGeneratorTable") AgileGeneratorTable agileGeneratorTable);
 
     /**
      * 根据表名获取表信息
      */
+    @InterceptorIgnore(tenantLine = "true")
     AgileGeneratorTable selectDbTableByTableName(@Param("tableName") String tableName);
 
     /**
      * 根据表名获取表字段信息
      */
+    @InterceptorIgnore(tenantLine = "true")
     List<AgileGeneratorTableColumn> selectDbTableColumnByTableName(@Param("tableName") String tableName);
 
 }
