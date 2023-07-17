@@ -122,7 +122,7 @@
             <el-form-item label="操作时间：">{{ form.createTime }}</el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item v-if="form.status === 1" label="操作信息：">{{ form.message }}</el-form-item>
+            <el-form-item v-if="form.status === '1'" label="操作信息：">{{ form.message }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
