@@ -31,6 +31,6 @@ public class AgileProcessFormController extends AgileCrudController<IAgileProces
     @AgileLogger(notes = "保存流程表单设计", type = AgileLoggerType.UPDATE)
     @ApiOperation(value = "保存流程表单设计", notes = "保存流程表单设计")
     public AgileResult<AgileProcessForm> designer(@SingleRequestBody String formId, @SingleRequestBody String formConf, @SingleRequestBody String formFields) {
-        return AgileResult.success(agileBaseService.saveProcessFormDesigner(formId, formConf, formFields));
+        return AgileResult.success(agileService.saveProcessFormDesigner(formId, formConf, formFields));
     }
 }

@@ -37,7 +37,7 @@ public class AgileSysMenuController extends AgileCrudController<IAgileSysMenuSer
     @AgileLogger(notes = "修改菜单排序", type = AgileLoggerType.UPDATE)
     @ApiOperation(value = "修改菜单排序", notes = "修改菜单排序")
     public AgileResult<String> updateSort(@RequestBody List<AgileMenuSort> agileMenuSortList) {
-        this.agileBaseService.updateMenuSort(agileMenuSortList);
+        this.agileService.updateMenuSort(agileMenuSortList);
         return this.success("菜单排序修改成功！");
     }
 }

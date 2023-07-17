@@ -35,7 +35,7 @@ public class AgileProcessModelController extends AgileCrudController<IAgileProce
     @AgileLogger(notes = "保存流程设计", type = AgileLoggerType.UPDATE)
     @ApiOperation(value = "保存流程设计", notes = "保存流程设计")
     public AgileResult<AgileProcessModel> designer(@SingleRequestBody String modelId, @SingleRequestBody String modelXml) {
-        return AgileResult.success(agileBaseService.saveProcessDesigner(modelId, modelXml));
+        return AgileResult.success(agileService.saveProcessDesigner(modelId, modelXml));
     }
 
     @AgileDemo
@@ -44,7 +44,7 @@ public class AgileProcessModelController extends AgileCrudController<IAgileProce
     @AgileLogger(notes = "流程发布", type = AgileLoggerType.UPDATE)
     @ApiOperation(value = "流程发布", notes = "流程发布")
     public AgileResult<AgileProcessModel> deployment(@SingleRequestBody String modelId) {
-        if (agileBaseService.processDeployment(modelId)) {
+        if (agileService.processDeployment(modelId)) {
             return AgileResult.success("流程发布成功！");
         } else {
             return AgileResult.error(AgileResultCode.FAIL_OPS, "流程发布失败！");

@@ -35,7 +35,7 @@ public class AgileSysUserController extends AgileCrudController<IAgileSysUserSer
     @AgileLogger(notes = "重置用户密码", type = AgileLoggerType.UPDATE)
     @AgileRequiresPermissions("password")
     public AgileResult<Object> resetUserPassword(@SingleRequestBody String userId, @SingleRequestBody String password) {
-        this.agileBaseService.resetUserPassword(userId, password);
+        this.agileService.resetUserPassword(userId, password);
         return this.success();
     }
 
@@ -44,7 +44,7 @@ public class AgileSysUserController extends AgileCrudController<IAgileSysUserSer
     @ApiOperation(value = "更新用户状态", notes = "更新用户状态")
     @AgileLogger(notes = "更新用户状态", type = AgileLoggerType.UPDATE)
     public AgileResult<Object> changeStatus(@SingleRequestBody String userId, @SingleRequestBody String userStatus) {
-        this.agileBaseService.changeUserStatus(userId, userStatus);
+        this.agileService.changeUserStatus(userId, userStatus);
         return this.success();
     }
 }

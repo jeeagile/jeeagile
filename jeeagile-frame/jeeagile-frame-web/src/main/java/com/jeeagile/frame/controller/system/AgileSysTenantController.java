@@ -42,7 +42,7 @@ public class AgileSysTenantController extends AgileCrudController<IAgileSysTenan
         if (agileSysTenant.getTenantType().equals("1")) {
             throw new AgileFrameException("正在努力建设中，敬请期待！");
         }
-        return AgileResult.success(this.agileBaseService.audit(agileSysTenant));
+        return AgileResult.success(this.agileService.audit(agileSysTenant));
     }
 
     @PostMapping("/info")
@@ -57,7 +57,7 @@ public class AgileSysTenantController extends AgileCrudController<IAgileSysTenan
         if (AgileStringUtil.isEmpty(tenantSign)) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "租户模式，非法访问！");
         }
-        AgileSysTenant agileSysTenant = this.agileBaseService.agileSysTenantInfo(tenantId);
+        AgileSysTenant agileSysTenant = this.agileService.agileSysTenantInfo(tenantId);
         if (agileSysTenant == null || AgileStringUtil.isEmpty(agileSysTenant.getId())) {
             return AgileResult.error(AgileResultCode.WARN_VALIDATE_PASSED, "租户模式，非法访问！");
         }

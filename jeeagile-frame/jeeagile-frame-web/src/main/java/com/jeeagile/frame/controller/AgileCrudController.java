@@ -43,7 +43,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
 
     @Getter
     @AgileReference
-    protected I agileBaseService;
+    protected I agileService;
 
     @RequestMapping(value = "/init", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "初始化", notes = "提供页面初始化数据接口")
@@ -55,7 +55,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
      * 初始化数据
      */
     protected Object initData() {
-        return agileBaseService.initData();
+        return agileService.initData();
     }
 
     @PostMapping(value = "/page")
@@ -63,7 +63,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileLogger(notes = "根据条件分页查询数据", type = AgileLoggerType.SELECT)
     @ApiOperation(value = "分页查询", notes = "分页查询数据接口")
     public AgileResult<AgilePage<T>> selectPage(@RequestBody AgilePageable<T> agilePageable) {
-        return AgileResult.success(agileBaseService.selectPage(agilePageable));
+        return AgileResult.success(agileService.selectPage(agilePageable));
     }
 
     @PostMapping(value = "/list")
@@ -71,7 +71,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileLogger(notes = "根据条件查询数据", type = AgileLoggerType.SELECT)
     @ApiOperation(value = "查询列表", notes = "根据条件查询数据")
     public AgileResult<List<T>> selectList(@RequestBody T agileModel) {
-        return AgileResult.success(agileBaseService.selectList(agileModel));
+        return AgileResult.success(agileService.selectList(agileModel));
     }
 
     @PostMapping("/detail")
@@ -79,7 +79,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<T> detail(@SingleRequestBody Serializable id) {
-        return AgileResult.success(agileBaseService.selectModel(id));
+        return AgileResult.success(agileService.selectModel(id));
     }
 
     @GetMapping("/{id}")
@@ -87,7 +87,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<T> detailInfo(@PathVariable Serializable id) {
-        return AgileResult.success(agileBaseService.selectModel(id));
+        return AgileResult.success(agileService.selectModel(id));
     }
 
     @AgileDemo
@@ -97,7 +97,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @ApiOperation(value = "新增数据", notes = "新增数据")
     public AgileResult<T> add(@RequestBody T agileModel) {
         this.saveModelValidate(agileModel);
-        return AgileResult.success(agileBaseService.saveModel(agileModel));
+        return AgileResult.success(agileService.saveModel(agileModel));
     }
 
     @AgileDemo
@@ -107,7 +107,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @ApiOperation(value = "更新数据", notes = "根据主键更新数据")
     public AgileResult update(@RequestBody T agileModel) {
         this.updateModelValidate(agileModel);
-        if (agileBaseService.updateModel(agileModel)) {
+        if (agileService.updateModel(agileModel)) {
             return AgileResult.success("数据更新成功！");
         } else {
             return AgileResult.error(AgileResultCode.FAIL_OPS_UPDATE, "数据更新失败！");
@@ -120,7 +120,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileLogger(notes = "根据主键删除数据", type = AgileLoggerType.DELETE)
     @ApiOperation(value = "删除数据", notes = "删除业务数据")
     public AgileResult delete(@SingleRequestBody Serializable id) {
-        if (agileBaseService.deleteModel(id)) {
+        if (agileService.deleteModel(id)) {
             return AgileResult.success("数据删除成功！");
         } else {
             return AgileResult.error(AgileResultCode.FAIL_OPS_DELETE, "数据删除失败！");
@@ -133,7 +133,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileLogger(notes = "根据主键删除数据", type = AgileLoggerType.DELETE)
     @ApiOperation(value = "删除数据", notes = "根据主键删除数据")
     public AgileResult deleteInfo(@PathVariable Serializable id) {
-        if (agileBaseService.deleteModel(id)) {
+        if (agileService.deleteModel(id)) {
             return AgileResult.success("数据删除成功！");
         } else {
             return AgileResult.error(AgileResultCode.FAIL_OPS_DELETE, "数据删除失败！");
@@ -148,10 +148,10 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     public AgileResult importExcel(@RequestParam("importExcel") MultipartFile multipartFile) {
         try {
             AgileExcelListener agileExcelListener = this.getAgileExcelListener();
-            EasyExcel.read(multipartFile.getInputStream(), agileBaseService.getEntityClass(), agileExcelListener).sheet().doRead();
+            EasyExcel.read(multipartFile.getInputStream(), agileService.getEntityClass(), agileExcelListener).sheet().doRead();
             List<T> agileModelList = agileExcelListener.getAgileModelList();
             if (AgileCollectionUtil.isNotEmpty(agileModelList)) {
-                return AgileResult.success(agileBaseService.importData(agileModelList));
+                return AgileResult.success(agileService.importData(agileModelList));
             } else {
                 return AgileResult.error(AgileResultCode.FAIL_OPS_IMPORT, "没有读取到任务数据！");
             }
@@ -190,7 +190,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
         if (AgileStringUtil.isEmpty(excelName)) {
             excelName = "导出数据";
         }
-        this.exportExcel(agileBaseService.selectExportData(agileModel), excelName);
+        this.exportExcel(agileService.selectExportData(agileModel), excelName);
     }
 
     /**
@@ -206,7 +206,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
             httpServletResponse.setCharacterEncoding("utf-8");
             String fileName = URLEncoder.encode(excelName, "UTF-8").replaceAll("\\+", "%20");
             httpServletResponse.setHeader("Content-disposition", "attachment;filename*=" + fileName + ".xlsx");
-            EasyExcel.write(httpServletResponse.getOutputStream(), this.agileBaseService.getEntityClass()).sheet(excelName).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).doWrite(dataList);
+            EasyExcel.write(httpServletResponse.getOutputStream(), this.agileService.getEntityClass()).sheet(excelName).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).doWrite(dataList);
         } catch (Exception ex) {
             throw new AgileFrameException(AgileResultCode.FAIL_OPS_EXPORT, excelName + "数据导出失败！", ex);
         }

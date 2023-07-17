@@ -34,7 +34,7 @@ public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleSer
     @ApiOperation(value = "更新角色状态", notes = "更新角色状态")
     @AgileLogger(notes = "更新角色状态", type = AgileLoggerType.UPDATE)
     public AgileResult<String> changeRoleStatus(@SingleRequestBody String roleId, @SingleRequestBody String roleStatus) {
-        if (this.agileBaseService.changeRoleStatus(roleId, roleStatus)) {
+        if (this.agileService.changeRoleStatus(roleId, roleStatus)) {
             return this.success();
         } else {
             return this.error(AgileResultCode.FAIL_UPDATE_EXCEPTION, "角色状态更新失败！");
@@ -47,7 +47,7 @@ public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleSer
     @ApiOperation(value = "更新角色权限范围", notes = "更新角色权限范围")
     @AgileLogger(notes = "更新角色权限范围", type = AgileLoggerType.UPDATE)
     public AgileResult<String> dataScope(@RequestBody AgileSysRole agileSysRole) {
-        if (this.agileBaseService.updateRoleDataScope(agileSysRole)) {
+        if (this.agileService.updateRoleDataScope(agileSysRole)) {
             return this.success();
         } else {
             return this.error(AgileResultCode.FAIL_UPDATE_EXCEPTION, "角色权限范围更新失败！");
