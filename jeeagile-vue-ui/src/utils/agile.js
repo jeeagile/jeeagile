@@ -1,4 +1,5 @@
 ﻿import arrayToTree from 'array-to-tree'
+import { v4 } from 'uuid'
 
 /**
  * 表单重置
@@ -45,4 +46,13 @@ export function handleTree(data, id, parentId, children) {
     parentProperty: parentId,
     childrenProperty: children
   })
+}
+
+/**
+ * 生成uuid
+ * @returns {string}
+ */
+export function getUuid() {
+  const uuid = v4()
+  return uuid.replace(/[-]/g, '')
 }

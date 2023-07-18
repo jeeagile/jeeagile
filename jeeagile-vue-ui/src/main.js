@@ -31,12 +31,13 @@ import ProcessView from '@/components/ProcessDesigner/ProcessView'
 import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getSysConfig, getSysConfigValue, getSysDictData, getSysDictDataList } from '@/api/system/common'
-import { handleDictLabel, handleTree, resetForm } from '@/utils/agile'
+import { handleDictLabel, handleTree, resetForm, getUuid } from '@/utils/agile'
 import VueParticles from 'vue-particles'
 import { vuePlugin } from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark-reasonable.css'
-
-
+import '@/components/AgileDict'
+import '@/components/AgileDict/system'
+import '@/components/AgileDict/online'
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
@@ -54,6 +55,7 @@ Vue.prototype.getSysDictData = getSysDictData
 Vue.prototype.getSysDictDataList = getSysDictDataList
 Vue.prototype.getSysConfig = getSysConfig
 Vue.prototype.getSysConfigValue = getSysConfigValue
+Vue.prototype.uuid = getUuid
 
 Vue.prototype.messageSuccess = function (message) {
   this.$message({ showClose: true, message: message, type: 'success' })
