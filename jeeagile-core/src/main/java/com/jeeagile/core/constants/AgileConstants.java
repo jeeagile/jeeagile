@@ -14,7 +14,6 @@ public class AgileConstants {
     // UTF-8 编码
     public static final String UTF8 = AgileCharsetUtil.UTF_8;
 
-
     // 系统通用成功标识
     public static final String SUCCESS = "0";
 

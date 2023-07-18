@@ -37,13 +37,15 @@ export class AgileBaseDict extends Map {
 
     return temp
   }
-
-  getValue(id, valueKey = 'value') {
+  /**
+   * 获取字典标签
+   */
+  getLabel(value, labelKey = 'label') {
     // 如果id为boolean类型，则自动转换为0和1
-    if (typeof id === 'boolean') {
-      id = id ? 1 : 0
+    if (typeof value === 'boolean') {
+      value = value ? 1 : 0
     }
-    return (this.get(id) || {})[valueKey]
+    return (this.get(value) || {})[labelKey]
   }
 }
 

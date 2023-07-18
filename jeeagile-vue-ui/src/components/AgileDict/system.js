@@ -32,3 +32,22 @@ const SysUserSex = new AgileBaseDict('用户性别', [
   }
 ])
 Vue.prototype.SysUserSex = SysUserSex
+
+const SysYesNo = new AgileBaseDict('系统是否', [
+  {
+    value: '0',
+    label: '否',
+    symbol: 'NO'
+  },
+  {
+    value: '1',
+    label: '是',
+    symbol: 'YES'
+  }
+])
+Vue.prototype.SysYesNo = SysYesNo
+export {
+  SysUserStatus,
+  SysUserSex,
+  SysYesNo
+}

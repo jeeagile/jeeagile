@@ -151,3 +151,8 @@ ALTER TABLE `agile_process_expression`
 ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
 
 update `agile_process_expression` set tenant_id='jeeagile';
+
+ALTER TABLE `agile_online_dict`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+
+update `agile_online_dict` set tenant_id='jeeagile';
