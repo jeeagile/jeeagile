@@ -6,7 +6,7 @@ CREATE TABLE agile_online_dict (
   dict_type                     varchar(2) NOT NULL COMMENT '字典类型（01:数据表字典 02:系统管理字典 99:自定义字典）',
   system_dict_type              varchar(100) DEFAULT NULL COMMENT '系统字典类型',
   table_name                    varchar(50) DEFAULT NULL COMMENT '字典表名称',
-  table_tree_flag               varchar(1) DEFAULT NULL COMMENT '字典表树形标识',
+  tree_flag                     varchar(1) DEFAULT NULL COMMENT '字典表树形标识',
   parent_key_column_name        varchar(50) DEFAULT NULL COMMENT '字典表父字段名称',
   key_column_name               varchar(50) DEFAULT NULL COMMENT '字典表键字段名称',
   value_column_name             varchar(50) DEFAULT NULL COMMENT '字典值字段名称',
