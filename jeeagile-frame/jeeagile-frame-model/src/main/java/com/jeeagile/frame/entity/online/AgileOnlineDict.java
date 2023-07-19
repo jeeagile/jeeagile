@@ -87,11 +87,17 @@ public class AgileOnlineDict extends AgileBaseTenantModel<AgileOnlineDict> {
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String dictDataJson;
     /**
-     * 字段参数JSON
+     * 字典参数JSON
      */
-    @ApiModelProperty("字段参数JSON")
+    @ApiModelProperty("字典参数JSON")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String dictParamJson;
+    /**
+     * 字典过滤JSON
+     */
+    @ApiModelProperty("字典过滤JSON")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private String dictFilterJson;
     /**
      * 备注
      */

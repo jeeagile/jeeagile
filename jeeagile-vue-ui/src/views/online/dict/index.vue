@@ -422,6 +422,7 @@
         }
         this.dictParamList = []
         this.dictDataList = []
+        this.jdbcTableColumnList = []
         this.resetForm('form')
       },
       /** 搜索按钮操作 */
@@ -468,6 +469,7 @@
         this.form.dictParamJson = undefined
         this.dictParamList = []
         this.dictDataList = []
+        this.jdbcTableColumnList = []
       },
       handleDictData() {
         this.resetDictDataPage()

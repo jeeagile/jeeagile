@@ -75,11 +75,11 @@ public class AgileOnlineDictServiceImpl extends AgileBaseServiceImpl<AgileOnline
             }
             agileOnlineDict.setTableName(null);
             agileOnlineDict.setParentKeyColumnName(null);
-            agileOnlineDict.setParentKeyColumnName(null);
             agileOnlineDict.setKeyColumnName(null);
             agileOnlineDict.setValueColumnName(null);
             agileOnlineDict.setLabelColumnName(null);
             agileOnlineDict.setDictParamJson(null);
+            agileOnlineDict.setDictFilterJson(null);
             return;
         }
         if (OnlineDictType.CUSTOM.equals(agileOnlineDict.getDictType())) {
@@ -89,11 +89,11 @@ public class AgileOnlineDictServiceImpl extends AgileBaseServiceImpl<AgileOnline
             agileOnlineDict.setTableName(null);
             agileOnlineDict.setSystemDictType(null);
             agileOnlineDict.setParentKeyColumnName(null);
-            agileOnlineDict.setParentKeyColumnName(null);
             agileOnlineDict.setKeyColumnName(null);
             agileOnlineDict.setValueColumnName(null);
             agileOnlineDict.setLabelColumnName(null);
             agileOnlineDict.setDictParamJson(null);
+            agileOnlineDict.setDictFilterJson(null);
             return;
         }
     }
