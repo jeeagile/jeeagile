@@ -29,7 +29,7 @@ CREATE TABLE agile_online_form (
   form_name                     varchar(100) NOT NULL COMMENT '表单名称',
   form_type                     varchar(2) NOT NULL COMMENT '表单类型（01:业务表单 02:流程表单）',
   form_status                   varchar(2) NOT NULL COMMENT '表单状态（01:编辑基础信息 02：编辑数据模型 03：表单页面设计）',
-  publish_status                varchar(1) DEFAULT '2' COMMENT '发布状态（1:已发布 2:未发布）',
+  publish_status                varchar(2) DEFAULT '02' COMMENT '发布状态（01:已发布 02:未发布）',
   jdbc_id                       varchar(32) DEFAULT NULL COMMENT '数据源ID',
   remark                        varchar(300) DEFAULT NULL COMMENT '备注',
   create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',

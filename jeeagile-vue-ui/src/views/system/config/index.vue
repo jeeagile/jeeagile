@@ -47,7 +47,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" icon="el-icon-refresh" size="mini" @click="handleClearCache"
-                   v-hasPerm="['system:config:delete']">
+                   v-hasPerm="['system:config:clear']">
           清理缓存
         </el-button>
       </el-col>

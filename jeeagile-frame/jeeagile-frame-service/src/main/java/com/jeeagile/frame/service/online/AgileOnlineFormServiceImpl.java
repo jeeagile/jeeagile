@@ -27,10 +27,10 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
                 lambdaQueryWrapper.like(AgileOnlineForm::getFormName, agileOnlineForm.getFormName());
             }
             if (AgileStringUtil.isNotEmpty(agileOnlineForm.getFormType())) {
-                lambdaQueryWrapper.like(AgileOnlineForm::getFormType, agileOnlineForm.getFormType());
+                lambdaQueryWrapper.eq(AgileOnlineForm::getFormType, agileOnlineForm.getFormType());
             }
             if (AgileStringUtil.isNotEmpty(agileOnlineForm.getPublishStatus())) {
-                lambdaQueryWrapper.like(AgileOnlineForm::getPublishStatus, agileOnlineForm.getPublishStatus());
+                lambdaQueryWrapper.eq(AgileOnlineForm::getPublishStatus, agileOnlineForm.getPublishStatus());
             }
         }
         return lambdaQueryWrapper;
