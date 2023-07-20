@@ -9,19 +9,14 @@ import com.jeeagile.frame.constants.system.SysYesNo;
 import com.jeeagile.frame.entity.online.AgileOnlineDict;
 import com.jeeagile.frame.mapper.online.AgileOnlineDictMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
-import com.jeeagile.frame.service.system.IAgileSysDictDataService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author JeeAgile
- * @date 2021-03-21
- * @description
+ * @date 2021-07-17
+ * @description 在线表单 字典管理 接口实现
  */
 @AgileService
 public class AgileOnlineDictServiceImpl extends AgileBaseServiceImpl<AgileOnlineDictMapper, AgileOnlineDict> implements IAgileOnlineDictService {
-    @Autowired
-    private IAgileSysDictDataService agileSysDictDataService;
-
     @Override
     public LambdaQueryWrapper<AgileOnlineDict> queryWrapper(AgileOnlineDict agileOnlineDict) {
         LambdaQueryWrapper<AgileOnlineDict> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -37,17 +32,17 @@ public class AgileOnlineDictServiceImpl extends AgileBaseServiceImpl<AgileOnline
     }
 
     @Override
-    public void saveModelValidate(AgileOnlineDict AgileOnlineDict) {
-        this.validateData(AgileOnlineDict);
+    public void saveModelValidate(AgileOnlineDict agileOnlineDict) {
+        this.validateData(agileOnlineDict);
     }
 
     @Override
-    public void updateModelValidate(AgileOnlineDict AgileOnlineDict) {
-        this.validateData(AgileOnlineDict);
+    public void updateModelValidate(AgileOnlineDict agileOnlineDict) {
+        this.validateData(agileOnlineDict);
     }
 
     /**
-     * 校验参数名称或参数键名不能与已存在的数据重复
+     * 校验数据
      */
     private void validateData(AgileOnlineDict agileOnlineDict) {
         if (OnlineDictType.TABLE.equals(agileOnlineDict.getDictType())) {

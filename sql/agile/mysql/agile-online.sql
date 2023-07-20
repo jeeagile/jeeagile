@@ -1,4 +1,5 @@
 drop table if exists agile_online_dict;
+drop table if exists agile_online_form;
 
 CREATE TABLE agile_online_dict (
   id                            varchar(32) NOT NULL COMMENT '字典主键ID',
@@ -21,6 +22,25 @@ CREATE TABLE agile_online_dict (
   update_time                   datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (id)
 ) ;
+
+CREATE TABLE agile_online_form (
+  id                            varchar(32) NOT NULL COMMENT '表单主键ID',
+  form_code                     varchar(20) NOT NULL COMMENT '表单编码',
+  form_name                     varchar(100) NOT NULL COMMENT '表单名称',
+  form_type                     varchar(2) NOT NULL COMMENT '表单类型（01:业务表单 02:流程表单）',
+  form_status                   varchar(2) NOT NULL COMMENT '表单状态（01:编辑基础信息 02：编辑数据模型 03：表单页面设计）',
+  publish_status                varchar(1) DEFAULT '2' COMMENT '发布状态（1:已发布 2:未发布）',
+  jdbc_id                       varchar(32) DEFAULT NULL COMMENT '数据源ID',
+  remark                        varchar(300) DEFAULT NULL COMMENT '备注',
+  create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',
+  create_time                   datetime DEFAULT NULL COMMENT '创建时间',
+  update_user                   varchar(32) DEFAULT NULL COMMENT '修改人',
+  update_time                   datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (id)
+)
+alter table agile_online_dict comment '在线表单信息表';
+
+
 
 alter table agile_online_dict comment '字典类型表';
 

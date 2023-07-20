@@ -14,8 +14,10 @@ public class SysYesNo {
      * 是
      */
     public static final String YES = "1";
-
-    private static final Map<String, String> SYS_YES_NO_MAP = new HashMap<>();
+    /**
+     * MAP
+     */
+    private static final Map<String, String> SYS_YES_NO_MAP = new HashMap<>(2);
 
     static {
         SYS_YES_NO_MAP.put(NO, "否");
