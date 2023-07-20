@@ -46,23 +46,8 @@ const SysYesNo = new AgileBaseDict('系统是否', [
   }
 ])
 Vue.prototype.SysYesNo = SysYesNo
-
-const SysPublishStatus = new AgileBaseDict('发布状态', [
-  {
-    value: '01',
-    label: '已发布',
-    symbol: 'PUBLISHED'
-  },
-  {
-    value: '02',
-    label: '未发布',
-    symbol: 'UNPUBLISHED'
-  }
-])
-Vue.prototype.SysPublishStatus = SysPublishStatus
 export {
   SysUserStatus,
   SysUserSex,
-  SysYesNo,
-  SysPublishStatus
+  SysYesNo
 }

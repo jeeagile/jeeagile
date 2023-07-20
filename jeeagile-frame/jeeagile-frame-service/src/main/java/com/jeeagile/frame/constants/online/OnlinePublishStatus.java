@@ -1,4 +1,4 @@
-package com.jeeagile.frame.constants.system;
+package com.jeeagile.frame.constants.online;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,15 +8,15 @@ import java.util.Map;
  * @date 2027-07-17
  * @description 在线表单 发布状态字典常量
  */
-public class SysPublishStatus {
+public class OnlinePublishStatus {
     /**
      * 已发布
      */
-    public static final String PUBLISHED = "01";
+    public static final String PUBLISHED = "1";
     /**
      * 未发布
      */
-    public static final String UNPUBLISHED = "02";
+    public static final String UNPUBLISHED = "2";
 
     /**
      *
@@ -45,6 +45,6 @@ public class SysPublishStatus {
     /**
      * 私有构造函数
      */
-    private SysPublishStatus() {
+    private OnlinePublishStatus() {
     }
 }

@@ -19,41 +19,6 @@ const OnlineDictType = new AgileBaseDict('字典类型', [
   }
 ])
 Vue.prototype.OnlineDictType = OnlineDictType
-
-const OnlineFormStatus = new AgileBaseDict('表单状态', [
-  {
-    value: '01',
-    label: '编辑基础信息',
-    symbol: 'FORM_BASIC'
-  },
-  {
-    value: '02',
-    label: '编辑数据模型',
-    symbol: 'DATA_MODEL'
-  },
-  {
-    value: '03',
-    label: '表单页面设计',
-    symbol: 'PAGE_DESIGN'
-  }
-])
-Vue.prototype.OnlineFormStatus = OnlineFormStatus
-
-const OnlineFormType = new AgileBaseDict('表单类型', [
-  {
-    value: '01',
-    label: '业务表单',
-    symbol: 'BUSINESS'
-  },
-  {
-    value: '02',
-    label: '流程表单',
-    symbol: 'FLOW'
-  }
-])
-Vue.prototype.OnlineFormType = OnlineFormType
-
 export {
-  OnlineDictType,
-  OnlineFormStatus
+  OnlineDictType
 }
