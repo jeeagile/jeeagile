@@ -23,12 +23,12 @@ Vue.prototype.OnlineDictType = OnlineDictType
 const OnlineFormStatus = new AgileBaseDict('表单状态', [
   {
     value: '01',
-    label: '编辑基础信息',
+    label: '表单信息录入',
     symbol: 'FORM_BASIC'
   },
   {
     value: '02',
-    label: '编辑数据模型',
+    label: '数据模型录入',
     symbol: 'DATA_MODEL'
   },
   {

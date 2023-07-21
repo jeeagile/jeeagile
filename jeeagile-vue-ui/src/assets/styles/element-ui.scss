@@ -45,7 +45,25 @@
   }
 }
 
-// to fixed https://github.com/ElemeFE/element/issues/2461
+.el-steps--simple {
+  background: white !important;
+}
+
+.el-container {
+  padding: 0px;
+  margin: 0px;
+}
+
+.el-aside {
+  padding: 0px;
+  margin: 0px;
+}
+
+.el-main {
+  padding: 0px;
+  margin: 0px;
+}
+
 .el-dialog {
   transform: none;
   left: 0;
@@ -61,7 +79,6 @@
   padding: 10px;
 }
 
-// refine element ui upload
 .upload-container {
   .el-upload {
     width: 100%;
@@ -73,19 +90,17 @@
   }
 }
 
-// dropdown
 .el-dropdown-menu {
   a {
     display: block
   }
 }
 
-// fix date-picker ui bug in filter-item
 .el-range-editor.el-input__inner {
   display: inline-flex !important;
 }
 
-// to fix el-date-picker css style
 .el-range-separator {
   box-sizing: content-box;
 }
+

@@ -1,9 +1,13 @@
 package com.jeeagile.frame.service.online;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.constants.online.OnlineFormStatus;
+import com.jeeagile.frame.constants.system.SysPublishStatus;
 import com.jeeagile.frame.entity.online.AgileOnlineForm;
 import com.jeeagile.frame.mapper.online.AgileOnlineFormMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -38,11 +42,16 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
 
     @Override
     public void saveModelValidate(AgileOnlineForm agileOnlineForm) {
+        agileOnlineForm.setFormStatus(OnlineFormStatus.DATA_MODEL);
+        agileOnlineForm.setPublishStatus(SysPublishStatus.UNPUBLISHED);
         this.validateData(agileOnlineForm);
     }
 
     @Override
     public void updateModelValidate(AgileOnlineForm agileOnlineForm) {
+        // 防止对表单状态和发布状态值进行修改
+        agileOnlineForm.setFormStatus(null);
+        agileOnlineForm.setPublishStatus(null);
         this.validateData(agileOnlineForm);
     }
 
@@ -60,5 +69,23 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
         if (this.count(queryWrapper) > 0) {
             throw new AgileValidateException("表单名称或表单编码已存在！");
         }
+    }
+
+    @Override
+    public boolean publish(String id, String publishStatus) {
+        if (!SysPublishStatus.isValid(publishStatus)) {
+            throw new AgileValidateException("非法发布状态值！");
+        }
+        AgileOnlineForm agileOnlineForm = this.getById(id);
+        if (agileOnlineForm == null || AgileStringUtil.isEmpty(agileOnlineForm.getId())) {
+            throw new AgileValidateException("表单已不存在！");
+        }
+        if (SysPublishStatus.PUBLISHED.equals(publishStatus) && !OnlineFormStatus.PAGE_DESIGN.equals(agileOnlineForm.getFormStatus())) {
+            throw new AgileValidateException("表单还处于" + OnlineFormStatus.getDesc(agileOnlineForm.getFormStatus()) + "不能进行发布！");
+        }
+        LambdaUpdateWrapper<AgileOnlineForm> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.set(AgileOnlineForm::getPublishStatus, publishStatus);
+        lambdaUpdateWrapper.eq(AgileOnlineForm::getId, id);
+        return this.update(lambdaUpdateWrapper);
     }
 }

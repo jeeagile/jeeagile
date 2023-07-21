@@ -3,7 +3,7 @@
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="字典名称" prop="dictName">
         <el-input v-model="queryParam.queryCond.dictName" placeholder="请输入字典名称" clearable size="small"
-                  style="width: 240px" @keyup.enter.native="handleQuery"/>
+                  @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="字典类型" prop="dictType">
         <el-select v-model="queryParam.queryCond.dictType" placeholder="字典类型" clearable size="small">
@@ -294,7 +294,7 @@
         multiple: true,
         // 显示搜索条件
         showSearch: true,
-        // 参数表格数据
+        // 字典表格数据
         dictList: [],
         // 弹出层标题
         dialogTitle: '',
@@ -302,7 +302,7 @@
         openDialog: false,
         // 类型数据字典
         flagOptionList: [],
-        // 查询参数
+        // 查询字典
         queryParam: {
           pageTotal: 0,
           pageSize: 10,

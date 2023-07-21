@@ -10,11 +10,11 @@ import java.util.Map;
  */
 public class OnlineFormStatus {
     /**
-     * 编辑基础信息
+     * 表单信息录入
      */
     public static final String FORM_BASIC = "01";
     /**
-     * 编辑数据模型
+     * 数据模型录入
      */
     public static final String DATA_MODEL = "02";
     /**
@@ -28,8 +28,8 @@ public class OnlineFormStatus {
     private static final Map<Object, String> DICT_MAP = new HashMap<>(3);
 
     static {
-        DICT_MAP.put(FORM_BASIC, "编辑基础信息");
-        DICT_MAP.put(DATA_MODEL, "编辑数据模型");
+        DICT_MAP.put(FORM_BASIC, "表单信息录入");
+        DICT_MAP.put(DATA_MODEL, "数据模型录入");
         DICT_MAP.put(PAGE_DESIGN, "表单页面设计");
     }
 

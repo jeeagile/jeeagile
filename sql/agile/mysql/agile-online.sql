@@ -1,6 +1,9 @@
 drop table if exists agile_online_dict;
 drop table if exists agile_online_form;
 
+/*==============================================================*/
+/* table: agile_online_dict 字典类型表                          */
+/*==============================================================*/
 CREATE TABLE agile_online_dict (
   id                            varchar(32) NOT NULL COMMENT '字典主键ID',
   dict_name                     varchar(100) NOT NULL COMMENT '字典名称',
@@ -22,7 +25,11 @@ CREATE TABLE agile_online_dict (
   update_time                   datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (id)
 ) ;
+alter table agile_online_dict comment '字典类型表';
 
+/*==============================================================*/
+/* table: agile_online_form 在线表单信息表                       */
+/*==============================================================*/
 CREATE TABLE agile_online_form (
   id                            varchar(32) NOT NULL COMMENT '表单主键ID',
   form_code                     varchar(20) NOT NULL COMMENT '表单编码',
@@ -37,12 +44,8 @@ CREATE TABLE agile_online_form (
   update_user                   varchar(32) DEFAULT NULL COMMENT '修改人',
   update_time                   datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (id)
-)
-alter table agile_online_dict comment '在线表单信息表';
-
-
-
-alter table agile_online_dict comment '字典类型表';
+);
+alter table agile_online_form comment '在线表单信息表';
 
 INSERT INTO agile_sys_menu VALUES ('5', '0', '在线表单', '5', '', 'online', 'online', 'M', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('501','5','字典管理',1,'online/dict/index','dict','dict','C','0','0','1','online:dict:page','',NULL,NULL,NULL,NULL);

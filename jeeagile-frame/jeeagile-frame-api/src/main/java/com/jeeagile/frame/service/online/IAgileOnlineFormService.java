@@ -9,5 +9,12 @@ import com.jeeagile.frame.service.IAgileBaseService;
  * @description 在线表单 表单信息 接口
  */
 public interface IAgileOnlineFormService extends IAgileBaseService<AgileOnlineForm> {
-
+    /**
+     * 表单发布
+     *
+     * @param id
+     * @param publishStatus
+     * @return
+     */
+    boolean publish(String id, String publishStatus);
 }
