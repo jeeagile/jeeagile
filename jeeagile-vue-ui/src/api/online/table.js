@@ -1,0 +1,26 @@
+import { postApi } from '@/utils/axios'
+
+/**
+ * 查询数据模型列表
+ */
+export const selectOnlineTableList = data => postApi('/online/table/list', data)
+
+/**
+ * 查看数据模型配置
+ */
+export const detailOnlineTable = tableId => postApi('/online/table/detail', tableId)
+
+/**
+ * 新增数据模型配置
+ */
+export const addOnlineTable = data => postApi('/online/table/add', data)
+
+/**
+ * 修改数据模型配置
+ */
+export const updateOnlineTable = data => postApi('/online/table/update', data)
+
+/**
+ * 删除数据模型配置
+ */
+export const deleteOnlineTable = data => postApi('/online/table/delete', data)

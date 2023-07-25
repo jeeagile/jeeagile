@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div v-if="!openForm">
+    <div v-if="!openOnlineForm">
       <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
         <el-form-item label="表单编码" prop="formCode">
           <el-input v-model="queryParam.queryCond.formCode" placeholder="请输入表单编码" clearable size="small"
@@ -54,7 +54,7 @@
         </el-col>
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getOnlineFormList"></right-toolbar>
       </el-row>
-      <el-table v-loading="loading" :data="onlineFormList" @selection-change="handleSelectionChange">
+      <el-table v-loading="formLoading" :data="onlineFormList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center"/>
         <el-table-column label="表单编码" align="center" prop="formCode"/>
         <el-table-column label="表单名称" align="center" prop="formName" :show-overflow-tooltip="true"/>
@@ -115,8 +115,8 @@
         </el-row>
       </el-header>
       <div class="online-form">
-        <el-row type="flex" justify="center" align="middle" style="height: 100%;">
-          <el-col v-if="activeStep === 0" class="online-form-el-col">
+        <el-row type="flex" justify="center" style="height: 100%;">
+          <el-col v-if="activeStep === 0" class="form-basic">
             <el-form ref="onlineForm" :model="onlineForm" :rules="onlineFormRules" label-width="100px">
               <el-form-item label="表单编码" prop="formCode">
                 <el-input v-model="onlineForm.formCode" placeholder="请输入表单编码"/>
@@ -139,6 +139,52 @@
               </el-form-item>
             </el-form>
           </el-col>
+          <el-col v-if="activeStep === 1" class="data-model">
+            <template v-if="columnVisible==false">
+              <el-table v-loading="formLoading" :data="onlineTableList"
+                        header-cell-class-name="table-header-gray" key="formTable">
+                <el-table-column label="数据表名" prop="tableName"/>
+                <el-table-column label="数据表描述" prop="tableLabel" :show-overflow-tooltip="true"/>
+                <el-table-column label="数据表类型" prop="relationType">
+                  <template slot-scope="scope">
+                    <el-tag size="mini" :type="getOnlineTableTypeTag(scope.row.tableType)">
+                      {{OnlineTableType.getLabel(scope.row.tableType)|| '未知类型'}}
+                    </el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="主表关联字段" prop="masterColumnName"/>
+                <el-table-column label="从表关联字段" prop="slaveColumnName"/>
+                <el-table-column label="操作" width="200px">
+                  <template slot-scope="scope">
+                    <el-button size="mini" type="text" @click="editOnlineTable(scope.row)">
+                      编辑
+                    </el-button>
+                    <el-button size="mini" type="text" @click="editOnlineTableColumn(scope.row)">
+                      字段管理
+                    </el-button>
+                    <el-button size="mini" type="text" @click="deleteOnlineTable(scope.row)">
+                      删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-button style="width: 100%;margin-top: 10px" icon="el-icon-plus" @click="addOnlineTable">新增数据表
+              </el-button>
+              <el-dialog :title="onlineTableTitle" :visible.sync="onlineTableDialog" width="700px" append-to-body>
+                <el-form ref="onlineTableForm" :model="onlineTable" :rules="onlineTableRules"
+                         label-width="120px">
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                  <el-button type="primary" @click="submitOnlineTable">确 定</el-button>
+                  <el-button @click="onlineTableDialog=false">取 消</el-button>
+                </div>
+              </el-dialog>
+            </template>
+            <template v-if="columnVisible">
+              <table-column :table-id="editColumnTableId" :table-name="editColumnTableName"
+                            @close="handleTableColumnClose"></table-column>
+            </template>
+          </el-col>
         </el-row>
       </div>
     </div>
@@ -147,23 +193,31 @@
 
 <script>
   import {
-    selectFormPage,
-    detailForm,
-    deleteForm,
-    addForm,
-    updateForm,
-    exportForm,
-    changePublishStatus
+    selectOnlineFormPage,
+    detailOnlineForm,
+    deleteOnlineForm,
+    addOnlineForm,
+    updateOnlineForm,
+    exportOnlineForm,
+    publishOnlineForm
   } from '@/api/online/form'
-  import { SysPublishStatus } from '../../../components/AgileDict/system'
-  import { OnlineFormStatus } from '../../../components/AgileDict/online'
+  import {
+    selectOnlineTableList,
+    detailOnlineTable,
+    deleteOnlineTable,
+    addOnlineTable,
+    updateOnlineTable
+  } from '@/api/online/table'
+  import { SysPublishStatus } from '@/components/AgileDict/system'
+  import { OnlineFormStatus } from '@/components/AgileDict/online'
+  import { OnlineTableType } from '../../../components/AgileDict/online'
 
   export default {
     name: 'Form',
     data() {
       return {
-        // 遮罩层
-        loading: true,
+        // 表单列表遮罩层
+        formLoading: true,
         // 已选择的列表
         selectRowList: [],
         // 非单个禁用
@@ -188,7 +242,7 @@
           }
         },
         // 打开表单页面标识
-        openForm: false,
+        openOnlineForm: false,
         // 表单执行步骤
         activeStep: 0,
         // 字段管理
@@ -197,16 +251,32 @@
         designerVisible: false,
         // 在线表单参数
         onlineForm: {},
+        // 在线表单参数字符串
+        onlineFormStr: undefined,
         // 表单校验
         onlineFormRules: {
           formCode: [
             { required: true, message: '表单编码不能为空', trigger: 'blur' }
           ],
           formName: [
-            { required: true, message: '参数名称不能为空', trigger: 'blur' }
+            { required: true, message: '表单不能为空', trigger: 'blur' }
           ],
           formType: [
             { required: true, message: '表单类型不能为空', trigger: 'blur' }
+          ]
+        },
+        // 数据模型信息
+        onlineTable: {},
+        // 数据表列表
+        onlineTableList: [],
+        // 数据表标题
+        onlineTableTitle: '新增数据表',
+        // 打开数据表模型编辑标识
+        onlineTableDialog: false,
+        // 数据模型表单校验
+        onlineTableRules: {
+          tableName: [
+            { required: true, message: '表单编码不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -215,20 +285,15 @@
       this.getOnlineFormList()
     },
     methods: {
-      /** 查询参数列表 */
+      /** 查询表单列表 */
       getOnlineFormList() {
-        this.loading = true
-        selectFormPage(this.queryParam).then(response => {
+        this.formLoading = true
+        selectOnlineFormPage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
             this.onlineFormList = response.data.records
-            this.loading = false
+            this.formLoading = false
           }
         )
-      },
-      // 取消按钮
-      cancel() {
-        this.openDialog = false
-        this.reset()
       },
       // 表单重置
       resetOnlineForm() {
@@ -276,6 +341,8 @@
           return 'primary'
         case this.OnlineFormStatus.PAGE_DESIGN:
           return 'success'
+        default:
+          return 'warning'
         }
       },
       /** 修改发布状态 */
@@ -292,7 +359,7 @@
           type: 'warning'
         }).then(() => {
           const data = { id: row.id, publishStatus: row.publishStatus }
-          return changePublishStatus(data)
+          return publishOnlineForm(data)
         }).then(() => {
           this.messageSuccess(text + '成功')
         }).catch(() => {
@@ -302,7 +369,7 @@
       /** 新增表单按钮操作 */
       handleAddForm() {
         this.resetOnlineForm()
-        this.openForm = true
+        this.openOnlineForm = true
       },
       // 多选框选中数据
       handleSelectionChange(selection) {
@@ -314,9 +381,10 @@
       handleUpdateForm(row) {
         this.resetOnlineForm()
         row = undefined === row.id ? this.selectRowList[0] : row
-        detailForm(row.id).then(response => {
+        detailOnlineForm(row.id).then(response => {
           this.onlineForm = response.data
-          this.openForm = true
+          this.onlineFormStr = JSON.stringify(this.onlineForm)
+          this.openOnlineForm = true
         })
       },
       /** 上一步 */
@@ -324,21 +392,31 @@
         this.activeStep = this.activeStep - 1
         if (this.activeStep == 1) {
           this.columnVisible = false
+          this.getOnlineTableList()
         }
       },
       /** 下一步 */
       handleNextStep() {
         if (this.activeStep == 0) {
           this.columnVisible = false
-          this.submitOnlineForm()
+          // 判断是否修改过表单基础信息
+          if (JSON.stringify(this.onlineForm) !== this.onlineFormStr) {
+            this.onlineFormStr = JSON.stringify(this.onlineForm)
+            this.submitOnlineForm()
+          }
         }
         this.activeStep = this.activeStep + 1
+        if (this.activeStep == 1) {
+          this.columnVisible = false
+          this.getOnlineTableList()
+        }
         if (this.activeStep == 2) {
           this.designerVisible = false
         }
       },
+      /** 退出表单编辑 */
       handleExitForm() {
-        this.openForm = false
+        this.openOnlineForm = false
         this.getOnlineFormList()
       },
       /** 提交按钮 */
@@ -346,11 +424,11 @@
         this.$refs.onlineForm.validate(valid => {
           if (valid) {
             if (this.onlineForm.id != undefined) {
-              updateForm(this.onlineForm).then(() => {
+              updateOnlineForm(this.onlineForm).then(() => {
                 this.messageSuccess('表单基础信息修改成功')
               })
             } else {
-              addForm(this.onlineForm).then(() => {
+              addOnlineForm(this.onlineForm).then(() => {
                 this.messageSuccess('新增表单基础信息成功')
               })
             }
@@ -360,16 +438,104 @@
       /** 删除按钮操作 */
       handleDeleteForm(row) {
         row = undefined === row.id ? this.selectRowList[0] : row
-        this.$confirm('是否确认删除参数名称为"' + row.formName + '"的数据项?', '警告', {
+        this.$confirm('是否确认删除表单名称为"' + row.formName + '"的数据项?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return deleteForm(row.id)
+          return deleteOnlineForm(row.id)
         }).then(() => {
           this.getOnlineFormList()
           this.messageSuccess('删除成功')
         })
+      },
+      /** 查询表单列表 */
+      getOnlineTableList() {
+        this.formLoading = true
+        this.resetOnlineTable()
+        selectOnlineTableList(this.onlineTable).then(response => {
+            this.onlineTableList = response.data
+            this.formLoading = false
+          }
+        )
+      },
+      /** 设置表单类型标签 */
+      getOnlineTableTypeTag(tableType) {
+        switch (tableType) {
+        case this.OnlineTableType.MASTER:
+          return 'success'
+        case this.OnlineTableType.ONE_TO_ONE:
+          return 'primary'
+        case this.OnlineTableType.ONE_TO_MANY:
+          return 'warning'
+        default:
+          return 'error'
+        }
+      },
+      // 表单重置
+      resetOnlineTable() {
+        this.onlineTable = {
+          id: undefined,
+          formId: this.onlineForm.id,
+          tableName: undefined,
+          tableType: undefined,
+          tableLabel: undefined,
+          masterColumnId: undefined,
+          masterColumnName: undefined,
+          slaveColumnId: undefined,
+          slaveColumnName: undefined
+        }
+        this.resetForm('onlineTable')
+      },
+      /** 新增数据表 */
+      addOnlineTable() {
+        this.resetOnlineTable()
+        if (!this.onlineTableList?.length > 0) {
+          this.onlineTable.tableType = OnlineTableType.MASTER
+        }
+        this.onlineTableDialog = true
+        this.onlineTableTitle = '新增数据表'
+      },
+      /** 编辑数据表 */
+      editOnlineTable(row) {
+        this.resetOnlineTable()
+        detailOnlineTable(row.id).then(response => {
+          this.onlineTable = response.data
+          this.onlineTableDialog = true
+          this.onlineTableTitle = '编辑数据表'
+        })
+      },
+      /** 删除数据表 */
+      deleteOnlineTable(row) {
+        this.$confirm('是否确认删除数据表为"' + row.tableName + '"的数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return deleteOnlineTable(row.id)
+        }).then(() => {
+          this.getOnlineFormList()
+          this.messageSuccess('删除成功')
+        })
+      },
+      /** 提交数据表 */
+      submitOnlineTable() {
+        this.$refs.onlineTable.validate(valid => {
+          if (valid) {
+            if (this.onlineTable.id != undefined) {
+              updateOnlineTable(this.onlineForm).then(() => {
+                this.messageSuccess('数据表信息修改成功')
+              })
+            } else {
+              addOnlineTable(this.onlineForm).then(() => {
+                this.messageSuccess('新增数据表信息成功')
+              })
+            }
+          }
+        })
+      },
+      /** 编辑数据表字段 */
+      editOnlineTableColumn() {
       },
       /** 导出按钮操作 */
       handleExportForm() {
@@ -378,7 +544,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return exportForm(this.queryParam.queryCond)
+          return exportOnlineForm(this.queryParam.queryCond)
         })
       }
     }
@@ -389,12 +555,18 @@
     background: #EBEEF5;
     padding: 10px;
     height: calc(100vh - 165px);
+
+    .form-basic {
+      width: 60%;
+      background: white;
+      padding: 20px;
+    }
+
+    .data-model {
+      width: 99%;
+      background: white;
+    }
   }
 
-  .online-form-el-col {
-    width: 60%;
-    background: white;
-    padding: 20px;
-    position: absolute;
-  }
+
 </style>

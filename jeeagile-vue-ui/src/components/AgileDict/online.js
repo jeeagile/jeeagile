@@ -53,7 +53,28 @@ const OnlineFormType = new AgileBaseDict('表单类型', [
 ])
 Vue.prototype.OnlineFormType = OnlineFormType
 
+const OnlineTableType = new AgileBaseDict('数据表类型', [
+  {
+    value: '01',
+    label: '数据主表',
+    symbol: 'MASTER'
+  },
+  {
+    value: '02',
+    label: '一对一从表',
+    symbol: 'ONE_TO_ONE'
+  },
+  {
+    value: '03',
+    label: '一对多从表',
+    symbol: 'ONE_TO_MANY'
+  }
+])
+Vue.prototype.OnlineTableType = OnlineTableType
+
 export {
   OnlineDictType,
-  OnlineFormStatus
+  OnlineFormStatus,
+  OnlineFormType,
+  OnlineTableType
 }

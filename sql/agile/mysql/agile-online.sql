@@ -47,6 +47,27 @@ CREATE TABLE agile_online_form (
 );
 alter table agile_online_form comment '在线表单信息表';
 
+/*==============================================================*/
+/* table: agile_online_table 在线表单数据表                      */
+/*==============================================================*/
+CREATE TABLE agile_online_table (
+  id                            varchar(32) NOT NULL COMMENT '数据表主键id',
+  form_id                       varchar(32) NOT NULL COMMENT '在线表单主键ID',
+  table_name                    varchar(100) NOT NULL COMMENT '数据表名称',
+  table_label                   varchar(100) NOT NULL COMMENT '数据表描述',
+  table_type                    varchar(2) NOT NULL COMMENT '数据表类型（01:数据主表 02:一对一从表 03:一对多从表）',
+  master_column_id              varchar(32) DEFAULT NULL COMMENT '主表字段ID',
+  master_column_name            varchar(50) DEFAULT NULL COMMENT '主表字段名称',
+  slave_column_id               varchar(32) DEFAULT NULL COMMENT '从表字段ID',
+  slave_column_name             varchar(50) DEFAULT NULL COMMENT '从表字段称',
+  create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',
+  create_time                   datetime DEFAULT NULL COMMENT '创建时间',
+  update_user                   varchar(32) DEFAULT NULL COMMENT '修改人',
+  update_time                   datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (id)
+);
+alter table agile_online_table comment '在线表单数据表';
+
 INSERT INTO agile_sys_menu VALUES ('5', '0', '在线表单', '5', '', 'online', 'online', 'M', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('501','5','字典管理',1,'online/dict/index','dict','dict','C','0','0','1','online:dict:page','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50101','501','字典明细',1,'','','#','F','0','0','1','online:dict:detail','',NULL,NULL,NULL,NULL);

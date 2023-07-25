@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * @author JeeAgile
  * @date 2023-07-13
- * @description 在线表单 字典管理 前端控制器
+ * @description 在线表单 表单信息 前端控制器
  */
 @RestController
 @AgileLogger("表单管理")
