@@ -143,7 +143,7 @@
             <template v-if="columnVisible==false">
               <el-table v-loading="formLoading" :data="onlineTableList"
                         header-cell-class-name="table-header-gray" key="formTable">
-                <el-table-column label="数据表名" prop="tableName" align="center" width="180px"
+                <el-table-column label="数据表名" prop="tableName" align="center" width="200px"
                                  :show-overflow-tooltip="true"/>
                 <el-table-column label="数据表描述" prop="tableLabel" align="center" :show-overflow-tooltip="true"/>
                 <el-table-column label="数据表类型" prop="relationType" align="center">
@@ -297,7 +297,13 @@
         // 数据模型表单校验
         onlineTableRules: {
           tableName: [
-            { required: true, message: '表单编码不能为空', trigger: 'blur' }
+            { required: true, message: '请选择数据表！', trigger: 'blur' }
+          ],
+          tableLabel: [
+            { required: true, message: '数据表描述不能为空！', trigger: 'blur' }
+          ],
+          modelName: [
+            { required: true, message: '数据模型标识不能为空！', trigger: 'blur' }
           ]
         }
       }

@@ -32,19 +32,7 @@ public class AgileOnlineDictServiceImpl extends AgileBaseServiceImpl<AgileOnline
     }
 
     @Override
-    public void saveModelValidate(AgileOnlineDict agileOnlineDict) {
-        this.validateData(agileOnlineDict);
-    }
-
-    @Override
-    public void updateModelValidate(AgileOnlineDict agileOnlineDict) {
-        this.validateData(agileOnlineDict);
-    }
-
-    /**
-     * 校验数据
-     */
-    private void validateData(AgileOnlineDict agileOnlineDict) {
+    public void validateModel(AgileOnlineDict agileOnlineDict) {
         if (OnlineDictType.TABLE.equals(agileOnlineDict.getDictType())) {
             if (AgileStringUtil.isEmpty(agileOnlineDict.getKeyColumnName())) {
                 throw new AgileValidateException("字典表键字段名称不能为空！");

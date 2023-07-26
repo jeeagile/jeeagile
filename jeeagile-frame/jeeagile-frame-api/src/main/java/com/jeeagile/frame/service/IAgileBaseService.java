@@ -115,6 +115,7 @@ public interface IAgileBaseService<T extends AgileModel> extends IService<T> {
      * @return
      */
     default T saveModel(T agileModel) {
+        agileModel.validate();
         this.saveModelValidate(agileModel);
         if (!this.save(agileModel)) {
             throw new AgileFrameException("保存数据失败！");
@@ -137,7 +138,7 @@ public interface IAgileBaseService<T extends AgileModel> extends IService<T> {
      * @param agileModel
      */
     default void validateModel(T agileModel) {
-        agileModel.validate();
+
     }
 
 
@@ -148,6 +149,7 @@ public interface IAgileBaseService<T extends AgileModel> extends IService<T> {
      * @return
      */
     default boolean updateModel(T agileModel) {
+        agileModel.validate();
         this.updateModelValidate(agileModel);
         if (this.updateById(agileModel)) {
             return true;
