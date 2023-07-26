@@ -277,8 +277,6 @@
   import { selectDictTypeList } from '@/api/system/dictType'
   import { selectJdbcTableList, selectTableColumnList } from '@/api/system/jdbc'
   import { selectDictPage, detailDict, deleteDict, addDict, updateDict } from '@/api/online/dict'
-  import { OnlineDictType } from '../../../components/AgileDict/online'
-  import { SysYesNo } from '../../../components/AgileDict/system'
 
   export default {
     name: 'Dict',

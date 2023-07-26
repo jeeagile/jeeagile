@@ -1,5 +1,6 @@
 drop table if exists agile_online_dict;
 drop table if exists agile_online_form;
+drop table if exists agile_online_table;
 
 /*==============================================================*/
 /* table: agile_online_dict 字典类型表                          */
@@ -56,6 +57,7 @@ CREATE TABLE agile_online_table (
   table_name                    varchar(100) NOT NULL COMMENT '数据表名称',
   table_label                   varchar(100) NOT NULL COMMENT '数据表描述',
   table_type                    varchar(2) NOT NULL COMMENT '数据表类型（01:数据主表 02:一对一从表 03:一对多从表）',
+  model_name                    varchar(100) NOT NULL COMMENT '数据模型名称',
   master_column_id              varchar(32) DEFAULT NULL COMMENT '主表字段ID',
   master_column_name            varchar(50) DEFAULT NULL COMMENT '主表字段名称',
   slave_column_id               varchar(32) DEFAULT NULL COMMENT '从表字段ID',

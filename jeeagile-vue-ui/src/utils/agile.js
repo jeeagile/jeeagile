@@ -56,3 +56,12 @@ export function getUuid() {
   const uuid = v4()
   return uuid.replace(/[-]/g, '')
 }
+
+/**
+ *  转驼峰
+ */
+export function toCamelCase(str) {
+  return str.replace(/\_(\w)/g, (all, letter) => {
+    return letter.toUpperCase()
+  })
+}

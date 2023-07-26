@@ -143,18 +143,19 @@
             <template v-if="columnVisible==false">
               <el-table v-loading="formLoading" :data="onlineTableList"
                         header-cell-class-name="table-header-gray" key="formTable">
-                <el-table-column label="数据表名" prop="tableName"/>
-                <el-table-column label="数据表描述" prop="tableLabel" :show-overflow-tooltip="true"/>
-                <el-table-column label="数据表类型" prop="relationType">
+                <el-table-column label="数据表名" prop="tableName" align="center" width="180px"
+                                 :show-overflow-tooltip="true"/>
+                <el-table-column label="数据表描述" prop="tableLabel" align="center" :show-overflow-tooltip="true"/>
+                <el-table-column label="数据表类型" prop="relationType" align="center">
                   <template slot-scope="scope">
                     <el-tag size="mini" :type="getOnlineTableTypeTag(scope.row.tableType)">
                       {{OnlineTableType.getLabel(scope.row.tableType)|| '未知类型'}}
                     </el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column label="主表关联字段" prop="masterColumnName"/>
-                <el-table-column label="从表关联字段" prop="slaveColumnName"/>
-                <el-table-column label="操作" width="200px">
+                <el-table-column label="主表关联字段" prop="masterColumnName" align="center"/>
+                <el-table-column label="从表关联字段" prop="slaveColumnName" align="center"/>
+                <el-table-column label="操作" width="200px" align="center">
                   <template slot-scope="scope">
                     <el-button size="mini" type="text" @click="editOnlineTable(scope.row)">
                       编辑
@@ -171,8 +172,29 @@
               <el-button style="width: 100%;margin-top: 10px" icon="el-icon-plus" @click="addOnlineTable">新增数据表
               </el-button>
               <el-dialog :title="onlineTableTitle" :visible.sync="onlineTableDialog" width="700px" append-to-body>
-                <el-form ref="onlineTableForm" :model="onlineTable" :rules="onlineTableRules"
-                         label-width="120px">
+                <el-form ref="onlineTableForm" :model="onlineTable" :rules="onlineTableRules" label-width="120px">
+                  <template v-if="onlineTable.tableType==OnlineTableType.MASTER">
+                    <el-form-item label="数据主表" prop="tableName">
+                      <el-select v-model="onlineTable.tableName" placeholder="数据主表" clearable style="width: 100%"
+                                 @change="handleOnlineTable">
+                        <el-option
+                          v-for="tableOption in jdbcTableList"
+                          :key="tableOption.tableName"
+                          :label="`${tableOption.tableComment}|${tableOption.tableName}`"
+                          :value="tableOption.tableName"
+                        />
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="数据表描述" prop="tableLabel">
+                      <el-input v-model="onlineTable.tableLabel" placeholder="请输入数据表描述"/>
+                    </el-form-item>
+                    <el-form-item label="数据模型标识" prop="modelName">
+                      <el-input v-model="onlineTable.modelName" placeholder="请输入数据模型标识"/>
+                    </el-form-item>
+                  </template>
+                  <template v-else>
+
+                  </template>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                   <el-button type="primary" @click="submitOnlineTable">确 定</el-button>
@@ -208,9 +230,7 @@
     addOnlineTable,
     updateOnlineTable
   } from '@/api/online/table'
-  import { SysPublishStatus } from '@/components/AgileDict/system'
-  import { OnlineFormStatus } from '@/components/AgileDict/online'
-  import { OnlineTableType } from '../../../components/AgileDict/online'
+  import { selectJdbcTableList } from '@/api/system/jdbc'
 
   export default {
     name: 'Form',
@@ -265,6 +285,7 @@
             { required: true, message: '表单类型不能为空', trigger: 'blur' }
           ]
         },
+        jdbcTableList: [],
         // 数据模型信息
         onlineTable: {},
         // 数据表列表
@@ -302,8 +323,8 @@
           formCode: undefined,
           formName: undefined,
           formType: undefined,
-          formStatus: OnlineFormStatus.FORM_BASIC,
-          publishStatus: SysPublishStatus.UNPUBLISHED,
+          formStatus: this.OnlineFormStatus.FORM_BASIC,
+          publishStatus: this.SysPublishStatus.UNPUBLISHED,
           remark: undefined
         }
         this.activeStep = 0
@@ -347,12 +368,12 @@
       },
       /** 修改发布状态 */
       handlePublishStatus(row) {
-        if (row.publishStatus === SysPublishStatus.PUBLISHED && row.formStatus !== OnlineFormStatus.PAGE_DESIGN) {
-          this.messageWarning('表单还处于' + OnlineFormStatus.getLabel(row.formStatus) + '不能进行发布！')
-          row.publishStatus = row.publishStatus === SysPublishStatus.PUBLISHED ? SysPublishStatus.UNPUBLISHED : SysPublishStatus.PUBLISHED
+        if (row.publishStatus === this.SysPublishStatus.PUBLISHED && row.formStatus !== this.OnlineFormStatus.PAGE_DESIGN) {
+          this.messageWarning('表单还处于' + this.OnlineFormStatus.getLabel(row.formStatus) + '不能进行发布！')
+          row.publishStatus = row.publishStatus === this.SysPublishStatus.PUBLISHED ? this.SysPublishStatus.UNPUBLISHED : this.SysPublishStatus.PUBLISHED
           return
         }
-        let text = row.publishStatus === SysPublishStatus.PUBLISHED ? '发布' : '停用'
+        let text = row.publishStatus === this.SysPublishStatus.PUBLISHED ? '发布' : '停用'
         this.$confirm('确认要' + text + '' + row.formName + '表单吗?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -363,7 +384,7 @@
         }).then(() => {
           this.messageSuccess(text + '成功')
         }).catch(() => {
-          row.publishStatus = row.publishStatus === SysPublishStatus.PUBLISHED ? SysPublishStatus.UNPUBLISHED : SysPublishStatus.PUBLISHED
+          row.publishStatus = row.publishStatus === this.SysPublishStatus.PUBLISHED ? this.SysPublishStatus.UNPUBLISHED : this.SysPublishStatus.PUBLISHED
         })
       },
       /** 新增表单按钮操作 */
@@ -459,6 +480,13 @@
           }
         )
       },
+      /** 查询数据库表列表 */
+      getJdbcTableList() {
+        selectJdbcTableList().then(response => {
+            this.jdbcTableList = response.data
+          }
+        )
+      },
       /** 设置表单类型标签 */
       getOnlineTableTypeTag(tableType) {
         switch (tableType) {
@@ -490,19 +518,32 @@
       /** 新增数据表 */
       addOnlineTable() {
         this.resetOnlineTable()
-        if (!this.onlineTableList?.length > 0) {
-          this.onlineTable.tableType = OnlineTableType.MASTER
+        if (!this.onlineTableList || this.onlineTableList.length == 0) {
+          this.onlineTable.tableType = this.OnlineTableType.MASTER
+          this.onlineTableTitle = '新增数据主表'
+        } else {
+          this.onlineTable.tableType = undefined
+          this.onlineTableTitle = '新增数据从表'
+        }
+        if (this.jdbcTableList) {
+          this.getJdbcTableList()
         }
         this.onlineTableDialog = true
-        this.onlineTableTitle = '新增数据表'
       },
       /** 编辑数据表 */
       editOnlineTable(row) {
         this.resetOnlineTable()
         detailOnlineTable(row.id).then(response => {
           this.onlineTable = response.data
+          if (this.onlineTable.tableType === this.OnlineTableType.MASTER) {
+            this.onlineTableTitle = '编辑数据主表'
+          } else {
+            this.onlineTableTitle = '编辑数据从表'
+          }
+          if (!this.jdbcTableList) {
+            this.getJdbcTableList()
+          }
           this.onlineTableDialog = true
-          this.onlineTableTitle = '编辑数据表'
         })
       },
       /** 删除数据表 */
@@ -514,21 +555,25 @@
         }).then(() => {
           return deleteOnlineTable(row.id)
         }).then(() => {
-          this.getOnlineFormList()
+          this.getOnlineTableList()
           this.messageSuccess('删除成功')
         })
       },
       /** 提交数据表 */
       submitOnlineTable() {
-        this.$refs.onlineTable.validate(valid => {
+        this.$refs.onlineTableForm.validate(valid => {
           if (valid) {
             if (this.onlineTable.id != undefined) {
-              updateOnlineTable(this.onlineForm).then(() => {
+              updateOnlineTable(this.onlineTable).then(() => {
+                this.onlineTableDialog = false
                 this.messageSuccess('数据表信息修改成功')
+                this.getOnlineTableList()
               })
             } else {
-              addOnlineTable(this.onlineForm).then(() => {
+              addOnlineTable(this.onlineTable).then(() => {
+                this.onlineTableDialog = false
                 this.messageSuccess('新增数据表信息成功')
+                this.getOnlineTableList()
               })
             }
           }
@@ -536,6 +581,11 @@
       },
       /** 编辑数据表字段 */
       editOnlineTableColumn() {
+      },
+      handleOnlineTable() {
+        const jdbcTable = this.jdbcTableList.find(item => item.tableName == this.onlineTable.tableName)
+        this.onlineTable.tableLabel = jdbcTable.tableComment
+        this.onlineTable.modelName = this.toCamelCase(jdbcTable.tableName)
       },
       /** 导出按钮操作 */
       handleExportForm() {

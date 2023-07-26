@@ -34,6 +34,10 @@ public class AgileOnlineTable extends AgileBaseTenantModel<AgileOnlineTable> {
      */
     private String tableType;
     /**
+     * 数据模型名称
+     */
+    private String modelName;
+    /**
      * 主表字段ID
      */
     private String masterColumnId;
