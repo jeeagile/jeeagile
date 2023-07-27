@@ -43,6 +43,10 @@ public class AgileOnlineTable extends AgileBaseTenantModel<AgileOnlineTable> {
     @NotNull(message = "数据模型名称不能为空！")
     private String modelName;
     /**
+     * 主表ID
+     */
+    private String masterTableId;
+    /**
      * 主表字段ID
      */
     private String masterColumnId;

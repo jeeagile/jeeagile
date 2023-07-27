@@ -1,20 +1,31 @@
-package com.jeeagile.frame.vo.system;
+package com.jeeagile.frame.entity.online;
 
-import com.jeeagile.frame.vo.AgileBaseVo;
+import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * @author JeeAgile
- * @date 2027-07-17
- * @description 数据源表字段信息
+ * @date 2023-07-27
+ * @description 在线表单 数据表字段
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileJdbcTableColumn extends AgileBaseVo {
+public class AgileOnlineColumn extends AgileBaseTenantModel<AgileOnlineColumn> {
+    /**
+     * 在线表单主键ID
+     */
+    @NotNull(message = "表单ID不能为空！")
+    private String formId;
+    /**
+     * 在线表单主键ID
+     */
+    @NotNull(message = "数据表ID不能为空！")
+    private String tableId;
     /**
      * 字段名称
      */
@@ -33,7 +44,7 @@ public class AgileJdbcTableColumn extends AgileBaseVo {
     /**
      * 字段必填标识（0:否 1:是）
      */
-    @ApiModelProperty(value = "字段必填标识（0:否 1:是）")
+    @ApiModelProperty(value = "是否可空")
     private String columnNullable;
     /**
      * 字段长度
@@ -75,9 +86,35 @@ public class AgileJdbcTableColumn extends AgileBaseVo {
      */
     @ApiModelProperty(value = "主键类型")
     private String primaryType;
+
     /**
-     * JAVA类型
+     * 数据对象字段名称
      */
-    @ApiModelProperty(value = "JAVA类型")
-    private String javaType;
+    @ApiModelProperty(value = "数据对象字段名称")
+    private String fieldName;
+    /**
+     * 数据对象数据类型
+     */
+    @ApiModelProperty(value = "数据对象数据类型")
+    private String fieldType;
+    /**
+     * 数据对象显示标签
+     */
+    @ApiModelProperty(value = "数据对象显示标签")
+    private String fieldLabel;
+    /**
+     * 数据对象过滤类型 01:无过滤 02:普通过滤 03:范围过滤 04:模糊过滤
+     */
+    @ApiModelProperty(value = "数据对象过滤类型")
+    private String filterType;
+    /**
+     * 数据对象字段分类
+     */
+    @ApiModelProperty(value = "数据对象字段分类")
+    private String fieldClassify;
+    /**
+     * 数据对象字典ID
+     */
+    @ApiModelProperty(value = "数据对象字典")
+    private String dictId;
 }

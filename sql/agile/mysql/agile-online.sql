@@ -1,6 +1,7 @@
 drop table if exists agile_online_dict;
 drop table if exists agile_online_form;
 drop table if exists agile_online_table;
+drop table if exists agile_online_column;
 
 /*==============================================================*/
 /* table: agile_online_dict 字典类型表                          */
@@ -58,6 +59,7 @@ CREATE TABLE agile_online_table (
   table_label                   varchar(100) NOT NULL COMMENT '数据表描述',
   table_type                    varchar(2) NOT NULL COMMENT '数据表类型（01:数据主表 02:一对一从表 03:一对多从表）',
   model_name                    varchar(100) NOT NULL COMMENT '数据模型名称',
+  master_table_id               varchar(32) DEFAULT NULL COMMENT '主表ID',
   master_column_id              varchar(32) DEFAULT NULL COMMENT '主表字段ID',
   master_column_name            varchar(50) DEFAULT NULL COMMENT '主表字段名称',
   slave_column_id               varchar(32) DEFAULT NULL COMMENT '从表字段ID',
@@ -69,6 +71,42 @@ CREATE TABLE agile_online_table (
   PRIMARY KEY (id)
 );
 alter table agile_online_table comment '在线表单数据表';
+
+
+
+/*==============================================================*/
+/* table: agile_online_column 在线表单数据表字段                 */
+/*==============================================================*/
+CREATE TABLE agile_online_column (
+  id                            varchar(32) NOT NULL COMMENT '数据表主键id',
+  form_id                       varchar(32) NOT NULL COMMENT '在线表单主键ID',
+  table_id                      varchar(32) NOT NULL COMMENT '在线表单数据表主键',
+  column_name                   varchar(100) NOT NULL COMMENT '字段名称',
+  column_comment                varchar(200) NOT NULL COMMENT '字段描述',
+  column_sort                   int NOT NULL COMMENT '字段排序',
+  column_nullable               char(1) NOT NULL COMMENT '字段必填标识（0:否 1:是）',
+  column_length                 int DEFAULT NULL COMMENT '字段长度',
+  column_precision              int DEFAULT NULL COMMENT '字段精度',
+  column_default                varchar(50) DEFAULT NULL COMMENT '字段默认值',
+  column_extra                  varchar(200) DEFAULT NULL COMMENT '字段扩展',
+  column_type                   varchar(50) NOT NULL COMMENT '字段类型',
+  data_type                     varchar(20) NOT NULL COMMENT '数据类型',
+  primary_flag                  char(1) NOT NULL COMMENT '主键标识（0:否 1:是）',
+  primary_type                  varchar(20) DEFAULT NULL COMMENT '主键类型',
+  field_name                    varchar(100) NOT NULL COMMENT '数据对象数据名称',
+  field_type                    varchar(50) NOT NULL COMMENT '数据对象数据类型',
+  field_label                   varchar(100) NOT NULL COMMENT '数据对象显示标签',
+  field_classify                varchar(2) DEFAULT NULL COMMENT '数据对象字段分类',
+  filter_type                   varchar(2) NOT NULL DEFAULT '01' COMMENT '字段过滤类型',
+  dict_id                       varchar(32) DEFAULT NULL COMMENT '字典ID',
+  create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',
+  create_time                   datetime DEFAULT NULL COMMENT '创建时间',
+  update_user                   varchar(32) DEFAULT NULL COMMENT '修改人',
+  update_time                   datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (id)
+);
+alter table agile_online_column comment '在线表单数据表字段';
+
 
 INSERT INTO agile_sys_menu VALUES ('5', '0', '在线表单', '5', '', 'online', 'online', 'M', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('501','5','字典管理',1,'online/dict/index','dict','dict','C','0','0','1','online:dict:page','',NULL,NULL,NULL,NULL);

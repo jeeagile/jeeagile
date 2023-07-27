@@ -2,15 +2,19 @@ package com.jeeagile.frame.service.online;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.constants.online.OnlineFormStatus;
 import com.jeeagile.frame.constants.system.SysPublishStatus;
+import com.jeeagile.frame.entity.online.AgileOnlineColumn;
 import com.jeeagile.frame.entity.online.AgileOnlineForm;
+import com.jeeagile.frame.entity.online.AgileOnlineTable;
 import com.jeeagile.frame.mapper.online.AgileOnlineFormMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.Serializable;
 
 /**
  * @author JeeAgile
@@ -19,6 +23,11 @@ import com.jeeagile.frame.service.AgileBaseServiceImpl;
  */
 @AgileService
 public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnlineFormMapper, AgileOnlineForm> implements IAgileOnlineFormService {
+
+    @Autowired
+    private IAgileOnlineTableService agileOnlineTableService;
+    @Autowired
+    private IAgileOnlineColumnService agileOnlineColumnService;
 
     @Override
     public LambdaQueryWrapper<AgileOnlineForm> queryWrapper(AgileOnlineForm agileOnlineForm) {
@@ -87,5 +96,34 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
         lambdaUpdateWrapper.set(AgileOnlineForm::getPublishStatus, publishStatus);
         lambdaUpdateWrapper.eq(AgileOnlineForm::getId, id);
         return this.update(lambdaUpdateWrapper);
+    }
+
+    @Override
+    public boolean deleteModel(Serializable id) {
+        this.deleteOnlineTable(id);
+        this.deleteOnlineColumn(id);
+        return this.removeById(id);
+    }
+
+    /**
+     * 删除在线表单数据表
+     *
+     * @param formId
+     */
+    private void deleteOnlineTable(Serializable formId) {
+        LambdaQueryWrapper<AgileOnlineTable> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileOnlineTable::getFormId, formId);
+        agileOnlineTableService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 删除在线表单数据表字段
+     *
+     * @param formId
+     */
+    private void deleteOnlineColumn(Serializable formId) {
+        LambdaQueryWrapper<AgileOnlineColumn> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileOnlineColumn::getFormId, formId);
+        agileOnlineColumnService.remove(lambdaQueryWrapper);
     }
 }

@@ -18,12 +18,12 @@ import java.util.List;
 @AgileService
 public class AgileSysJdbcServiceImpl extends AgileBaseServiceImpl<AgileSysJdbcMapper, AgileSysJdbc> implements IAgileSysJdbcService {
     @Override
-    public List<AgileJdbcTable> selectTableList(String id) {
+    public List<AgileJdbcTable> selectTableList() {
         return this.baseMapper.getTableList();
     }
 
     @Override
-    public List<AgileJdbcTableColumn> selectTableColumnList(String id, String tableName) {
+    public List<AgileJdbcTableColumn> selectTableColumnList(String tableName) {
         List<AgileJdbcTableColumn> agileJdbcTableColumnList = this.baseMapper.getTableColumnList(tableName);
         agileJdbcTableColumnList.forEach(agileJdbcTableColumn -> {
             agileJdbcTableColumn.setColumnComment(this.handleColumnComment(agileJdbcTableColumn.getColumnComment()));
@@ -32,6 +32,12 @@ public class AgileSysJdbcServiceImpl extends AgileBaseServiceImpl<AgileSysJdbcMa
         return agileJdbcTableColumnList;
     }
 
+    /**
+     * 处理字段描述
+     *
+     * @param columnComment
+     * @return
+     */
     private String handleColumnComment(String columnComment) {
         if (StringUtils.indexOf(columnComment, "（") > 0) {
             columnComment = StringUtils.substringBefore(columnComment, "（");

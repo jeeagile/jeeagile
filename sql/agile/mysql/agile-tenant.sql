@@ -166,3 +166,9 @@ ALTER TABLE `agile_online_table`
 ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `slave_column_name`;
 
 update `agile_online_table` set tenant_id='jeeagile';
+
+
+ALTER TABLE `agile_online_column`
+ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `dict_id`;
+
+update `agile_online_column` set tenant_id='jeeagile';

@@ -193,7 +193,91 @@
                     </el-form-item>
                   </template>
                   <template v-else>
-
+                    <el-row>
+                      <el-col :span="12">
+                        <el-form-item label="数据从表:" prop="tableName">
+                          <el-select v-model="onlineTable.tableName" placeholder="数据从表" clearable style="width: 100%"
+                                     @change="handleOnlineTable">
+                            <el-option
+                              v-for="tableOption in jdbcTableList"
+                              :key="tableOption.tableName"
+                              :label="`${tableOption.tableComment}|${tableOption.tableName}`"
+                              :value="tableOption.tableName"
+                            />
+                          </el-select>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="12">
+                        <el-form-item label="从表类型:" prop="tableType">
+                          <el-select v-model="onlineTable.tableType" size="small" style="width: 100%">
+                            <el-option
+                              v-for="tableTypeOption in OnlineTableType.getList().filter(item => item.value!==OnlineTableType.MASTER)"
+                              :key="tableTypeOption.value"
+                              :label="tableTypeOption.label"
+                              :value="tableTypeOption.value"
+                            />
+                          </el-select>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="12">
+                        <el-form-item label="数据表描述:" prop="tableLabel">
+                          <el-input v-model="onlineTable.tableLabel" placeholder="请输入数据表描述"/>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="12">
+                        <el-form-item label="数据模型标识:" prop="modelName">
+                          <el-input v-model="onlineTable.modelName" placeholder="请输入数据模型标识"/>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="12">
+                        <el-form-item label="主表关联字段:" prop="masterColumnId">
+                          <el-select v-model="onlineTable.masterColumnId" size="small" style="width: 100%">
+                            <el-option
+                              v-for="tableColumnOption in masterTableColumnList"
+                              :key="tableColumnOption.id"
+                              :label="`${tableColumnOption.columnComment}|${tableColumnOption.columnName}`"
+                              :value="tableColumnOption.id"
+                            />
+                          </el-select>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="12">
+                        <el-form-item label="从表关联字段:" prop="slaveColumnName">
+                          <el-select v-model="onlineTable.slaveColumnName" size="small" style="width: 100%">
+                            <el-option
+                              v-for="tableColumnOption in slaveTableColumnList"
+                              :key="tableColumnOption.columnName"
+                              :label="`${tableColumnOption.columnComment}|${tableColumnOption.columnName}`"
+                              :value="tableColumnOption.columnName"
+                            />
+                          </el-select>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="12">
+                        <el-form-item label="是否级联删除:" prop="cascadeDelete">
+                          <el-switch
+                            v-model="onlineTable.cascadeDelete"
+                            active-value="1"
+                            inactive-value="0"
+                          ></el-switch>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="12">
+                        <el-form-item label="是否左关联:" prop="leftJoin">
+                          <el-switch
+                            v-model="onlineTable.leftJoin"
+                            active-value="1"
+                            inactive-value="0"
+                          ></el-switch>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
                   </template>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -230,7 +314,9 @@
     addOnlineTable,
     updateOnlineTable
   } from '@/api/online/table'
-  import { selectJdbcTableList } from '@/api/system/jdbc'
+  import { selectJdbcTableList, selectTableColumnList } from '@/api/system/jdbc'
+  import { selectOnlineColumnList } from '@/api/online/column'
+  import { OnlineTableType } from '../../../components/AgileDict/online'
 
   export default {
     name: 'Form',
@@ -302,10 +388,22 @@
           tableLabel: [
             { required: true, message: '数据表描述不能为空！', trigger: 'blur' }
           ],
+          tableType: [
+            { required: true, message: '从表类型不能为空！', trigger: 'blur' }
+          ],
           modelName: [
             { required: true, message: '数据模型标识不能为空！', trigger: 'blur' }
+          ],
+          masterColumnId: [
+            { required: true, message: '主表关联字段不能为空！', trigger: 'blur' }
+          ],
+          slaveColumnName: [
+            { required: true, message: '从表关联字段不能为空！', trigger: 'blur' }
           ]
-        }
+        },
+        masterOnlineTable: undefined,
+        masterTableColumnList: [],
+        slaveTableColumnList: []
       }
     },
     created() {
@@ -433,10 +531,6 @@
           }
         }
         this.activeStep = this.activeStep + 1
-        if (this.activeStep == 1) {
-          this.columnVisible = false
-          this.getOnlineTableList()
-        }
         if (this.activeStep == 2) {
           this.designerVisible = false
         }
@@ -452,10 +546,15 @@
           if (valid) {
             if (this.onlineForm.id != undefined) {
               updateOnlineForm(this.onlineForm).then(() => {
+                this.getOnlineFormList()
+                this.getOnlineTableList()
                 this.messageSuccess('表单基础信息修改成功')
               })
             } else {
-              addOnlineForm(this.onlineForm).then(() => {
+              addOnlineForm(this.onlineForm).then(response => {
+                this.onlineForm = response.data
+                this.onlineFormStr = JSON.stringify(this.onlineForm)
+                this.getOnlineFormList()
                 this.messageSuccess('新增表单基础信息成功')
               })
             }
@@ -482,6 +581,7 @@
         this.resetOnlineTable()
         selectOnlineTableList(this.onlineTable).then(response => {
             this.onlineTableList = response.data
+            this.masterOnlineTable = this.onlineTableList.find(item => item.tableType == this.OnlineTableType.MASTER)
             this.formLoading = false
           }
         )
@@ -492,6 +592,19 @@
             this.jdbcTableList = response.data
           }
         )
+      },
+      /** 查询主表字段列表 */
+      getMasterTableColumnList(tableId) {
+        selectOnlineColumnList({ formId: this.onlineTable.formId, tableId: tableId }).then(response => {
+            this.masterTableColumnList = response.data
+          }
+        )
+      },
+      /** 查询从表字段列表 */
+      getSlaveTableColumnList(tableName) {
+        selectTableColumnList(tableName).then(response => {
+          this.slaveTableColumnList = response.data
+        })
       },
       /** 设置表单类型标签 */
       getOnlineTableTypeTag(tableType) {
@@ -514,6 +627,7 @@
           tableName: undefined,
           tableType: undefined,
           tableLabel: undefined,
+          masterTableId: undefined,
           masterColumnId: undefined,
           masterColumnName: undefined,
           slaveColumnId: undefined,
@@ -530,6 +644,10 @@
         } else {
           this.onlineTable.tableType = undefined
           this.onlineTableTitle = '新增数据从表'
+          this.onlineTable.masterTableId = this.masterOnlineTable.id
+          if (this.masterTableColumnList) {
+            this.getMasterTableColumnList(this.onlineTable.masterTableId)
+          }
         }
         if (this.jdbcTableList) {
           this.getJdbcTableList()
@@ -545,8 +663,12 @@
             this.onlineTableTitle = '编辑数据主表'
           } else {
             this.onlineTableTitle = '编辑数据从表'
+            if (this.masterTableColumnList) {
+              this.getMasterTableColumnList(this.onlineTable.masterTableId)
+            }
+            this.getSlaveTableColumnList(this.onlineTable.tableName)
           }
-          if (!this.jdbcTableList) {
+          if (this.jdbcTableList) {
             this.getJdbcTableList()
           }
           this.onlineTableDialog = true
@@ -569,6 +691,9 @@
       submitOnlineTable() {
         this.$refs.onlineTableForm.validate(valid => {
           if (valid) {
+            if (this.onlineTable.tableType != OnlineTableType.MASTER) {
+              this.onlineTable.masterColumnName = this.masterTableColumnList.find(item => item.id == this.onlineTable.masterColumnId)?.columnName
+            }
             if (this.onlineTable.id != undefined) {
               updateOnlineTable(this.onlineTable).then(() => {
                 this.onlineTableDialog = false
@@ -589,9 +714,12 @@
       editOnlineTableColumn() {
       },
       handleOnlineTable() {
-        const jdbcTable = this.jdbcTableList.find(item => item.tableName == this.onlineTable.tableName)
-        this.onlineTable.tableLabel = jdbcTable.tableComment
-        this.onlineTable.modelName = this.toCamelCase(jdbcTable.tableName)
+        this.onlineTable.modelName = this.toCamelCase(this.onlineTable.tableName)
+        this.onlineTable.tableLabel = this.jdbcTableList.find(item => item.tableName == this.onlineTable.tableName)?.tableComment
+        if (this.onlineTable.tableType != OnlineTableType.MASTER) {
+          this.getSlaveTableColumnList(this.onlineTable.tableName)
+          this.onlineTable.slaveColumnName = undefined
+        }
       },
       /** 导出按钮操作 */
       handleExportForm() {
