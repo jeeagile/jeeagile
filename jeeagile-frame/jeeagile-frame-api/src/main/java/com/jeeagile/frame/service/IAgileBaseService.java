@@ -117,10 +117,39 @@ public interface IAgileBaseService<T extends AgileModel> extends IService<T> {
     default T saveModel(T agileModel) {
         agileModel.validate();
         this.saveModelValidate(agileModel);
+        this.saveModelBefore(agileModel);
         if (!this.save(agileModel)) {
-            throw new AgileFrameException("保存数据失败！");
+            this.saveModelException(agileModel);
         }
+        this.saveModelAfter(agileModel);
         return agileModel;
+    }
+
+    /**
+     * 保存前处理
+     *
+     * @param agileModel
+     */
+    default void saveModelBefore(T agileModel) {
+        // default method ignored
+    }
+
+    /**
+     * 保存后处理
+     *
+     * @param agileModel
+     */
+    default void saveModelAfter(T agileModel) {
+        // default method ignored
+    }
+
+    /**
+     * 保存异常处理
+     *
+     * @param agileModel
+     */
+    default void saveModelException(T agileModel) {
+        throw new AgileFrameException("保存数据失败！");
     }
 
     /**
@@ -138,7 +167,7 @@ public interface IAgileBaseService<T extends AgileModel> extends IService<T> {
      * @param agileModel
      */
     default void validateModel(T agileModel) {
-
+        // default method ignored
     }
 
 
@@ -151,10 +180,9 @@ public interface IAgileBaseService<T extends AgileModel> extends IService<T> {
     default boolean updateModel(T agileModel) {
         agileModel.validate();
         this.updateModelValidate(agileModel);
-        if (this.updateById(agileModel)) {
-            return true;
-        }
-        return false;
+        this.updateModelBefore(agileModel);
+        boolean updateFlag = this.updateById(agileModel);
+        return this.updateModelAfter(agileModel, updateFlag);
     }
 
     /**
@@ -164,6 +192,24 @@ public interface IAgileBaseService<T extends AgileModel> extends IService<T> {
      */
     default void updateModelValidate(T agileModel) {
         this.validateModel(agileModel);
+    }
+
+    /**
+     * 更新前处理
+     *
+     * @param agileModel
+     */
+    default void updateModelBefore(T agileModel) {
+        // default method ignored
+    }
+
+    /**
+     * 更新后处理
+     *
+     * @param agileModel
+     */
+    default boolean updateModelAfter(T agileModel, boolean updateFlag) {
+        return updateFlag;
     }
 
     /**
