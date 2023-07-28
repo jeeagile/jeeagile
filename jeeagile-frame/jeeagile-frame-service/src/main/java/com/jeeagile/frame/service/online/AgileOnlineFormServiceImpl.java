@@ -99,6 +99,17 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
     }
 
     @Override
+    public boolean changeFormStatus(String id, String formStatus) {
+        if (!OnlineFormStatus.isValid(formStatus)) {
+            throw new AgileValidateException("非法表单状态值！");
+        }
+        LambdaUpdateWrapper<AgileOnlineForm> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.set(AgileOnlineForm::getFormStatus, formStatus);
+        lambdaUpdateWrapper.eq(AgileOnlineForm::getId, id);
+        return this.update(lambdaUpdateWrapper);
+    }
+
+    @Override
     public boolean deleteModel(Serializable id) {
         this.deleteOnlineTable(id);
         this.deleteOnlineColumn(id);

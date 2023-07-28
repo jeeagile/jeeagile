@@ -72,9 +72,80 @@ const OnlineTableType = new AgileBaseDict('数据表类型', [
 ])
 Vue.prototype.OnlineTableType = OnlineTableType
 
+const OnlineFilterType = new AgileBaseDict('字段过滤类型', [
+  {
+    value: '01',
+    label: '无过滤',
+    symbol: 'NONE'
+  },
+  {
+    value: '02',
+    label: '普通过滤',
+    symbol: 'EQUAL'
+  },
+  {
+    value: '03',
+    label: '范围过滤',
+    symbol: 'RANGE'
+  },
+  {
+    value: '04',
+    label: '模糊过滤',
+    symbol: 'LIKE'
+  }
+])
+Vue.prototype.OnlineFilterType = OnlineFilterType
+
+const OnlineFieldClassify = new AgileBaseDict('字段分类', [
+  {
+    value: '01',
+    label: '文件上传字段',
+    symbol: 'UPLOAD_FILE'
+  },
+  {
+    value: '02',
+    label: '图片上传字段',
+    symbol: 'UPLOAD_IMAGE'
+  },
+  {
+    value: '03',
+    label: '富文本字段',
+    symbol: 'RICH_TEXT'
+  },
+  {
+    value: '04',
+    label: '创建人字段',
+    symbol: 'CREATE_USER'
+  },
+  {
+    value: '05',
+    label: '创建时间字段',
+    symbol: 'CREATE_TIME'
+  },
+  {
+    value: '06',
+    label: '更新人字段',
+    symbol: 'UPDATE_USER'
+  },
+  {
+    value: '07',
+    label: '更新时间字段',
+    symbol: 'UPDATE_TIME'
+  },
+  {
+    value: '08',
+    label: '逻辑删除字段',
+    symbol: 'LOGIC_DELETE'
+  }
+])
+Vue.prototype.OnlineFieldClassify = OnlineFieldClassify
+
+
 export {
   OnlineDictType,
   OnlineFormStatus,
   OnlineFormType,
-  OnlineTableType
+  OnlineTableType,
+  OnlineFilterType,
+  OnlineFieldClassify
 }

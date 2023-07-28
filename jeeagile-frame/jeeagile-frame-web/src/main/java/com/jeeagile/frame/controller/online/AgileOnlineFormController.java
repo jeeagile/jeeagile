@@ -29,8 +29,14 @@ import java.util.List;
 public class AgileOnlineFormController extends AgileCrudController<IAgileOnlineFormService, AgileOnlineForm> {
     @PostMapping(value = "/publish")
     @ApiOperation(value = "表单发布", notes = "表单发布")
-    public AgileResult<List<AgileJdbcTable>> selectTableList(@SingleRequestBody String id, @SingleRequestBody String publishStatus) {
+    public AgileResult<List<AgileJdbcTable>> publish(@SingleRequestBody String id, @SingleRequestBody String publishStatus) {
         return this.success(agileService.publish(id, publishStatus));
+    }
+
+    @PostMapping(value = "/changeFormStatus")
+    @ApiOperation(value = "修改表单状态", notes = "修改表单状态")
+    public AgileResult<List<AgileJdbcTable>> changeFormStatus(@SingleRequestBody String id, @SingleRequestBody String formStatus) {
+        return this.success(agileService.changeFormStatus(id, formStatus));
     }
 
 }

@@ -17,4 +17,13 @@ public interface IAgileOnlineFormService extends IAgileBaseService<AgileOnlineFo
      * @return
      */
     boolean publish(String id, String publishStatus);
+
+    /**
+     * 修改表单状态
+     *
+     * @param id
+     * @param formStatus
+     * @return
+     */
+    boolean changeFormStatus(String id, String formStatus);
 }

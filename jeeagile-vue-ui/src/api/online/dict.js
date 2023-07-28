@@ -6,6 +6,11 @@ import { postApi } from '@/utils/axios'
 export const selectDictPage = data => postApi('/online/dict/page', data)
 
 /**
+ * 查询字典列表
+ */
+export const selectDictList = data => postApi('/online/dict/list', data)
+
+/**
  * 查看字典配置
  */
 export const detailDict = dictId => postApi('/online/dict/detail', dictId)

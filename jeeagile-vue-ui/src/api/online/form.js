@@ -29,3 +29,8 @@ export const deleteOnlineForm = data => postApi('/online/form/delete', data)
  * 修改发布状态
  */
 export const publishOnlineForm = data => postApi('/online/form/publish', data)
+
+/**
+ * 修改表单状态
+ */
+export const changeFormStatus = data => postApi('/online/form/changeFormStatus', data)
