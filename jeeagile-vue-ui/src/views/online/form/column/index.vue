@@ -17,18 +17,18 @@
           </el-dropdown>
         </div>
         <el-scrollbar style="height:calc(100vh - 160px)">
-          <div v-for="onlineColumnOption in getOnlineTableColumnList" :key="onlineColumnOption.id"
-               class="table-column-item" :class="{'active-column': onlineColumn === onlineColumnOption}"
-               :title="onlineColumnOption.columnComment"
-               @click.stop="handleOnlineColumn(onlineColumnOption)"
+          <div v-for="column in getOnlineTableColumnList" :key="column.id"
+               class="table-column-item" :class="{'active-column': column === onlineColumn}"
+               :title="column.columnComment"
+               @click.stop="handleOnlineColumn(column)"
           >
             <div>
-              <span style="margin-right: 10px;">{{onlineColumnOption.columnName}}</span>
-              <el-tag v-if="onlineColumnOption.deletedFlag" size="mini" type="danger">已删除</el-tag>
+              <span style="margin-right: 10px;">{{column.columnName}}</span>
+              <el-tag v-if="column.deletedFlag" size="mini" type="danger">已删除</el-tag>
             </div>
             <div class="refresh" style="margin-left: 10px;">
               <el-button class="table-btn success" size="mini" type="text" v-if="getAddOnlineColumnList.length <= 0"
-                         @click.stop="refreshOnlineColumn(tableColumn, tableColumn)"
+                         @click.stop="refreshOnlineColumn(column, column)"
               >
                 刷新
               </el-button>
@@ -37,15 +37,15 @@
                   刷新
                 </el-button>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="addTableColumn in getAddOnlineColumnList" :key="addTableColumn.columnName"
-                                    :command="{onlineColumnOption, addTableColumn}">
-                    {{addTableColumn.columnName}}
+                  <el-dropdown-item v-for="newColumn in getAddOnlineColumnList" :key="newColumn.columnName"
+                                    :command="{column, newColumn}">
+                    {{newColumn.columnName}}
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-button v-if="onlineColumnOption.deletedFlag" class="table-btn delete" size="mini" type="text"
+              <el-button v-if="column.deletedFlag" class="table-btn delete" size="mini" type="text"
                          style="margin-left: 10px;"
-                         @click.stop="deleteOnlineColumn(onlineColumnOption)"
+                         @click.stop="deleteOnlineColumn(column)"
               >
                 删除
               </el-button>
@@ -57,7 +57,7 @@
         <div class="title">
           <span>字段属性</span>
           <div style="float: right">
-            <el-button size="mini" type="text" icon="el-icon-check">保存</el-button>
+            <el-button size="mini" type="text" icon="el-icon-check" @click="saveOnlineColumn">保存</el-button>
             <el-button size="mini" type="text" icon="el-icon-back" style="color: #67C23A;" @click="handleBack">返回
             </el-button>
           </div>
@@ -139,8 +139,10 @@
 </template>
 <script>
   import { selectTableColumnList } from '@/api/system/jdbc'
-  import { selectOnlineColumnList, deleteOnlineColumn } from '@/api/online/column'
   import { selectDictList } from '@/api/online/dict'
+  import { selectOnlineColumnList, updateOnlineColumn, deleteOnlineColumn } from '@/api/online/column'
+  import { addOnlineColumn, refreshOnlineColumn } from '@/api/online/table'
+
 
   export default {
     name: 'TableColumn',
@@ -254,7 +256,16 @@
         }
       },
       /** 新增字段 */
-      addNewOnlineColumn() {
+      addNewOnlineColumn(newOnlineColumn) {
+        const onlineColumn = {
+          formId: this.formId,
+          tableId: this.tableId,
+          columnName: newOnlineColumn.columnName
+        }
+        addOnlineColumn(onlineColumn).then(response => {
+          this.messageSuccess('表字段添加成功！')
+          this.getOnlineColumnList()
+        })
       },
       /** 删除字段 */
       deleteOnlineColumn(onlineColumn) {
@@ -270,10 +281,16 @@
         })
       },
       /** 刷新字段 */
-      refreshOnlineColumn() {
+      refreshOnlineColumn(onlineColumn, newOnlineColumn) {
+        onlineColumn.columnName = newOnlineColumn.columnName
+        refreshOnlineColumn(onlineColumn).then(response => {
+          this.messageSuccess('表字段刷新成功！')
+          this.getOnlineColumnList()
+        })
       },
       /** 刷新新增字段 */
-      refreshNewOnlineColumn() {
+      refreshNewOnlineColumn(command) {
+        this.refreshOnlineColumn(command.column, command.newColumn)
       },
       /** 新增字段验证规则 */
       addOnlineColumnRule() {
@@ -287,6 +304,17 @@
       deleteOnlineColumnRule() {
 
       },
+      /** 保存字段信息 */
+      saveOnlineColumn() {
+        this.$refs.onlineColumnForm.validate(valid => {
+          if (valid) {
+            updateOnlineColumn(this.onlineColumn).then(response => {
+              this.messageSuccess('表字段信息保存成功！')
+            })
+          }
+        })
+      },
+      /** 返回 */
       handleBack() {
         this.$emit('close')
       }

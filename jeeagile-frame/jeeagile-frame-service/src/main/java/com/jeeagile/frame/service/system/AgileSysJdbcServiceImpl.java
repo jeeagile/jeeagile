@@ -32,6 +32,14 @@ public class AgileSysJdbcServiceImpl extends AgileBaseServiceImpl<AgileSysJdbcMa
         return agileJdbcTableColumnList;
     }
 
+    @Override
+    public AgileJdbcTableColumn selectTableColumn(String tableName, String columnName) {
+        AgileJdbcTableColumn agileJdbcTableColumn = this.baseMapper.getTableColumn(tableName, columnName);
+        agileJdbcTableColumn.setColumnComment(this.handleColumnComment(agileJdbcTableColumn.getColumnComment()));
+        agileJdbcTableColumn.setJavaType(this.convertToJavaType(agileJdbcTableColumn.getDataType()));
+        return agileJdbcTableColumn;
+    }
+
     /**
      * 处理字段描述
      *

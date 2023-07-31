@@ -24,3 +24,13 @@ export const updateOnlineTable = data => postApi('/online/table/update', data)
  * 删除数据模型配置
  */
 export const deleteOnlineTable = data => postApi('/online/table/delete', data)
+
+/**
+ * 添加表字段
+ */
+export const addOnlineColumn = data => postApi('/online/table/addOnlineColumn', data)
+
+/**
+ * 刷新表字段
+ */
+export const refreshOnlineColumn = data => postApi('/online/table/refreshOnlineColumn', data)

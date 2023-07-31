@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.entity.online.AgileOnlineColumn;
 import com.jeeagile.frame.mapper.online.AgileOnlineColumnMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -29,5 +30,17 @@ public class AgileOnlineColumnServiceImpl extends AgileBaseServiceImpl<AgileOnli
         lambdaQueryWrapper.eq(AgileOnlineColumn::getTableId, agileOnlineColumn.getTableId());
         lambdaQueryWrapper.orderByAsc(AgileOnlineColumn::getColumnSort);
         return lambdaQueryWrapper;
+    }
+    @Override
+    public boolean updateModel(AgileOnlineColumn agileOnlineColumn) {
+        AgileOnlineColumn oldOnlineColumn = this.getById(agileOnlineColumn.getId());
+        if (oldOnlineColumn == null || AgileStringUtil.isEmpty(oldOnlineColumn.getId())) {
+            throw new AgileValidateException("字段已不存在无法更新!");
+        }
+        oldOnlineColumn.setFilterType(agileOnlineColumn.getFilterType());
+        oldOnlineColumn.setFieldLabel(agileOnlineColumn.getFieldLabel());
+        oldOnlineColumn.setDictId(agileOnlineColumn.getDictId());
+        oldOnlineColumn.setFieldClassify(agileOnlineColumn.getFieldClassify());
+        return this.updateById(oldOnlineColumn);
     }
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.constants.online.OnlineFieldClassify;
 import com.jeeagile.frame.constants.online.OnlineTableType;
 import com.jeeagile.frame.entity.online.AgileOnlineColumn;
@@ -47,14 +48,7 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
         agileOnlineTable.setId(AgileStringUtil.getUuid());
         List<AgileJdbcTableColumn> agileJdbcTableColumnList = this.agileSysJdbcService.selectTableColumnList(agileOnlineTable.getTableName());
         agileJdbcTableColumnList.forEach(agileJdbcTableColumn -> {
-            AgileOnlineColumn agileOnlineColumn = new AgileOnlineColumn();
-            BeanUtils.copyProperties(agileJdbcTableColumn, agileOnlineColumn);
-            agileOnlineColumn.setFormId(agileOnlineTable.getFormId());
-            agileOnlineColumn.setTableId(agileOnlineTable.getId());
-            agileOnlineColumn.setFieldName(AgileStringUtil.toCamelCase(agileJdbcTableColumn.getColumnName()));
-            agileOnlineColumn.setFieldLabel(agileJdbcTableColumn.getColumnComment());
-            agileOnlineColumn.setFieldType(agileJdbcTableColumn.getJavaType());
-            agileOnlineColumn.setFieldClassify(OnlineFieldClassify.convertFieldClassify(agileJdbcTableColumn.getColumnName()));
+            AgileOnlineColumn agileOnlineColumn = handleAgileOnlineColumn(agileOnlineTable, agileJdbcTableColumn);
             agileOnlineColumnService.saveModel(agileOnlineColumn);
             if (!OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
                 if (agileOnlineTable.getSlaveColumnName().equals(agileOnlineColumn.getColumnName())) {
@@ -62,6 +56,23 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
                 }
             }
         });
+    }
+
+    /**
+     * @param agileOnlineTable
+     * @param agileJdbcTableColumn
+     * @return
+     */
+    private AgileOnlineColumn handleAgileOnlineColumn(AgileOnlineTable agileOnlineTable, AgileJdbcTableColumn agileJdbcTableColumn) {
+        AgileOnlineColumn agileOnlineColumn = new AgileOnlineColumn();
+        BeanUtils.copyProperties(agileJdbcTableColumn, agileOnlineColumn);
+        agileOnlineColumn.setFormId(agileOnlineTable.getFormId());
+        agileOnlineColumn.setTableId(agileOnlineTable.getId());
+        agileOnlineColumn.setFieldName(AgileStringUtil.toCamelCase(agileJdbcTableColumn.getColumnName()));
+        agileOnlineColumn.setFieldLabel(agileJdbcTableColumn.getColumnComment());
+        agileOnlineColumn.setFieldType(agileJdbcTableColumn.getJavaType());
+        agileOnlineColumn.setFieldClassify(OnlineFieldClassify.convertFieldClassify(agileJdbcTableColumn.getColumnName()));
+        return agileOnlineColumn;
     }
 
     @Override
@@ -109,10 +120,47 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
             if (AgileStringUtil.isEmpty(agileOnlineTable.getMasterColumnName())) {
                 throw new AgileValidateException("主表字段名称不能为空！");
             }
-            // todo 根据字段ID获取字典信息校验字段名称是否正确
             if (AgileStringUtil.isEmpty(agileOnlineTable.getSlaveColumnName())) {
                 throw new AgileValidateException("从表字段名称不能为空！");
             }
         }
+    }
+
+    @Override
+    public AgileOnlineColumn addOnlineColumn(AgileOnlineColumn agileOnlineColumn) {
+        AgileValidateUtil.validateObject(agileOnlineColumn);
+        agileOnlineColumn = getAgileOnlineColumn(agileOnlineColumn.getTableId(), agileOnlineColumn.getColumnName());
+        agileOnlineColumnService.saveModel(agileOnlineColumn);
+        return agileOnlineColumn;
+    }
+
+    @Override
+    public AgileOnlineColumn refreshOnlineColumn(AgileOnlineColumn agileOnlineColumn) {
+        AgileValidateUtil.validateObject(agileOnlineColumn);
+        if (AgileStringUtil.isEmpty(agileOnlineColumn.getColumnName())) {
+            agileOnlineColumn = agileOnlineColumnService.getById(agileOnlineColumn.getId());
+        }
+        String onlineColumnId = agileOnlineColumn.getId();
+        agileOnlineColumn = getAgileOnlineColumn(agileOnlineColumn.getTableId(), agileOnlineColumn.getColumnName());
+        agileOnlineColumn.setId(onlineColumnId);
+        agileOnlineColumnService.updateById(agileOnlineColumn);
+        return agileOnlineColumn;
+    }
+
+    /**
+     * @param tableId
+     * @param columnName
+     * @return
+     */
+    private AgileOnlineColumn getAgileOnlineColumn(String tableId, String columnName) {
+        AgileOnlineTable agileOnlineTable = this.getById(tableId);
+        if (agileOnlineTable == null || AgileStringUtil.isEmpty(agileOnlineTable.getId())) {
+            throw new AgileValidateException("数据表已不存在！");
+        }
+        AgileJdbcTableColumn agileJdbcTableColumn = agileSysJdbcService.selectTableColumn(agileOnlineTable.getTableName(), columnName);
+        if (agileJdbcTableColumn == null || AgileStringUtil.isEmpty(agileJdbcTableColumn.getColumnName())) {
+            throw new AgileValidateException("字段已不存在！");
+        }
+        return handleAgileOnlineColumn(agileOnlineTable, agileJdbcTableColumn);
     }
 }

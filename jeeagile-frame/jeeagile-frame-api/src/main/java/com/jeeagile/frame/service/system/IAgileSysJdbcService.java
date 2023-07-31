@@ -14,18 +14,26 @@ import java.util.List;
  */
 public interface IAgileSysJdbcService extends IAgileBaseService<AgileSysJdbc> {
     /**
-     * 获取数据源下数据表 数据源ID为空在使用当前数据源
+     * 获取数据源下数据表
      *
      * @return
      */
     List<AgileJdbcTable> selectTableList();
 
     /**
-     * 获取数据源下数据表字段信息 数据源ID为空在使用当前数据源
+     * 获取数据源下数据表字段信息
      *
      * @param tableName 表名称
      * @return
      */
     List<AgileJdbcTableColumn> selectTableColumnList(String tableName);
 
+    /**
+     * 获取数据源下数据表字段信息
+     *
+     * @param tableName  表名称
+     * @param columnName 字段名称
+     * @return
+     */
+    AgileJdbcTableColumn selectTableColumn(String tableName, String columnName);
 }
