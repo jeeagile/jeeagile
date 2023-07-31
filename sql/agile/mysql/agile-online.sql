@@ -70,7 +70,7 @@ CREATE TABLE agile_online_table (
   update_time                   datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (id)
 );
-alter table agile_online_table comment '在线表单数据表';
+alter table agile_online_table comment '在线表单 数据表';
 
 
 
@@ -105,8 +105,30 @@ CREATE TABLE agile_online_column (
   update_time                   datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (id)
 );
-alter table agile_online_column comment '在线表单数据表字段';
+alter table agile_online_column comment '在线表单 数据表字段';
 
+
+/*==============================================================*/
+/* table: agile_online_page 在线表单 页面管理                    */
+/*==============================================================*/
+CREATE TABLE agile_online_page (
+  id                            varchar(32) NOT NULL COMMENT '页面主键ID',
+  form_id                       varchar(32) NOT NULL COMMENT '表单主键ID',
+  table_id                      varchar(32) NOT NULL COMMENT '数据表主键ID',
+  page_code                     varchar(20) NOT NULL COMMENT '页面编码',
+  page_name                     varchar(100) NOT NULL COMMENT '页面名称',
+  page_kind                     varchar(2) NOT NULL COMMENT '页面类别',
+  page_type                     varchar(2) NOT NULL COMMENT '页面类型',
+  widget_json                   text COMMENT '页面组件JSON',
+  param_json                    text COMMENT '页面参数JSON',
+  remark                        varchar(300) DEFAULT NULL COMMENT '备注',
+  create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',
+  create_time                   datetime DEFAULT NULL COMMENT '创建时间',
+  update_user                   varchar(32) DEFAULT NULL COMMENT '修改人',
+  update_time                   datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (id)
+);
+alter table agile_online_page comment '在线表单 表单页面';
 
 INSERT INTO agile_sys_menu VALUES ('5', '0', '在线表单', '5', '', 'online', 'online', 'M', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('501','5','字典管理',1,'online/dict/index','dict','dict','C','0','0','1','online:dict:page','',NULL,NULL,NULL,NULL);

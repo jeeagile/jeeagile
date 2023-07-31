@@ -285,6 +285,7 @@
         onlineColumn.columnName = newOnlineColumn.columnName
         refreshOnlineColumn(onlineColumn).then(response => {
           this.messageSuccess('表字段刷新成功！')
+          this.onlineColumn = response.data
           this.getOnlineColumnList()
         })
       },

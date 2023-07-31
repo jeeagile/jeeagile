@@ -291,6 +291,43 @@
                           @close="columnVisible=false"/>
           </template>
         </el-col>
+        <el-col v-if="activeStep === 2" class="page-designer">
+          <template v-if="designerVisible==false">
+            <el-table :data="onlinePageList" header-cell-class-name="table-header-gray" key="onlinePage">
+              <el-table-column label="页面编码" prop="pageCode" :show-overflow-tooltip="true"/>
+              <el-table-column label="页面名称" prop="pageName" :show-overflow-tooltip="true"/>
+              <el-table-column label="页面分类" prop="pageCategory">
+                <template slot-scope="scope">
+                  <!--                  <el-tag size="mini" :type="handlePageCategoryTag(scope.row.pageCategory)" effect="dark">-->
+                  <!--                    {{handlePageCategoryName(scope.row.pageType)}}-->
+                  <!--                  </el-tag>-->
+                </template>
+              </el-table-column>
+              <el-table-column label="页面类型" prop="pageType">
+                <template slot-scope="scope">
+                  <!--                  <el-tag size="mini" :type="handlePageTypeTag(scope.row.pageType)" effect="dark">-->
+                  <!--                    {{handlePageTypeName(scope.row.pageType)}}-->
+                  <!--                  </el-tag>-->
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="220px">
+                <template slot-scope="scope">
+                  <el-button size="mini" type="text" @click="onlinePageDesigner(scope.row)">
+                    页面设计
+                  </el-button>
+                  <el-button size="mini" type="text" @click="editOnlinePage(scope.row)">
+                    编辑页面
+                  </el-button>
+                  <el-button size="mini" type="text" @click="deleteOnlinePage(scope.row)">
+                    删除页面
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-button style="width: 100%;margin-top: 10px" icon="el-icon-plus" @click="addOnlinePage">添加表单页面
+            </el-button>
+          </template>
+        </el-col>
       </el-row>
     </div>
   </div>
@@ -415,7 +452,8 @@
         // 编辑字段 表名称
         onlineTableName: undefined,
         // 编辑字段 表描述
-        onlineTableLabel: undefined
+        onlineTableLabel: undefined,
+        onlinePageList: []
       }
     },
     created() {
@@ -753,6 +791,18 @@
           this.onlineTable.slaveColumnName = undefined
         }
       },
+      /** 新增页面 */
+      addOnlinePage() {
+      },
+      /** 编辑页面 */
+      editOnlinePage() {
+      },
+      /** 删除页面 */
+      deleteOnlinePage() {
+      },
+      /** 页面设计 */
+      onlinePageDesigner() {
+      },
       /** 导出按钮操作 */
       handleExportForm() {
         this.$confirm('请确认是否导出字段类型数据项?', '警告', {
@@ -779,6 +829,11 @@
     }
 
     .data-model {
+      width: 99%;
+      background: white;
+    }
+
+    .page-designer {
       width: 99%;
       background: white;
     }
