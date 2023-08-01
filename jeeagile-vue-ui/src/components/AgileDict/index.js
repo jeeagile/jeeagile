@@ -37,6 +37,7 @@ export class AgileBaseDict extends Map {
 
     return temp
   }
+
   /**
    * 获取字典标签
    */
@@ -46,6 +47,17 @@ export class AgileBaseDict extends Map {
       value = value ? 1 : 0
     }
     return (this.get(value) || {})[labelKey]
+  }
+
+  /**
+   * 获取
+   */
+  getTag(value, tagKey = 'tag') {
+    // 如果id为boolean类型，则自动转换为0和1
+    if (typeof value === 'boolean') {
+      value = value ? 1 : 0
+    }
+    return (this.get(value) || {})[tagKey] || 'error'
   }
 }
 

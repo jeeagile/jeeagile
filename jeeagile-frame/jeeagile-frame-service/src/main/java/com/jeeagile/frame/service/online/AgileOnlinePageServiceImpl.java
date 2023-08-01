@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.entity.online.AgileOnlinePage;
 import com.jeeagile.frame.mapper.online.AgileOnlinePageMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -22,6 +23,7 @@ public class AgileOnlinePageServiceImpl extends AgileBaseServiceImpl<AgileOnline
             throw new AgileValidateException("表单ID不能空！");
         }
         LambdaQueryWrapper<AgileOnlinePage> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.select(AgileOnlinePage.class, i -> !"widgetJson".contains(i.getProperty()) || !"paramJson".contains(i.getProperty()));
         if (AgileStringUtil.isNotEmpty(agileOnlinePage.getPageCode())) {
             lambdaQueryWrapper.eq(AgileOnlinePage::getPageCode, agileOnlinePage.getPageCode());
         }
@@ -42,6 +44,8 @@ public class AgileOnlinePageServiceImpl extends AgileBaseServiceImpl<AgileOnline
 
     @Override
     public void updateModelValidate(AgileOnlinePage agileOnlinePage) {
+        agileOnlinePage.setWidgetJson(null);
+        agileOnlinePage.setParamJson(null);
         this.validateData(agileOnlinePage);
     }
 

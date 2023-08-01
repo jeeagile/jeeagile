@@ -44,7 +44,7 @@
       <el-table-column label="字典名称" align="center" prop="dictName"/>
       <el-table-column label="字典类型" align="center" prop="dictType">
         <template slot-scope="scope">
-          <el-tag size="mini" :type="getOnlineDictTypeTag(scope.row.dictType)">
+          <el-tag size="mini" :type="OnlineDictType.getTag(scope.row.dictType)">
             {{OnlineDictType.getLabel(scope.row.dictType)}}
           </el-tag>
         </template>
@@ -406,10 +406,10 @@
         this.form = {
           id: undefined,
           dictName: undefined,
-          dictType: OnlineDictType.TABLE,
+          dictType: this.OnlineDictType.TABLE,
           systemDictType: undefined,
           tableName: undefined,
-          treeFlag: SysYesNo.NO,
+          treeFlag: this.SysYesNo.NO,
           parentKeyColumnName: undefined,
           keyColumnName: undefined,
           valueColumnName: undefined,
@@ -432,18 +432,6 @@
       resetQuery() {
         this.resetForm('queryForm')
         this.handleQuery()
-      },
-      getOnlineDictTypeTag(dictType) {
-        switch (dictType) {
-        case this.OnlineDictType.TABLE:
-          return 'success'
-        case this.OnlineDictType.SYSTEM:
-          return 'primary'
-        case this.OnlineDictType.CUSTOM:
-          return 'danger'
-        default:
-          return 'info'
-        }
       },
       resetDictDataPage() {
         this.dictDataPage = {
@@ -471,7 +459,7 @@
       },
       handleDictData() {
         this.resetDictDataPage()
-        if (this.form.dictType === OnlineDictType.TABLE) {
+        if (this.form.dictType === this.OnlineDictType.TABLE) {
           this.handleJdbcTable()
           this.dictDataList = []
           this.dictParamList = []
@@ -480,14 +468,14 @@
           }
           return
         }
-        if (this.form.dictType === OnlineDictType.SYSTEM) {
+        if (this.form.dictType === this.OnlineDictType.SYSTEM) {
           this.dictDataList = []
           this.getSysDictDataList(this.form.systemDictType).then(response => {
             this.dictDataList = response.data
           })
           return
         }
-        if (this.form.dictType === OnlineDictType.CUSTOM) {
+        if (this.form.dictType === this.OnlineDictType.CUSTOM) {
           this.dictDataList = []
           if (this.form.dictDataJson) {
             this.dictDataList = JSON.parse(this.form.dictDataJson)
@@ -521,12 +509,12 @@
       },
       /** 提交按钮 */
       submitForm: function () {
-        if (this.form.dictType === OnlineDictType.CUSTOM) {
+        if (this.form.dictType === this.OnlineDictType.CUSTOM) {
           this.form.dictDataJson = JSON.stringify(this.dictDataList)
         } else {
           this.form.dictDataJson = undefined
         }
-        if (this.form.dictType === OnlineDictType.TABLE) {
+        if (this.form.dictType === this.OnlineDictType.TABLE) {
           const dictParamList = []
           this.dictParamList.map(item => {
             const tableColumn = this.jdbcTableColumnList.find(column => column.columnName == item)

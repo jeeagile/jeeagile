@@ -59,14 +59,14 @@
       <el-table-column label="表单名称" align="center" prop="formName" :show-overflow-tooltip="true"/>
       <el-table-column label="表单类型" align="center" prop="formType">
         <template slot-scope="scope">
-          <el-tag size="mini" :type="getOnlineFormTypeTag(scope.row.formType)">
+          <el-tag size="mini" :type="OnlineFormType.getTag(scope.row.formType)">
             {{OnlineFormType.getLabel(scope.row.formType)}}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="表单状态" align="center" prop="formStatus">
         <template slot-scope="scope">
-          <el-tag size="mini" :type="getOnlineFormStatusTag(scope.row.formStatus)">
+          <el-tag size="mini" :type="OnlineFormStatus.getTag(scope.row.formStatus)">
             {{OnlineFormStatus.getLabel(scope.row.formStatus)}}
           </el-tag>
         </template>
@@ -147,7 +147,7 @@
               <el-table-column label="数据表描述" prop="tableLabel" align="center" :show-overflow-tooltip="true"/>
               <el-table-column label="数据表类型" prop="relationType" align="center">
                 <template slot-scope="scope">
-                  <el-tag size="mini" :type="getOnlineTableTypeTag(scope.row.tableType)">
+                  <el-tag size="mini" :type="OnlineTableType.getTag(scope.row.tableType)">
                     {{OnlineTableType.getLabel(scope.row.tableType)|| '未知类型'}}
                   </el-tag>
                 </template>
@@ -293,24 +293,25 @@
         </el-col>
         <el-col v-if="activeStep === 2" class="page-designer">
           <template v-if="designerVisible==false">
-            <el-table :data="onlinePageList" header-cell-class-name="table-header-gray" key="onlinePage">
-              <el-table-column label="页面编码" prop="pageCode" :show-overflow-tooltip="true"/>
-              <el-table-column label="页面名称" prop="pageName" :show-overflow-tooltip="true"/>
-              <el-table-column label="页面分类" prop="pageCategory">
+            <el-table v-loading="formLoading" :data="onlinePageList" header-cell-class-name="table-header-gray"
+                      key="onlinePage">
+              <el-table-column label="页面编码" prop="pageCode" :show-overflow-tooltip="true" align="center"/>
+              <el-table-column label="页面名称" prop="pageName" :show-overflow-tooltip="true" align="center"/>
+              <el-table-column label="页面分类" prop="pageCategory" align="center">
                 <template slot-scope="scope">
-                  <!--                  <el-tag size="mini" :type="handlePageCategoryTag(scope.row.pageCategory)" effect="dark">-->
-                  <!--                    {{handlePageCategoryName(scope.row.pageType)}}-->
-                  <!--                  </el-tag>-->
+                  <el-tag size="mini" :type="OnlinePageKind.getTag(scope.row.pageKind)">
+                    {{OnlinePageKind.getLabel(scope.row.pageKind)|| '未知类型'}}
+                  </el-tag>
                 </template>
               </el-table-column>
-              <el-table-column label="页面类型" prop="pageType">
+              <el-table-column label="页面类型" prop="pageType" align="center">
                 <template slot-scope="scope">
-                  <!--                  <el-tag size="mini" :type="handlePageTypeTag(scope.row.pageType)" effect="dark">-->
-                  <!--                    {{handlePageTypeName(scope.row.pageType)}}-->
-                  <!--                  </el-tag>-->
+                  <el-tag size="mini" :type="OnlinePageType.getTag(scope.row.pageType)">
+                    {{OnlinePageType.getLabel(scope.row.pageType)|| '未知类型'}}
+                  </el-tag>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="220px">
+              <el-table-column label="操作" width="220px" align="center">
                 <template slot-scope="scope">
                   <el-button size="mini" type="text" @click="onlinePageDesigner(scope.row)">
                     页面设计
@@ -326,6 +327,55 @@
             </el-table>
             <el-button style="width: 100%;margin-top: 10px" icon="el-icon-plus" @click="addOnlinePage">添加表单页面
             </el-button>
+            <el-dialog :title="onlinePageTitle" :visible.sync="onlinePageDialog" width="500px" append-to-body>
+              <el-form ref="onlinePageForm" :model="onlinePage" :rules="onlinePageRules" label-width="100px">
+                <el-form-item label="页面编码:" prop="pageCode">
+                  <el-input v-model="onlinePage.pageCode" placeholder="请输入页面编码"/>
+                </el-form-item>
+                <el-form-item label="页面名称:" prop="pageName">
+                  <el-input v-model="onlinePage.pageName" placeholder="请输入页面编码"/>
+                </el-form-item>
+                <el-form-item label="页面类别:" prop="pageKind">
+                  <el-select v-model="onlinePage.pageKind" placeholder="请选择页面类别" size="small" style="width: 100%">
+                    <el-option
+                      v-for="item in OnlinePageKind.getList()"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="页面类型:" prop="pageType">
+                  <el-select v-model="onlinePage.pageType" placeholder="请选择页面类型" size="small" style="width: 100%">
+                    <el-option
+                      v-for="item in OnlinePageType.getList()"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="页面数据:" prop="tableId">
+                  <el-select class="input-item" v-model="onlinePage.tableId" :clearable="true" placeholder="页面数据"
+                             style="width: 100%">
+                    <el-option v-for="item in onlineTableList" :key="item.id"
+                               :value="item.id" :label="item.tableName">
+                      <el-row type="flex" justify="space-between" align="middle">
+                        <span>{{item.tableName}}</span>
+                        <el-tag size="mini" :type="OnlineTableType.getTag(item.tableType)" effect="dark"
+                                style="margin-left: 30px;">
+                          {{OnlineTableType.getLabel(item.tableType)}}
+                        </el-tag>
+                      </el-row>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="submitOnlinePage">确 定</el-button>
+                <el-button @click="onlinePageDialog=false">取 消</el-button>
+              </div>
+            </el-dialog>
           </template>
         </el-col>
       </el-row>
@@ -353,6 +403,13 @@
   } from '@/api/online/table'
   import { selectJdbcTableList, selectTableColumnList } from '@/api/system/jdbc'
   import { selectOnlineColumnList } from '@/api/online/column'
+  import {
+    selectOnlinePageList,
+    detailOnlinePage,
+    deleteOnlinePage,
+    addOnlinePage,
+    updateOnlinePage
+  } from '@/api/online/page'
   import TableColumn from './column'
 
   export default {
@@ -403,7 +460,7 @@
             { required: true, message: '表单编码不能为空', trigger: 'blur' }
           ],
           formName: [
-            { required: true, message: '表单不能为空', trigger: 'blur' }
+            { required: true, message: '表单名称不能为空', trigger: 'blur' }
           ],
           formType: [
             { required: true, message: '表单类型不能为空', trigger: 'blur' }
@@ -453,7 +510,27 @@
         onlineTableName: undefined,
         // 编辑字段 表描述
         onlineTableLabel: undefined,
-        onlinePageList: []
+        onlinePageList: [],
+        onlinePageTitle: '新增表单页面',
+        onlinePageDialog: false,
+        onlinePage: {},
+        onlinePageRules: {
+          pageCode: [
+            { required: true, message: '表单页面编码不能为空', trigger: 'blur' }
+          ],
+          pageName: [
+            { required: true, message: '表单页面名称不能为空', trigger: 'blur' }
+          ],
+          pageType: [
+            { required: true, message: '表单页面类型不能为空', trigger: 'blur' }
+          ],
+          pageKind: [
+            { required: true, message: '表单页面分类不能为空', trigger: 'blur' }
+          ],
+          tableId: [
+            { required: true, message: '数据表不能为空', trigger: 'blur' }
+          ]
+        }
       }
     },
     created() {
@@ -499,30 +576,6 @@
       resetQuery() {
         this.resetForm('queryForm')
         this.handleQuery()
-      },
-      /** 设置表单类型标签 */
-      getOnlineFormTypeTag(formType) {
-        switch (formType) {
-        case this.OnlineFormType.BUSINESS:
-          return 'success'
-        case this.OnlineDictType.FLOW:
-          return 'info'
-        default:
-          return 'info'
-        }
-      },
-      /** 设置表单状态标签 */
-      getOnlineFormStatusTag(formStatus) {
-        switch (formStatus) {
-        case this.OnlineFormStatus.FORM_BASIC:
-          return 'warning'
-        case this.OnlineFormStatus.DATA_MODEL:
-          return 'primary'
-        case this.OnlineFormStatus.PAGE_DESIGN:
-          return 'success'
-        default:
-          return 'warning'
-        }
       },
       /** 修改发布状态 */
       handlePublishStatus(row) {
@@ -596,6 +649,7 @@
           if (this.onlineForm.formStatus != this.OnlineFormStatus.PAGE_DESIGN) {
             changeFormStatus({ id: this.onlineForm.id, formStatus: this.OnlineFormStatus.PAGE_DESIGN })
           }
+          this.getOnlinePageList()
         }
       },
       /** 退出表单编辑 */
@@ -638,7 +692,7 @@
           this.messageSuccess('删除成功')
         })
       },
-      /** 查询表单列表 */
+      /** 查询表单数据模型列表 */
       getOnlineTableList() {
         this.formLoading = true
         this.resetOnlineTable()
@@ -656,6 +710,16 @@
           }
         )
       },
+      /** 查询表单页面列表 */
+      getOnlinePageList() {
+        this.formLoading = true
+        this.resetOnlinePage()
+        selectOnlinePageList(this.onlinePage).then(response => {
+            this.onlinePageList = response.data
+            this.formLoading = false
+          }
+        )
+      },
       /** 查询主表字段列表 */
       getMasterTableColumnList(tableId) {
         selectOnlineColumnList({ formId: this.onlineTable.formId, tableId: tableId }).then(response => {
@@ -668,19 +732,6 @@
         selectTableColumnList(tableName).then(response => {
           this.slaveTableColumnList = response.data
         })
-      },
-      /** 设置表单类型标签 */
-      getOnlineTableTypeTag(tableType) {
-        switch (tableType) {
-        case this.OnlineTableType.MASTER:
-          return 'success'
-        case this.OnlineTableType.ONE_TO_ONE:
-          return 'primary'
-        case this.OnlineTableType.ONE_TO_MANY:
-          return 'warning'
-        default:
-          return 'error'
-        }
       },
       // 表单重置
       resetOnlineTable() {
@@ -791,17 +842,67 @@
           this.onlineTable.slaveColumnName = undefined
         }
       },
-      /** 新增页面 */
+      // 表单重置
+      resetOnlinePage() {
+        this.onlinePage = {
+          id: undefined,
+          formId: this.onlineForm.id,
+          tableId: undefined,
+          pageCode: undefined,
+          pageName: undefined,
+          pageType: undefined,
+          pageKind: undefined
+        }
+        this.resetForm('onlinePage')
+      },
+      /** 新增表单页面 */
       addOnlinePage() {
+        this.resetOnlinePage()
+        this.onlinePageDialog = true
       },
-      /** 编辑页面 */
-      editOnlinePage() {
+      /** 编辑表单页面 */
+      editOnlinePage(row) {
+        this.resetOnlinePage()
+        detailOnlinePage(row.id).then(response => {
+          this.onlinePage = response.data
+          this.onlinePageDialog = true
+        })
       },
-      /** 删除页面 */
-      deleteOnlinePage() {
+      /** 删除表单页面 */
+      deleteOnlinePage(row) {
+        this.$confirm('是否确认删除表单页面名称为"' + row.pageName + '"的数据项?', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          return deleteOnlinePage(row.id)
+        }).then(() => {
+          this.getOnlinePageList()
+          this.messageSuccess('删除成功')
+        })
       },
-      /** 页面设计 */
+      /** 表单页面设计 */
       onlinePageDesigner() {
+      },
+      /** 提交表单页面 */
+      submitOnlinePage() {
+        this.$refs.onlinePageForm.validate(valid => {
+          if (valid) {
+            if (this.onlinePage.id != undefined) {
+              updateOnlinePage(this.onlinePage).then(() => {
+                this.onlinePageDialog = false
+                this.messageSuccess('表单页面信息修改成功')
+                this.getOnlinePageList()
+              })
+            } else {
+              addOnlinePage(this.onlinePage).then(() => {
+                this.onlinePageDialog = false
+                this.messageSuccess('新增数据表信息成功')
+                this.getOnlinePageList()
+              })
+            }
+          }
+        })
       },
       /** 导出按钮操作 */
       handleExportForm() {
