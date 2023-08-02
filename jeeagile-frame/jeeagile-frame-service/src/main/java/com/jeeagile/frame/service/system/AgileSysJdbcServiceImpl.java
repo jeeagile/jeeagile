@@ -26,8 +26,7 @@ public class AgileSysJdbcServiceImpl extends AgileBaseServiceImpl<AgileSysJdbcMa
     public List<AgileJdbcTableColumn> selectTableColumnList(String tableName) {
         List<AgileJdbcTableColumn> agileJdbcTableColumnList = this.baseMapper.getTableColumnList(tableName);
         agileJdbcTableColumnList.forEach(agileJdbcTableColumn -> {
-            agileJdbcTableColumn.setColumnComment(this.handleColumnComment(agileJdbcTableColumn.getColumnComment()));
-            agileJdbcTableColumn.setJavaType(this.convertToJavaType(agileJdbcTableColumn.getDataType()));
+            this.handlerTableColumn(agileJdbcTableColumn);
         });
         return agileJdbcTableColumnList;
     }
@@ -35,9 +34,20 @@ public class AgileSysJdbcServiceImpl extends AgileBaseServiceImpl<AgileSysJdbcMa
     @Override
     public AgileJdbcTableColumn selectTableColumn(String tableName, String columnName) {
         AgileJdbcTableColumn agileJdbcTableColumn = this.baseMapper.getTableColumn(tableName, columnName);
+        this.handlerTableColumn(agileJdbcTableColumn);
+        return agileJdbcTableColumn;
+    }
+
+    /**
+     *
+     * @param agileJdbcTableColumn
+     */
+    private void handlerTableColumn(AgileJdbcTableColumn agileJdbcTableColumn) {
         agileJdbcTableColumn.setColumnComment(this.handleColumnComment(agileJdbcTableColumn.getColumnComment()));
         agileJdbcTableColumn.setJavaType(this.convertToJavaType(agileJdbcTableColumn.getDataType()));
-        return agileJdbcTableColumn;
+        if (agileJdbcTableColumn.getColumnType().equals("longtext")) {
+            agileJdbcTableColumn.setColumnLength(null);
+        }
     }
 
     /**

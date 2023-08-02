@@ -6,17 +6,23 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.constants.online.OnlineFieldClassify;
+import com.jeeagile.frame.constants.online.OnlinePageType;
 import com.jeeagile.frame.constants.online.OnlineTableType;
 import com.jeeagile.frame.entity.online.AgileOnlineColumn;
+import com.jeeagile.frame.entity.online.AgileOnlineDict;
+import com.jeeagile.frame.entity.online.AgileOnlinePage;
 import com.jeeagile.frame.entity.online.AgileOnlineTable;
 import com.jeeagile.frame.mapper.online.AgileOnlineTableMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.frame.service.system.IAgileSysJdbcService;
+import com.jeeagile.frame.vo.online.OnlinePageTable;
+import com.jeeagile.frame.vo.online.OnlineTableColumn;
 import com.jeeagile.frame.vo.system.AgileJdbcTableColumn;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +37,10 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
     private IAgileSysJdbcService agileSysJdbcService;
     @Autowired
     private IAgileOnlineColumnService agileOnlineColumnService;
+    @Autowired
+    private IAgileOnlinePageService agileOnlinePageService;
+    @Autowired
+    private IAgileOnlineDictService agileOnlineDictService;
 
     @Override
     public LambdaQueryWrapper<AgileOnlineTable> queryWrapper(AgileOnlineTable agileOnlineTable) {
@@ -147,6 +157,59 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
         return agileOnlineColumn;
     }
 
+    @Override
+    public List<OnlinePageTable> pageTableList(String pageId) {
+        AgileOnlinePage agileOnlinePage = agileOnlinePageService.getById(pageId);
+        if (agileOnlinePage == null || agileOnlinePage.isEmptyPk()) {
+            throw new AgileValidateException("该表单页面已不存在！");
+        }
+        AgileOnlineTable agileOnlineTable = this.getById(agileOnlinePage.getTableId());
+        if (agileOnlineTable == null || agileOnlineTable.isEmptyPk()) {
+            throw new AgileValidateException("该表单页面数据表已不存在！");
+        }
+        List<AgileOnlineTable> agileOnlineTableList = new ArrayList<>();
+        if (OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
+            AgileOnlineTable queryOnlineTable = AgileOnlineTable.builder().formId(agileOnlineTable.getFormId()).build();
+            agileOnlineTableList = this.selectList(queryOnlineTable);
+        } else {
+            agileOnlineTableList.add(agileOnlineTable);
+        }
+        List<OnlinePageTable> onlinePageTableList = new ArrayList<>();
+        agileOnlineTableList.forEach(onlineTable -> {
+            if (OnlinePageType.QUERY.equals(agileOnlinePage.getPageType()) && OnlineTableType.ONE_TO_MANY.equals(onlineTable.getTableType())) {
+                return;
+            }
+            OnlinePageTable onlinePageTable = new OnlinePageTable();
+            BeanUtils.copyProperties(onlineTable, onlinePageTable);
+            onlinePageTable.setTableId(onlineTable.getId());
+            onlinePageTable.setTableColumnList(this.getOnlineTableColumn(onlinePageTable.getFormId(), onlinePageTable.getTableId()));
+            onlinePageTableList.add(onlinePageTable);
+        });
+        return onlinePageTableList;
+    }
+
+    /**
+     * 获取表字段
+     *
+     * @param fromId  表单ID
+     * @param tableId 数据表ID
+     * @return
+     */
+    private List<OnlineTableColumn> getOnlineTableColumn(String fromId, String tableId) {
+        AgileOnlineColumn queryOnlineColumn = AgileOnlineColumn.builder().formId(fromId).tableId(tableId).build();
+        List<AgileOnlineColumn> agileOnlineColumnList = agileOnlineColumnService.selectList(queryOnlineColumn);
+        List<OnlineTableColumn> onlineTableColumnList = new ArrayList<>();
+        agileOnlineColumnList.forEach(agileOnlineColumn -> {
+            OnlineTableColumn onlineTableColumn = new OnlineTableColumn();
+            BeanUtils.copyProperties(agileOnlineColumn, onlineTableColumn);
+            if (AgileStringUtil.isNotEmpty(agileOnlineColumn.getDictId())) {
+                onlineTableColumn.setOnlineDict(agileOnlineDictService.getById(agileOnlineColumn.getDictId()));
+            }
+            onlineTableColumnList.add(onlineTableColumn);
+        });
+        return onlineTableColumnList;
+    }
+
     /**
      * @param tableId
      * @param columnName
@@ -154,7 +217,7 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
      */
     private AgileOnlineColumn getAgileOnlineColumn(String tableId, String columnName) {
         AgileOnlineTable agileOnlineTable = this.getById(tableId);
-        if (agileOnlineTable == null || AgileStringUtil.isEmpty(agileOnlineTable.getId())) {
+        if (agileOnlineTable == null || agileOnlineTable.isEmptyPk()) {
             throw new AgileValidateException("数据表已不存在！");
         }
         AgileJdbcTableColumn agileJdbcTableColumn = agileSysJdbcService.selectTableColumn(agileOnlineTable.getTableName(), columnName);

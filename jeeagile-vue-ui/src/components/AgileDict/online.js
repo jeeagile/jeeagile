@@ -195,6 +195,121 @@ const OnlinePageType = new AgileBaseDict('表单页面类型', [
 ])
 Vue.prototype.OnlinePageType = OnlinePageType
 
+
+const OnlineWidgetType = new AgileBaseDict('组件类型', [
+  {
+    value: 'Label',
+    label: '文本显示',
+    symbol: 'Label'
+  },
+  {
+    value: 'Input',
+    label: '文本输入框',
+    symbol: 'Input'
+  },
+  {
+    value: 'NumberInput',
+    label: '数字输入框',
+    symbol: 'NumberInput'
+  },
+  {
+    value: 'NumberRange',
+    label: '数字范围输入框',
+    symbol: 'NumberRange'
+  },
+  {
+    value: 'Switch',
+    label: '开关组件',
+    symbol: 'Switch'
+  },
+  {
+    value: 'Select',
+    label: '下拉选择框',
+    symbol: 'Select'
+  },
+  {
+    value: 'Cascader',
+    label: '级联选择框',
+    symbol: 'Cascader'
+  },
+  {
+    value: 'Date',
+    label: '日期选择框',
+    symbol: 'Date'
+  },
+  {
+    value: 'DateRange',
+    label: '日期范围选择框',
+    symbol: 'DateRange'
+  },
+  {
+    value: 'Upload',
+    label: '上传组件',
+    symbol: 'Upload'
+  },
+  {
+    value: 'RichEditor',
+    label: '富文本编辑',
+    symbol: 'RichEditor'
+  },
+  {
+    value: 'Divider',
+    label: '分割线',
+    symbol: 'Divider'
+  },
+  {
+    value: 'Text',
+    label: '文本',
+    symbol: 'Text'
+  },
+  {
+    value: 'Image',
+    label: '图片',
+    symbol: 'Image'
+  },
+  {
+    value: 'Table',
+    label: '表格组件',
+    symbol: 'Table'
+  },
+  {
+    value: 'Block',
+    label: '基础块',
+    symbol: 'Block'
+  },
+  {
+    value: 'Card',
+    label: '卡片组件',
+    symbol: 'Card'
+  }
+])
+
+Vue.prototype.OnlineWidgetType = OnlineWidgetType
+
+const OnlineWidgetKind = new AgileBaseDict('组件类别', [
+  {
+    value: '01',
+    label: '过滤组件',
+    symbol: 'Filter'
+  },
+  {
+    value: '02',
+    label: '表单组件',
+    symbol: 'Form'
+  },
+  {
+    value: '03',
+    label: '数据组件',
+    symbol: 'Data'
+  },
+  {
+    value: '04',
+    label: '容器组件',
+    symbol: 'Container'
+  }
+])
+Vue.prototype.OnlineWidgetKind = OnlineWidgetKind
+
 export {
   OnlineDictType,
   OnlineFormStatus,
@@ -203,5 +318,7 @@ export {
   OnlineFilterType,
   OnlineFieldClassify,
   OnlinePageKind,
-  OnlinePageType
+  OnlinePageType,
+  OnlineWidgetType,
+  OnlineWidgetKind
 }

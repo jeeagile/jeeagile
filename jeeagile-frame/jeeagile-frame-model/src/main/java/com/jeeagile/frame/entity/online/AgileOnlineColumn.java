@@ -3,6 +3,7 @@ package com.jeeagile.frame.entity.online;
 import com.jeeagile.frame.entity.AgileBaseTenantModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -50,7 +51,7 @@ public class AgileOnlineColumn extends AgileBaseTenantModel<AgileOnlineColumn> {
      * 字段长度
      */
     @ApiModelProperty(value = "字段长度")
-    private long columnLength;
+    private Long columnLength;
     /**
      * 字段精度
      */
@@ -117,4 +118,13 @@ public class AgileOnlineColumn extends AgileBaseTenantModel<AgileOnlineColumn> {
      */
     @ApiModelProperty(value = "数据对象字典")
     private String dictId;
+
+    public AgileOnlineColumn() {
+    }
+
+    @Builder
+    public AgileOnlineColumn(String formId, String tableId) {
+        this.formId = formId;
+        this.tableId = tableId;
+    }
 }

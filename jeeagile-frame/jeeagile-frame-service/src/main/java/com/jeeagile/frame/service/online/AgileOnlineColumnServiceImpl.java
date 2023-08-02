@@ -34,7 +34,7 @@ public class AgileOnlineColumnServiceImpl extends AgileBaseServiceImpl<AgileOnli
     @Override
     public boolean updateModel(AgileOnlineColumn agileOnlineColumn) {
         AgileOnlineColumn oldOnlineColumn = this.getById(agileOnlineColumn.getId());
-        if (oldOnlineColumn == null || AgileStringUtil.isEmpty(oldOnlineColumn.getId())) {
+        if (oldOnlineColumn == null || oldOnlineColumn.isEmptyPk()) {
             throw new AgileValidateException("字段已不存在无法更新!");
         }
         oldOnlineColumn.setFilterType(agileOnlineColumn.getFilterType());

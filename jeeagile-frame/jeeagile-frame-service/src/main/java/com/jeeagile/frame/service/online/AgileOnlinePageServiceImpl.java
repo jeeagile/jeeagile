@@ -1,10 +1,10 @@
 package com.jeeagile.frame.service.online;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.frame.entity.online.AgileOnlinePage;
 import com.jeeagile.frame.mapper.online.AgileOnlinePageMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -63,5 +63,14 @@ public class AgileOnlinePageServiceImpl extends AgileBaseServiceImpl<AgileOnline
         if (this.count(queryWrapper) > 0) {
             throw new AgileValidateException("表单页面名称或表单页面编码已存在！");
         }
+    }
+
+    @Override
+    public boolean designer(AgileOnlinePage agileOnlinePage) {
+        LambdaUpdateWrapper<AgileOnlinePage> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.set(AgileOnlinePage::getWidgetJson, agileOnlinePage.getWidgetJson());
+        lambdaUpdateWrapper.set(AgileOnlinePage::getParamJson, agileOnlinePage.getParamJson());
+        lambdaUpdateWrapper.eq(AgileOnlinePage::getId, agileOnlinePage.getId());
+        return this.update(lambdaUpdateWrapper);
     }
 }

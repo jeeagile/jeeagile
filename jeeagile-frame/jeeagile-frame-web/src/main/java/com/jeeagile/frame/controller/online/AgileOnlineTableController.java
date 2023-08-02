@@ -8,6 +8,7 @@ import com.jeeagile.frame.entity.online.AgileOnlineColumn;
 import com.jeeagile.frame.entity.online.AgileOnlineTable;
 import com.jeeagile.frame.service.online.IAgileOnlineTableService;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
+import com.jeeagile.frame.vo.online.OnlinePageTable;
 import com.jeeagile.frame.vo.system.AgileJdbcTable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,12 +33,18 @@ public class AgileOnlineTableController extends AgileCrudController<IAgileOnline
     @PostMapping(value = "/addOnlineColumn")
     @ApiOperation(value = "修改表单状态", notes = "修改表单状态")
     public AgileResult<AgileOnlineColumn> addOnlineColumn(@RequestBody AgileOnlineColumn agileOnlineColumn) {
-        return this.success(agileService.addOnlineColumn(agileOnlineColumn));
+        return AgileResult.success(agileService.addOnlineColumn(agileOnlineColumn));
     }
 
     @PostMapping(value = "/refreshOnlineColumn")
     @ApiOperation(value = "修改表单状态", notes = "修改表单状态")
     public AgileResult<AgileOnlineColumn> refreshOnlineColumn(@RequestBody AgileOnlineColumn agileOnlineColumn) {
-        return this.success(agileService.refreshOnlineColumn(agileOnlineColumn));
+        return AgileResult.success(agileService.refreshOnlineColumn(agileOnlineColumn));
+    }
+
+    @PostMapping(value = "/pageTableList")
+    @ApiOperation(value = "修改表单状态", notes = "修改表单状态")
+    public AgileResult<List<OnlinePageTable>> pageTableList(@SingleRequestBody String pageId) {
+        return AgileResult.success(agileService.pageTableList(pageId));
     }
 }

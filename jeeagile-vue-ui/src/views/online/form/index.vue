@@ -377,6 +377,9 @@
               </div>
             </el-dialog>
           </template>
+          <template v-if="designerVisible">
+            <page-designer :online-form="onlineForm" :online-page="onlinePage" @close="designerVisible=false"/>
+          </template>
         </el-col>
       </el-row>
     </div>
@@ -411,10 +414,11 @@
     updateOnlinePage
   } from '@/api/online/page'
   import TableColumn from './column'
+  import PageDesigner from './designer'
 
   export default {
     name: 'Form',
-    components: { TableColumn },
+    components: { TableColumn, PageDesigner },
     data() {
       return {
         // 表单列表遮罩层
@@ -882,7 +886,12 @@
         })
       },
       /** 表单页面设计 */
-      onlinePageDesigner() {
+      onlinePageDesigner(row) {
+        this.resetOnlinePage()
+        detailOnlinePage(row.id).then(response => {
+          this.onlinePage = response.data
+          this.designerVisible = true
+        })
       },
       /** 提交表单页面 */
       submitOnlinePage() {
@@ -921,7 +930,7 @@
   .online-form {
     background: #EBEEF5;
     padding: 10px;
-    height: calc(100vh - 165px);
+    height: calc(100vh - 150px);
 
     .form-basic {
       width: 60%;

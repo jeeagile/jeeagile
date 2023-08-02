@@ -39,7 +39,7 @@ public class AgileJdbcTableColumn extends AgileBaseVo {
      * 字段长度
      */
     @ApiModelProperty(value = "字段长度")
-    private long columnLength;
+    private Long columnLength;
     /**
      * 字段精度
      */

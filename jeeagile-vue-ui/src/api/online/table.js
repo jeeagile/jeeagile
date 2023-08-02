@@ -34,3 +34,8 @@ export const addOnlineColumn = data => postApi('/online/table/addOnlineColumn', 
  * 刷新表字段
  */
 export const refreshOnlineColumn = data => postApi('/online/table/refreshOnlineColumn', data)
+/**
+ * 获取表单页面数据表
+ */
+export const selectPageTableList = data => postApi('/online/table/pageTableList', data)
+
