@@ -157,7 +157,7 @@ export const DefaultWidgetAttributes = {
     widgetKind: OnlineWidgetKind.Data,
     widgetType: OnlineWidgetType.Image,
     span: 24,
-    src: 'https://www.w3school.com.cn/i/eg_tulip.jpg',
+    src: '',
     height: undefined,
     width: undefined,
     fit: 'fill'
@@ -176,9 +176,10 @@ export const DefaultWidgetAttributes = {
     tableColumnList: [],
     operationList: [
       {
-        id: 1,
+        id: '01',
         type: 'ADD',
         name: '新建',
+        icon: 'el-icon-plus',
         enabled: true,
         builtin: true,
         rowOperation: false,
@@ -187,9 +188,10 @@ export const DefaultWidgetAttributes = {
         formId: undefined
       },
       {
-        id: 2,
+        id: '02',
         type: 'EDIT',
         name: '编辑',
+        icon: 'el-icon-edit',
         enabled: true,
         builtin: true,
         rowOperation: true,
@@ -197,9 +199,10 @@ export const DefaultWidgetAttributes = {
         formId: undefined
       },
       {
-        id: 3,
+        id: '03',
         type: 'DELETE',
         name: '删除',
+        icon: 'el-icon-delete',
         enabled: true,
         builtin: true,
         rowOperation: true,

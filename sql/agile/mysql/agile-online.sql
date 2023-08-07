@@ -96,7 +96,7 @@ CREATE TABLE agile_online_column (
   field_name                    varchar(100) NOT NULL COMMENT '数据对象数据名称',
   field_type                    varchar(50) NOT NULL COMMENT '数据对象数据类型',
   field_label                   varchar(100) NOT NULL COMMENT '数据对象显示标签',
-  field_classify                varchar(2) DEFAULT NULL COMMENT '数据对象字段分类',
+  field_kind                    varchar(2) DEFAULT NULL COMMENT '数据对象字段分类',
   filter_type                   varchar(2) NOT NULL DEFAULT '01' COMMENT '字段过滤类型',
   dict_id                       varchar(32) DEFAULT NULL COMMENT '字典ID',
   create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',

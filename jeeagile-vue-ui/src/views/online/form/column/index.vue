@@ -105,9 +105,9 @@
             </el-col>
             <el-col class="attribute-item">
               <el-form-item label="字段分类：">
-                <el-select v-model="onlineColumn.fieldClassify" clearable placeholder="字段业务分类" style="width: 250px;">
-                  <el-option v-for="item in OnlineFieldClassify.getList()" :key="item.value"
-                             :label="item.label" :value="item.value" :disabled="disabledFieldClassify(item)"
+                <el-select v-model="onlineColumn.fieldKind" clearable placeholder="字段业务分类" style="width: 250px;">
+                  <el-option v-for="item in OnlineFieldKind.getList()" :key="item.value"
+                             :label="item.label" :value="item.value" :disabled="disabledFieldKind(item)"
                   />
                 </el-select>
               </el-form-item>
@@ -238,18 +238,18 @@
         this.onlineColumn = onlineColumn
       },
       /** 处理字段分类 */
-      disabledFieldClassify(item) {
+      disabledFieldKind(item) {
         switch (item.value) {
-        case this.OnlineFieldClassify.UPLOAD_FILE:
-        case this.OnlineFieldClassify.UPLOAD_IMAGE:
-        case this.OnlineFieldClassify.RICH_TEXT:
-        case this.OnlineFieldClassify.CREATE_USER:
-        case this.OnlineFieldClassify.UPDATE_USER:
+        case this.OnlineFieldKind.UPLOAD_FILE:
+        case this.OnlineFieldKind.UPLOAD_IMAGE:
+        case this.OnlineFieldKind.RICH_TEXT:
+        case this.OnlineFieldKind.CREATE_USER:
+        case this.OnlineFieldKind.UPDATE_USER:
           return this.onlineColumn.fieldType !== 'String'
-        case this.OnlineFieldClassify.CREATE_TIME:
-        case this.OnlineFieldClassify.UPDATE_TIME:
+        case this.OnlineFieldKind.CREATE_TIME:
+        case this.OnlineFieldKind.UPDATE_TIME:
           return this.onlineColumn.fieldType !== 'Date'
-        case this.OnlineFieldClassify.LOGIC_DELETE:
+        case this.OnlineFieldKind.LOGIC_DELETE:
           return this.onlineColumn.fieldType !== 'Integer' && this.onlineColumn.fieldType !== 'String'
         default:
           return false

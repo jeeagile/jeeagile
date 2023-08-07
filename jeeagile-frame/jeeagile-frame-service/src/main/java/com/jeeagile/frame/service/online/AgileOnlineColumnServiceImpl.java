@@ -40,7 +40,7 @@ public class AgileOnlineColumnServiceImpl extends AgileBaseServiceImpl<AgileOnli
         oldOnlineColumn.setFilterType(agileOnlineColumn.getFilterType());
         oldOnlineColumn.setFieldLabel(agileOnlineColumn.getFieldLabel());
         oldOnlineColumn.setDictId(agileOnlineColumn.getDictId());
-        oldOnlineColumn.setFieldClassify(agileOnlineColumn.getFieldClassify());
+        oldOnlineColumn.setFieldKind(agileOnlineColumn.getFieldKind());
         return this.updateById(oldOnlineColumn);
     }
 }

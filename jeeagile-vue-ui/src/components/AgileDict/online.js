@@ -56,7 +56,7 @@ const OnlineFormType = new AgileBaseDict('表单类型', [
     value: '02',
     label: '流程表单',
     symbol: 'FLOW',
-    tag: 'info'
+    tag: 'primary'
   }
 ])
 Vue.prototype.OnlineFormType = OnlineFormType
@@ -107,7 +107,7 @@ const OnlineFilterType = new AgileBaseDict('字段过滤类型', [
 ])
 Vue.prototype.OnlineFilterType = OnlineFilterType
 
-const OnlineFieldClassify = new AgileBaseDict('字段分类', [
+const OnlineFieldKind = new AgileBaseDict('字段分类', [
   {
     value: '01',
     label: '文件上传字段',
@@ -149,7 +149,7 @@ const OnlineFieldClassify = new AgileBaseDict('字段分类', [
     symbol: 'LOGIC_DELETE'
   }
 ])
-Vue.prototype.OnlineFieldClassify = OnlineFieldClassify
+Vue.prototype.OnlineFieldKind = OnlineFieldKind
 
 const OnlinePageKind = new AgileBaseDict('表单页面分类', [
   {
@@ -310,15 +310,46 @@ const OnlineWidgetKind = new AgileBaseDict('组件类别', [
 ])
 Vue.prototype.OnlineWidgetKind = OnlineWidgetKind
 
+const OnlineOperationType = new AgileBaseDict('操作类型', [
+  {
+    value: '01',
+    name: '新建',
+    symbol: 'ADD'
+  },
+  {
+    value: '02',
+    name: '编辑',
+    symbol: 'EDIT'
+  },
+  {
+    value: '03',
+    name: '删除',
+    symbol: 'DELETE'
+  },
+  {
+    value: '04',
+    name: '导出',
+    symbol: 'EXPORT'
+  },
+  {
+    value: '99',
+    name: '自定义操作',
+    symbol: 'CUSTOM'
+  }
+]);
+Vue.prototype.OnlineOperationType = OnlineOperationType;
+
+
 export {
   OnlineDictType,
   OnlineFormStatus,
   OnlineFormType,
   OnlineTableType,
   OnlineFilterType,
-  OnlineFieldClassify,
+  OnlineFieldKind,
   OnlinePageKind,
   OnlinePageType,
   OnlineWidgetType,
-  OnlineWidgetKind
+  OnlineWidgetKind,
+  OnlineOperationType
 }

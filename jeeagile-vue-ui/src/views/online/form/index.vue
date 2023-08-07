@@ -1,6 +1,6 @@
 <template>
   <div v-if="!openOnlineForm" class="app-container">
-    <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
       <el-form-item label="表单编码" prop="formCode">
         <el-input v-model="queryParam.queryCond.formCode" placeholder="请输入表单编码" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
@@ -28,26 +28,26 @@
     </el-form>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddForm"
-                   v-hasPerm="['online:form:add']">
+        <el-button type="primary" icon="el-icon-plus" size="mini" v-hasPerm="['online:form:add']"
+                   @click="handleAddForm">
           新增
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdateForm"
-                   v-hasPerm="['online:form:update']">
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" v-hasPerm="['online:form:update']"
+                   @click="handleUpdateForm">
           修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleDeleteForm"
-                   v-hasPerm="['online:form:delete']">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" v-hasPerm="['online:form:delete']"
+                   @click="handleDeleteForm">
           删除
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" icon="el-icon-download" size="mini" @click="handleExportForm"
-                   v-hasPerm="['online:form:export']">
+        <el-button type="warning" icon="el-icon-download" size="mini" v-hasPerm="['online:form:export']"
+                   @click="handleExportForm">
           导出
         </el-button>
       </el-col>
@@ -133,7 +133,7 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="备注:" prop="remark">
+            <el-form-item label="备注" prop="remark">
               <el-input v-model="onlineForm.remark" type="textarea" placeholder="请输入内容"></el-input>
             </el-form-item>
           </el-form>
@@ -194,7 +194,7 @@
                 <template v-else>
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="数据从表:" prop="tableName">
+                      <el-form-item label="数据从表" prop="tableName">
                         <el-select v-model="onlineTable.tableName" placeholder="数据从表" clearable style="width: 100%"
                                    @change="handleOnlineTable">
                           <el-option
@@ -207,7 +207,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="从表类型:" prop="tableType">
+                      <el-form-item label="从表类型" prop="tableType">
                         <el-select v-model="onlineTable.tableType" size="small" style="width: 100%">
                           <el-option
                             v-for="tableTypeOption in OnlineTableType.getList().filter(item => item.value!==OnlineTableType.MASTER)"
@@ -221,19 +221,19 @@
                   </el-row>
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="数据表描述:" prop="tableLabel">
+                      <el-form-item label="数据表描述" prop="tableLabel">
                         <el-input v-model="onlineTable.tableLabel" placeholder="请输入数据表描述"/>
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="数据模型标识:" prop="modelName">
+                      <el-form-item label="数据模型标识" prop="modelName">
                         <el-input v-model="onlineTable.modelName" placeholder="请输入数据模型标识"/>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="主表关联字段:" prop="masterColumnId">
+                      <el-form-item label="主表关联字段" prop="masterColumnId">
                         <el-select v-model="onlineTable.masterColumnId" size="small" style="width: 100%">
                           <el-option
                             v-for="tableColumnOption in masterTableColumnList"
@@ -245,7 +245,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="从表关联字段:" prop="slaveColumnName">
+                      <el-form-item label="从表关联字段" prop="slaveColumnName">
                         <el-select v-model="onlineTable.slaveColumnName" size="small" style="width: 100%">
                           <el-option
                             v-for="tableColumnOption in slaveTableColumnList"
@@ -259,7 +259,7 @@
                   </el-row>
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="是否级联删除:" prop="cascadeDelete">
+                      <el-form-item label="是否级联删除" prop="cascadeDelete">
                         <el-switch
                           v-model="onlineTable.cascadeDelete"
                           active-value="1"
@@ -268,7 +268,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="是否左关联:" prop="leftJoin">
+                      <el-form-item label="是否左关联" prop="leftJoin">
                         <el-switch
                           v-model="onlineTable.leftJoin"
                           active-value="1"
@@ -313,7 +313,7 @@
               </el-table-column>
               <el-table-column label="操作" width="220px" align="center">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="text" @click="onlinePageDesigner(scope.row)">
+                  <el-button size="mini" type="text" @click="designerOnlinePage(scope.row)">
                     页面设计
                   </el-button>
                   <el-button size="mini" type="text" @click="editOnlinePage(scope.row)">
@@ -329,14 +329,15 @@
             </el-button>
             <el-dialog :title="onlinePageTitle" :visible.sync="onlinePageDialog" width="500px" append-to-body>
               <el-form ref="onlinePageForm" :model="onlinePage" :rules="onlinePageRules" label-width="100px">
-                <el-form-item label="页面编码:" prop="pageCode">
+                <el-form-item label="页面编码" prop="pageCode">
                   <el-input v-model="onlinePage.pageCode" placeholder="请输入页面编码"/>
                 </el-form-item>
-                <el-form-item label="页面名称:" prop="pageName">
+                <el-form-item label="页面名称" prop="pageName">
                   <el-input v-model="onlinePage.pageName" placeholder="请输入页面编码"/>
                 </el-form-item>
-                <el-form-item label="页面类别:" prop="pageKind">
-                  <el-select v-model="onlinePage.pageKind" placeholder="请选择页面类别" size="small" style="width: 100%">
+                <el-form-item label="页面类别" prop="pageKind">
+                  <el-select v-model="onlinePage.pageKind" placeholder="请选择页面类别" size="small" style="width: 100%"
+                             :disabled="this.onlineForm.formType===OnlineFormType.FLOW">
                     <el-option
                       v-for="item in OnlinePageKind.getList()"
                       :key="item.value"
@@ -345,20 +346,20 @@
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item label="页面类型:" prop="pageType">
+                <el-form-item label="页面类型" prop="pageType">
                   <el-select v-model="onlinePage.pageType" placeholder="请选择页面类型" size="small" style="width: 100%">
                     <el-option
-                      v-for="item in OnlinePageType.getList()"
+                      v-for="item in filterPageTypeList"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value"
                     />
                   </el-select>
                 </el-form-item>
-                <el-form-item label="页面数据:" prop="tableId">
+                <el-form-item label="页面数据" prop="tableId">
                   <el-select class="input-item" v-model="onlinePage.tableId" :clearable="true" placeholder="页面数据"
                              style="width: 100%">
-                    <el-option v-for="item in onlineTableList" :key="item.id"
+                    <el-option v-for="item in filterPageTableList" :key="item.id"
                                :value="item.id" :label="item.tableName">
                       <el-row type="flex" justify="space-between" align="middle">
                         <span>{{item.tableName}}</span>
@@ -413,6 +414,7 @@
     addOnlinePage,
     updateOnlinePage
   } from '@/api/online/page'
+  import { DefaultPageConfig, DefaultWidgetAttributes } from './config'
   import TableColumn from './column'
   import PageDesigner from './designer'
 
@@ -540,6 +542,41 @@
     created() {
       this.getOnlineFormList()
     },
+    computed: {
+      /** 过滤表单页面类型 */
+      filterPageTypeList() {
+        return this.OnlinePageType.getList().filter(item => {
+          if (item.value === this.OnlinePageType.FLOW) {
+            return this.onlineForm.formType === this.OnlineFormType.FLOW
+          } else if (item.value === this.OnlinePageType.QUERY) {
+            return this.onlineForm.formType !== this.OnlineFormType.FLOW
+          } else if (item.value === this.OnlinePageType.ORDER) {
+            return this.onlineForm.formType === this.OnlineFormType.FLOW
+          } else {
+            return true
+          }
+        })
+      },
+      /** 过滤表单页面可选数据表 */
+      filterPageTableList() {
+        return this.onlineTableList.filter(item => {
+          switch (this.onlinePage.pageType) {
+            // 工单列表页面和工作流流程页面，只能选择主表
+          case this.OnlinePageType.FLOW:
+          case this.OnlinePageType.ORDER:
+            return item.tableType === this.OnlineTableType.MASTER
+            // 流程编辑页面只支持一对多从表，普通编辑页面只支持主表和一对多从表
+          case this.OnlinePageType.EDIT:
+            return this.onlineForm.formType === this.OnlineFormType.FLOW ? item.tableType === this.OnlineTableType.ONE_TO_MANY : (item.tableType === this.OnlineTableType.MASTER || item.tableType === this.OnlineTableType.ONE_TO_MANY)
+            // 查询页面可以选择主表或者一对多从表
+          case this.OnlinePageType.QUERY:
+            return item.tableType === this.OnlineTableType.MASTER || item.tableType === this.OnlineTableType.ONE_TO_MANY
+          default:
+            return false
+          }
+        })
+      }
+    },
     methods: {
       /** 查询表单列表 */
       getOnlineFormList() {
@@ -610,7 +647,7 @@
       // 多选框选中数据
       handleSelectionChange(selection) {
         this.selectRowList = selection
-        this.single = selection.length != 1
+        this.single = selection.length !== 1
         this.multiple = !selection.length
       },
       /** 修改按钮操作 */
@@ -626,14 +663,14 @@
       /** 上一步 */
       handlePrevStep() {
         this.activeStep = this.activeStep - 1
-        if (this.activeStep == 1) {
+        if (this.activeStep === 1) {
           this.columnVisible = false
           this.getOnlineTableList()
         }
       },
       /** 下一步 */
       handleNextStep() {
-        if (this.activeStep == 0) {
+        if (this.activeStep === 0) {
           this.columnVisible = false
           // 判断是否修改过表单基础信息
           if (JSON.stringify(this.onlineForm) !== this.onlineFormStr) {
@@ -643,14 +680,14 @@
             this.getOnlineTableList()
           }
         }
-        if (this.activeStep == 1 && !this.masterOnlineTable) {
+        if (this.activeStep === 1 && !this.masterOnlineTable) {
           this.messageWarning('请添加数据主表！')
           return
         }
         this.activeStep = this.activeStep + 1
-        if (this.activeStep == 2) {
+        if (this.activeStep === 2) {
           this.designerVisible = false
-          if (this.onlineForm.formStatus != this.OnlineFormStatus.PAGE_DESIGN) {
+          if (this.onlineForm.formStatus !== this.OnlineFormStatus.PAGE_DESIGN) {
             changeFormStatus({ id: this.onlineForm.id, formStatus: this.OnlineFormStatus.PAGE_DESIGN })
           }
           this.getOnlinePageList()
@@ -665,7 +702,7 @@
       submitOnlineForm: function () {
         this.$refs.onlineForm.validate(valid => {
           if (valid) {
-            if (this.onlineForm.id != undefined) {
+            if (this.onlineForm.id !== undefined) {
               updateOnlineForm(this.onlineForm).then(() => {
                 this.getOnlineFormList()
                 this.getOnlineTableList()
@@ -702,7 +739,7 @@
         this.resetOnlineTable()
         selectOnlineTableList(this.onlineTable).then(response => {
             this.onlineTableList = response.data
-            this.masterOnlineTable = this.onlineTableList.find(item => item.tableType == this.OnlineTableType.MASTER)
+            this.masterOnlineTable = this.onlineTableList.find(item => item.tableType === this.OnlineTableType.MASTER)
             this.formLoading = false
           }
         )
@@ -718,7 +755,7 @@
       getOnlinePageList() {
         this.formLoading = true
         this.resetOnlinePage()
-        selectOnlinePageList(this.onlinePage).then(response => {
+        selectOnlinePageList({ formId: this.onlineForm.id }).then(response => {
             this.onlinePageList = response.data
             this.formLoading = false
           }
@@ -758,7 +795,7 @@
       /** 新增数据表 */
       addOnlineTable() {
         this.resetOnlineTable()
-        if (!this.onlineTableList || this.onlineTableList.length == 0) {
+        if (!this.onlineTableList || this.onlineTableList.length === 0) {
           this.onlineTable.tableType = this.OnlineTableType.MASTER
           this.onlineTableTitle = '新增数据主表'
         } else {
@@ -811,10 +848,10 @@
       submitOnlineTable() {
         this.$refs.onlineTableForm.validate(valid => {
           if (valid) {
-            if (this.onlineTable.tableType != this.OnlineTableType.MASTER) {
-              this.onlineTable.masterColumnName = this.masterTableColumnList.find(item => item.id == this.onlineTable.masterColumnId)?.columnName
+            if (this.onlineTable.tableType !== this.OnlineTableType.MASTER) {
+              this.onlineTable.masterColumnName = this.masterTableColumnList.find(item => item.id === this.onlineTable.masterColumnId)?.columnName
             }
-            if (this.onlineTable.id != undefined) {
+            if (this.onlineTable.id !== undefined) {
               updateOnlineTable(this.onlineTable).then(() => {
                 this.onlineTableDialog = false
                 this.messageSuccess('数据表信息修改成功')
@@ -840,8 +877,8 @@
       },
       handleOnlineTable() {
         this.onlineTable.modelName = this.toCamelCase(this.onlineTable.tableName)
-        this.onlineTable.tableLabel = this.jdbcTableList.find(item => item.tableName == this.onlineTable.tableName)?.tableComment
-        if (this.onlineTable.tableType != this.OnlineTableType.MASTER) {
+        this.onlineTable.tableLabel = this.jdbcTableList.find(item => item.tableName === this.onlineTable.tableName)?.tableComment
+        if (this.onlineTable.tableType !== this.OnlineTableType.MASTER) {
           this.getSlaveTableColumnList(this.onlineTable.tableName)
           this.onlineTable.slaveColumnName = undefined
         }
@@ -854,9 +891,10 @@
           tableId: undefined,
           pageCode: undefined,
           pageName: undefined,
-          pageType: undefined,
-          pageKind: undefined
+          pageType: this.onlineForm.formTag === this.OnlineFormType.FLOW ? this.OnlinePageType.FLOW : this.OnlinePageType.QUERY,
+          pageKind: this.OnlinePageKind.JUMP
         }
+        this.onlinePageList = []
         this.resetForm('onlinePage')
       },
       /** 新增表单页面 */
@@ -866,7 +904,6 @@
       },
       /** 编辑表单页面 */
       editOnlinePage(row) {
-        this.resetOnlinePage()
         detailOnlinePage(row.id).then(response => {
           this.onlinePage = response.data
           this.onlinePageDialog = true
@@ -886,8 +923,7 @@
         })
       },
       /** 表单页面设计 */
-      onlinePageDesigner(row) {
-        this.resetOnlinePage()
+      designerOnlinePage(row) {
         detailOnlinePage(row.id).then(response => {
           this.onlinePage = response.data
           this.designerVisible = true
@@ -895,9 +931,31 @@
       },
       /** 提交表单页面 */
       submitOnlinePage() {
+        let pageConfig = {
+          ...DefaultPageConfig,
+          widgetList: [],
+          paramList: []
+        }
+        // 如果是查询页面，则添加默认的主表
+        if (this.onlinePage.pageType === this.OnlinePageType.QUERY || this.onlinePage.pageType === this.OnlinePageType.ORDER) {
+          pageConfig.tableWidget = {
+            ...DefaultWidgetAttributes.Table,
+            tableId: this.onlinePage.tableId,
+            tableColumnList: [],
+            variableName: this.onlinePage.pageCode,
+            showName: this.onlinePage.pageName,
+            operationList: this.onlinePage.pageType === this.OnlinePageType.QUERY ? [...DefaultWidgetAttributes.Table.operationList] : [],
+            tableInfo: { ...DefaultWidgetAttributes.Table.tableInfo }
+          }
+        }
+        this.onlinePage.widgetJson = JSON.stringify({
+          pageConfig: pageConfig,
+          widgetList: []
+        })
+        this.onlinePage.paramsJson = JSON.stringify([])
         this.$refs.onlinePageForm.validate(valid => {
           if (valid) {
-            if (this.onlinePage.id != undefined) {
+            if (this.onlinePage.id !== undefined) {
               updateOnlinePage(this.onlinePage).then(() => {
                 this.onlinePageDialog = false
                 this.messageSuccess('表单页面信息修改成功')

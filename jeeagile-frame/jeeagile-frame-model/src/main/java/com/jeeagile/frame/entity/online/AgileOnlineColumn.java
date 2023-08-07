@@ -20,11 +20,13 @@ public class AgileOnlineColumn extends AgileBaseTenantModel<AgileOnlineColumn> {
     /**
      * 在线表单主键ID
      */
+    @ApiModelProperty("在线表单主键ID")
     @NotNull(message = "表单ID不能为空！")
     private String formId;
     /**
-     * 在线表单主键ID
+     * 在线数据表主键ID
      */
+    @ApiModelProperty("在线数据表主键ID")
     @NotNull(message = "数据表ID不能为空！")
     private String tableId;
     /**
@@ -112,7 +114,7 @@ public class AgileOnlineColumn extends AgileBaseTenantModel<AgileOnlineColumn> {
      * 数据对象字段分类
      */
     @ApiModelProperty(value = "数据对象字段分类")
-    private String fieldClassify;
+    private String fieldKind;
     /**
      * 数据对象字典ID
      */

@@ -25,3 +25,7 @@ export const updateOnlinePage = data => postApi('/online/page/update', data)
  */
 export const deleteOnlinePage = data => postApi('/online/page/delete', data)
 
+/**
+ * 保存表单页面设计
+ */
+export const savePageDesigner = data => postApi('/online/page/designer', data)

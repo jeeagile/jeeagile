@@ -5,11 +5,10 @@ import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.validate.AgileValidateUtil;
-import com.jeeagile.frame.constants.online.OnlineFieldClassify;
+import com.jeeagile.frame.constants.online.OnlineFieldKind;
 import com.jeeagile.frame.constants.online.OnlinePageType;
 import com.jeeagile.frame.constants.online.OnlineTableType;
 import com.jeeagile.frame.entity.online.AgileOnlineColumn;
-import com.jeeagile.frame.entity.online.AgileOnlineDict;
 import com.jeeagile.frame.entity.online.AgileOnlinePage;
 import com.jeeagile.frame.entity.online.AgileOnlineTable;
 import com.jeeagile.frame.mapper.online.AgileOnlineTableMapper;
@@ -81,7 +80,7 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
         agileOnlineColumn.setFieldName(AgileStringUtil.toCamelCase(agileJdbcTableColumn.getColumnName()));
         agileOnlineColumn.setFieldLabel(agileJdbcTableColumn.getColumnComment());
         agileOnlineColumn.setFieldType(agileJdbcTableColumn.getJavaType());
-        agileOnlineColumn.setFieldClassify(OnlineFieldClassify.convertFieldClassify(agileJdbcTableColumn.getColumnName()));
+        agileOnlineColumn.setFieldKind(OnlineFieldKind.convertfieldKind(agileJdbcTableColumn.getColumnName()));
         return agileOnlineColumn;
     }
 
@@ -201,6 +200,7 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
         List<OnlineTableColumn> onlineTableColumnList = new ArrayList<>();
         agileOnlineColumnList.forEach(agileOnlineColumn -> {
             OnlineTableColumn onlineTableColumn = new OnlineTableColumn();
+            onlineTableColumn.setColumnId(agileOnlineColumn.getId());
             BeanUtils.copyProperties(agileOnlineColumn, onlineTableColumn);
             if (AgileStringUtil.isNotEmpty(agileOnlineColumn.getDictId())) {
                 onlineTableColumn.setOnlineDict(agileOnlineDictService.getById(agileOnlineColumn.getDictId()));

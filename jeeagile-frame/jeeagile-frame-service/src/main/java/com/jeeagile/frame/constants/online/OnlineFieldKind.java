@@ -8,7 +8,7 @@ import java.util.Map;
  * @date 2027-07-27
  * @description 在线表单 数据表字段分类
  */
-public class OnlineFieldClassify {
+public class OnlineFieldKind {
     /**
      * 文件上传字段
      */
@@ -76,7 +76,7 @@ public class OnlineFieldClassify {
      * @param columnName
      * @return
      */
-    public static String convertFieldClassify(String columnName) {
+    public static String convertfieldKind(String columnName) {
         switch (columnName.toLowerCase()) {
             case "create_user":
                 return CREATE_USER;
@@ -94,6 +94,6 @@ public class OnlineFieldClassify {
     /**
      * 私有构造函数
      */
-    private OnlineFieldClassify() {
+    private OnlineFieldKind() {
     }
 }

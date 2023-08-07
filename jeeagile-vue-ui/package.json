@@ -34,6 +34,7 @@
     "file-saver": "^2.0.5",
     "fuse.js": "^6.4.6",
     "highlight": "^0.2.4",
+    "jquery": "^3.7.0",
     "js-beautify": "^1.13.13",
     "js-cookie": "^2.2.1",
     "less-loader": "^6.2.0",

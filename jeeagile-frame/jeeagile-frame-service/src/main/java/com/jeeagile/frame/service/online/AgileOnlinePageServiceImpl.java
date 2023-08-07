@@ -24,6 +24,7 @@ public class AgileOnlinePageServiceImpl extends AgileBaseServiceImpl<AgileOnline
         }
         LambdaQueryWrapper<AgileOnlinePage> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.select(AgileOnlinePage.class, i -> !"widgetJson".contains(i.getProperty()) || !"paramJson".contains(i.getProperty()));
+        lambdaQueryWrapper.eq(AgileOnlinePage::getFormId, agileOnlinePage.getFormId());
         if (AgileStringUtil.isNotEmpty(agileOnlinePage.getPageCode())) {
             lambdaQueryWrapper.eq(AgileOnlinePage::getPageCode, agileOnlinePage.getPageCode());
         }
@@ -44,8 +45,11 @@ public class AgileOnlinePageServiceImpl extends AgileBaseServiceImpl<AgileOnline
 
     @Override
     public void updateModelValidate(AgileOnlinePage agileOnlinePage) {
-        agileOnlinePage.setWidgetJson(null);
-        agileOnlinePage.setParamJson(null);
+        AgileOnlinePage oldOnlinePage = this.getById(agileOnlinePage.getId());
+        if (!oldOnlinePage.getTableId().equals(agileOnlinePage.getTableId())) {
+            agileOnlinePage.setWidgetJson(oldOnlinePage.getWidgetJson());
+            agileOnlinePage.setParamJson(oldOnlinePage.getParamJson());
+        }
         this.validateData(agileOnlinePage);
     }
 
