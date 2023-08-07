@@ -64,7 +64,7 @@
               <i class="el-icon-setting" style="margin-right: 10px;"/>{{onlinePage.pageName}}
             </el-breadcrumb-item>
           </el-breadcrumb>
-          <el-button class="table-btn delete" type="text" icon="el-icon-delete">重置</el-button>
+          <el-button class="table-btn delete" type="text" icon="el-icon-delete" @click="resetPageDesigner">重置</el-button>
           <el-button type="text" icon="el-icon-video-play">预览</el-button>
           <el-button class="table-btn warning" type="text" icon="el-icon-check" @click="savePageDesigner">保存</el-button>
           <el-button class="table-btn success" type="text" icon="el-icon-back" @click="handleBack">返回</el-button>
@@ -676,6 +676,18 @@
 
         savePageDesigner(onlinePage).then(response => {
           this.messageSuccess('表单页面设计配置信息保存成功！')
+        })
+      },
+      resetPageDesigner() {
+        this.$confirm('是否重置表单组件？', '表单设计', {
+          type: 'warning'
+        }).then(res => {
+          this.widgetVariableNameSet.clear()
+          if (this.pageConfig.pageType === this.OnlinePageType.QUERY) {
+            this.widgetVariableNameSet.add(this.pageConfig.tableWidget.variableName)
+          }
+          this.widgetUseCount = []
+          this.pageWidgetList = []
         })
       },
       /** 退出表单页面设计 */
