@@ -166,12 +166,8 @@ export const DefaultWidgetAttributes = {
     widgetKind: OnlineWidgetKind.Data,
     widgetType: OnlineWidgetType.Table,
     span: 24,
-    supportBottom: 0,
-    tableInfo: {
-      height: undefined,
-      paged: true,
-      optionColumnWidth: 150
-    },
+    height: undefined,
+    pageFlag: true,
     titleColor: '#409EFF',
     tableColumnList: [],
     operationList: [
@@ -210,13 +206,13 @@ export const DefaultWidgetAttributes = {
         formId: undefined
       }
     ],
+    operationWidth: 150,
     queryParamList: []
   },
   Card: {
     widgetKind: OnlineWidgetKind.Container,
     widgetType: OnlineWidgetType.Card,
     span: 12,
-    supportBottom: 0,
     padding: 15,
     gutter: 15,
     height: undefined,

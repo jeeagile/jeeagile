@@ -30,6 +30,7 @@ import ProcessDesigner from '@/components/ProcessDesigner/ProcessDesigner'
 import ProcessView from '@/components/ProcessDesigner/ProcessView'
 import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
 import { getSysConfig, getSysConfigValue, getSysDictData, getSysDictDataList } from '@/api/system/common'
 import { handleDictLabel, handleTree, resetForm, toCamelCase, getUuid } from '@/utils/agile'
 import VueParticles from 'vue-particles'
@@ -38,6 +39,8 @@ import 'highlight.js/styles/atom-one-dark-reasonable.css'
 import '@/components/AgileDict'
 import '@/components/AgileDict/system'
 import '@/components/AgileDict/online'
+import '@/components/Dialog'
+
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)

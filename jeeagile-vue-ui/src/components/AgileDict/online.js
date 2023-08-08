@@ -336,9 +336,32 @@ const OnlineOperationType = new AgileBaseDict('操作类型', [
     name: '自定义操作',
     symbol: 'CUSTOM'
   }
-]);
-Vue.prototype.OnlineOperationType = OnlineOperationType;
+])
+Vue.prototype.OnlineOperationType = OnlineOperationType
 
+const OnlineParamValueType = new AgileBaseDict('表单页面参数值类型', [
+  {
+    value: '01',
+    label: '表单参数',
+    symbol: 'FORM_PARAM'
+  },
+  {
+    value: '02',
+    label: '数据字段',
+    symbol: 'TABLE_COLUMN'
+  },
+  {
+    value: '03',
+    label: '系统静态字典',
+    symbol: 'STATIC_DICT'
+  },
+  {
+    value: '04',
+    label: '直接输入',
+    symbol: 'INPUT_VALUE'
+  }
+])
+Vue.prototype.OnlineParamValueType = OnlineParamValueType
 
 export {
   OnlineDictType,
@@ -351,5 +374,6 @@ export {
   OnlinePageType,
   OnlineWidgetType,
   OnlineWidgetKind,
-  OnlineOperationType
+  OnlineOperationType,
+  OnlineParamValueType
 }

@@ -945,7 +945,6 @@
             variableName: this.onlinePage.pageCode,
             showName: this.onlinePage.pageName,
             operationList: this.onlinePage.pageType === this.OnlinePageType.QUERY ? [...DefaultWidgetAttributes.Table.operationList] : [],
-            tableInfo: { ...DefaultWidgetAttributes.Table.tableInfo }
           }
         }
         this.onlinePage.widgetJson = JSON.stringify({

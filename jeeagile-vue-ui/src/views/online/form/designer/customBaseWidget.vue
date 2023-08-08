@@ -92,8 +92,7 @@
                class="base-card" :shadow="widgetConfig.shadow"
                :body-style="{padding: widgetConfig.padding ? widgetConfig.padding + 'px' : '0px'}"
                :style="{
-          height: (widgetConfig.height != null && widgetConfig.height !=='') ? widgetConfig.height + 'px' : undefined,
-          'margin-bottom': widgetConfig.supportBottom === 1 ? '20px' : undefined
+          height: (widgetConfig.height != null && widgetConfig.height !=='') ? widgetConfig.height + 'px' : undefined
         }">
         <div slot="header" class="base-card-header">
           <span>{{widgetConfig.showName}}</span>

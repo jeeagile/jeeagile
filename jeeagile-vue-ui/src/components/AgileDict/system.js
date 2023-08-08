@@ -60,6 +60,7 @@ const SysPublishStatus = new AgileBaseDict('发布状态', [
   }
 ])
 Vue.prototype.SysPublishStatus = SysPublishStatus
+
 export {
   SysUserStatus,
   SysUserSex,

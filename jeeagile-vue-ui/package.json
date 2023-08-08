@@ -37,6 +37,7 @@
     "jquery": "^3.7.0",
     "js-beautify": "^1.13.13",
     "js-cookie": "^2.2.1",
+    "layui-layer": "^1.0.9",
     "less-loader": "^6.2.0",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",

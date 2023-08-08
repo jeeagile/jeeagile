@@ -1,5 +1,5 @@
 import { Message } from 'element-ui'
-// import { treeDataTranslate } from '@/utils'
+import { handleTree } from '@/utils/agile'
 
 const DEFAULT_PAGE_SIZE = 10
 
@@ -74,7 +74,7 @@ export class DropdownWidget {
    */
   setDropdownList(dataList) {
     if (Array.isArray(dataList)) {
-      this.dropdownList = this.isTree ? treeDataTranslate(dataList, this.idKey, this.parentIdKey) : dataList
+      this.dropdownList = this.isTree ? handleTree(dataList, this.idKey, this.parentIdKey) : dataList
     }
   }
 }

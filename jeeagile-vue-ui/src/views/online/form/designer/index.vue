@@ -64,7 +64,8 @@
               <i class="el-icon-setting" style="margin-right: 10px;"/>{{onlinePage.pageName}}
             </el-breadcrumb-item>
           </el-breadcrumb>
-          <el-button class="table-btn delete" type="text" icon="el-icon-delete" @click="resetPageDesigner">重置</el-button>
+          <el-button class="table-btn delete" type="text" icon="el-icon-delete" @click="resetPageDesigner">重置
+          </el-button>
           <el-button type="text" icon="el-icon-video-play">预览</el-button>
           <el-button class="table-btn warning" type="text" icon="el-icon-check" @click="savePageDesigner">保存</el-button>
           <el-button class="table-btn success" type="text" icon="el-icon-back" @click="handleBack">返回</el-button>
@@ -164,6 +165,454 @@
         </el-row>
       </el-main>
       <el-aside class="page-designer-right" style="width: 280px;overflow: hidden">
+        <el-tabs class="tab-box" v-model="activeTabName">
+          <el-tab-pane :label="currentWidget == null ? '表单属性' : '组件属性'" name="widget">
+            <el-scrollbar style="height:calc(100vh - 210px);">
+              <el-row v-if="currentWidget != null" class="scroll-box">
+                <el-alert v-if="currentWidget.hasError" :title="currentWidget.errorMessage" type="error"
+                          :closable="false" style="margin-bottom: 15px;"/>
+                <el-form class="full-width-input" size="small" label-position="right" label-width="90px">
+                  <el-form-item label="组件类型">
+                    <el-select v-model="currentWidget.widgetType" :disabled="true">
+                      <el-option v-for="item in OnlineWidgetType.getList()" :key="item.value"
+                                 :label="item.label" :value="item.value"/>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="组件标识">
+                    <el-input v-model="currentWidget.variableName" placeholder="" disabled/>
+                  </el-form-item>
+                  <el-form-item label="标题名">
+                    <el-input v-model="currentWidget.showName" placeholder=""/>
+                  </el-form-item>
+                  <el-form-item label="占位提示"
+                                v-if="currentWidget.widgetType !== OnlineWidgetType.RichEditor &&
+                  currentWidget.widgetType !== 'Upload' &&
+                  currentWidget.widgetKind === 'Form'"
+                  >
+                    <el-input v-model="currentWidget.placeholder" placeholder=""/>
+                  </el-form-item>
+                  <el-form-item label="栅格数量"
+                                v-if="currentWidget.widgetType !== OnlineWidgetType.Divider &&
+                  currentWidget.widgetType !== OnlineWidgetType.Text &&
+                  currentWidget.widgetKind !== OnlineWidgetType.Filter &&
+                  pageConfig.pageType !== OnlinePageType.QUERY"
+                  >
+                    <el-slider v-model="currentWidget.span" :min="1" :max="24"/>
+                  </el-form-item>
+                  <!-- Input属性 -->
+                  <el-row v-if="currentWidget.widgetType === OnlineWidgetType.Input">
+                    <el-form-item label="输入框类型" v-if="currentWidget.widgetKind !== OnlineWidgetKind.Filter">
+                      <el-select v-model="currentWidget.type" placeholder="">
+                        <el-option value="text" label="单行文本"/>
+                        <el-option value="textarea" label="多行文本"/>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="最小行数"
+                                  v-if="currentWidget.widgetType === OnlineWidgetType.Input && currentWidget.widgetType === OnlineWidgetType.Textarea">
+                      <el-input-number v-model="currentWidget.minRows"/>
+                    </el-form-item>
+                    <el-form-item label="最大行数"
+                                  v-if="currentWidget.widgetType === OnlineWidgetType.Input && currentWidget.widgetType === OnlineWidgetType.Textarea">
+                      <el-input-number v-model="currentWidget.maxRows"/>
+                    </el-form-item>
+                  </el-row>
+                  <!-- Date属性 -->
+                  <el-row v-if="currentWidget.widgetType === OnlineWidgetType.Date">
+                    <el-form-item label="日期类型">
+                      <el-select v-model="currentWidget.type" placeholder="" @change="dateTypeChange">
+                        <el-option value="year" label="年（year）"/>
+                        <el-option value="month" label="月（month）"/>
+                        <el-option value="date" label="日（date）"/>
+                        <el-option value="datetime" label="日期时间（datetime）"/>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="显示格式">
+                      <el-input v-model="currentWidget.format" placeholder="请输入日期显示格式"/>
+                    </el-form-item>
+                    <el-form-item label="绑定值格式">
+                      <el-input v-model="currentWidget.valueFormat" placeholder="请输入绑定值格式"/>
+                    </el-form-item>
+                  </el-row>
+                  <!-- 数字输入框属性 -->
+                  <el-row v-if="currentWidget.widgetType === OnlineWidgetType.NumberInput">
+                    <el-form-item label="最小值">
+                      <el-input-number v-model="currentWidget.min"/>
+                    </el-form-item>
+                    <el-form-item label="最大值">
+                      <el-input-number v-model="currentWidget.max"/>
+                    </el-form-item>
+                    <el-form-item label="步长">
+                      <el-input-number v-model="currentWidget.step"/>
+                    </el-form-item>
+                    <el-form-item label="精度">
+                      <el-input-number v-model="currentWidget.precision"/>
+                    </el-form-item>
+                    <el-form-item label="控制按钮">
+                      <el-radio-group v-model="currentWidget.controlVisible">
+                        <el-radio-button :label="1">显示</el-radio-button>
+                        <el-radio-button :label="0">隐藏</el-radio-button>
+                      </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="按钮位置">
+                      <el-radio-group v-model="currentWidget.controlPosition">
+                        <el-radio-button :label="0">默认</el-radio-button>
+                        <el-radio-button :label="1">右侧</el-radio-button>
+                      </el-radio-group>
+                    </el-form-item>
+                  </el-row>
+                  <!-- 上传组件属性 -->
+                  <el-row v-if="currentWidget.widgetType === OnlineWidgetType.Upload">
+                    <el-form-item label="文件字段名">
+                      <el-input v-model="currentWidget.fileFieldName" placeholder="" disabled/>
+                    </el-form-item>
+                    <el-form-item label="上传地址">
+                      <el-input v-model="currentWidget.actionUrl" placeholder="" readonly/>
+                    </el-form-item>
+                    <el-form-item label="下载地址">
+                      <el-input v-model="currentWidget.downloadUrl" placeholder="" readonly/>
+                    </el-form-item>
+                  </el-row>
+                  <!-- 基础卡片属性 -->
+                  <el-row v-if="currentWidget.widgetType === OnlineWidgetType.Card">
+                    <el-form-item label="内边距">
+                      <el-input-number v-model="currentWidget.padding"/>
+                    </el-form-item>
+                    <el-form-item label="栅格间距">
+                      <el-input-number v-model="currentWidget.gutter"/>
+                    </el-form-item>
+                    <el-form-item label="卡片高度">
+                      <el-input-number v-model="currentWidget.height" placeholder="请输入卡片高度，单位px"/>
+                    </el-form-item>
+                    <el-form-item label="阴影显示">
+                      <el-radio-group v-model="currentWidget.shadow">
+                        <el-radio-button label="always">一直显示</el-radio-button>
+                        <el-radio-button label="hover">移入显示</el-radio-button>
+                        <el-radio-button label="never">永不显示</el-radio-button>
+                      </el-radio-group>
+                    </el-form-item>
+                  </el-row>
+                  <!-- 分割线属性 -->
+                  <el-form-item label="阴影显示" v-if="currentWidget.widgetType === OnlineWidgetType.Divider">
+                    <el-radio-group v-model="currentWidget.position">
+                      <el-radio-button label="left">居左</el-radio-button>
+                      <el-radio-button label="center">居中</el-radio-button>
+                      <el-radio-button label="right">居右</el-radio-button>
+                    </el-radio-group>
+                  </el-form-item>
+                  <!-- 表格属性 -->
+                  <el-row v-if="currentWidget.widgetType === OnlineWidgetType.Table">
+                    <el-form-item class="color-select" label="标题颜色" style="height: 32px;"
+                                  v-if="pageConfig.pageType !== OnlinePageType.QUERY">
+                      <el-color-picker v-model="currentWidget.titleColor" style="width: 100%;"/>
+                    </el-form-item>
+                    <el-form-item label="表格高度">
+                      <el-input-number v-model="currentWidget.height" placeholder="请输入表格高度，单位px"/>
+                    </el-form-item>
+                    <el-form-item label="是否分页">
+                      <el-switch v-model="currentWidget.pageFlag" key="pageFlag"/>
+                    </el-form-item>
+                    <el-col :span="24">
+                      <el-divider>表格字段</el-divider>
+                    </el-col>
+                    <el-col :span="24" style="border-top: 1px solid #EBEEF5;">
+                      <el-table :data="currentWidget.tableColumnList" :show-header="false" empty-text="请选择绑定字段"
+                                key="tableColumn">
+                        <el-table-column label="操作" width="45px">
+                          <template slot-scope="scope">
+                            <el-button class="table-btn delete" type="text" icon="el-icon-remove-outline"
+                                       @click="deleteTableColumn(scope.row)"
+                            />
+                          </template>
+                        </el-table-column>
+                        <el-table-column label="表格列名" prop="showName" width="100px">
+                          <template slot-scope="scope">
+                            <el-button class="table-btn" type="text" style="text-decoration: underline;"
+                                       @click="editTableColumn(scope.row)">{{scope.row.showName}}
+                            </el-button>
+                          </template>
+                        </el-table-column>
+                        <el-table-column label="表格字段">
+                          <template slot-scope="scope">
+                            <span>{{(scope.row.onlineColumn || {}).columnName}}</span>
+                          </template>
+                        </el-table-column>
+                      </el-table>
+                      <el-button class="full-line-btn" icon="el-icon-plus" @click="addTableColumn()">添加表格字段
+                      </el-button>
+                    </el-col>
+                  </el-row>
+                  <!-- 文本属性 -->
+                  <el-row v-if="currentWidget.widgetType === 'Text'">
+                    <el-form-item class="color-select" label="背景颜色" style="height: 32px;">
+                      <el-color-picker v-model="currentWidget.backgroundColor" style="width: 100%;"/>
+                    </el-form-item>
+                    <el-form-item class="color-select" label="文字颜色" style="height: 32px;">
+                      <el-color-picker v-model="currentWidget.color" style="width: 100%;"/>
+                    </el-form-item>
+                    <el-form-item label="文字大小">
+                      <el-input-number v-model="currentWidget.fontSize" placeholder="请输入文字大小，单位px"/>
+                    </el-form-item>
+                    <el-form-item label="文字行高">
+                      <el-input-number v-model="currentWidget.lineHeight" placeholder="请输入文字行高，单位px"/>
+                    </el-form-item>
+                    <el-form-item label="首行缩进">
+                      <el-input-number v-model="currentWidget.indent" placeholder="请输入首行缩进，单位em"/>
+                    </el-form-item>
+                    <el-form-item label="内边距">
+                      <el-input-number v-model="currentWidget.padding"/>
+                    </el-form-item>
+                    <el-form-item label="文本修饰">
+                      <el-radio-group v-model="currentWidget.decoration">
+                        <el-radio-button label="none">标准</el-radio-button>
+                        <el-radio-button label="underline">下划线</el-radio-button>
+                        <el-radio-button label="line-through">中划线</el-radio-button>
+                      </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="对齐方式">
+                      <el-radio-group v-model="currentWidget.align">
+                        <el-radio-button label="left">左对齐</el-radio-button>
+                        <el-radio-button label="right">右对齐</el-radio-button>
+                        <el-radio-button label="center">中间对齐</el-radio-button>
+                      </el-radio-group>
+                    </el-form-item>
+                  </el-row>
+                  <!-- 图片属性 -->
+                  <el-row v-if="currentWidget.widgetType === OnlineWidgetType.Image">
+                    <el-form-item label="图片宽度">
+                      <el-input-number v-model="currentWidget.width"/>
+                    </el-form-item>
+                    <el-form-item label="图片高度">
+                      <el-input-number v-model="currentWidget.height"/>
+                    </el-form-item>
+                    <el-form-item label="显示模式">
+                      <el-select v-model="currentWidget.fit" placeholder="">
+                        <el-option value="fill" label="充满"/>
+                        <el-option value="contain" label="包含"/>
+                        <el-option value="cover" label="裁剪"/>
+                        <el-option value="none" label="原始尺寸"/>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="图片URL">
+                      <el-input v-model="currentWidget.src" placeholder=""/>
+                    </el-form-item>
+                  </el-row>
+                  <!-- 公共属性 -->
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="是否只读" v-if="currentWidget.widgetKind === OnlineWidgetKind.Form">
+                        <el-switch v-model="currentWidget.readOnly"/>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="是否禁用"
+                                    v-if="currentWidget.widgetType !== OnlineWidgetType.RichEditor && currentWidget.widgetKind === OnlineWidgetKind.Form">
+                        <el-switch v-model="currentWidget.disabled"/>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <!-- 字典下拉参数设置 -->
+                  <el-row v-if="currentWidget.widgetType === OnlineWidgetType.Select && currentWidgetDict">
+                    <el-col :span="24">
+                      <el-divider>下拉选项配置</el-divider>
+                    </el-col>
+                    <el-col :span="24">
+                      <el-form-item label="数据字典">
+                        <el-input v-model="currentWidget.onlineColumn.onlineDict.dictName" readonly/>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="24" style="border-top: 1px solid #EBEEF5;"
+                            v-if="Array.isArray(currentWidgetDict.paramList) && currentWidgetDict.paramList.length > 0"
+                    >
+                      <el-table :data="currentWidgetDict.paramList" :show-header="false" key="dictParamTable">
+                        <el-table-column label="参数名称" prop="dictParamName" width="100px"/>
+                        <el-table-column label="参数值" width="120px">
+                          <template slot-scope="scope">
+                            <el-button class="table-btn" type="text" style="text-decoration: underline;"
+                                       @click="editDictParam(scope.row)">
+                          <span v-if="scope.row.paramValueType === OnlineParamValueType.FORM_PARAM">
+                            {{(getPageParam(scope.row.dictValue) || {}).columnName}}
+                          </span>
+                              <span v-else-if="scope.row.paramValueType === OnlineParamValueType.TABLE_COLUMN">
+                            {{(getTableColumn(scope.row.dictValue) || {}).columnName}}
+                          </span>
+                              <span v-else-if="scope.row.paramValueType === OnlineParamValueType.STATIC_DICT">
+                            {{getDictValueShowName(scope.row.dictValue)}}
+                          </span>
+                              <span v-else-if="scope.row.paramValueType === OnlineParamValueType.INPUT_VALUE">
+                            {{scope.row.dictValue}}
+                          </span>
+                              <span v-else>尚未设置参数值</span>
+                            </el-button>
+                          </template>
+                        </el-table-column>
+                        <el-table-column label="操作" width="40px">
+                          <template slot-scope="scope">
+                            <el-button class="table-btn delete" type="text" icon="el-icon-remove-outline"
+                                       :disabled="scope.row.dictValue == null" @click="deleteDictParam(scope.row)"
+                            />
+                          </template>
+                        </el-table-column>
+                      </el-table>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </el-row>
+              <el-row v-if="currentWidget == null" class="scroll-box">
+                <el-form class="full-width-input" size="small" label-position="left" label-width="90px">
+                  <el-form-item label="表单类别">
+                    <el-select v-model="pageConfig.pageKind" placeholder="">
+                      <el-option v-for="item in OnlinePageKind.getList()" :key="item.value"
+                                 :label="item.label" :value="item.value"/>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="表单类型">
+                    <el-input :value="OnlinePageType.getLabel(pageConfig.pageType)" readonly disabled/>
+                  </el-form-item>
+                  <el-form-item label="标签位置">
+                    <el-radio-group v-model="pageConfig.labelPosition">
+                      <el-radio-button label="left">居左</el-radio-button>
+                      <el-radio-button label="right">居右</el-radio-button>
+                      <el-radio-button label="top">顶部</el-radio-button>
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="标签宽度">
+                    <el-input-number v-model="pageConfig.labelWidth"/>
+                  </el-form-item>
+                  <el-form-item label="栅格间距">
+                    <el-input-number v-model="pageConfig.gutter"/>
+                  </el-form-item>
+                  <el-form-item label="弹窗宽度" v-if="pageConfig.pageKind === OnlinePageKind.DIALOG">
+                    <el-input-number v-model="pageConfig.width"/>
+                  </el-form-item>
+                  <el-form-item label="弹窗高度" v-if="pageConfig.pageKind === OnlinePageKind.DIALOG">
+                    <el-input-number v-model="pageConfig.height"/>
+                  </el-form-item>
+                </el-form>
+              </el-row>
+            </el-scrollbar>
+          </el-tab-pane>
+          <el-tab-pane label="操作管理" name="operation"
+                       v-if="currentWidget && currentWidget.widgetType === OnlineWidgetType.Table">
+            <el-scrollbar style="height:calc(100vh - 210px);">
+              <el-row v-if="currentWidget != null && currentWidget.widgetType === OnlineWidgetType.Table"
+                      class="scroll-box">
+                <el-form class="full-width-input" size="small" label-position="left" label-width="90px">
+                  <el-row>
+                    <el-col :span="24">
+                      <el-form-item label="操作列宽度">
+                        <el-input-number v-model="currentWidget.operationWidth" placeholder="请输入表格高度，单位px"/>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="24" style="border-top: 1px solid #EBEEF5;">
+                      <el-table :data="currentWidget.operationList" :show-header="false" key="operationTable">
+                        <el-table-column label="操作" width="40px">
+                          <template slot-scope="scope">
+                            <el-button class="table-btn delete" type="text" icon="el-icon-remove-outline"
+                                       :disabled="scope.row.builtin" @click="deleteTableOperation(scope.row)"
+                            />
+                          </template>
+                        </el-table-column>
+                        <el-table-column label="操作名称" prop="name" width="70px">
+                          <template slot-scope="scope">
+                            <el-button class="table-btn" type="text" style="text-decoration: underline;"
+                                       @click="editTableOperation(scope.row)">{{scope.row.name}}
+                            </el-button>
+                          </template>
+                        </el-table-column>
+                        <el-table-column label="是否启动" prop="enabled" width="70px">
+                          <template slot-scope="scope">
+                            <el-switch v-model="scope.row.enabled"/>
+                          </template>
+                        </el-table-column>
+                        <el-table-column label="操作类型" prop="type" width="80px">
+                          <template slot-scope="scope">
+                            <el-tag size="mini" effect="dark" :type="scope.row.rowOperation ? 'success' : 'warning'">
+                              {{scope.row.rowOperation ? '行内操作' : '表格操作'}}
+                            </el-tag>
+                          </template>
+                        </el-table-column>
+                      </el-table>
+                      <el-button class="full-line-btn" icon="el-icon-plus" @click="addTableOperation()"
+                                 :disabled="pageConfig.pageType === OnlinePageType.ORDER"
+                      >
+                        添加自定义操作
+                      </el-button>
+                    </el-col>
+                    <el-col :span="24">
+                      <el-divider>查询参数</el-divider>
+                    </el-col>
+                    <el-col :span="24" style="border-top: 1px solid #EBEEF5;">
+                      <el-table :data="currentWidget.queryParamList" :show-header="false" key="queryParamTable">
+                        <el-table-column label="操作" width="40px">
+                          <template slot-scope="scope">
+                            <el-button class="table-btn delete" type="text" icon="el-icon-remove-outline"
+                                       @click="deleteQueryParam(scope.row)"
+                            />
+                          </template>
+                        </el-table-column>
+                        <el-table-column label="参数名称" width="100px">
+                          <template slot-scope="scope">
+                            <el-tag size="mini" effect="dark"
+                                    :type="scope.row.tableType == OnlineTableType.MASTER ? 'success' : 'primary'">
+                              {{scope.row.onlineColumn.columnName}}
+                            </el-tag>
+                          </template>
+                        </el-table-column>
+                        <el-table-column label="参数值">
+                          <template slot-scope="scope">
+                            <span v-if="scope.row.paramValueType === OnlineParamValueType.FORM_PARAM">
+                              {{(getPageParam(scope.row.dictValue) || {}).columnName}}
+                            </span>
+                            <span v-else-if="scope.row.paramValueType === OnlineParamValueType.TABLE_COLUMN">
+                              {{scope.row.onlineColumn.columnName}}
+                            </span>
+                            <span v-else-if="scope.row.paramValueType === OnlineParamValueType.STATIC_DICT">
+                              {{getDictValueShowName(scope.row.paramValue)}}
+                            </span>
+                            <span v-else-if="scope.row.paramValueType === OnlineParamValueType.INPUT_VALUE">
+                              {{scope.row.paramValue}}
+                            </span>
+                            <span v-else>尚未设置参数值</span>
+                          </template>
+                        </el-table-column>
+
+                      </el-table>
+                      <el-button class="full-line-btn" icon="el-icon-plus" @click="addQueryParam(null)"
+                                 :disabled="pageConfig.pageType === OnlinePageType.ORDER"
+                      >
+                        添加查询参数
+                      </el-button>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </el-row>
+            </el-scrollbar>
+          </el-tab-pane>
+          <el-tab-pane label="表单参数" name="operation" v-if="currentWidget == null">
+            <el-row class="scroll-box">
+              <el-form size="small" label-position="left" label-width="90px">
+                <el-col :span="24" style="border-top: 1px solid #EBEEF5;">
+                  <el-table :data="pageConfig.paramList" :show-header="false" key="formParamTable">
+                    <el-table-column label="操作" width="45px">
+                      <template slot-scope="scope">
+                        <el-button class="table-btn delete" type="text" icon="el-icon-remove-outline"
+                                   :disabled="scope.row.builtin" @click="deletePageParam(scope.row)"
+                        />
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="参数名" prop="columnName"/>
+                    <el-table-column label="参数类型" width="100px">
+                      <template slot-scope="scope">
+                        <el-tag v-if="scope.row.columnPrimary" size="mini" type="warning">主键</el-tag>
+                        <el-tag v-if="scope.row.slaveColumn" size="mini" type="primary">关联字段</el-tag>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </el-col>
+              </el-form>
+            </el-row>
+          </el-tab-pane>
+        </el-tabs>
       </el-aside>
     </el-container>
   </div>
@@ -178,6 +627,11 @@
   import DragWidgetItem from './dragWidgetItem'
   import DragWidgetFilter from './dragWidgetFilter'
   import { findItemFromList } from '../util'
+  import EditWidgetTableColumn from './editWidgetTableColumn'
+  import EditWidgetTableOperation from './editWidgetTableOperation'
+  import EditWidgetTableQueryParam from './editWidgetTableQueryParam'
+  import EditWidgtDictParam from './editWidgtDictParam'
+  import * as SystemStaticDict from '@/components/AgileDict/system'
 
   Vue.component('drag-widget-item', DragWidgetItem)
   export default {
@@ -329,6 +783,7 @@
               } else {
                 if (widget.columnId != null) {
                   widget.onlineColumn = findItemFromList(widget.onlineTable.tableColumnList, widget.columnId, 'columnId')
+                  // eslint-disable-next-line max-depth
                   if (widget.onlineColumn == null) {
                     widget.hasError = true
                     widget.errorMessage = '组件 [' + widget.showName + ' ]绑定数据表字段并不属于数据表 [' + widget.onlineTable.tableName + ' ]'
@@ -390,7 +845,7 @@
           columnName: widget.name,
           showName: widget.label,
           variableName: this.handleWidgetVariableName(widget.name),
-          widgetCategory: this.onlinePage.pageType === this.OnlinePageType.QUERY ? this.OnlineWidgetKind.Filter : attrs.widgetKind
+          widgetKind: this.onlinePage.pageType === this.OnlinePageType.QUERY ? this.OnlineWidgetKind.Filter : attrs.widgetKind
         }
       },
       /** 组装组件名称 */
@@ -439,7 +894,7 @@
           return { ...DefaultWidgetAttributes.Label }
         }
         if (column.dictId && column.dictId !== '' && column.onlineDict) {
-          return column.onlineDict.treeFlag ? { ...DefaultWidgetAttributes.Cascader } : { ...DefaultWidgetAttributes.Select }
+          return column.onlineDict.treeFlag == this.SysYesNo.YES ? { ...DefaultWidgetAttributes.Cascader } : { ...DefaultWidgetAttributes.Select }
         }
         if (column.fieldType === 'Boolean') {
           return { ...DefaultWidgetAttributes.Switch }
@@ -459,8 +914,7 @@
             ...DefaultWidgetAttributes.Table,
             tableColumnList: [],
             operationList: [...DefaultWidgetAttributes.Table.operationList],
-            queryParamList: [],
-            tableInfo: { ...DefaultWidgetAttributes.Table.tableInfo }
+            queryParamList: []
           }
         } else {
           attrs = this.getColumnDefaultAttributes(column)
@@ -533,16 +987,16 @@
         if (widget === this.currentWidget) return
         this.currentWidgetDict = undefined
         if (widget) {
-          if (widget.onlincColumn && widget.column.onlineDict && widget.onlincColumn.onlineDict.paramList === null) {
+          if (widget.onlineColumn && widget.onlineColumn.onlineDict && !widget.onlineColumn.onlineDict.paramList) {
             if (widget.dictParamList) {
-              widget.onlincColumn.onlineDict.paramList = widget.dictParamList
+              widget.onlineColumn.onlineDict.paramList = widget.dictParamList
             } else {
-              if (widget.onlincColumn.onlineDict.dictParamJson) {
-                widget.onlincColumn.onlineDict.paramList = JSON.parse(widget.onlincColumn.onlineDict.dictParamJson)
+              if (widget.onlineColumn.onlineDict.dictParamJson) {
+                widget.onlineColumn.onlineDict.paramList = JSON.parse(widget.onlineColumn.onlineDict.dictParamJson)
               }
             }
           }
-          if (widget.onlincColumn) this.currentWidgetDict = widget.onlincColumn.onlineDict
+          if (widget.onlineColumn) this.currentWidgetDict = widget.onlineColumn.onlineDict
         }
         this.currentWidget = widget
         if (this.currentWidget.widgetType === 'Table') {
@@ -596,6 +1050,227 @@
         return this.pageConfig.tableWidget.operationList.filter(operation => {
           return operation.rowOperation === rowOperation && operation.enabled
         })
+      },
+      /** 日期类型组件 */
+      dateTypeChange(type) {
+        switch (type) {
+        case 'year':
+          this.currentWidget.format = 'yyyy'
+          this.currentWidget.valueFormat = 'yyyy'
+          break
+        case 'month':
+          this.currentWidget.format = 'yyyy-MM'
+          this.currentWidget.valueFormat = 'yyyy-MM'
+          break
+        case 'date':
+          this.currentWidget.format = 'yyyy-MM-dd'
+          this.currentWidget.valueFormat = 'yyyy-MM-dd'
+          break
+        case 'datetime':
+          this.currentWidget.format = 'yyyy-MM-dd HH:mm:ss'
+          this.currentWidget.valueFormat = 'yyyy-MM-dd HH:mm:ss'
+          break
+        default:
+          this.currentWidget.format = 'yyyy-MM-dd HH:mm:ss'
+          this.currentWidget.valueFormat = 'yyyy-MM-dd HH:mm:ss'
+          break
+        }
+      },
+      /** 删除表格字段 */
+      deleteTableColumn(column) {
+        if (column == null) return
+        this.$confirm('是否删除此表格列？').then(res => {
+          this.currentWidget.tableColumnList = this.currentWidget.tableColumnList.filter(item => {
+            return item.columnId !== column.columnId
+          })
+        })
+      },
+      /** 编辑表格字段 */
+      editTableColumn(column) {
+        this.handlerTableColumn(column)
+      },
+      /** 添加表格字段 */
+      addTableColumn() {
+        this.handlerTableColumn(null)
+      },
+      /** 添加、编辑表格字段 */
+      handlerTableColumn(column) {
+        let maxShowOrder = 0
+        this.currentWidget.tableColumnList.forEach(item => {
+          maxShowOrder = Math.max(item.showOrder, maxShowOrder)
+        })
+        maxShowOrder++
+        this.$dialog.show(column ? '编辑字段' : '添加字段', EditWidgetTableColumn, {
+          area: '450px'
+        }, {
+          showOrder: maxShowOrder,
+          rowData: column,
+          tableList: this.getTableWidgetTableList(this.currentWidget.onlineTable),
+          usedColumnList: this.currentWidget.tableColumnList.map(item => item.columnId)
+        }).then(res => {
+          if (column == null) {
+            this.currentWidget.tableColumnList.push(res)
+          } else {
+            this.currentWidget.tableColumnList = this.currentWidget.tableColumnList.map(item => {
+              return (item.columnId === column.columnId) ? res : item
+            })
+          }
+          this.currentWidget.tableColumnList = this.currentWidget.tableColumnList.sort((value1, value2) => {
+            return value1.showOrder - value2.showOrder
+          })
+        })
+      },
+      /** 获取表格组件相关数据表 */
+      getTableWidgetTableList(onlineTable) {
+        let tableList = []
+        if (onlineTable != null) {
+          tableList.push(onlineTable)
+          if (onlineTable.tableType === this.OnlineTableType.MASTER) {
+            this.pageTableList.map(item => {
+              if (item.tableType === this.OnlineTableType.ONE_TO_ONE) {
+                tableList.push(item)
+              }
+            })
+          }
+        }
+        return tableList
+      },
+      /** 删除表格操作按钮 */
+      deleteTableOperation(operation) {
+        if (operation == null) return
+        this.$confirm('是否删除此操作？').then(res => {
+          this.currentWidget.operationList = this.currentWidget.operationList.filter(item => {
+            return item.id !== operation.id
+          })
+        })
+      },
+      /** 编辑表格操作按钮 */
+      editTableOperation(operation) {
+        this.handlerTableOperation(operation)
+      },
+      /** 添加表格操作按钮 */
+      addTableOperation() {
+        this.handlerTableOperation(null)
+      },
+      /** 添加、编辑表格操作按钮 */
+      handlerTableOperation(operation) {
+        this.$dialog.show(operation ? '编辑操作' : '新建操作', EditWidgetTableOperation, {
+          area: '450px'
+        }, {
+          rowData: operation,
+          pageList: this.onlinePageList.filter(item => item.id !== this.onlinePage.id)
+        }).then(res => {
+          if (operation == null) {
+            let maxId = 0
+            this.currentWidget.operationList.forEach(item => {
+              maxId = Math.max(maxId, item.id)
+            })
+            res.id = ++maxId
+            this.currentWidget.operationList.push(res)
+          } else {
+            this.currentWidget.operationList = this.currentWidget.operationList.map(item => {
+              return (item.id === operation.id) ? res : item
+            })
+          }
+        })
+      },
+      /** 删除字典参数 */
+      deleteDictParam(param) {
+        this.currentWidgetDict.paramList = this.currentWidgetDict.paramList.map(item => {
+          if (item.dictParamName === param.dictParamName) {
+            item.paramValueType = undefined
+            item.dictValue = undefined
+          }
+          return item
+        })
+      },
+      /** 编辑字典参数 */
+      editDictParam(param) {
+        let columnList = []
+        if (this.getPageMasterTable != null && Array.isArray(this.getPageMasterTable.tableColumnList)) {
+          columnList = this.getPageMasterTable.tableColumnList.filter(column => {
+            return (this.pageConfig.pageType !== this.OnlinePageType.QUERY || column.filterType !== this.OnlineFilterType.NONE)
+          })
+        }
+        this.$dialog.show('字典参数设置', EditWidgtDictParam, {
+          area: '400px'
+        }, {
+          rowData: param,
+          pageParamList: this.pageConfig.paramList,
+          columnList: columnList
+        }).then(res => {
+          this.currentWidgetDict.paramList = this.currentWidgetDict.paramList.map(item => {
+            return item.dictParamName === param.dictParamName ? res : item
+          })
+          this.currentWidgetDict = {
+            ...this.currentWidgetDict
+          }
+        })
+      },
+      /** 删除查询参数 */
+      deleteQueryParam(row) {
+        this.$confirm('是否移除此表格过滤参数？').then(res => {
+          this.currentWidget.queryParamList = this.currentWidget.queryParamList.filter(param => {
+            return param.columnId !== row.columnId
+          })
+        })
+      },
+      /** 添加查询参数 */
+      addQueryParam() {
+        let tableFilterColumnList = []
+        if (this.getPageMasterTable != null && Array.isArray(this.getPageMasterTable.tableColumnList)) {
+          tableFilterColumnList = this.pageTableList.map(table => {
+            return {
+              tableId: table.tableId,
+              tableName: table.tableName,
+              // eslint-disable-next-line multiline-ternary
+              columnList: Array.isArray(table.tableColumnList) ? table.tableColumnList.filter(column => {
+                return (this.pageConfig.pageType !== this.OnlinePageType.QUERY || column.filterType !== this.OnlineFilterType.NONE)
+              }) : []
+            }
+          })
+        }
+        this.$dialog.show('添加查询参数', EditWidgetTableQueryParam, {
+          area: '450px'
+        }, {
+          tableList: this.getTableWidgetTableList(this.currentWidget.onlineTable),
+          usedColumnList: (this.currentWidget.queryParamList || []).map(item => item.columnId),
+          pageParamList: this.pageConfig.paramList,
+          tableFilterColumnList: tableFilterColumnList
+        }).then(res => {
+          if (this.currentWidget.queryParamList == null) this.currentWidget.queryParamList = []
+          this.currentWidget.queryParamList.push(res)
+        })
+      },
+      /** 删除表单页面参数 */
+      deletePageParam(row) {
+        this.$confirm('是否删除此页面参数？').then(res => {
+          this.pageConfig.paramList = this.pageConfig.paramList.filter(item => {
+            return item.columnName !== row.columnName
+          })
+        })
+      },
+      /** 获取表单页面参数 */
+      getPageParam(paramName) {
+        return findItemFromList(this.pageConfig.paramList, paramName, 'columnName')
+      },
+      /** 获取字段对应信息 */
+      getTableColumn(columnId) {
+        for (let i = 0; i < this.pageTableList.length; i++) {
+          let table = this.pageTableList[i]
+          if (table && Array.isArray(table.tableColumnList)) {
+            let column = findItemFromList(table.tableColumnList, columnId, 'id')
+            if (column != null) return column
+          }
+        }
+        return null
+      },
+      /** 获取静态字典展示名称 */
+      getDictValueShowName(dictValue) {
+        let staticDict = SystemStaticDict[dictValue[0]]
+        if (staticDict) {
+          return staticDict.dictName + ' / ' + staticDict.getLabel(dictValue[1])
+        }
       },
       /** 保存表单设计 */
       savePageDesigner() {
@@ -678,6 +1353,7 @@
           this.messageSuccess('表单页面设计配置信息保存成功！')
         })
       },
+      /** 重置表单设计 */
       resetPageDesigner() {
         this.$confirm('是否重置表单组件？', '表单设计', {
           type: 'warning'
@@ -822,6 +1498,10 @@
         overflow-x: hidden;
         overflow-y: auto;
         padding: 10px;
+      }
+
+      .el-scrollbar__wrap {
+        overflow-x: hidden;
       }
 
       .full-line-btn {

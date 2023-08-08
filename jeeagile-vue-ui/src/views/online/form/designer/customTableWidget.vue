@@ -21,8 +21,8 @@
       </el-col>
       <el-col :span="24">
         <el-table size="mini" header-cell-class-name="table-header-gray" ref="tableImpl"
-                  :style="{height: (widgetConfig.tableInfo.height != null && widgetConfig.tableInfo.height !== '') ? widgetConfig.tableInfo.height + 'px' : undefined}"
-                  :height="(widgetConfig.tableInfo.height != null && widgetConfig.tableInfo.height !== '') ? widgetConfig.tableInfo.height + 'px' : undefined"
+                  :style="{height: (widgetConfig.height != null && widgetConfig.height !== '') ? widgetConfig.height + 'px' : undefined}"
+                  :height="(widgetConfig.height != null && widgetConfig.height !== '') ? widgetConfig.height + 'px' : undefined"
                   :data="tableWidget.dataList" :row-key="primaryFieldName"
                   @sort-change="tableWidget.onSortChange">
           <el-table-column label="序号" header-align="center" align="center" type="index" width="55px"
@@ -34,6 +34,7 @@
                              :label="tableColumn.showName" :width="tableColumn.columnWidth + 'px'"
                              :prop="tableColumn.onlineColumn.fieldName"
                              :sortable="tableColumn.sortable ? 'custom' : false"
+                             :align="tableColumn.columnAlign"
             >
               <template slot-scope="scope">
                 <el-tag size="mini" :type="scope.row[tableColumn.dataFieldName] ? 'success' : 'danger'">
@@ -42,13 +43,14 @@
               </template>
             </el-table-column>
             <!-- 普通非字典字段 -->
-            <template v-else-if="(tableColumn.onlineColumn || {}).dictInfo == null">
+            <template v-else-if="(tableColumn.onlineColumn || {}).onlineDict == null">
               <el-table-column :label="tableColumn.showName"
                                v-if="tableColumn.onlineColumn &&
                   (tableColumn.onlineColumn.fieldKind === OnlineFieldKind.UPLOAD ||
                   tableColumn.onlineColumn.fieldKind === OnlineFieldKind.UPLOAD_IMAGE)"
                                :key="(tableColumn.onlineColumn || {}).fieldName"
                                :width="tableColumn.columnWidth + 'px'"
+                               :align="tableColumn.columnAlign"
               >
                 <template slot-scope="scope">
                   <template v-if="tableColumn.onlineColumn.fieldKind === OnlineFieldKind.UPLOAD_IMAGE">
@@ -73,6 +75,7 @@
                                :label="tableColumn.showName" :prop="tableColumn.dataFieldName"
                                :width="tableColumn.columnWidth + 'px'"
                                :sortable="tableColumn.sortable ? 'custom' : false"
+                               :align="tableColumn.columnAlign"
               />
             </template>
             <!-- 字典字段 -->
@@ -80,6 +83,7 @@
                              :label="tableColumn.showName" :width="tableColumn.columnWidth + 'px'"
                              :prop="tableColumn.onlineColumn.fieldName"
                              :sortable="tableColumn.sortable ? 'custom' : false"
+                             :align="tableColumn.columnAlign"
             >
               <template slot-scope="scope">
                 <span>
@@ -94,7 +98,7 @@
           <el-table-column v-if="pageType === OnlinePageType.ORDER" label="流程状态" width="100px" prop="flowStatus"/>
           <el-table-column
             v-if="getTableOperation(true).length > 0 || pageType === OnlinePageType.ORDER"
-            label="操作" :width="(widgetConfig.tableInfo.optionColumnWidth || 150) + 'px'" fixed="right"
+            label="操作" :width="(widgetConfig.operationWidth || 150) + 'px'" fixed="right" align="center"
           >
             <template slot-scope="scope">
               <el-button v-for="operation in getTableOperation(true)" :key="operation.id"
@@ -129,9 +133,7 @@
           </el-table-column>
         </el-table>
       </el-col>
-      <el-col :span="24" v-if="widgetConfig.tableInfo.paged && !this.isNew"
-              :style="{'margin-bottom': widgetConfig.supportBottom === 1 ? '20px' : undefined}"
-      >
+      <el-col :span="24" v-if="widgetConfig.pageFlag && !this.isNew">
         <el-row type="flex" justify="end" style="margin-top: 10px;">
           <el-pagination
             :background="true"
@@ -184,10 +186,10 @@
         tableWidget: new TableWidget(
           this.loadTableData,
           this.loadTableVerify,
-          this.widgetConfig.tableInfo.paged && !this.isNew,
+          this.widgetConfig.pageFlag && !this.isNew,
           false,
-          this.widgetConfig.tableInfo.orderFieldName,
-          this.widgetConfig.tableInfo.ascending
+          this.widgetConfig.orderFieldName,
+          this.widgetConfig.ascending
         )
       }
     },
