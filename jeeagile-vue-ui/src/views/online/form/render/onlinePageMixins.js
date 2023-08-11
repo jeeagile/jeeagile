@@ -216,9 +216,9 @@ const OnlinePageMixins = {
           }
           if (Array.isArray(widget.tableColumnList)) {
             widget.tableColumnList.forEach(tableColumn => {
-              tableColumn.onlieTable = this.onlineTableMap.get(tableColumn.tableId)
-              tableColumn.onlinColumn = this.onlineColumnMap.get(tableColumn.columnId)
-              if (tableColumn.onlieTable == null || tableColumn.onlinColumn == null) {
+              tableColumn.onlineTable = this.onlineTableMap.get(tableColumn.tableId)
+              tableColumn.onlineColumn = this.onlineColumnMap.get(tableColumn.columnId)
+              if (tableColumn.onlineTable == null || tableColumn.onlineColumn == null) {
                 this.errorMessage.push({
                   widget: widget,
                   message: '表格列 [' + tableColumn.showName + '] 绑定的字段不存在！'
@@ -228,9 +228,9 @@ const OnlinePageMixins = {
           }
           if (Array.isArray(widget.queryParamList)) {
             widget.queryParamList.forEach(param => {
-              param.onlieTable = this.onlineTableMap.get(param.tableId)
-              param.onlinColumn = this.onlineColumnMap.get(param.columnId)
-              if (param.onlieTable == null || param.onlinColumn == null) {
+              param.onlineTable = this.onlineTableMap.get(param.tableId)
+              param.onlineColumn = this.onlineColumnMap.get(param.columnId)
+              if (param.onlineTable == null || param.onlineColumn == null) {
                 this.errorMessage.push({
                   widget: widget,
                   message: '表格查询参数不存在！'
@@ -238,12 +238,10 @@ const OnlinePageMixins = {
               }
             })
           }
-
           this.tableWidgetList.push(widget)
         }
-
         // 校验组件 数据表是否存在
-        if (widget.onlieTable) {
+        if (widget.onlineTable == null) {
           let errorItem = {
             widget: widget,
             message: '组件绑定字段所属数据表不存在！'
@@ -251,7 +249,7 @@ const OnlinePageMixins = {
           this.errorMessage.push(errorItem)
         }
         // 校验组件 数据表字段是否存在
-        if (widget.onlieColumn && widget.columnId) {
+        if (widget.widgetType != this.OnlineWidgetType.Table && widget.onlineColumn == null && widget.columnId == null) {
           let errorItem = {
             widget: widget,
             message: '组件绑定字段不存在！'
@@ -259,7 +257,7 @@ const OnlinePageMixins = {
           this.errorMessage.push(errorItem)
         }
         // 校验组件表格数据表绑定是否正确
-        if (widget.onlineColumn) {
+        if (widget.onlineColumn == null) {
           let table = this.onlineTableMap.get(widget.tableId)
           if (table.tableId !== widget.onlineTable.tableId) {
             let errorItem = {
@@ -269,7 +267,6 @@ const OnlinePageMixins = {
             this.errorMessage.push(errorItem)
           }
         }
-
         // 初始化子组件
         if (Array.isArray(widget.childWidgetList)) {
           widget.childWidgetList.forEach(subWidget => {
@@ -305,7 +302,7 @@ const OnlinePageMixins = {
         case this.OnlineParamValueType.FORM_PARAM:
           return this.params ? this.params[valueData] : undefined
         case this.OnlineParamValueType.TABLE_COLUMN:{
-          let column = this.onlieColumnMap.get(valueData)
+          let column = this.onlineColumnMap.get(valueData)
           let columnValue = null
           if (this.pageConfig.formType === this.OnlinePageType.QUERY) {
             columnValue = this.formData.formFilterCopy[column.columnName]

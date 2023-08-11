@@ -48,7 +48,7 @@
                      @visible-change="(isShow) => dropdownWidget.onVisibleChange(isShow).catch(e => {})"
                      @change="handlerWidgetChange"
           >
-            <el-option v-for="item in dropdownWidget.dropdownList" :key="item.id" :value="item.id" :label="item.name"/>
+            <el-option v-for="item in dropdownWidget.dropdownList" :key="item.dictValue" :value="item.dictValue" :label="item.dictLabel"/>
           </el-select>
           <el-cascader v-if="widgetConfig.widgetType === OnlineWidgetType.Cascader"
                        class="input-item" filterable
@@ -137,7 +137,7 @@
       return {
         cascaderValue: [],
         dropdownWidget: (this.widgetConfig.widgetType === this.OnlineWidgetType.Select || this.widgetConfig.widgetType === this.OnlineWidgetType.Cascader)
-          ? new DropdownWidget(this.loadDropdownList, this.widgetConfig.widgetType === this.OnlineWidgetType.Cascader) : undefined
+          ? new DropdownWidget(this.loadDropdownData, this.widgetConfig.widgetType === this.OnlineWidgetType.Cascader) : undefined
       }
     },
     methods: {
@@ -148,14 +148,14 @@
         if (this.dropdownWidget) this.dropdownWidget.dirty = true
       },
       /** 加载下拉选项 */
-      loadDropdownList() {
+      loadDropdownData() {
         if (this.preview()) {
           return Promise.resolve([])
         }
         return new Promise((resolve, reject) => {
-          if (this.widgetConfig.column != null && this.widgetConfig.column.onlineDict != null) {
+          if (this.widgetConfig.onlineColumn != null && this.widgetConfig.onlineColumn.onlineDict != null) {
             let params = {}
-            let onlineDict = this.widgetConfig.column.onlineDict
+            let onlineDict = this.widgetConfig.onlineColumn.onlineDict
             if (onlineDict.dictType === this.OnlineDictType.TABLE) {
               params = this.getDropdownParams ? this.getDropdownParams(this.widgetConfig) : {}
             }

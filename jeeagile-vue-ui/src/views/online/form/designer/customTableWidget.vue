@@ -152,7 +152,9 @@
 </template>
 
 <script>
+  import { getOnlineDictData } from '../util'
   import { TableWidget } from '../util/widget'
+  import { mapGetters } from 'vuex'
 
   export default {
     props: {
@@ -174,6 +176,10 @@
         type: Object
       },
       isNew: {
+        type: Boolean,
+        default: false
+      },
+      isDesigner: {
         type: Boolean,
         default: false
       }
@@ -226,12 +232,47 @@
       },
       /** 加载表数据 */
       loadTableData(params) {
+        if (this.widgetConfig.table == null || this.isDesigner || this.isNew || this.preview()) {
+          return Promise.resolve({
+            dataList: this.tableWidget.dataList,
+            totalCount: 0
+          })
+        }
+        if (params == null) params = {}
       },
       loadTableVerify() {
         return true
       },
+      /**  页面是否是返回状态 */
+      isResume() {
+        let key = this.$route.fullPath
+        return this.onlinePageCache[key] != null
+      },
       /** 刷新表格数据 */
       refresh(row, operatorType) {
+        if (this.isResume()) return
+        if (!this.isNew) {
+          // 重新获取表格数据
+          this.tableWidget.refreshTable()
+        } else {
+          if (operatorType === this.OnlineOperationType.ADD) this.tableWidget.dataList.push(row)
+          if (operatorType === this.OnlineOperationType.EDIT) {
+            this.tableWidget.dataList = this.tableWidget.dataList.map(item => {
+              if (item.__cascade_add_id__ == null ? item[this.primaryColumnName] === row[this.primaryColumnName] : item.__cascade_add_id__ === row.__cascade_add_id__) {
+                return {
+                  ...row
+                }
+              } else {
+                return item
+              }
+            })
+          }
+          if (operatorType === this.OnlineOperationType.DELETE) {
+            this.tableWidget.dataList = this.tableWidget.dataList.filter(item => {
+              return item !== row
+            })
+          }
+        }
       },
       /** 获取表操作按钮 */
       getTableOperation(rowOperation) {
@@ -247,10 +288,43 @@
           }))
         }
         return tempList
+      },
+      /** 获取表格列字段 */
+      getTableColumnFieldName(tableColumn) {
+        if (tableColumn.onlineColumn == null) return null
+        let fieldName = tableColumn.onlineColumn.columnName || tableColumn.onlineColumn.fieldName
+        if (tableColumn.tableType != this.OnlineTableType.MASTER) {
+          fieldName = tableColumn.onlineTable.modelName + '__' + fieldName
+        }
+        if (this.pageType === this.OnlineTableType.ORDER) {
+          fieldName = 'masterTable__' + fieldName
+        }
+        return fieldName
       }
     },
     mounted() {
-
+      if (Array.isArray(this.widgetConfig.tableColumnList)) {
+        this.widgetConfig.tableColumnList.forEach(tableColumn => {
+          tableColumn.dataFieldName = this.getTableColumnFieldName(tableColumn)
+          let onlineColumn = tableColumn.onlineColumn
+          if (onlineColumn && onlineColumn.onlineDict && onlineColumn.onlineDict.dictType !== this.OnlineDictType.TABLE) {
+            if (!this.tableDictValueListMap.has(onlineColumn.onlineDict.dictId)) {
+              let tempMap = new Map()
+              this.tableDictValueListMap.set(onlineColumn.onlineDict.id, tempMap)
+              getOnlineDictData(this, onlineColumn.onlineDict, null).then(dictDataList => {
+                if (Array.isArray(dictDataList)) {
+                  dictDataList.forEach(data => {
+                    this.tableDictValueListMap.get(onlineColumn.onlineDict.id).set(data.dictValue, data)
+                  })
+                }
+              })
+            }
+          }
+        })
+        this.refresh()
+      } else {
+        this.refresh()
+      }
     },
     computed: {
       primaryFieldName() {
@@ -264,7 +338,8 @@
         }
         return null
       }
-    }
+    },
+    ...mapGetters(['onlinePageCache'])
   }
 </script>
 

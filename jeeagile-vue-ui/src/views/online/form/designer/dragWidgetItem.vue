@@ -11,7 +11,7 @@
     <template v-else>
       <custom-table-widget v-if="widgetConfig.widgetType === OnlineWidgetType.Table"
                            class="drag-widget-item" :pageType="pageConfig().pageType"
-                           :widgetConfig="{ ...widgetConfig, span: null }" :dictList="{}"/>
+                           :widgetConfig="{ ...widgetConfig, span: null }" :dictList="{}" :isDesigner="true"/>
       <custom-base-widget v-else class="drag-widget-item"
                           :pageConfig="pageConfig()"
                           :widgetConfig="{ ...widgetConfig, span: null }"

@@ -31,7 +31,6 @@ module.exports = {
     'no-extra-boolean-cast': ['error'], // 禁止不必要的布尔转换
     'no-extra-semi': ['error'], // 禁止不必要的分号
     'no-func-assign': ['warn'], // 禁止对 function 声明重新赋值
-    'no-inner-declarations': ['error'], // 禁止在嵌套的块中出现变量声明或 function 声明
     'no-invalid-regexp': ['error', { 'allowConstructorFlags': [] }], // 禁止 RegExp 构造函数中存在无效的正则表达式字符串
     'no-irregular-whitespace': ['error'], // 禁止在字符串和注释之外不规则的空白
     'no-obj-calls': ['error'], // 禁止把全局对象作为函数调用

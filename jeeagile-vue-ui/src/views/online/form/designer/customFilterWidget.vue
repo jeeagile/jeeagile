@@ -105,12 +105,11 @@
         this.$emit('change', value)
       },
       loadDropdownData() {
-        // if (this.preview()) {
-        //   return Promise.resolve([])
-        // }
+        if (this.preview()) {
+          return Promise.resolve([])
+        }
         return new Promise((resolve, reject) => {
           if (this.widgetConfig.onlineColumn != null && this.widgetConfig.onlineColumn.onlineDict != null) {
-            debugger
             let dropdownParam = {}
             let onlineDict = this.widgetConfig.onlineColumn.onlineDict
             if (onlineDict.dictType === this.OnlineDictType.TABLE) {

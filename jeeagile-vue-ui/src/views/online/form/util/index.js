@@ -15,7 +15,6 @@ export async function getOnlineDictData(sender, onlineDict, dictParam) {
     case OnlineDictType.SYSTEM:
       if (onlineDict.systemDictType != null) {
         const dictDataList = await getSysDictDataList(onlineDict.systemDictType).then(response => {
-          debugger
           return response.data
         })
         return Promise.resolve(dictDataList)
@@ -23,7 +22,6 @@ export async function getOnlineDictData(sender, onlineDict, dictParam) {
         return Promise.reject(new Error('未知的静态字典！'))
       }
     case OnlineDictType.CUSTOM:
-      // eslint-disable-next-line no-case-declarations
       let dictData = JSON.parse(onlineDict.dictDataJson)
       if (dictData != null && Array.isArray(dictData)) {
         return Promise.resolve(dictData)
