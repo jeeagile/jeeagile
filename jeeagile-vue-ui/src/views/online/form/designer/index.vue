@@ -66,9 +66,9 @@
           </el-breadcrumb>
           <el-button class="table-btn delete" type="text" icon="el-icon-delete" @click="resetPageDesigner">重置
           </el-button>
-          <el-button type="text" icon="el-icon-video-play">预览</el-button>
+          <el-button type="text" icon="el-icon-video-play" @click="previewOnlinePage">预览</el-button>
           <el-button class="table-btn warning" type="text" icon="el-icon-check" @click="savePageDesigner">保存</el-button>
-          <el-button class="table-btn success" type="text" icon="el-icon-back" @click="handleBack">返回</el-button>
+          <el-button class="table-btn success" type="text" icon="el-icon-back" @click="exitPageDesigner">返回</el-button>
         </el-row>
         <el-row style="margin: 0px">
           <el-col :span="24">
@@ -79,8 +79,7 @@
                   <div style="position: relative;">
                     <el-form size="mini" :label-width="pageConfig.labelWidth + 'px'"
                              :label-position="pageConfig.labelPosition" @submit.native.prevent>
-                      <drag-widget-filter :list="pageWidgetList"
-                                          :style="{'min-height': '50px'}"
+                      <drag-widget-filter :style="{'min-height': '50px'}"
                                           style="padding: 10px 10px 0px 10px; overflow: hidden; justify-content: space-between;"
                       >
                         <template v-if="pageConfig.pageType === OnlinePageType.QUERY">
@@ -144,7 +143,7 @@
                   </div>
                 </template>
                 <el-row v-else :gutter="pageConfig.gutter" style="margin: 0px;">
-                  <el-form class="full-width-input" size="mini" :label-width="pageConfig.labelWidth + 'px'"
+                  <el-form size="mini" :label-width="pageConfig.labelWidth + 'px'"
                            :label-position="pageConfig.labelPosition">
                     <draggable draggable=".draggable-item" :animation="340" :list="pageWidgetList"
                                group="componentsGroup"
@@ -186,18 +185,31 @@
                   </el-form-item>
                   <el-form-item label="占位提示"
                                 v-if="currentWidget.widgetType !== OnlineWidgetType.RichEditor &&
-                  currentWidget.widgetType !== 'Upload' &&
-                  currentWidget.widgetKind === 'Form'"
+                                      currentWidget.widgetType !== OnlineWidgetType.Upload &&
+                                      currentWidget.widgetKind === OnlineWidgetKind.Form"
                   >
                     <el-input v-model="currentWidget.placeholder" placeholder=""/>
                   </el-form-item>
                   <el-form-item label="栅格数量"
                                 v-if="currentWidget.widgetType !== OnlineWidgetType.Divider &&
-                  currentWidget.widgetType !== OnlineWidgetType.Text &&
-                  currentWidget.widgetKind !== OnlineWidgetType.Filter &&
-                  pageConfig.pageType !== OnlinePageType.QUERY"
+                                      currentWidget.widgetType !== OnlineWidgetType.Text &&
+                                      currentWidget.widgetKind !== OnlineWidgetKind.Filter &&
+                                      pageConfig.pageType !== OnlinePageType.QUERY"
                   >
                     <el-slider v-model="currentWidget.span" :min="1" :max="24"/>
+                  </el-form-item>
+                  <el-form-item label="下边距"
+                                v-if="currentWidget.widgetType !== OnlineWidgetType.Divider &&
+                  currentWidget.widgetType !== OnlineWidgetType.Text &&
+                  currentWidget.widgetType !== OnlineWidgetType.Image &&
+                  currentWidget.widgetKind !== OnlineWidgetKind.Form &&
+                  currentWidget.widgetKind !== OnlineWidgetKind.Filter &&
+                  pageConfig.pageType !== OnlinePageType.QUER"
+                  >
+                    <el-radio-group v-model="currentWidget.supportBottom">
+                      <el-radio-button :label="1">支持</el-radio-button>
+                      <el-radio-button :label="0">不支持</el-radio-button>
+                    </el-radio-group>
                   </el-form-item>
                   <!-- Input属性 -->
                   <el-row v-if="currentWidget.widgetType === OnlineWidgetType.Input">
@@ -632,6 +644,7 @@
   import EditWidgetTableQueryParam from './editWidgetTableQueryParam'
   import EditWidgtDictParam from './editWidgtDictParam'
   import * as SystemStaticDict from '@/components/AgileDict/system'
+  import OnlinePagePreview from '../../index'
 
   Vue.component('drag-widget-item', DragWidgetItem)
   export default {
@@ -1223,7 +1236,6 @@
             return {
               tableId: table.tableId,
               tableName: table.tableName,
-              // eslint-disable-next-line multiline-ternary
               columnList: Array.isArray(table.tableColumnList) ? table.tableColumnList.filter(column => {
                 return (this.pageConfig.pageType !== this.OnlinePageType.QUERY || column.filterType !== this.OnlineFilterType.NONE)
               }) : []
@@ -1272,6 +1284,19 @@
           return staticDict.dictName + ' / ' + staticDict.getLabel(dictValue[1])
         }
       },
+      /** 预览表单页面 */
+      previewOnlinePage() {
+        let dialogPos = {
+          area: this.pageConfig.pageType === '01' ? ['60vw', '80vh'] : this.pageConfig.width + 'px',
+          offset: '80px'
+        }
+        this.$dialog.show(this.onlinePage.pageName, OnlinePagePreview, dialogPos, {
+          pageId: this.onlinePage.id,
+          pageType: this.onlinePage.pageType,
+          operationType: 'ADD',
+          isPreview: true
+        })
+      },
       /** 保存表单设计 */
       savePageDesigner() {
         let pageConfig = {
@@ -1289,7 +1314,6 @@
             ...this.pageConfig.tableWidget,
             tableId: this.pageConfig.tableWidget.tableId,
             onlineTable: undefined,
-            // eslint-disable-next-line multiline-ternary
             tableColumnList: Array.isArray(this.pageConfig.tableWidget.tableColumnList) ? this.pageConfig.tableWidget.tableColumnList.map(tableColumn => {
               return {
                 ...tableColumn,
@@ -1297,7 +1321,6 @@
                 onlineTable: undefined
               }
             }) : [],
-            // eslint-disable-next-line multiline-ternary
             queryParamList: Array.isArray(this.pageConfig.tableWidget.queryParamList) ? this.pageConfig.tableWidget.queryParamList.map(param => {
               return {
                 ...param,
@@ -1316,7 +1339,6 @@
           return {
             ...widget,
             dictParamList,
-            // eslint-disable-next-line multiline-ternary
             queryParamList: Array.isArray(widget.queryParamList) ? widget.queryParamList.map(param => {
               return {
                 ...param,
@@ -1324,7 +1346,6 @@
                 onlineTable: undefined
               }
             }) : [],
-            // eslint-disable-next-line multiline-ternary
             tableColumnList: Array.isArray(widget.tableColumnList) ? widget.tableColumnList.map(tableColumn => {
               return {
                 ...tableColumn,
@@ -1367,7 +1388,7 @@
         })
       },
       /** 退出表单页面设计 */
-      handleBack() {
+      exitPageDesigner() {
         this.$emit('close')
       }
     }

@@ -13,9 +13,12 @@ import com.jeeagile.frame.entity.online.AgileOnlinePage;
 import com.jeeagile.frame.entity.online.AgileOnlineTable;
 import com.jeeagile.frame.mapper.online.AgileOnlineFormMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import com.jeeagile.frame.vo.online.OnlinePageRender;
+import com.jeeagile.frame.vo.online.OnlinePageTable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author JeeAgile
@@ -110,6 +113,24 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
         lambdaUpdateWrapper.set(AgileOnlineForm::getFormStatus, formStatus);
         lambdaUpdateWrapper.eq(AgileOnlineForm::getId, id);
         return this.update(lambdaUpdateWrapper);
+    }
+
+    @Override
+    public OnlinePageRender render(String pageId) {
+        AgileOnlinePage agileOnlinePage = this.agileOnlinePageService.getById(pageId);
+        if (agileOnlinePage == null || agileOnlinePage.isEmptyPk()) {
+            throw new AgileValidateException("表单页面已不存在");
+        }
+        AgileOnlineForm agileOnlineForm = this.getById(agileOnlinePage.getFormId());
+        if (agileOnlineForm == null || agileOnlineForm.isEmptyPk()) {
+            throw new AgileValidateException("表单已不存在");
+        }
+        List<OnlinePageTable> pageTableList = this.agileOnlineTableService.pageTableList(pageId);
+        OnlinePageRender onlinePageRender = new OnlinePageRender();
+        onlinePageRender.setOnlineForm(agileOnlineForm);
+        onlinePageRender.setOnlinePage(agileOnlinePage);
+        onlinePageRender.setPageTableList(pageTableList);
+        return onlinePageRender;
     }
 
     @Override

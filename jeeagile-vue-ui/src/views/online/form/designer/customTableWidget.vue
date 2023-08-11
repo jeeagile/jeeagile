@@ -164,10 +164,10 @@
         type: Object,
         required: true
       },
-      getTableQueryParams: {
+      queryParam: {
         type: Function
       },
-      loadTableDataFunc: {
+      loadDataFunc: {
         type: Function
       },
       flowData: {

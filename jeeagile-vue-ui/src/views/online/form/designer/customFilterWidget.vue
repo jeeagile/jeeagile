@@ -29,7 +29,7 @@
                @visible-change="dropdownWidget.onVisibleChange"
                @change="handlerWidgetChange"
     >
-      <el-option v-for="item in dropdownWidget.dropdownList" :key="item.id" :value="item.id" :label="item.name"/>
+      <el-option v-for="item in dropdownWidget.dropdownList" :key="item.dictValue" :value="item.dictValue" :label="item.dictLabel"/>
     </el-select>
     <el-cascader v-if="widgetConfig.widgetType === OnlineWidgetType.Cascader"
                  class="filter-item" filterable
@@ -71,7 +71,7 @@
       value: {
         type: [String, Number, Date, Object, Array]
       },
-      getDropdownParams: {
+      dropdownParam: {
         type: Function
       }
     },
@@ -80,7 +80,7 @@
       return {
         cascaderValue: [],
         dropdownWidget: (this.widgetConfig.widgetType === this.OnlineWidgetType.Select || this.widgetConfig.widgetType === this.OnlineWidgetType.Cascader)
-          ? new DropdownWidget(this.loadDropdownList, this.widgetConfig.widgetType === this.OnlineWidgetType.Cascader) : undefined
+          ? new DropdownWidget(this.loadDropdownData, this.widgetConfig.widgetType === this.OnlineWidgetType.Cascader) : undefined
       }
     },
     methods: {
@@ -104,12 +104,13 @@
       handlerWidgetChange(value) {
         this.$emit('change', value)
       },
-      loadDropdownList() {
-        if (this.preview()) {
-          return Promise.resolve([])
-        }
+      loadDropdownData() {
+        // if (this.preview()) {
+        //   return Promise.resolve([])
+        // }
         return new Promise((resolve, reject) => {
           if (this.widgetConfig.onlineColumn != null && this.widgetConfig.onlineColumn.onlineDict != null) {
+            debugger
             let dropdownParam = {}
             let onlineDict = this.widgetConfig.onlineColumn.onlineDict
             if (onlineDict.dictType === this.OnlineDictType.TABLE) {
@@ -145,3 +146,8 @@
     }
   }
 </script>
+<style lang='scss'>
+  .input-item {
+    width: 100% !important;
+  }
+</style>

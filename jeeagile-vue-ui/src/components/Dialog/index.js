@@ -1,5 +1,7 @@
 import $ from 'jquery'
 import Vue from 'vue'
+import router from '@/router'
+import store from '@/store'
 
 window.jQuery = $
 const layer = require('layui-layer')
@@ -62,7 +64,7 @@ class Dialog {
       let dom = document.createElement('div')
       document.body.appendChild(dom)
       let Content = Vue.extend(component)
-      let vueObj = new Content({ propsData: params })
+      let vueObj = new Content({ router: router, store: store, propsData: params })
       vueObj.observer = observer
       vueObj.$mount(dom)
       layerOptions.contentDom = vueObj.$el

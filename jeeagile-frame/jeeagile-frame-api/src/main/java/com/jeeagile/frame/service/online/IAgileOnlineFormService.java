@@ -2,6 +2,7 @@ package com.jeeagile.frame.service.online;
 
 import com.jeeagile.frame.entity.online.AgileOnlineForm;
 import com.jeeagile.frame.service.IAgileBaseService;
+import com.jeeagile.frame.vo.online.OnlinePageRender;
 
 /**
  * @author JeeAgile
@@ -26,4 +27,12 @@ public interface IAgileOnlineFormService extends IAgileBaseService<AgileOnlineFo
      * @return
      */
     boolean changeFormStatus(String id, String formStatus);
+
+    /**
+     * 加载表单页面
+     *
+     * @param pageId 表单页面ID
+     * @return
+     */
+    OnlinePageRender render(String pageId);
 }

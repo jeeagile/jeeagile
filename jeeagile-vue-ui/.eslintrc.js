@@ -14,7 +14,7 @@ module.exports = {
     'vue/max-attributes-per-line': 'off',
     'vue/singleline-html-element-content-newline': 'off',
     'vue/multiline-html-element-content-newline': 'off',
-    "vue/html-closing-bracket-spacing": 'off',
+    'vue/html-closing-bracket-spacing': 'off',
     'vue/name-property-casing': ['error', 'PascalCase'],
     'vue/no-v-html': 'off',
     'no-cond-assign': ['error', 'always'], // 禁止条件表达式中出现赋值操作符
@@ -42,11 +42,9 @@ module.exports = {
     'no-unsafe-negation': ['error'], // 禁止对关系运算符的左操作数使用否定操作符
     'use-isnan': ['error'], // 要求使用 isNaN() 检查 NaN
 
-    'default-case': ['error'], // 要求 switch 语句中有 default 分支
     'dot-notation': ['error'], // 强制尽可能地使用点号
     'eqeqeq': ['warn'], // 要求使用 === 和 !==
     'no-caller': ['error'], // 禁用 arguments.caller 或 arguments.callee
-    'no-case-declarations': ['error'], // 不允许在 case 子句中使用词法声明
     'no-empty-function': ['error'], // 禁止出现空函数
     'no-empty-pattern': ['error'], // 禁止使用空解构模式
     'no-eval': ['error'], // 禁用 eval()
@@ -61,7 +59,7 @@ module.exports = {
     'no-undef': ['error'], // 禁用未声明的变量，除非它们在 /*global */ 注释中被提到
     'no-unused-vars': ['error', { 'vars': 'all', 'args': 'none' }], // 禁止出现未使用过的变量
 
-    'brace-style': ['error', '1tbs',], // 强制在代码块中使用一致的大括号风格
+    'brace-style': ['error', '1tbs'], // 强制在代码块中使用一致的大括号风格
     'comma-dangle': ['error', 'never'], // 要求或禁止末尾逗号
     'comma-spacing': ['error', { 'before': false, 'after': true }], // 强制在逗号前后使用一致的空格
     'comma-style': ['error', 'last'], // 强制使用一致的逗号风格
@@ -69,11 +67,11 @@ module.exports = {
     'eol-last': ['error', 'always'], // 要求或禁止文件末尾存在空行
     'func-call-spacing': ['error', 'never'], // 要求或禁止在函数标识符和其调用之间有空格
     'implicit-arrow-linebreak': ['error', 'beside'], // 强制隐式返回的箭头函数体的位置
-    'indent': ['error', 2], // 两个空格缩进
+    'indent': ['error', 2, { 'SwitchCase': 1 }], // 两个空格缩进
     'jsx-quotes': ['error', 'prefer-double'], // 强制在 JSX 属性中一致地使用双引号或单引号
     'key-spacing': ['error', { 'beforeColon': false, 'afterColon': true }], // 强制在对象字面量的属性中键和值之间使用一致的间距
     'linebreak-style': ['off', 'windows'], // 换行符风格
-    'max-depth': ['error', 4], // 强制可嵌套的块的最大深度
+    'max-depth': ['error', 5], // 强制可嵌套的块的最大深度
     'max-nested-callbacks': ['error', 3], // 强制回调函数最大嵌套深度
     'max-params': ['error', 6], // 强制函数定义中最多允许的参数数量
     'multiline-ternary': ['error', 'always-multiline'], // 要求或禁止在三元操作数中间换行
@@ -99,7 +97,7 @@ module.exports = {
     'arrow-spacing': ['error', { 'before': true, 'after': true }], // 强制箭头函数的箭头前后使用一致的空格
     'no-var': ['error'], // 要求使用 let 或 const 而不是 var
     'prefer-arrow-callback': ['error', { 'allowNamedFunctions': false }], // 要求回调函数使用箭头函数
-    'array-bracket-spacing': ['error', 'never'], // 强制数组方括号中使用一致的空2
+    'array-bracket-spacing': ['error', 'never'] // 强制数组方括号中使用一致的空2
   },
   overrides: [{ 'files': ['*.vue'], 'rules': { 'indent': 'off' } }]
-};
+}

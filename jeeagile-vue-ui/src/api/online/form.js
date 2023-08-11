@@ -34,3 +34,8 @@ export const publishOnlineForm = data => postApi('/online/form/publish', data)
  * 修改表单状态
  */
 export const changeFormStatus = data => postApi('/online/form/changeFormStatus', data)
+
+/**
+ * 加载表单
+ */
+export const formPageRender = data => postApi('/online/form/render', data)

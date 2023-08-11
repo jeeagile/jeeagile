@@ -28,6 +28,7 @@ public class AgileOnlineDictServiceImpl extends AgileBaseServiceImpl<AgileOnline
                 lambdaQueryWrapper.eq(AgileOnlineDict::getDictType, agileOnlineDict.getDictType());
             }
         }
+        lambdaQueryWrapper.orderByAsc(AgileOnlineDict::getDictType);
         return lambdaQueryWrapper;
     }
 

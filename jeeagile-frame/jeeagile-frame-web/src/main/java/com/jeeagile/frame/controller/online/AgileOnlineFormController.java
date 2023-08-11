@@ -39,4 +39,9 @@ public class AgileOnlineFormController extends AgileCrudController<IAgileOnlineF
         return this.success(agileService.changeFormStatus(id, formStatus));
     }
 
+    @PostMapping(value = "/render")
+    @ApiOperation(value = "表单加载", notes = "表单加载")
+    public AgileResult<List<AgileJdbcTable>> render(@SingleRequestBody String pageId) {
+        return this.success(agileService.render(pageId));
+    }
 }

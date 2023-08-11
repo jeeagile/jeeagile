@@ -39,7 +39,7 @@ export const DefaultPageConfig = {
   labelPosition: 'right',
   tableWidget: undefined,
   width: 800,
-  height: undefined
+  height: 300
 }
 
 export const DefaultWidgetAttributes = {
@@ -166,6 +166,7 @@ export const DefaultWidgetAttributes = {
     widgetKind: OnlineWidgetKind.Data,
     widgetType: OnlineWidgetType.Table,
     span: 24,
+    supportBottom: 0,
     height: undefined,
     pageFlag: true,
     titleColor: '#409EFF',

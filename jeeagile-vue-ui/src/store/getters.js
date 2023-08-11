@@ -10,7 +10,7 @@ const getters = {
   userAvatar: state => state.auth.userAvatar,
   userRole: state => state.auth.userRole,
   userRoute: state => state.auth.userRoute,
-  userPerm: state => state.auth.userPerm
-
+  userPerm: state => state.auth.userPerm,
+  onlinePageCache: state => state.online.onlinePageCache
 }
 export default getters

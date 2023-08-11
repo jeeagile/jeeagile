@@ -150,8 +150,6 @@ AgileContextPadProvider.prototype.getContextPadEntries = function (element) {
       })
     }
 
-
-    // eslint-disable-next-line multiline-ternary
     let append = autoPlace ? function (event, element) {
       let shape = elementFactory.createShape(assign({ type: type }, options))
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <draggable class="flex-box" draggable=".draggable-item" :list="list" group="componentsGroup">
+      <draggable class="flex-box" draggable=".draggable-item" group="componentsGroup">
         <slot/>
       </draggable>
     </el-row>
@@ -18,15 +18,9 @@
   import Draggable from 'vuedraggable'
 
   export default {
-    name: 'WidgetFilter',
+    name: 'DragWidgetFilter',
     components: {
       Draggable
-    },
-    props: {
-      list: {
-        type: Array,
-        default: () => []
-      }
     }
   }
 </script>

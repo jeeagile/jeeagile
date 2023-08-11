@@ -1,3 +1,6 @@
+import { getSysDictDataList } from '@/api/system/common'
+import { OnlineDictType } from '@/components/AgileDict/online'
+
 /**
  * 获取字典数据
  * @param sender
@@ -6,17 +9,33 @@
  * @returns  字典数据
  */
 export async function getOnlineDictData(sender, onlineDict, dictParam) {
-
+  switch(onlineDict.dictType){
+    case OnlineDictType.TABLE:
+      break
+    case OnlineDictType.SYSTEM:
+      if (onlineDict.systemDictType != null) {
+        const dictDataList = await getSysDictDataList(onlineDict.systemDictType).then(response => {
+          debugger
+          return response.data
+        })
+        return Promise.resolve(dictDataList)
+      } else {
+        return Promise.reject(new Error('未知的静态字典！'))
+      }
+    case OnlineDictType.CUSTOM:
+      // eslint-disable-next-line no-case-declarations
+      let dictData = JSON.parse(onlineDict.dictDataJson)
+      if (dictData != null && Array.isArray(dictData)) {
+        return Promise.resolve(dictData)
+      } else {
+        return Promise.reject(new Error('获取自定义字典数据错误！')).catch(() => {
+        })
+      }
+    default:
+      return Promise.reject(new Error('未知的字典类型！')).catch(() => {
+      })
+  }
 }
-
-/**
- * 从数组中查找某一项
- * @param {Array} list 要查找的数组
- * @param {String} id 要查找的节点id
- * @param {String} idKey 主键字段名（如果为null则直接比较）
- * @param {Boolean} removeItem 是否从数组中移除查找到的节点
- * @returns {Object} 找到返回节点，没找到返回undefined
- */
 
 /**
  * 从数组中查找某一项
@@ -38,6 +57,7 @@ export function findItemFromList(list, value, key, remove = false) {
   }
   return null
 }
+
 /**
  * 通过值返回从根节点到指定节点的路径
  * @param treeRoot
