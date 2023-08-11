@@ -1,6 +1,7 @@
 package com.jeeagile.spring.autoconfigure;
 
 
+import com.jeeagile.core.security.annotation.AgileRequiresGuest;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.spring.access.AgileAccessDeniedHandler;
 import com.jeeagile.spring.access.AgileAuthenticationEntryPoint;
@@ -11,6 +12,7 @@ import com.jeeagile.spring.security.AgileSpringSecurity;
 import com.jeeagile.spring.userdetails.AgileUserDetailsService;
 import com.jeeagile.core.security.properties.AgileSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.endpoint.web.servlet.ControllerEndpointHandlerMapping;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -21,14 +23,20 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @Configuration
 @ComponentScan("com.jeeagile.spring")
@@ -36,13 +44,14 @@ import javax.annotation.Resource;
 public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
     @Resource
     private AgileSecurityProperties agileSecurityProperties;
-
     @Autowired
     private AgileUserTokenFilter agileUserTokenFilter;
     @Autowired
     private AgileAccessDeniedHandler agileAccessDeniedHandler;
     @Autowired
     private AgileAuthenticationEntryPoint agileAuthenticationEntryPoint;
+    @Autowired
+    private RequestMappingHandlerMapping requestMappingHandlerMapping;
     @Autowired
     private Environment environment;
 
@@ -67,6 +76,55 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity webSecurity) throws Exception {
+        WebSecurity and = webSecurity.ignoring().and();
+        Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = requestMappingHandlerMapping.getHandlerMethods();
+        handlerMethodMap.forEach(((requestMappingInfo, handlerMethod) -> {
+            AgileRequiresGuest agileRequiresGuest = handlerMethod.getBeanType().getAnnotation(AgileRequiresGuest.class);
+            RequestMapping requestMapping = handlerMethod.getBeanType().getAnnotation(RequestMapping.class);
+            if (agileRequiresGuest != null && requestMapping != null) {
+                String path = requestMapping.path()[0];
+                if (path.lastIndexOf("/") != path.length() - 1) {
+                    and.ignoring().antMatchers(path + "/**");
+                } else {
+                    and.ignoring().antMatchers(path + "**");
+                }
+            }
+            agileRequiresGuest = handlerMethod.getMethodAnnotation(AgileRequiresGuest.class);
+            if (agileRequiresGuest != null) {
+                requestMappingInfo.getMethodsCondition().getMethods().forEach(requestMethod -> {
+                    switch (requestMethod) {
+                        case POST:
+                            requestMappingInfo.getPatternsCondition().getPatterns().forEach(pattern -> {
+                                and.ignoring().antMatchers(HttpMethod.POST, pattern);
+                            });
+                            break;
+                        case GET:
+                            requestMappingInfo.getPatternsCondition().getPatterns().forEach(pattern -> {
+                                and.ignoring().antMatchers(HttpMethod.GET, pattern);
+                            });
+                            break;
+                        case DELETE:
+                            requestMappingInfo.getPatternsCondition().getPatterns().forEach(pattern -> {
+                                and.ignoring().antMatchers(HttpMethod.DELETE, pattern);
+                            });
+                            break;
+                        case PUT:
+                            requestMappingInfo.getPatternsCondition().getPatterns().forEach(pattern -> {
+                                and.ignoring().antMatchers(HttpMethod.PUT, pattern);
+                            });
+                            break;
+                        default:
+                            requestMappingInfo.getPatternsCondition().getPatterns().forEach(pattern -> {
+                                and.ignoring().antMatchers(pattern);
+                            });
+                    }
+                });
+            }
+        }));
+    }
+
+    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.cors().disable();
@@ -74,10 +132,10 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
 
         // 过滤请求 对于登录login 允许匿名访问
         httpSecurity.authorizeRequests().antMatchers(
-                getContextPath() + "/system/auth/login",
-                getContextPath() + "/system/tenant/info",
-                getContextPath() + "/system/kaptcha/image",
-                getContextPath() + "/system/kaptcha/valid")
+                "/system/auth/login",
+                "/system/tenant/info",
+                "/system/kaptcha/image",
+                "/system/kaptcha/valid")
                 .permitAll();
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET,
                 "/static/**",
