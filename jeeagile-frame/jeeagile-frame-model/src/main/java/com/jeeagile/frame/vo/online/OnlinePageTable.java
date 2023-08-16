@@ -42,6 +42,16 @@ public class OnlinePageTable {
     @ApiModelProperty("数据模型名称")
     private String modelName;
     /**
+     * 表主键字段ID
+     */
+    @ApiModelProperty("表主键字段ID")
+    private String primaryColumnId;
+    /**
+     * 表主键字段名称
+     */
+    @ApiModelProperty("表主键字段名称")
+    private String primaryColumnName;
+    /**
      * 主表ID
      */
     @ApiModelProperty("主表ID")

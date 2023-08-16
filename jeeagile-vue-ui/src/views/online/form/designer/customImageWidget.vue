@@ -8,6 +8,7 @@
 
 <script>
   export default {
+    name: 'CustomImageWidget',
     props: {
       widgetConfig: {
         type: Object,

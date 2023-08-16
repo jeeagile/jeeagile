@@ -1,6 +1,8 @@
 import { mapMutations } from 'vuex'
 import { formPageRender } from '@/api/online/form'
 import * as SystemStaticDict from '@/components/AgileDict/system'
+import OnlinePagePreview from '../../index'
+import { selectOneData, deleteTableData } from '@/api/online/operation'
 
 const OnlinePageMixins = {
   props: {
@@ -110,16 +112,18 @@ const OnlinePageMixins = {
       })
     },
     initFormPageData(pageConfig) {
-      function handlePageDataByColumn(retObj, column, table) {
-        let fieldName = (table.tableType != '01' ? table.modelName + '__' : '') + column.columnName
+      const that = this
+
+      function addFormPageData(retObj, onlineTable, onlineColumn) {
+        let fieldName = that.getColumnFieldName(onlineTable, onlineColumn)
         if (retObj == null) retObj = {}
-        if (pageConfig.pageType === '01') {
+        if (pageConfig.pageType === that.OnlinePageType.QUERY) {
           if (retObj.pageFilter == null) retObj.pageFilter = {}
           if (retObj.pageFilterCopy == null) retObj.pageFilterCopy = {}
-          retObj.pageFilter[fieldName] = column.fieldType === 'Boolean' ? false : undefined
-          retObj.pageFilterCopy[fieldName] = column.fieldType === 'Boolean' ? false : undefined
+          retObj.pageFilter[fieldName] = onlineColumn.fieldType === 'Boolean' ? false : undefined
+          retObj.pageFilterCopy[fieldName] = onlineColumn.fieldType === 'Boolean' ? false : undefined
         } else {
-          retObj[fieldName] = column.fieldType === 'Boolean' ? false : undefined
+          retObj[fieldName] = onlineColumn.fieldType === 'Boolean' ? false : undefined
         }
         return retObj
       }
@@ -129,14 +133,14 @@ const OnlinePageMixins = {
       if (this.masterTable) {
         // 添加表单主表的数据
         this.masterTable.tableColumnList.forEach(column => {
-          formPageData = handlePageDataByColumn(formPageData, column, this.masterTable)
+          formPageData = addFormPageData(formPageData, this.masterTable, column)
         })
         // 如果表单主表是数据源主表，添加一对一关联从表数据
         if (this.masterTable.tableType == this.OnlineTableType.MASTER) {
           this.pageTableList.forEach(pageTable => {
             if (pageTable.tableType === this.OnlineTableType.ONE_TO_ONE) {
               pageTable.tableColumnList.forEach(column => {
-                formPageData = handlePageDataByColumn(formPageData, column, pageTable)
+                formPageData = addFormPageData(formPageData, pageTable, column)
               })
             }
           })
@@ -204,16 +208,7 @@ const OnlinePageMixins = {
         }
         // 初始化表格组件
         if (widget.widgetType === this.OnlineWidgetType.Table) {
-          widget.primaryColumnName = undefined
-          if (widget.onlineTable && Array.isArray(widget.onlineTable.tableColumnList)) {
-            for (let i = 0; i < widget.onlineTable.tableColumnList.length; i++) {
-              // eslint-disable-next-line max-depth
-              if (widget.onlineTable.tableColumnList[i].primaryFlag === this.SysYesNo.YES) {
-                widget.primaryColumnName = widget.onlineTable.tableColumnList[i].columnName
-                break
-              }
-            }
-          }
+          widget.primaryColumnName = widget.onlineTable.primaryColumnName
           if (Array.isArray(widget.tableColumnList)) {
             widget.tableColumnList.forEach(tableColumn => {
               tableColumn.onlineTable = this.onlineTableMap.get(tableColumn.tableId)
@@ -302,14 +297,14 @@ const OnlinePageMixins = {
         case this.OnlineParamValueType.FORM_PARAM:
           return this.params ? this.params[valueData] : undefined
         case this.OnlineParamValueType.TABLE_COLUMN:{
-          let column = this.onlineColumnMap.get(valueData)
+          let onlineColumn = this.onlineColumnMap.get(valueData)
           let columnValue = null
-          if (this.pageConfig.formType === this.OnlinePageType.QUERY) {
-            columnValue = this.formData.formFilterCopy[column.columnName]
+          if (this.pageConfig.pageType === this.OnlinePageType.QUERY) {
+            columnValue = this.formPageData.pageFilterCopy[onlineColumn.columnName]
           } else {
-            columnValue = this.formData[column.columnName]
+            columnValue = this.formPageData[onlineColumn.columnName]
           }
-          if (column == null || columnValue == null || columnValue === '') {
+          if (onlineColumn == null || columnValue == null || columnValue === '') {
             return null
           } else {
             return columnValue
@@ -342,7 +337,7 @@ const OnlinePageMixins = {
       }
     },
     clean() {
-      this.formPageData = null
+      this.formPageData = {}
       this.onlineTableMap = null
       this.onlineColumnMap = null
       this.onlineDictMap = null
@@ -356,7 +351,19 @@ const OnlinePageMixins = {
         this.loading = false
         if (this.pageConfig.pageType === this.OnlinePageType.EDIT) {
           if (this.operationType === this.OnlineOperationType.EDIT && this.saveOnClose === '1') {
-            // 初始化编辑页面数据
+            let params = {
+              tableId: this.masterTable.tableId,
+              dataId: this.params[this.masterTable.primaryColumnName]
+            }
+            selectOneData(params).then(response => {
+              this.formPageData = {
+                ...this.formPageData,
+                ...response.data
+              }
+              this.loadDropdownData()
+            })
+
+            return
           } else {
             if (this.rowData != null) {
               this.formPageData = {
@@ -368,43 +375,46 @@ const OnlinePageMixins = {
         }
       })
     },
-    getPrimaryKeyColumnParam(table, row) {
-      if (table && Array.isArray(table.tableColumnList)) {
-        return table.tableColumnList.reduce((retObj, column) => {
-          let fieldName = (table.tableType !== this.OnlineTableType.MASTER ? table.relation.variableName + '__' : '') + column.columnName
-          if (column.primaryKey) {
-            retObj[column.columnName] = row ? row[fieldName] : undefined
-          }
-          return retObj
-        }, {})
+    /** 获取主键数据 */
+    getPrimaryColumnParam(onlineTable, row) {
+      if (onlineTable) {
+        let retObj = {}
+        retObj[onlineTable.primaryColumnName] = row ? row[this.getPrimaryFieldName(onlineTable)] : undefined
+        return retObj
       }
-
       return null
     },
+    /** 组装子页面 */
     buildSubFormParams(operation, subFormInfo, row) {
-      let subFormMasterTable = this.onlineTableMap.get(subFormInfo.masterTableId)
+      let subFormMasterTable = this.onlineTableMap.get(subFormInfo.tableId)
       if (subFormMasterTable == null) return null
       if (subFormMasterTable.tableType == this.OnlineTableType.MASTER) {
         if (operation.type === this.OnlineOperationType.EDIT) {
-          return this.getPrimaryKeyColumnParam(this.masterTable, row)
+          return this.getPrimaryColumnParam(this.masterTable, row)
         } else {
           return null
         }
       } else {
-        if (subFormInfo.PageType === this.OnlinePageType.QUERY) {
-          return this.getPrimaryKeyColumnParam(this.masterTable, row)
+        if (subFormInfo.pageType === this.OnlinePageType.QUERY) {
+          return this.getPrimaryColumnParam(this.masterTable, row)
         } else {
           if (operation.type === this.OnlineOperationType.EDIT) {
             // 从表的编辑页面
-            if (this.pageConfig.PageType === this.OnlinePageType.EDIT && this.operationType === this.OnlineOperationType.ADD) {
+            if (this.pageConfig.pageType === this.OnlinePageType.EDIT && this.operationType === this.OnlineOperationType.ADD) {
               return {
                 ...row
               }
             } else {
-              return this.getPrimaryKeyColumnParam(subFormMasterTable, row)
+              return this.getPrimaryColumnParam(subFormMasterTable, row)
             }
           } else {
-            // 从表的添加页面
+            if (this.params === null) {
+              this.params = {}
+            }
+            const masterOnlineTable = this.onlineTableMap.get(subFormMasterTable.masterTableId)
+            const masterOnlineColumn = this.onlineColumnMap.get(subFormMasterTable.masterColumnId)
+            const fieldName = this.getColumnFieldName(masterOnlineTable, masterOnlineColumn)
+            this.params[subFormMasterTable.slaveColumnName] = this.formPageData[fieldName]
             return {
               ...this.params
             }
@@ -412,21 +422,148 @@ const OnlinePageMixins = {
         }
       }
     },
+    /** 处理操作 */
     handlerOperation(operation, row, widget) {
       if (this.preview()) return
+      if (operation.pageId != null) {
+        formPageRender({ pageId: operation.pageId }).then(response => {
+          let onlinePage = response.data.onlinePage
+          if (onlinePage != null) {
+            let params = this.buildSubFormParams(operation, onlinePage, row)
+            if (onlinePage.pageKind === this.OnlinePageKind.JUMP) {
+              let pageJsonData = JSON.parse(onlinePage.widgetJson)
+              let area = (onlinePage.height != null) ? [(pageJsonData.pageConfig.width || 800) + 'px', pageJsonData.pageConfig.height + 'px'] : (pageJsonData.pageConfig.width || 800) + 'px'
+              this.$dialog.show(operation.name, OnlinePagePreview, {
+                area: area,
+                offset: '100px'
+              }, {
+                flowData: this.flowData,
+                pageId: onlinePage.id,
+                pageType: onlinePage.pageType,
+                operationType: operation.type,
+                params,
+                saveOnClose: (
+                  onlinePage.pageType === this.OnlinePageType.FLOW ||
+                  this.pageConfig.pageType === this.OnlinePageType.FLOW ||
+                  (onlinePage.pageType === this.OnlinePageType.EDIT && this.operationType === this.OnlineOperationType.ADD)
+                ) ? '0' : '1',
+                rowData: row
+              }).then(res => {
+                let widgetObj = this.$refs[widget.variableName]
+                if (Array.isArray(widgetObj)) {
+                  widgetObj.forEach(item => {
+                    item.refresh(res, operation.type)
+                  })
+                } else {
+                  widgetObj.refresh(res, operation.type)
+                }
+              })
+            } else {
+              if (this.pageConfig.pageType === this.OnlinePageType.QUERY) {
+                let tableWidget = this.$refs[this.pageConfig.pageQueryTable.variableName].getTableWidget()
+                this.addOnlinePageCache({
+                  key: this.$route.fullPath,
+                  value: {
+                    pageFilter: { ...this.formPageData.pageFilter },
+                    pageFilterCopy: { ...this.formPageData.pageFilterCopy },
+                    tableImpl: {
+                      totalCount: tableWidget.totalCount,
+                      currentPage: tableWidget.currentPage,
+                      pageSize: tableWidget.pageSize
+                    }
+                  }
+                })
+              }
+              this.$router.push({
+                name: 'onlinePage',
+                query: {
+                  flowData: this.flowData,
+                  pageId: onlinePage.pageId,
+                  pageType: onlinePage.pageType,
+                  closeVisible: '1',
+                  operationType: onlinePage.type,
+                  params,
+                  saveOnClose: (
+                    onlinePage.pageType === this.OnlinePageType.FLOW ||
+                    this.pageConfig.pageType === this.OnlinePageType.FLOW ||
+                    (onlinePage.pageType === this.OnlinePageType.EDIT && this.operationType === this.OnlineOperationType.ADD)
+                  ) ? '0' : '1',
+                  rowData: row
+                }
+              })
+            }
+          }
+        })
+      } else {
+        if (operation.type === 'DELETE') {
+          this.$confirm('是否删除当前数据？').then(res => {
+            if (this.pageConfig.pageType !== this.OnlinePageType.FLOW &&
+              (this.pageConfig.pageType !== this.OnlinePageType.EDIT || this.operationType !== this.OnlineOperationType.ADD)) {
+              let params = {
+                tableId: (widget.onlineTable || {}).tableId
+              }
+              params.dataId = row[this.getPrimaryFieldName(widget.onlineTable)]
+              deleteTableData(params).then(response => {
+                this.messageSuccess('删除成功！')
+                let widgetObj = this.$refs[widget.variableName]
+                if (Array.isArray(widgetObj)) {
+                  widgetObj.forEach(item => {
+                    item.refresh(res, operation.type)
+                  })
+                } else {
+                  widgetObj.refresh(res, operation.type)
+                }
+              })
+            } else {
+              let widgetObj = this.$refs[widget.variableName]
+              if (Array.isArray(widgetObj)) {
+                widgetObj.forEach(item => {
+                  item.refresh(row, operation.type)
+                })
+              } else {
+                widgetObj.refresh(row, operation.type)
+              }
+            }
+          })
+        } else if (operation.type === this.OnlineOperationType.EXPORT) {
+          this.messageWarning('导出操作正在码砖中，请耐心等待！')
+        }
+      }
     },
+    /** 获取关联表数据 */
     getRelationTableData(tableWidget) {
-      if (tableWidget.widgetType === this.OnlineWidgetType.Table) {
+      if (tableWidget.widgetType === 'Table') {
+        let onlineTable = tableWidget.onlineTable
+        let temp = this.$refs[tableWidget.variableName]
+        if (onlineTable != null && Array.isArray(onlineTable.tableColumnList) && temp != null) {
+          let tableWidgetImpl = temp[0] || temp
+          return tableWidgetImpl.getTableWidget().dataList.map(data => {
+            return onlineTable.tableColumnList.reduce((retObj, onlineColumn) => {
+              let fieldName = this.getColumnFieldName(onlineTable, onlineColumn)
+              retObj[onlineColumn.columnName] = data[fieldName]
+              return retObj
+            }, {})
+          })
+        }
       }
       return null
+    },
+    /** 获取主键字段名  */
+    getPrimaryFieldName(onlineTable) {
+      if (onlineTable && Array.isArray(onlineTable.tableColumnList)) {
+        const primaryOnlineColumn = onlineTable.tableColumnList.find(item => item.columnId === onlineTable.primaryColumnId)
+        return this.getColumnFieldName(onlineTable, primaryOnlineColumn)
+      }
+      return null
+    },
+    /** 获取字段名  */
+    getColumnFieldName(onlineTable, onlineColumn) {
+      return (onlineTable.tableType !== this.OnlineTableType.MASTER ? onlineTable.modelName + '__' : '') + onlineColumn.fieldName
     },
     ...mapMutations(['addOnlinePageCache'])
   },
   created() {
     this.reload()
-  },
-  destoryed() {
-    this.clean()
   },
   watch: {
     pageId: {

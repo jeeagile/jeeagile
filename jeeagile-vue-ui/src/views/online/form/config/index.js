@@ -38,7 +38,7 @@ export const DefaultPageConfig = {
   labelWidth: 100,
   labelPosition: 'right',
   tableWidget: undefined,
-  width: 800,
+  width: 600,
   height: 300
 }
 

@@ -10,14 +10,14 @@
           >
             {{value}}
           </span>
-          <span v-else-if="widgetConfig.widgetType === OnlineWidgetType.Select">{{getDictValue(value)}}</span>
+          <span v-else-if="widgetConfig.widgetType === OnlineWidgetType.Select">{{getDictLabel(value)}}</span>
           <div v-else-if="widgetConfig.widgetType === OnlineWidgetType.RichEditor" v-html="value"/>
           <span v-else-if="widgetConfig.widgetType === OnlineWidgetType.Switch">{{value ? '是' : '否'}}</span>
         </el-form-item>
       </template>
       <template v-else>
         <el-form-item :label="widgetConfig.showName"
-                      :prop="(widgetConfig.tableType!==OnlineTableType.MASTER ? (widgetConfig.variableName + '__') : '') + (widgetConfig.column || {}).columnName">
+                      :prop="getColumnFieldName(widgetConfig.onlineTable,widgetConfig.onlineColumn)">
           <el-input v-if="widgetConfig.widgetType === OnlineWidgetType.Input"
                     class="input-item" clearable
                     :type="widgetConfig.type"
@@ -48,7 +48,8 @@
                      @visible-change="(isShow) => dropdownWidget.onVisibleChange(isShow).catch(e => {})"
                      @change="handlerWidgetChange"
           >
-            <el-option v-for="item in dropdownWidget.dropdownList" :key="item.dictValue" :value="item.dictValue" :label="item.dictLabel"/>
+            <el-option v-for="item in dropdownWidget.dropdownList" :key="item.dictValue" :value="item.dictValue"
+                       :label="item.dictLabel"/>
           </el-select>
           <el-cascader v-if="widgetConfig.widgetType === OnlineWidgetType.Cascader"
                        class="input-item" filterable
@@ -112,6 +113,7 @@
   import CustomImageWidget from './customImageWidget'
 
   export default {
+    name: 'CustomBaseWidget',
     props: {
       pageConfig: {
         type: Object,
@@ -124,7 +126,7 @@
       value: {
         type: [String, Number, Date, Object, Array, Boolean]
       },
-      getDropdownParams: {
+      dropdownParam: {
         type: Function
       }
     },
@@ -157,7 +159,7 @@
             let params = {}
             let onlineDict = this.widgetConfig.onlineColumn.onlineDict
             if (onlineDict.dictType === this.OnlineDictType.TABLE) {
-              params = this.getDropdownParams ? this.getDropdownParams(this.widgetConfig) : {}
+              params = this.dropdownParam ? this.dropdownParam(this.widgetConfig) : {}
             }
             if (params == null) {
               reject()
@@ -208,12 +210,16 @@
           this.$emit('change', value, this.widgetConfig)
         }
       },
-      getDictValue(dictValue) {
+      /** 获得字典标签 */
+      getDictLabel(dictValue) {
         if (this.dropdownWidget && Array.isArray(this.dropdownWidget.dropdownList)) {
           return (findItemFromList(this.dropdownWidget.dropdownList, dictValue, 'dictValue') || {}).dictLabel
         } else {
           return ''
         }
+      },
+      getColumnFieldName(onlineTable, onlineColumn) {
+        return (onlineTable.tableType !== this.OnlineTableType.MASTER ? onlineTable.modelName + '__' : '') + onlineColumn.fieldName
       }
     }
   }

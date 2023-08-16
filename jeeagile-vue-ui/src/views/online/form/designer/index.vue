@@ -448,7 +448,7 @@
                             {{(getTableColumn(scope.row.dictValue) || {}).columnName}}
                           </span>
                               <span v-else-if="scope.row.paramValueType === OnlineParamValueType.STATIC_DICT">
-                            {{getDictValueShowName(scope.row.dictValue)}}
+                            {{getDictShowName(scope.row.dictValue)}}
                           </span>
                               <span v-else-if="scope.row.paramValueType === OnlineParamValueType.INPUT_VALUE">
                             {{scope.row.dictValue}}
@@ -579,7 +579,7 @@
                               {{scope.row.onlineColumn.columnName}}
                             </span>
                             <span v-else-if="scope.row.paramValueType === OnlineParamValueType.STATIC_DICT">
-                              {{getDictValueShowName(scope.row.paramValue)}}
+                              {{getDictShowName(scope.row.paramValue)}}
                             </span>
                             <span v-else-if="scope.row.paramValueType === OnlineParamValueType.INPUT_VALUE">
                               {{scope.row.paramValue}}
@@ -648,7 +648,7 @@
 
   Vue.component('drag-widget-item', DragWidgetItem)
   export default {
-    name: 'PageDesigner',
+    name: 'OnlinePageDesigner',
     components: { Draggable, DragWidgetFilter, DragWidgetItem },
     props: {
       onlineForm: {    // 表单信息
@@ -750,22 +750,19 @@
         if (this.getPageMasterTable.tableType !== this.OnlineTableType.MASTER || this.pageConfig.pageType !== this.OnlinePageType.QUERY) {
           // 编辑表单必须包含主表主键id
           if (this.pageConfig.pageType !== this.OnlinePageType.QUERY) {
-            let primaryKeyColumn = findItemFromList(this.getPageMasterTable.tableColumnList, this.SysYesNo.YES, 'columnPrimary')
-            if (primaryKeyColumn !== null) {
-              this.pageConfig.paramList.unshift({
-                columnName: primaryKeyColumn.columnName,
-                columnPrimary: true,
-                slaveColumn: false,
-                builtin: true
-              })
-            }
+            this.pageConfig.paramList.unshift({
+              columnName: this.getPageMasterTable.primaryColumnName,
+              columnPrimary: true,
+              slaveColumn: false,
+              builtin: true
+            })
           }
           // 一对多从表查询页面必须包含从表关联字段
           if (this.pageConfig.pageType === this.OnlinePageType.QUERY && this.getPageMasterTable.tableType === this.OnlineTableType.ONE_TO_MANY) {
-            let slaveColumn = findItemFromList(this.getPageMasterTable.tableColumnList, this.getPageMasterTable.slaveColumnId, 'columnId')
-            if (slaveColumn !== null) {
+            let slaveOnlineColumn = findItemFromList(this.getPageMasterTable.tableColumnList, this.getPageMasterTable.slaveColumnId, 'columnId')
+            if (slaveOnlineColumn !== null) {
               this.pageConfig.paramList.unshift({
-                columnName: slaveColumn.columnName,
+                columnName: slaveOnlineColumn.columnName,
                 columnPrimary: false,
                 slaveColumn: true,
                 builtin: true
@@ -1020,6 +1017,7 @@
       /** 组装表格组件 */
       buildTableWidgetInfo(tableWidget) {
         if (tableWidget != null) {
+          const v=this.handleWidgetVariableName()
           let onlineTable = findItemFromList(this.pageTableList, tableWidget.tableId, 'tableId')
           if (onlineTable != null) {
             tableWidget.onlineTable = onlineTable
@@ -1278,7 +1276,7 @@
         return null
       },
       /** 获取静态字典展示名称 */
-      getDictValueShowName(dictValue) {
+      getDictShowName(dictValue) {
         let staticDict = SystemStaticDict[dictValue[0]]
         if (staticDict) {
           return staticDict.dictName + ' / ' + staticDict.getLabel(dictValue[1])

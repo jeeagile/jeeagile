@@ -80,6 +80,7 @@
   import { findItemFromList } from '../util'
 
   export default {
+    name: 'EditWidgetTableColumn',
     props: {
       showOrder: {
         type: Number

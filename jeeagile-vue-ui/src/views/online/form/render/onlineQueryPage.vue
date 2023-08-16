@@ -83,13 +83,14 @@
             let paramValue = this.getParamValue(item.paramValueType, item.paramValue)
             if (!paramValue || (Array.isArray(paramValue) && paramValue.length === 0)) return
             let temp = {
+              tableId: item.onlineTable.tableId,
               tableName: item.onlineTable.tableName,
               columnName: item.onlineColumn.columnName,
               filterType: item.onlineColumn.filterType,
               columnValue: item.onlineColumn.filterType !== this.OnlineFilterType.RANFGE ? paramValue : undefined
             }
 
-            if (item.column.filterType === this.OnlineFilterType.RANFGE) {
+            if (item.onlineColumn.filterType === this.OnlineFilterType.RANFGE) {
               temp.columnValueStart = paramValue[0]
               temp.columnValueEnd = paramValue[1]
             }

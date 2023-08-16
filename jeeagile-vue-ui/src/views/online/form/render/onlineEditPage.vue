@@ -40,7 +40,7 @@
                   :key="subWidget.id"
                   :widgetConfig="subWidget"
                   :pageConfig="pageConfig"
-                  :dropdownParams="getDropdownParam"
+                  :dropdownParam="getDropdownParam"
                   v-model="formPageData[getWidgetFieldName(subWidget)]"
                 />
               </template>
@@ -67,6 +67,7 @@
   import { OnlinePageMixins } from './onlinePageMixins.js'
   import CustomBaseWidget from '../designer/customBaseWidget'
   import CustomTableWidget from '../designer/customTableWidget'
+  import { saveTableData, updateTableData } from '@/api/online/operation'
 
   export default {
     name: 'OnlineEditForm',
@@ -93,22 +94,111 @@
       CustomTableWidget
     },
     methods: {
+      /** 获取组件字段名 */
       getWidgetFieldName(widget) {
-        if (widget && widget.tableType === this.OnlineTableType.MASTER) {
-          return (widget.onlineColumn || {}).columnName
-        } else {
-          return widget.variableName + '__' + (widget.onlineColumn || {}).columnName
+        if (widget && widget.onlineTable && widget.onlineColumn) {
+          return this.getColumnFieldName(widget.onlineTable, widget.onlineColumn)
         }
       },
+      /** 是否为添加从表数据 */
       checkAddRelationTable(tableWidget) {
         return this.operationType === this.OnlineOperationType.ADD && tableWidget.tableType != this.OnlineTableType.MASTER
       },
+      /** 取消 */
       onCancel(isSuccess, data) {
         this.$emit('close', isSuccess, data)
       },
+      /** 保存数据 */
       onSave() {
         if (this.preview()) return
+        setTimeout(() => {
+          this.$refs.form.validate(valid => {
+            if (!valid) return
+            let tableId = this.masterTable?.tableId
+            let params = { tableId }
+            if (this.masterTable.tableType === this.OnlineTableType.MASTER) {
+              let masterData = {}
+              this.masterTable.tableColumnList.forEach(onlineColumn => {
+                masterData[onlineColumn.columnName] = this.formPageData[onlineColumn.fieldName]
+              })
+              params.masterData = masterData
+            }
+
+            // 添加调用按钮接口代码
+            if (this.saveOnClose === '1') {
+              if (tableId != null && tableId !== '') {
+                // 从表数据
+                let slaveData = {}
+                if (this.masterTable.tableType === this.OnlineTableType.MASTER) {
+                  if (Array.isArray(this.tableWidgetList) && this.tableWidgetList.length > 0 && this.operationType === this.OnlineOperationType.ADD) {
+                    this.tableWidgetList.forEach(tableWidget => {
+                      let tableData = this.getRelationTableData(tableWidget)
+                      if (tableData != null) {
+                        slaveData[tableWidget.tableId] = tableData
+                      }
+                    })
+                  }
+                } else {
+                  slaveData = this.masterTable.tableColumnList.reduce((retObj, column) => {
+                    const fieldName = this.getColumnFieldName(this.masterTable, column)
+                    retObj[column.columnName] = this.formPageData[fieldName]
+                    return retObj
+                  }, {})
+                  slaveData = {
+                    ...slaveData,
+                    ...this.params
+                  }
+                }
+                params.slaveData = slaveData
+                if (this.operationType === 'ADD') {
+                  saveTableData(params).then(res => {
+                    this.onCancel(true, this.formPageData)
+                  })
+                } else {
+                  if (this.masterTable.tableType === this.OnlineTableType.MASTER) {
+                    params.tableData = params.masterData
+                  } else {
+                    params.tableData = params.slaveData
+                  }
+                  params.masterData = undefined
+                  params.slaveData = undefined
+                  updateTableData(params).then(res => {
+                    this.onCancel(true, this.formPageData)
+                  })
+                }
+              }
+            } else {
+              let masterData = {
+                // 级联添加数据唯一标识
+                __cascade_add_id__: this.formPageData.__cascade_add_id__ || new Date().getTime()
+              }
+              if (this.masterTable && Array.isArray(this.masterTable.tableColumnList)) {
+                this.masterTable.tableColumnList.forEach(onlineColumn => {
+                  let fieldName = this.getColumnFieldName(this.masterTable, onlineColumn)
+                  masterData[fieldName] = this.formPageData[fieldName]
+                })
+
+                if (Array.isArray(this.dropdownWidgetList)) {
+                  this.dropdownWidgetList.forEach(dropdownWidget => {
+                    let fieldName = this.getColumnFieldName(this.masterTable, dropdownWidget.onlineColumn)
+                    let tempWidget = this.$refs[dropdownWidget.variableName]
+                    if (Array.isArray(tempWidget)) {
+                      tempWidget.forEach(item => {
+                        masterData[dropdownWidget.onlineColumn.columnName + '__DictMap'] = {
+                          dictValue: this.formPageData[fieldName],
+                          dictLabel: item.getDictLabel(this.formPageData[fieldName])
+                        }
+                      })
+                    }
+                  })
+                }
+              }
+              this.onCancel(true, masterData)
+            }
+          })
+        }, 30)
       },
+      /** 获取表格查询参数 */
       getTableQueryParam(widget) {
         let queryParams = []
         if (Array.isArray(widget.queryParamList)) {
@@ -116,6 +206,7 @@
             let paramValue = this.getParamValue(item.paramValueType, item.paramValue)
             if (paramValue == null || paramValue === '' || (Array.isArray(paramValue) && paramValue.length === 0)) return
             let temp = {
+              tableId: item.onlineTable.tableId,
               tableName: item.onlineTable.tableName,
               columnName: item.onlineColumn.columnName,
               filterType: item.onlineColumn.filterType,
@@ -128,9 +219,9 @@
             return temp
           }).filter(item => item != null)
         }
-
         return queryParams
       },
+      /** 获取下拉参数 */
       getDropdownParam(widget) {
         if (Array.isArray(widget.dictParamList)) {
           let params = {}
@@ -146,6 +237,7 @@
           return {}
         }
       },
+      /** 点击表格按钮 */
       clickTableOperation(operation, row, widget) {
         this.handlerOperation(operation, row, widget)
       }

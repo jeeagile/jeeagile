@@ -39,6 +39,7 @@
   import CustomFilterWidget from './customFilterWidget'
 
   export default {
+    name: 'DragWidgetItem',
     components: {
       Draggable,
       CustomBaseWidget,

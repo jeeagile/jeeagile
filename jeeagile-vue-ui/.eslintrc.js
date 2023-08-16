@@ -17,6 +17,7 @@ module.exports = {
     'vue/html-closing-bracket-spacing': 'off',
     'vue/name-property-casing': ['error', 'PascalCase'],
     'vue/no-v-html': 'off',
+    'no-case-declarations': 'off',
     'no-cond-assign': ['error', 'always'], // 禁止条件表达式中出现赋值操作符
     'no-console': ['error', { allow: ['warn', 'error'] }], // 禁用 console
     'no-constant-condition': ['error', { 'checkLoops': true }], // 禁止在条件中使用常量表达式
@@ -71,7 +72,7 @@ module.exports = {
     'key-spacing': ['error', { 'beforeColon': false, 'afterColon': true }], // 强制在对象字面量的属性中键和值之间使用一致的间距
     'linebreak-style': ['off', 'windows'], // 换行符风格
     'max-depth': ['error', 5], // 强制可嵌套的块的最大深度
-    'max-nested-callbacks': ['error', 3], // 强制回调函数最大嵌套深度
+    'max-nested-callbacks': ['error', 5], // 强制回调函数最大嵌套深度
     'max-params': ['error', 6], // 强制函数定义中最多允许的参数数量
     'multiline-ternary': ['error', 'always-multiline'], // 要求或禁止在三元操作数中间换行
     'new-cap': ['error', { 'capIsNew': false }], // 要求构造函数首字母大写

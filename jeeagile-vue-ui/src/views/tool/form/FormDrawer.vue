@@ -128,7 +128,6 @@ export default {
   },
   watch: {},
   created() {
-    debugger
     this.formData = this.$route.params.formData
     this.generateConf = this.$route.params.generateConf
   },

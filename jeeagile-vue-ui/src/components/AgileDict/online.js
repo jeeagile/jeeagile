@@ -312,27 +312,27 @@ Vue.prototype.OnlineWidgetKind = OnlineWidgetKind
 
 const OnlineOperationType = new AgileBaseDict('操作类型', [
   {
-    value: '01',
+    value: 'ADD',
     name: '新建',
     symbol: 'ADD'
   },
   {
-    value: '02',
+    value: 'EDIT',
     name: '编辑',
     symbol: 'EDIT'
   },
   {
-    value: '03',
+    value: 'DELETE',
     name: '删除',
     symbol: 'DELETE'
   },
   {
-    value: '04',
+    value: 'EXPORT',
     name: '导出',
     symbol: 'EXPORT'
   },
   {
-    value: '99',
+    value: 'CUSTOM',
     name: '自定义操作',
     symbol: 'CUSTOM'
   }

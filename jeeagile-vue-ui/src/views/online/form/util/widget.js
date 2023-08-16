@@ -98,7 +98,7 @@ export class TableWidget {
     this.currentPage = 0
     this.oldPageSize = DEFAULT_PAGE_SIZE
     this.pageSize = DEFAULT_PAGE_SIZE
-    this.totalCount = 0
+    this.pageTotal = 0
     this.dataList = []
     this.orderInfo = {
       fieldName: orderFieldName,
@@ -183,37 +183,37 @@ export class TableWidget {
     this.currentRow = null
     this.oldPage = 0
     this.currentPage = 0
-    this.totalCount = 0
+    this.pageTotal = 0
     this.dataList = []
   }
 
   /**
    * 获取表格数据
-   * @param {Integer} pageNum 当前分页
+   * @param {Integer} currentPage 当前分页
    * @param {Integer} pageSize 每页数量
    * @param {Boolean} reload 是否重新获取数据
    */
-  loadTableDataImpl(pageNum, pageSize, reload = false) {
+  loadTableDataImpl(currentPage, pageSize, reload = false) {
     return new Promise((resolve, reject) => {
       if (typeof this.loadTableData !== 'function') {
         reject()
       } else {
         // 如果pageSize和pageNum没有变化，并且不强制刷新
-        if (this.paged && !reload && this.oldPage === pageNum && this.oldPageSize === pageSize) {
+        if (this.paged && !reload && this.oldPage === currentPage && this.oldPageSize === pageSize) {
           resolve()
         } else {
           let params = {}
           if (this.orderInfo.fieldName != null) params.orderParam = [this.orderInfo]
           if (this.paged) {
             params.pageParam = {
-              pageNum,
+              currentPage,
               pageSize
             }
           }
           this.loading = true
           this.loadTableData(params).then(tableData => {
             this.dataList = tableData.dataList
-            this.totalCount = tableData.totalCount
+            this.pageTotal = tableData.pageTotal
             this.loading = false
             resolve()
           }).catch(e => {
@@ -228,25 +228,24 @@ export class TableWidget {
   /**
    * 刷新表格数据
    * @param {Boolean} research 是否按照新的查询条件重新查询（调用verify函数）
-   * @param {Integer} pageNum 当前页面
+   * @param {Integer} currentPage 当前页面
    */
-  refreshTable(research = false, pageNum = undefined, showMsg = false) {
+  refreshTable(research = false, currentPage = undefined, showMsg = false) {
     let reload = false
     if (research) {
       if (typeof this.searchVerify === 'function' && !this.searchVerify()) return
       reload = true
     }
 
-    if (Number.isInteger(pageNum) && pageNum !== this.currentPage) {
-      this.loadTableDataImpl(pageNum, this.pageSize, reload).then(res => {
-        this.oldPage = this.currentPage = pageNum
+    if (Number.isInteger(currentPage) && currentPage !== this.currentPage) {
+      this.loadTableDataImpl(currentPage, this.pageSize, reload).then(res => {
+        this.oldPage = this.currentPage = currentPage
         if (research && showMsg) Message.success('查询成功')
       }).catch(e => {
         this.currentPage = this.oldPage
       })
     } else {
-      this.loadTableDataImpl(this.currentPage, this.pageSize, true).catch(e => {
-      })
+      this.loadTableDataImpl(this.currentPage, this.pageSize, true)
     }
   }
 }
@@ -326,7 +325,6 @@ export class ChartWidget {
             if (this.chartObject) this.chartObject.resize()
             resolve()
           }).catch(e => {
-            console.error(e)
             this.loading = false
             reject(e)
           })
@@ -344,7 +342,6 @@ export class ChartWidget {
       if (typeof this.searchVerify === 'function' && !this.searchVerify()) return
     }
 
-    this.loadChartDataImpl(true).catch(e => {
-    })
+    this.loadChartDataImpl(true)
   }
 }

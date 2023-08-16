@@ -8,6 +8,7 @@
 
 <script>
 export default {
+  name: 'CustomTextWidget',
   props: {
     widgetConfig: {
       type: Object,

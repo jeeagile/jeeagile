@@ -1,5 +1,6 @@
 import { getSysDictDataList } from '@/api/system/common'
 import { OnlineDictType } from '@/components/AgileDict/online'
+import { selectDictData } from '@/api/online/operation'
 
 /**
  * 获取字典数据
@@ -11,7 +12,20 @@ import { OnlineDictType } from '@/components/AgileDict/online'
 export async function getOnlineDictData(sender, onlineDict, dictParam) {
   switch(onlineDict.dictType){
     case OnlineDictType.TABLE:
-      break
+      const filterList = Object.keys(dictParam).map(key => {
+        return {
+          columnName: key,
+          columnValue: dictParam[key]
+        }
+      })
+      let params = {
+        dictId: onlineDict.id,
+        filterList: filterList
+      }
+      const dictDataList = await selectDictData(params).then(response => {
+        return response.data
+      })
+      return Promise.resolve(dictDataList)
     case OnlineDictType.SYSTEM:
       if (onlineDict.systemDictType != null) {
         const dictDataList = await getSysDictDataList(onlineDict.systemDictType).then(response => {
@@ -58,7 +72,7 @@ export function findItemFromList(list, value, key, remove = false) {
 
 /**
  * 通过值返回从根节点到指定节点的路径
- * @param treeRoot
+ * @param treeList
  * @param value 要查询的节点的值
  * @param key 主键字段键值
  * @param childKey 子节点字键值

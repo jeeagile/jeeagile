@@ -57,6 +57,7 @@
 <script>
 
   export default {
+    name: 'EditWidgetTableOperation',
     props: {
       rowData: {
         type: Object

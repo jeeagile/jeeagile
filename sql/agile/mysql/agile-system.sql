@@ -100,7 +100,7 @@ INSERT INTO agile_sys_dict_type VALUES ('15', '流程实例状态', 'process_ins
 /*==============================================================*/
 create table agile_sys_dict_data
 (
-  id                varchar(32) not null comment '字典数据注解',
+  id                varchar(32) not null comment '字典数据主键',
   parent_id         varchar(32) not null default '0' comment '上级字典',
   dict_sort         int not null default '0' comment '字典排序',
   dict_label        varchar(100) not null comment '字典标签',

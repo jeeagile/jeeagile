@@ -91,6 +91,7 @@
 
 
   export default {
+    name: 'EditWidgetTableQueryParam',
     props: {
       // 表格数据表
       tableList: {
@@ -151,7 +152,6 @@
       onSubmit() {
         this.$refs.form.validate(valid => {
           if (!valid) return
-          debugger
           this.formData.onlineTable = this.getCurrentTable
           if (this.getCurrentTable.tableType === this.OnlineTableType.MASTER) {
             this.formData.tableId = this.getCurrentTable.tableId

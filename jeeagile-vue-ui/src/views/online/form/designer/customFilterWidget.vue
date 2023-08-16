@@ -58,6 +58,7 @@
   import { getOnlineDictData, findTreeNodePath } from '../util'
 
   export default {
+    name: 'CustomFilterWidget',
     props: {
       widgetConfig: {
         type: Object,

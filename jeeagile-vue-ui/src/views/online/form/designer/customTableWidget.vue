@@ -23,12 +23,11 @@
         <el-table size="mini" header-cell-class-name="table-header-gray" ref="tableImpl"
                   :style="{height: (widgetConfig.height != null && widgetConfig.height !== '') ? widgetConfig.height + 'px' : undefined}"
                   :height="(widgetConfig.height != null && widgetConfig.height !== '') ? widgetConfig.height + 'px' : undefined"
-                  :data="tableWidget.dataList" :row-key="primaryFieldName"
+                  :data="tableWidget.dataList" :row-key="getPrimaryFieldName"
                   @sort-change="tableWidget.onSortChange">
           <el-table-column label="序号" header-align="center" align="center" type="index" width="55px"
                            :index="tableWidget.getTableIndex"/>
           <template v-for="tableColumn in widgetConfig.tableColumnList">
-            <!-- Boolean类型的字段，使用el-tag去显示 -->
             <el-table-column v-if="(tableColumn.onlineColumn || {}).fieldType === 'Boolean'"
                              :key="tableColumn.dataFieldName"
                              :label="tableColumn.showName" :width="tableColumn.columnWidth + 'px'"
@@ -87,7 +86,7 @@
             >
               <template slot-scope="scope">
                 <span>
-                  {{getDictValue(tableColumn, scope.row)}}
+                  {{getDictLabel(tableColumn, scope.row)}}
                 </span>
               </template>
             </el-table-column>
@@ -137,7 +136,7 @@
         <el-row type="flex" justify="end" style="margin-top: 10px;">
           <el-pagination
             :background="true"
-            :total="tableWidget.totalCount"
+            :total="tableWidget.pageTotal"
             :current-page="tableWidget.currentPage"
             :page-size="tableWidget.pageSize"
             :page-sizes="[10, 20, 50, 100]"
@@ -155,8 +154,10 @@
   import { getOnlineDictData } from '../util'
   import { TableWidget } from '../util/widget'
   import { mapGetters } from 'vuex'
+  import { selectPageData } from '@/api/online/operation'
 
   export default {
+    name: 'CustomTableWidget',
     props: {
       pageType: {
         type: String,
@@ -218,7 +219,7 @@
       setTableWidget(tableWidget) {
         let timer = setInterval(() => {
           if (!this.tableWidget.loading) {
-            this.tableWidget.totalCount = tableWidget.totalCount
+            this.tableWidget.pageTotal = tableWidget.pageTotal
             this.tableWidget.currentPage = tableWidget.currentPage
             this.tableWidget.pageSize = tableWidget.pageSize
             this.tableWidget.refreshTable()
@@ -232,18 +233,36 @@
       },
       /** 加载表数据 */
       loadTableData(params) {
-        if (this.widgetConfig.table == null || this.isDesigner || this.isNew || this.preview()) {
+        if (this.widgetConfig.onlineTable == null || this.isDesigner || this.isNew) {
           return Promise.resolve({
             dataList: this.tableWidget.dataList,
-            totalCount: 0
+            pageTotal: 0
           })
         }
         if (params == null) params = {}
+        let filterParam = this.queryParam ? this.queryParam(this.widgetConfig) : undefined
+        const queryParam = {
+          currentPage: params.pageParam.currentPage,
+          pageSize: params.pageParam.pageSize,
+          queryCond: {
+            tableId: this.widgetConfig.tableId,
+            filterList: filterParam
+          }
+        }
+        return new Promise((resolve, reject) => {
+          selectPageData(queryParam).then(response => {
+              resolve({
+                dataList: response.data.records,
+                pageTotal: response.data.pageTotal
+              })
+            }
+          )
+        })
       },
       loadTableVerify() {
         return true
       },
-      /**  页面是否是返回状态 */
+      /** 页面是否是返回状态 */
       isResume() {
         let key = this.$route.fullPath
         return this.onlinePageCache[key] != null
@@ -252,7 +271,6 @@
       refresh(row, operatorType) {
         if (this.isResume()) return
         if (!this.isNew) {
-          // 重新获取表格数据
           this.tableWidget.refreshTable()
         } else {
           if (operatorType === this.OnlineOperationType.ADD) this.tableWidget.dataList.push(row)
@@ -291,15 +309,30 @@
       },
       /** 获取表格列字段 */
       getTableColumnFieldName(tableColumn) {
-        if (tableColumn.onlineColumn == null) return null
-        let fieldName = tableColumn.onlineColumn.columnName || tableColumn.onlineColumn.fieldName
-        if (tableColumn.tableType != this.OnlineTableType.MASTER) {
-          fieldName = tableColumn.onlineTable.modelName + '__' + fieldName
-        }
+        if (!tableColumn.onlineColumn) return null
+        let fieldName = this.getColumnFieldName(tableColumn.onlineTable, tableColumn.onlineColumn)
         if (this.pageType === this.OnlineTableType.ORDER) {
-          fieldName = 'masterTable__' + fieldName
+          fieldName = 'masterTable__' + tableColumn.onlineColumn.fieldName
         }
         return fieldName
+      },
+      /** 获取表格cell数据字典值 */
+      getDictLabel(tableColumn, row) {
+        let dictData = null
+        let value = row[tableColumn.dataFieldName]
+        if (tableColumn.onlineColumn.onlineDict != null) {
+          if (row[tableColumn.fieldName + '__DictMap']) {
+            return row[tableColumn.fieldName + '__DictMap'].dictLabel
+          }
+        }
+        let dictValueList = this.tableDictValueListMap.get(tableColumn.onlineColumn.dictId)
+        if (dictValueList != null) {
+          dictData = dictValueList.get(value)
+        }
+        return dictData?.dictLabel
+      },
+      getColumnFieldName(onlineTable, onlineColumn) {
+        return (onlineTable.tableType !== this.OnlineTableType.MASTER ? onlineTable.modelName + '__' : '') + onlineColumn.fieldName
       }
     },
     mounted() {
@@ -327,19 +360,16 @@
       }
     },
     computed: {
-      primaryFieldName() {
+      ...mapGetters(['onlinePageCache']),
+      /** 获取主键字段名  */
+      getPrimaryFieldName() {
         if (this.widgetConfig && this.widgetConfig.onlineTable && Array.isArray(this.widgetConfig.onlineTable.tableColumnList)) {
-          for (let i = 0; i < this.widgetConfig.onlineTable.tableColumnList.length; i++) {
-            let onlineColumn = this.widgetConfig.onlineTable.tableColumnList[i]
-            if (onlineColumn.primaryFlag === this.SysYesNo.YES) {
-              return (this.widgetConfig.tableType === this.OnlineTableType.MASTER ? this.widgetConfig.variableName + '__' : '') + onlineColumn.fieldName
-            }
-          }
+          const primaryOnlineColumn = this.widgetConfig.onlineTable.tableColumnList.find(item => item.columnId === this.widgetConfig.onlineTable.primaryColumnId)
+          return this.getColumnFieldName(this.widgetConfig.onlineTable, primaryOnlineColumn)
         }
         return null
       }
-    },
-    ...mapGetters(['onlinePageCache'])
+    }
   }
 </script>
 

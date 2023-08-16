@@ -66,6 +66,7 @@
   import * as SystemStaticDict from '@/components/AgileDict/system'
 
   export default {
+    name: 'EditWidgetDictParam',
     props: {
       rowData: {
         type: Object,
