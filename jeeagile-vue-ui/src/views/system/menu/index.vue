@@ -51,7 +51,6 @@
           <el-tag v-else-if="scope.row.menuType === 'F'" type="info" size="mini">权限</el-tag>
         </template>
       </el-table-column>
-<!--      <el-table-column prop="menuPerm" label="权限标识" :show-overflow-tooltip="true"/>-->
       <el-table-column prop="menuComp" align="center" label="组件路径" :show-overflow-tooltip="true"/>
       <el-table-column prop="menuStatus" label="菜单状态" :formatter="menuStatusFormat" align="center" width="80"/>
       <el-table-column prop="menuVisible" label="显示状态" :formatter="menuVisibleFormat" align="center" width="80"/>
@@ -74,22 +73,32 @@
     </el-table>
 
     <!-- 添加或修改菜单对话框 -->
-    <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="600px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="700px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row>
-          <el-col :span="24">
-            <el-form-item label="上级菜单">
-              <tree-select v-model="form.parentId" :options="menuTreeOptionList" :normalizer="normalizer"
-                           :show-count="true" placeholder="选择上级菜单"/>
+          <el-col :span="12">
+            <el-form-item label="菜单名称" prop="menuName">
+              <el-input v-model="form.menuName" placeholder="请输入菜单名称"/>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="菜单类型" prop="menuType">
               <el-radio-group v-model="form.menuType">
                 <el-radio label="M">目录</el-radio>
                 <el-radio label="C">菜单</el-radio>
                 <el-radio label="F">按钮</el-radio>
               </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="上级菜单">
+              <tree-select v-model="form.parentId" :options="menuTreeOptionList" :normalizer="normalizer"
+                           :show-count="true" placeholder="选择上级菜单"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="显示排序" prop="menuSort">
+              <el-input-number v-model="form.menuSort" controls-position="right" :min="0" style="width: 100%;"/>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -104,21 +113,13 @@
               </el-popover>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="菜单名称" prop="menuName">
-              <el-input v-model="form.menuName" placeholder="请输入菜单名称"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="显示排序" prop="menuSort">
-              <el-input-number v-model="form.menuSort" controls-position="right" :min="0" />
-            </el-form-item>
-          </el-col>
+
+
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="是否外链">
               <el-radio-group v-model="form.menuFrame">
-                <el-radio label="0">是</el-radio>
-                <el-radio label="1">否</el-radio>
+                <el-radio label="0">&nbsp;是&emsp;</el-radio>
+                <el-radio label="1">&nbsp;否</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
