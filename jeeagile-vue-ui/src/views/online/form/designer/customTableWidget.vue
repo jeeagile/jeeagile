@@ -167,7 +167,7 @@
         type: Object,
         required: true
       },
-      queryParam: {
+      tableQueryParam: {
         type: Function
       },
       loadDataFunc: {
@@ -240,7 +240,7 @@
           })
         }
         if (params == null) params = {}
-        let filterParam = this.queryParam ? this.queryParam(this.widgetConfig) : undefined
+        let filterParam = this.tableQueryParam ? this.tableQueryParam(this.widgetConfig) : undefined
         const queryParam = {
           currentPage: params.pageParam.currentPage,
           pageSize: params.pageParam.pageSize,

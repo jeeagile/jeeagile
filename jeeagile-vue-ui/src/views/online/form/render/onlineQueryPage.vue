@@ -36,7 +36,7 @@
         <custom-table-widget :ref="pageConfig.pageQueryTable.variableName"
                              :widgetConfig="pageConfig.pageQueryTable"
                              :pageType="pageConfig.pageType"
-                             :queryParam="getTableQueryParam"
+                             :tableQueryParam="getTableQueryParam"
                              @operationClick="clickTableOperation"/>
       </el-col>
     </el-row>

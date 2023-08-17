@@ -399,7 +399,6 @@ const OnlinePageMixins = {
           return this.getPrimaryColumnParam(this.masterTable, row)
         } else {
           if (operation.type === this.OnlineOperationType.EDIT) {
-            // 从表的编辑页面
             if (this.pageConfig.pageType === this.OnlinePageType.EDIT && this.operationType === this.OnlineOperationType.ADD) {
               return {
                 ...row

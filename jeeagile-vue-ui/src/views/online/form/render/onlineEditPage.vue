@@ -13,7 +13,7 @@
                                  :pageType="pageConfig.pageType"
                                  :primaryColumnName="widget.primaryColumnName"
                                  :isNew="checkAddRelationTable(widget)"
-                                 :queryParam="getTableQueryParam"
+                                 :tableQueryParam="getTableQueryParam"
                                  @operationClick="clickTableOperation"
             />
             <custom-base-widget
@@ -31,7 +31,7 @@
                                      :widgetConfig="subWidget"
                                      :pageType="pageConfig.pageType"
                                      :isNew="checkAddRelationTable(subWidget)"
-                                     :queryParam="getTableQueryParam"
+                                     :tableQueryParam="getTableQueryParam"
                                      @operationClick="clickTableOperation"
                 />
                 <custom-base-widget
@@ -208,6 +208,7 @@
             let temp = {
               tableId: item.onlineTable.tableId,
               tableName: item.onlineTable.tableName,
+              columnId: item.onlineColumn.columnId,
               columnName: item.onlineColumn.columnName,
               filterType: item.onlineColumn.filterType,
               columnValue: item.onlineColumn.filterType !== this.OnlineFilterType.RANFGE ? paramValue : undefined
@@ -218,6 +219,21 @@
             }
             return temp
           }).filter(item => item != null)
+        }
+        // 从表添加关联字段参数 后端校验关联参数是否存在，避免全表查询
+        if (widget.onlineTable.tableType === this.OnlineTableType.ONE_TO_MANY) {
+          const masterOnlineTable = this.onlineTableMap.get(widget.onlineTable.masterTableId)
+          const masterOnlineColumn = this.onlineColumnMap.get(widget.onlineTable.masterColumnId)
+          const fieldName = this.getColumnFieldName(masterOnlineTable, masterOnlineColumn)
+          const temp = {
+            tableId: widget.onlineTable.tableId,
+            tableName: widget.onlineTable.tableName,
+            columnId: widget.onlineColumn.slaveColumnId,
+            columnName: widget.onlineTable.slaveColumnName,
+            filterType: this.OnlineFilterType.EQUAL,
+            columnValue: this.rowData[fieldName]
+          }
+          queryParams.push(temp)
         }
         return queryParams
       },
