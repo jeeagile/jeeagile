@@ -39,3 +39,8 @@ export const changeFormStatus = data => postApi('/online/form/changeFormStatus',
  * 加载表单
  */
 export const formPageRender = data => postApi('/online/form/render', data)
+
+/**
+ * 表单页面列表
+ */
+export const formPageList = data => postApi('/online/form/formPageList', data)

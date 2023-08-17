@@ -90,6 +90,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="上级菜单">
               <tree-select v-model="form.parentId" :options="menuTreeOptionList" :normalizer="normalizer"
@@ -101,7 +103,9 @@
               <el-input-number v-model="form.menuSort" controls-position="right" :min="0" style="width: 100%;"/>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="菜单图标">
               <el-popover placement="bottom-start" width="460" trigger="click" @show="$refs['iconSelect'].reset()">
                 <IconSelect ref="iconSelect" @selected="selectedMenuIcon"/>
@@ -114,20 +118,14 @@
             </el-form-item>
           </el-col>
 
-
-          <el-col :span="12">
-            <el-form-item v-if="form.menuType != 'F'" label="是否外链">
-              <el-radio-group v-model="form.menuFrame">
-                <el-radio label="0">&nbsp;是&emsp;</el-radio>
-                <el-radio label="1">&nbsp;否</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="路由地址" prop="menuPath">
               <el-input v-model="form.menuPath" placeholder="请输入路由地址"/>
             </el-form-item>
           </el-col>
+        </el-row>
+
+        <el-row>
           <el-col v-if="form.menuType == 'C'" :span="12">
             <el-form-item label="组件路径" prop="menuComp">
               <el-input v-model="form.menuComp" placeholder="请输入组件路径"/>
@@ -136,6 +134,17 @@
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'M'" label="权限标识">
               <el-input v-model="form.menuPerm" placeholder="请权限标识" maxlength="50"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item v-if="form.menuType != 'F'" label="是否外链">
+              <el-radio-group v-model="form.menuFrame">
+                <el-radio label="0">&nbsp;是&emsp;</el-radio>
+                <el-radio label="1">&nbsp;否</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="12">

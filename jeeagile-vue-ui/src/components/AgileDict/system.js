@@ -47,6 +47,25 @@ const SysYesNo = new AgileBaseDict('系统是否', [
 ])
 Vue.prototype.SysYesNo = SysYesNo
 
+const SysMenuKind = new AgileBaseDict('菜单分类', [
+  {
+    value: '01',
+    label: '路由菜单',
+    symbol: 'ROUTER'
+  },
+  {
+    value: '02',
+    label: '在线表单',
+    symbol: 'ONLINE'
+  },
+  {
+    value: '03',
+    label: '工单列表',
+    symbol: 'ORDER'
+  }
+])
+Vue.prototype.SysMenuKind = SysMenuKind
+
 const SysPublishStatus = new AgileBaseDict('发布状态', [
   {
     value: '01',
@@ -65,5 +84,6 @@ export {
   SysUserStatus,
   SysUserSex,
   SysYesNo,
-  SysPublishStatus
+  SysPublishStatus,
+  SysMenuKind
 }

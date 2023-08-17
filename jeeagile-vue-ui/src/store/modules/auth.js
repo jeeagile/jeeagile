@@ -3,6 +3,8 @@ import { getUserToken, removeUserToken, setUserToken } from '@/utils/cookie'
 import { agileRouter } from '@/router'
 import Layout from '@/layout/index'
 import { handleTree } from '@/utils/agile'
+import { SysMenuKind } from '@/components/AgileDict/system'
+import { OnlinePageType } from '@/components/AgileDict/online'
 
 const state = {
   userName: '',
@@ -139,7 +141,7 @@ export function filterAsyncRoutes(asyncRoutes) {
 function handleUserMenuTree(userMenu) {
   const routerList = []
   userMenu.forEach(menu => {
-    routerList.push({
+    let router = {
       id: menu.id,
       parentId: menu.parentId,
       name: menu.menuName,
@@ -148,8 +150,14 @@ function handleUserMenuTree(userMenu) {
       meta: {
         title: menu.menuName,
         icon: menu.menuIcon
-      }
-    })
+      },
+      props: {}
+    }
+    if (menu.menuKind === SysMenuKind.ONLINE || menu.menuKind === SysMenuKind.ORDER) {
+      router.props.pageId = menu.pageId
+      router.props.pageType = menu.menuKind === SysMenuKind.ONLINE ? OnlinePageType.QUERY : OnlinePageType.ORDER
+    }
+    routerList.push(router)
   })
   return handleTree(routerList)
 }
@@ -167,6 +175,9 @@ function handleMenuPath(menu) {
 }
 
 function handleMenuComponent(menu) {
+  if (menu.menuKind === SysMenuKind.ONLINE || menu.menuKind === SysMenuKind.ORDER) {
+    return 'online/index'
+  }
   if (menu.menuComp && !isMenuFrame(menu)) {
     return menu.menuComp
   }

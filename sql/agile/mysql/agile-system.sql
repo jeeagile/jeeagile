@@ -13,7 +13,6 @@ drop table if exists agile_sys_user_role;
 drop table if exists agile_sys_login;
 drop table if exists agile_sys_logger;
 
-
 /*==============================================================*/
 /* table: agile_sys_config 参数配置表                            */
 /*==============================================================*/
@@ -573,3 +572,8 @@ alter table agile_sys_user_role add constraint fk_sys_user_role_ref_role foreign
 alter table agile_sys_user_role add constraint fk_sys_user_role_ref_user foreign key (user_id)
       references agile_sys_user (id) on delete restrict on update restrict;
 
+ALTER TABLE agile_sys_menu
+ADD COLUMN menu_kind VARCHAR(2) default null COMMENT '菜单分类（01：路由菜单 02：在线表单 03：工单列表）' AFTER menu_frame;
+
+ALTER TABLE agile_sys_menu
+ADD COLUMN page_id VARCHAR(32) default null COMMENT '在线表单页面ID' AFTER menu_kind;

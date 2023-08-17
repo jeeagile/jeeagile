@@ -36,139 +36,138 @@ INSERT INTO agile_sys_menu VALUES ('10006','100','租户导出',6,'','','#','F',
 INSERT INTO agile_sys_menu VALUES ('10007','100','租户审核',7,'','','#','F','0','0','1','system:tenant:audit','',NULL,NULL,NULL,NULL);
 
 
+ALTER TABLE agile_sys_config
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-ALTER TABLE `agile_sys_config`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+update agile_sys_config set tenant_id='jeeagile';
 
-update `agile_sys_config` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_dept
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-ALTER TABLE `agile_sys_dept`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+update agile_sys_dept set tenant_id='jeeagile';
 
-update `agile_sys_dept` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_dict_type
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-ALTER TABLE `agile_sys_dict_type`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+update agile_sys_dict_type set tenant_id='jeeagile';
 
-update `agile_sys_dict_type` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_dict_data
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-ALTER TABLE `agile_sys_dict_data`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+update agile_sys_dict_data set tenant_id='jeeagile';
 
-update `agile_sys_dict_data` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_menu
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-ALTER TABLE `agile_sys_menu`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+update agile_sys_menu set tenant_id='jeeagile';
 
-update `agile_sys_menu` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_post
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-ALTER TABLE `agile_sys_post`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+update agile_sys_post set tenant_id='jeeagile';
 
-update `agile_sys_post` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_role
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-ALTER TABLE `agile_sys_role`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+update agile_sys_role set tenant_id='jeeagile';
 
-update `agile_sys_role` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_role_dept
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER dept_id;
 
-ALTER TABLE `agile_sys_role_dept`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `dept_id`;
+update agile_sys_role_dept set tenant_id='jeeagile';
 
-update `agile_sys_role_dept` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_role_menu
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER menu_id;
 
-ALTER TABLE `agile_sys_role_menu`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `menu_id`;
+update agile_sys_role_menu set tenant_id='jeeagile';
 
-update `agile_sys_role_menu` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_user
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-ALTER TABLE `agile_sys_user`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+update agile_sys_user set tenant_id='jeeagile';
 
-update `agile_sys_user` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_user_post
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER post_id;
 
-ALTER TABLE `agile_sys_user_post`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `post_id`;
+update agile_sys_user_post set tenant_id='jeeagile';
 
-update `agile_sys_user_post` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_user_role
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER role_id;
 
-ALTER TABLE `agile_sys_user_role`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `role_id`;
+update agile_sys_user_role set tenant_id='jeeagile';
 
-update `agile_sys_user_role` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_login
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER message;
 
-ALTER TABLE `agile_sys_login`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `message`;
+update agile_sys_login set tenant_id='jeeagile';
 
-update `agile_sys_login` set tenant_id='jeeagile';
+ALTER TABLE agile_sys_logger
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER message;
 
-ALTER TABLE `agile_sys_logger`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `message`;
-
-update `agile_sys_logger` set tenant_id='jeeagile';
-
-
-ALTER TABLE `agile_quartz_job`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
-
-update `agile_quartz_job` set tenant_id='jeeagile';
-
-ALTER TABLE `agile_quartz_logger`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `message`;
-
-update `agile_quartz_logger` set tenant_id='jeeagile';
+update agile_sys_logger set tenant_id='jeeagile';
 
 
-ALTER TABLE `agile_process_form`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+ALTER TABLE agile_quartz_job
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-update `agile_process_form` set tenant_id='jeeagile';
+update agile_quartz_job set tenant_id='jeeagile';
 
-ALTER TABLE `agile_process_model`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
+ALTER TABLE agile_quartz_logger
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER message;
 
-update `agile_process_model` set tenant_id='jeeagile';
-
-
-ALTER TABLE `agile_process_definition`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `suspension_state`;
-
-update `agile_process_model` set tenant_id='jeeagile';
+update agile_quartz_logger set tenant_id='jeeagile';
 
 
-ALTER TABLE `agile_process_instance`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `end_time`;
+ALTER TABLE agile_process_form
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-update `agile_process_instance` set tenant_id='jeeagile';
+update agile_process_form set tenant_id='jeeagile';
 
-ALTER TABLE `agile_process_task`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `approve_message`;
+ALTER TABLE agile_process_model
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
 
-update `agile_process_task` set tenant_id='jeeagile';
-
-
-ALTER TABLE `agile_process_expression`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
-
-update `agile_process_expression` set tenant_id='jeeagile';
-
-ALTER TABLE `agile_online_dict`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
-
-update `agile_online_dict` set tenant_id='jeeagile';
-
-ALTER TABLE `agile_online_form`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `remark`;
-
-update `agile_online_form` set tenant_id='jeeagile';
-
-ALTER TABLE `agile_online_table`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `slave_column_name`;
-
-update `agile_online_table` set tenant_id='jeeagile';
+update agile_process_model set tenant_id='jeeagile';
 
 
-ALTER TABLE `agile_online_column`
-ADD COLUMN `tenant_id` VARCHAR(32) not null COMMENT '租户ID' AFTER `dict_id`;
+ALTER TABLE agile_process_definition
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER suspension_state;
 
-update `agile_online_column` set tenant_id='jeeagile';
+update agile_process_model set tenant_id='jeeagile';
+
+
+ALTER TABLE agile_process_instance
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER end_time;
+
+update agile_process_instance set tenant_id='jeeagile';
+
+ALTER TABLE agile_process_task
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER approve_message;
+
+update agile_process_task set tenant_id='jeeagile';
+
+
+ALTER TABLE agile_process_expression
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
+
+update agile_process_expression set tenant_id='jeeagile';
+
+ALTER TABLE agile_online_dict
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
+
+update agile_online_dict set tenant_id='jeeagile';
+
+ALTER TABLE agile_online_form
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
+
+update agile_online_form set tenant_id='jeeagile';
+
+ALTER TABLE agile_online_table
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER slave_column_name;
+
+update agile_online_table set tenant_id='jeeagile';
+
+
+ALTER TABLE agile_online_column
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER dict_id;
+
+update agile_online_column set tenant_id='jeeagile';

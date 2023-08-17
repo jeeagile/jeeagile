@@ -108,7 +108,7 @@
 
 <script>
   import { DropdownWidget } from '../util/widget'
-  import { getOnlineDictData, findItemFromList, findTreeNodePath } from '../util'
+  import { getOnlineDictData, findItemFromList } from '../util'
   import CustomTextWidget from './customTextWidget'
   import CustomImageWidget from './customImageWidget'
 
@@ -182,7 +182,7 @@
         if (this.dropdownWidget) {
           this.dropdownWidget.onVisibleChange(true).then(res => {
             if (this.widgetConfig.widgetType === this.OnlineWidgetType.Cascader) {
-              this.cascaderValue = findTreeNodePath(res, this.value, 'dictValue')
+              this.cascaderValue = this.findTreeNodePath(res, this.value, 'dictValue')
             }
           })
         }

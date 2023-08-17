@@ -52,9 +52,9 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
 
     @Override
     public AgileSysConfig getSysConfig(String configKey) {
-        QueryWrapper<AgileSysConfig> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(AgileSysConfig::getConfigKey, configKey);
-        return this.getOne(queryWrapper);
+        LambdaQueryWrapper<AgileSysConfig> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileSysConfig::getConfigKey, configKey);
+        return this.getOne(lambdaQueryWrapper);
     }
 
     @Override

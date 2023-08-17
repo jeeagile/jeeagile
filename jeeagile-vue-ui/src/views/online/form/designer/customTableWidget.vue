@@ -233,7 +233,7 @@
       },
       /** 加载表数据 */
       loadTableData(params) {
-        if (this.widgetConfig.onlineTable == null || this.isDesigner || this.isNew) {
+        if (this.widgetConfig.onlineTable == null || this.isDesigner || this.isNew || this.preview()) {
           return Promise.resolve({
             dataList: this.tableWidget.dataList,
             pageTotal: 0

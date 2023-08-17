@@ -26,6 +26,10 @@
         </dependency>
         <dependency>
             <groupId>com.jeeagile</groupId>
+            <artifactId>jeeagile-online-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-security-shiro</artifactId>
         </dependency>
         <dependency>

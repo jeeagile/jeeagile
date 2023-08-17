@@ -144,3 +144,6 @@ INSERT INTO agile_sys_menu VALUES ('50201','502','表单明细',1,'','','#','F',
 INSERT INTO agile_sys_menu VALUES ('50202','502','新增表单',2,'','','#','F','0','0','1','online:form:add','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50203','502','修改表单',3,'','','#','F','0','0','1','online:form:update','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50204','502','删除表单',4,'','','#','F','0','0','1','online:form:delete','',NULL,NULL,NULL,NULL);
+
+UPDATE `agile_sys_menu` SET `menu_comp` = 'system/menu/index_1.0' WHERE `id` = '103';
+UPDATE `agile_sys_menu` SET `menu_kind` = '01' where `menu_type`='C' ;

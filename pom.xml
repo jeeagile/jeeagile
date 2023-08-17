@@ -33,7 +33,7 @@
         <commons-codec.version>1.15</commons-codec.version>
         <commons-crypto.version>1.1.0</commons-crypto.version>
         <commons-pool2.version>2.11.1</commons-pool2.version>
-        <fastjson.version>2.0.10</fastjson.version>
+        <fastjson.version>2.0.38</fastjson.version>
         <mybatis-plus.version>3.5.3</mybatis-plus.version>
         <dubbo.version>3.0.8</dubbo.version>
 
@@ -293,6 +293,18 @@
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-protocol-dubbo</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-protocol-rabbit</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
                 <artifactId>jeeagile-quartz-api</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
@@ -364,19 +376,29 @@
                 <version>${jeeagile.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-protocol-dubbo</artifactId>
+                <artifactId>jeeagile-online-api</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-protocol-rabbit</artifactId>
+                <artifactId>jeeagile-online-model</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-online-service</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-online-web</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>

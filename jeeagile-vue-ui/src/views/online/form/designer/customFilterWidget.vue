@@ -55,7 +55,7 @@
 
 <script>
   import { DropdownWidget } from '../util/widget'
-  import { getOnlineDictData, findTreeNodePath } from '../util'
+  import { getOnlineDictData } from '../util'
 
   export default {
     name: 'CustomFilterWidget',
@@ -138,7 +138,7 @@
           this.dropdownWidget.onVisibleChange(true).then(res => {
             // 级联组件获取下拉数据
             if (this.widgetConfig.widgetType === this.OnlineWidgetType.Cascader) {
-              this.cascaderValue = findTreeNodePath(res, this.value, 'dictValue')
+              this.cascaderValue = this.findTreeNodePath(res, this.value, 'dictValue')
             }
           })
         }

@@ -1,5 +1,7 @@
 package com.jeeagile.frame.entity.system;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.jeeagile.frame.entity.AgileBaseTenantTreeModel;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotEmpty;
@@ -89,6 +91,18 @@ public class AgileSysMenu extends AgileBaseTenantTreeModel<AgileSysMenu> {
     @ApiModelProperty("权限标识")
     @Size(max = 100, message = "菜单权限标识最大长度为100!")
     private String menuPerm;
+
+    /**
+     * 菜单分类 (01：路由菜单 02：在线表单 03：工单列表)
+     */
+    @ApiModelProperty("菜单类别")
+    private String menuKind;
+    /**
+     * 在线表单页面ID
+     */
+    @ApiModelProperty("在线表单页面ID")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private String pageId;
 
     /**
      * 备注信息
