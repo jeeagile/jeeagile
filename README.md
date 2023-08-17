@@ -75,7 +75,11 @@
 - 代码生成：高灵活度生成前后端代码，减少大量重复的工作任务
 - 系统接口：结合knife4j和swagger展示后端接口
 
-6、工作流
+6、在线表单
+- 在线表单字典管理
+- 在线表单页面设计
+
+7、工作流
 - 工作流表单设计
 - 工作流模型设计
 
@@ -127,6 +131,15 @@ jeeagile
 │  │  ├─jeeagile-quartz-service    队列管理模块service层
 │  │  │
 │  │  └─jeeagile-quartz-web        队列管理模块web层
+│  │  
+│  ├─jeeagile-online          在线表单
+│  │  ├─jeeagile-online-api         在线表单api层
+│  │  │
+│  │  ├─jeeagile-online-model       在线表单model层
+│  │  │
+│  │  ├─jeeagile-online-service     在线表单service层
+│  │  │
+│  │  └─jeeagile-online-web         在线表单web层
 │  │  
 │  ├─jeeagile-process     工作流模块
 │  │  ├─jeeagile-process-api        工作流模块api层
