@@ -26,4 +26,14 @@ public class OnlineQueryParam {
      */
     @ApiModelProperty(value = "过滤条件")
     private List<OnlineFieldFilter> filterList;
+    /**
+     * 查询字段
+     */
+    @ApiModelProperty(value = "查询字段")
+    private List<OnlineFieldQuery> queryList;
+    /**
+     * 排序字段
+     */
+    @ApiModelProperty(value = "排序字段")
+    private List<OnlineFieldOrder> orderList;
 }

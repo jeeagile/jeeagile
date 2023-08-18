@@ -228,7 +228,7 @@
           const temp = {
             tableId: widget.onlineTable.tableId,
             tableName: widget.onlineTable.tableName,
-            columnId: widget.onlineColumn.slaveColumnId,
+            columnId: widget.onlineTable.slaveColumnId,
             columnName: widget.onlineTable.slaveColumnName,
             filterType: this.OnlineFilterType.EQUAL,
             columnValue: this.rowData[fieldName]

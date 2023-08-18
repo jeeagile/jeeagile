@@ -153,7 +153,7 @@ export class TableWidget {
    * @param {String} prop 排序字段的字段名
    * @param {String} order 正序还是倒序
    */
-  onSortChange({ prop, order }) {
+  onSortChange({ column, prop, order }) {
     this.orderInfo.fieldName = prop
     this.orderInfo.asc = (order === 'ascending')
     this.refreshTable()
@@ -203,7 +203,7 @@ export class TableWidget {
           resolve()
         } else {
           let params = {}
-          if (this.orderInfo.fieldName != null) params.orderParam = [this.orderInfo]
+          if (this.orderInfo.fieldName) params.orderParam = [this.orderInfo]
           if (this.paged) {
             params.pageParam = {
               currentPage,

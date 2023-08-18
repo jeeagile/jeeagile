@@ -14,9 +14,7 @@ import com.jeeagile.online.entity.AgileOnlineTable;
 import com.jeeagile.online.mapper.AgileOnlineOperationMapper;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
-import com.jeeagile.online.vo.OnlineColumnData;
-import com.jeeagile.online.vo.OnlineFieldFilter;
-import com.jeeagile.online.vo.OnlineQueryParam;
+import com.jeeagile.online.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -61,9 +59,14 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         if (agileOnlineTable == null || agileOnlineTable.isEmptyPk()) {
             throw new AgileValidateException("数据表已不存在！");
         }
-        String selectFields = this.makeTableSelectField(agileOnlineTable);
+
+        Map<String, AgileOnlineTable> onlineTableMap = new HashMap();
+        onlineTableMap.put(agileOnlineTable.getId(), agileOnlineTable);
+        this.checkFieldFilter(onlineTableMap, agileOnlineTable, onlineQueryParam.getFilterList());
+        String selectFields = this.makeTableSelectField(onlineTableMap, agileOnlineTable, onlineQueryParam.getQueryList());
+        String orderBy = this.makeTableOrderBy(onlineTableMap, onlineQueryParam.getOrderList());
         AgilePage<Map> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
-        return agileOnlineOperationMapper.getPageData(agilePage, agileOnlineTable.getTableName(), selectFields, null, onlineQueryParam.getFilterList(), null);
+        return agileOnlineOperationMapper.getPageData(agilePage, agileOnlineTable.getTableName(), selectFields, null, onlineQueryParam.getFilterList(), orderBy);
     }
 
     @Override
@@ -150,11 +153,11 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
             throw new AgileValidateException("数据表已不存在！");
         }
         if (OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) { // 删除从表数据
-            List<AgileOnlineTable> onlineRelationTableList = getOnlineRelationTable(agileOnlineTable.getFormId(), agileOnlineTable.getId());
-            if (AgileStringUtil.isNotEmpty(onlineRelationTableList)) {
+            List<AgileOnlineTable> slaveOnlineTableList = getSlaveOnlineTable(agileOnlineTable.getFormId(), agileOnlineTable.getId());
+            if (AgileStringUtil.isNotEmpty(slaveOnlineTableList)) {
                 Map masterTableData = getOneData(agileOnlineTable, dataId);
                 if (AgileStringUtil.isNotEmpty(masterTableData)) {
-                    for (AgileOnlineTable subOnlineTable : onlineRelationTableList) {
+                    for (AgileOnlineTable subOnlineTable : slaveOnlineTableList) {
                         List<OnlineFieldFilter> filterList = new ArrayList<>();
                         AgileOnlineColumn masterOnlineColumn = this.agileOnlineColumnService.getById(subOnlineTable.getMasterColumnId());
                         filterList.add(this.makeTableFieldFilter(subOnlineTable.getTableName(), subOnlineTable.getSlaveColumnName(), masterTableData.get(masterOnlineColumn.getFieldName())));
@@ -166,6 +169,66 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         List<OnlineFieldFilter> filterList = new ArrayList<>();
         filterList.add(this.makeTableFieldFilter(agileOnlineTable.getTableName(), agileOnlineTable.getPrimaryColumnName(), dataId));
         return agileOnlineOperationMapper.delete(agileOnlineTable.getTableName(), filterList) > 0;
+    }
+
+    /**
+     * 组装字典查询字段
+     *
+     * @param agileOnlineDict
+     * @param ignoreParentId
+     * @return
+     */
+    private String makeDictSelectField(AgileOnlineDict agileOnlineDict, boolean ignoreParentId) {
+        StringBuilder sb = new StringBuilder(128);
+        sb.append(agileOnlineDict.getKeyColumnName()).append(" id, ");
+        sb.append(agileOnlineDict.getValueColumnName()).append(" dictValue, ");
+        sb.append(agileOnlineDict.getLabelColumnName()).append(" dictLabel");
+        if (!ignoreParentId && SysYesNo.YES.equals(agileOnlineDict.getTreeFlag())) {
+            sb.append(", ").append(agileOnlineDict.getParentKeyColumnName()).append(" parentId");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 校验过滤条件
+     *
+     * @param onlineTableMap
+     * @param fieldFilterList
+     */
+    private void checkFieldFilter(Map<String, AgileOnlineTable> onlineTableMap, AgileOnlineTable agileOnlineTable, List<OnlineFieldFilter> fieldFilterList) {
+        // 如果为从表 校验过滤条件是否存在关联字段 避免全表查询
+        if (!OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
+            if (!fieldFilterList.stream().anyMatch(onlineFieldFilter -> onlineFieldFilter.getColumnId().equals(agileOnlineTable.getSlaveColumnId()))) {
+                throw new AgileValidateException("缺少从表关联字段查询条件！");
+            }
+        }
+        StringBuffer errorMessage = new StringBuffer();
+        for (OnlineFieldFilter onlineFieldFilter : fieldFilterList) {
+            AgileOnlineColumn agileOnlineColumn = this.agileOnlineColumnService.getById(onlineFieldFilter.getColumnId());
+            if (agileOnlineColumn == null || agileOnlineColumn.isEmptyPk()) {
+                errorMessage.append("过滤条件条件，过滤字段《").append(onlineFieldFilter.getColumnName()).append("》已不存在！\r\n");
+                continue;
+            } else {
+                onlineFieldFilter.setTableId(agileOnlineColumn.getTableId());
+                onlineFieldFilter.setColumnName(agileOnlineColumn.getColumnName());
+            }
+            AgileOnlineTable filterOnlineTable = null;
+            if (onlineTableMap.containsKey(onlineFieldFilter.getTableId())) {
+                filterOnlineTable = onlineTableMap.get(onlineFieldFilter.getTableId());
+            } else {
+                filterOnlineTable = this.agileOnlineTableService.getById(onlineFieldFilter.getTableId());
+            }
+            if (filterOnlineTable == null || filterOnlineTable.isEmptyPk()) {
+                errorMessage.append("过滤条件条件，过滤表《").append(onlineFieldFilter.getTableName()).append("》已不存在！\r\n");
+                continue;
+            } else {
+                onlineTableMap.put(filterOnlineTable.getId(), filterOnlineTable);
+                onlineFieldFilter.setTableName(filterOnlineTable.getTableName());
+            }
+        }
+        if (AgileStringUtil.isNotEmpty(errorMessage)) {
+            throw new AgileValidateException(errorMessage.toString());
+        }
     }
 
     /**
@@ -207,30 +270,13 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
      * @param tableId 主表ID
      * @return
      */
-    private List<AgileOnlineTable> getOnlineRelationTable(String formId, String tableId) {
+    private List<AgileOnlineTable> getSlaveOnlineTable(String formId, String tableId) {
         LambdaQueryWrapper<AgileOnlineTable> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(AgileOnlineTable::getFormId, formId);
         lambdaQueryWrapper.eq(AgileOnlineTable::getMasterTableId, tableId);
         return this.agileOnlineTableService.list(lambdaQueryWrapper);
     }
 
-    /**
-     * 组装字典查询字段
-     *
-     * @param agileOnlineDict
-     * @param ignoreParentId
-     * @return
-     */
-    private String makeDictSelectField(AgileOnlineDict agileOnlineDict, boolean ignoreParentId) {
-        StringBuilder sb = new StringBuilder(128);
-        sb.append(agileOnlineDict.getKeyColumnName()).append(" id, ");
-        sb.append(agileOnlineDict.getValueColumnName()).append(" dictValue, ");
-        sb.append(agileOnlineDict.getLabelColumnName()).append(" dictLabel");
-        if (!ignoreParentId && SysYesNo.YES.equals(agileOnlineDict.getTreeFlag())) {
-            sb.append(", ").append(agileOnlineDict.getParentKeyColumnName()).append(" parentId");
-        }
-        return sb.toString();
-    }
 
     /**
      * 获取数据表对应字段
@@ -243,6 +289,93 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         lambdaQueryWrapper.eq(AgileOnlineColumn::getFormId, agileOnlineTable.getFormId());
         lambdaQueryWrapper.eq(AgileOnlineColumn::getTableId, agileOnlineTable.getId());
         return agileOnlineColumnService.list(lambdaQueryWrapper);
+    }
+
+    /**
+     * 拼装分页查询字段
+     *
+     * @param queryFieldList
+     * @return
+     */
+    private String makeTableSelectField(Map<String, AgileOnlineTable> onlineTableMap, AgileOnlineTable agileOnlineTable, List<OnlineFieldQuery> queryFieldList) {
+        List<OnlineFieldQuery> newQueryFieldList = new ArrayList<>();
+        if (AgileStringUtil.isEmpty(queryFieldList)) queryFieldList = new ArrayList<>();
+        for (OnlineFieldQuery onlineFieldQuery : queryFieldList) {
+            AgileOnlineColumn agileOnlineColumn = this.agileOnlineColumnService.getById(onlineFieldQuery.getColumnId());
+            if (agileOnlineColumn == null || agileOnlineColumn.isEmptyPk()) {
+                continue;
+            }
+            onlineFieldQuery.setTableId(agileOnlineColumn.getTableId());
+            onlineFieldQuery.setColumnName(agileOnlineColumn.getColumnName());
+            onlineFieldQuery.setFieldName(agileOnlineColumn.getFieldName());
+            AgileOnlineTable queryOnlineTable = null;
+            if (onlineTableMap.containsKey(onlineFieldQuery.getTableId())) {
+                queryOnlineTable = onlineTableMap.get(onlineFieldQuery.getTableId());
+            } else {
+                queryOnlineTable = this.agileOnlineTableService.getById(onlineFieldQuery.getTableId());
+            }
+            if (queryOnlineTable != null && queryOnlineTable.isNotEmptyPk()) {
+                onlineTableMap.put(queryOnlineTable.getId(), queryOnlineTable);
+                onlineFieldQuery.setTableName(queryOnlineTable.getTableName());
+                onlineFieldQuery.setTableType(queryOnlineTable.getTableType());
+                onlineFieldQuery.setModelName(queryOnlineTable.getModelName());
+                newQueryFieldList.add(onlineFieldQuery);
+            }
+        }
+        // 判断是否存在主键、关联字段查询字段，如果不存在则添加
+        onlineTableMap.values().forEach(queryOnlineTable -> {
+            if (!newQueryFieldList.stream().anyMatch(queryField -> queryField.getColumnId().equals(queryOnlineTable.getPrimaryColumnId()))) {
+                OnlineFieldQuery onlineFieldQuery = makeTableQueryField(queryOnlineTable, queryOnlineTable.getPrimaryColumnId());
+                if (onlineFieldQuery != null) newQueryFieldList.add(onlineFieldQuery);
+            }
+            if (!OnlineTableType.MASTER.equals(queryOnlineTable.getTableType())) {
+                if (!newQueryFieldList.stream().anyMatch(queryField -> queryField.getColumnId().equals(queryOnlineTable.getSlaveColumnId()))) {
+                    OnlineFieldQuery onlineFieldQuery = makeTableQueryField(queryOnlineTable, queryOnlineTable.getSlaveColumnId());
+                    if (onlineFieldQuery != null) newQueryFieldList.add(onlineFieldQuery);
+                }
+            }
+        });
+        // 查看所有从表关联字段是否存在查询字段，如果不存在则添加
+        if (OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
+            List<AgileOnlineTable> slaveOnlineTableList = this.getSlaveOnlineTable(agileOnlineTable.getFormId(), agileOnlineTable.getId());
+            slaveOnlineTableList.forEach(slaveOnlineTable -> {
+                if (newQueryFieldList.stream().anyMatch(queryField -> queryField.getColumnId().equals(slaveOnlineTable.getSlaveColumnId()))) {
+                    OnlineFieldQuery onlineFieldQuery = makeTableQueryField(slaveOnlineTable, agileOnlineTable.getSlaveColumnId());
+                    if (onlineFieldQuery != null) newQueryFieldList.add(onlineFieldQuery);
+                }
+            });
+        }
+        StringBuilder selectFieldBuilder = new StringBuilder();
+        newQueryFieldList.forEach(onlineFieldQuery -> {
+            selectFieldBuilder
+                    .append(onlineFieldQuery.getTableName()).append(".")
+                    .append(onlineFieldQuery.getColumnName()).append(' ');
+            if (!OnlineTableType.MASTER.equals(onlineFieldQuery.getTableType())) {
+                selectFieldBuilder.append(onlineFieldQuery.getModelName()).append("__");
+            }
+            selectFieldBuilder.append(onlineFieldQuery.getFieldName()).append(",");
+        });
+        return selectFieldBuilder.substring(0, selectFieldBuilder.length() - 1);
+    }
+
+    /**
+     * 组装查询条件
+     *
+     * @param agileOnlineTable
+     * @param columnId
+     * @return
+     */
+    private OnlineFieldQuery makeTableQueryField(AgileOnlineTable agileOnlineTable, String columnId) {
+        AgileOnlineColumn agileOnlineColumn = this.agileOnlineColumnService.getById(columnId);
+        if (agileOnlineColumn != null && agileOnlineColumn.isNotEmptyPk()) {
+            OnlineFieldQuery onlineFieldQuery = new OnlineFieldQuery();
+            BeanUtils.copyProperties(agileOnlineColumn, onlineFieldQuery);
+            BeanUtils.copyProperties(agileOnlineTable, onlineFieldQuery);
+            onlineFieldQuery.setTableId(agileOnlineTable.getId());
+            onlineFieldQuery.setColumnId(agileOnlineColumn.getId());
+            return onlineFieldQuery;
+        }
+        return null;
     }
 
     /**
@@ -281,6 +414,46 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         return onlineFieldFilter;
     }
 
+
+    /**
+     * 组装排序字段
+     *
+     * @param onlineTableMap
+     * @param fieldOrderList
+     */
+    private String makeTableOrderBy(Map<String, AgileOnlineTable> onlineTableMap, List<OnlineFieldOrder> fieldOrderList) {
+        List<OnlineFieldOrder> newFieldOrderList = new ArrayList<>();
+        if (AgileStringUtil.isEmpty(fieldOrderList)) return null;
+        for (OnlineFieldOrder onlineFieldOrder : fieldOrderList) {
+            AgileOnlineColumn agileOnlineColumn = this.agileOnlineColumnService.getById(onlineFieldOrder.getColumnId());
+            if (agileOnlineColumn == null || agileOnlineColumn.isEmptyPk()) {
+                continue;
+            }
+            onlineFieldOrder.setColumnName(agileOnlineColumn.getColumnName());
+            onlineFieldOrder.setFieldName(agileOnlineColumn.getFieldName());
+            onlineFieldOrder.setTableId(agileOnlineColumn.getTableId());
+            AgileOnlineTable agileOnlineTable = null;
+            if (onlineTableMap.containsKey(onlineFieldOrder.getTableId())) {
+                agileOnlineTable = onlineTableMap.get(onlineFieldOrder.getTableId());
+            } else {
+                agileOnlineTable = this.agileOnlineTableService.getById(onlineFieldOrder.getTableId());
+            }
+            if (agileOnlineTable != null && agileOnlineTable.isNotEmptyPk()) {
+                BeanUtils.copyProperties(agileOnlineTable, onlineFieldOrder);
+                newFieldOrderList.add(onlineFieldOrder);
+            }
+        }
+        StringBuilder orderFieldBuilder = new StringBuilder();
+        newFieldOrderList.forEach(onlineFieldOrder -> {
+            orderFieldBuilder
+                    .append(onlineFieldOrder.getTableName()).append(".")
+                    .append(onlineFieldOrder.getColumnName()).append(' ');
+            if (!onlineFieldOrder.isAsc()) {
+                orderFieldBuilder.append(" DESC,");
+            }
+        });
+        return orderFieldBuilder.substring(0, orderFieldBuilder.length() - 1);
+    }
 
     /**
      * 组装字段名称

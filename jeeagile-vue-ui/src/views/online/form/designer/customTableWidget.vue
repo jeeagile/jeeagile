@@ -80,7 +80,7 @@
             <!-- 字典字段 -->
             <el-table-column v-else :key="(tableColumn.onlineColumn || {}).fieldName"
                              :label="tableColumn.showName" :width="tableColumn.columnWidth + 'px'"
-                             :prop="tableColumn.onlineColumn.fieldName"
+                             :prop="tableColumn.dataFieldName"
                              :sortable="tableColumn.sortable ? 'custom' : false"
                              :align="tableColumn.columnAlign"
             >
@@ -233,6 +233,7 @@
       },
       /** 加载表数据 */
       loadTableData(params) {
+        debugger
         if (this.widgetConfig.onlineTable == null || this.isDesigner || this.isNew || this.preview()) {
           return Promise.resolve({
             dataList: this.tableWidget.dataList,
@@ -240,13 +241,41 @@
           })
         }
         if (params == null) params = {}
-        let filterParam = this.tableQueryParam ? this.tableQueryParam(this.widgetConfig) : undefined
+        const filterParam = this.tableQueryParam ? this.tableQueryParam(this.widgetConfig) : undefined
+        const queryList = this.widgetConfig.tableColumnList.map(item => {
+          return {
+            tableId: item.onlineTable.tableId,
+            tableName: item.onlineTable.tableName,
+            modelName: item.onlineTable.modelName,
+            tableType: item.onlineTable.tableType,
+            columnId: item.onlineColumn.columnId,
+            columnName: item.onlineColumn.columnName,
+            fieldName: item.onlineColumn.fieldName
+          }
+        })
+        const orderList = params.orderParam?.map(item => {
+          const tableColumn = this.widgetConfig.tableColumnList.find(onlineColumn => onlineColumn.dataFieldName === item.fieldName)
+          if (tableColumn) {
+            return {
+              tableId: tableColumn.onlineTable.tableId,
+              tableName: tableColumn.onlineTable.tableName,
+              modelName: tableColumn.onlineTable.modelName,
+              tableType: tableColumn.onlineTable.tableType,
+              columnId: tableColumn.onlineColumn.columnId,
+              columnName: tableColumn.onlineColumn.columnName,
+              fieldName: tableColumn.onlineColumn.fieldName,
+              asc: item.asc
+            }
+          }
+        })
         const queryParam = {
           currentPage: params.pageParam.currentPage,
           pageSize: params.pageParam.pageSize,
           queryCond: {
             tableId: this.widgetConfig.tableId,
-            filterList: filterParam
+            queryList: queryList,
+            filterList: filterParam,
+            orderList: orderList
           }
         }
         return new Promise((resolve, reject) => {
