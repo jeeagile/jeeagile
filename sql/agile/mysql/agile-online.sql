@@ -66,6 +66,8 @@ CREATE TABLE agile_online_table (
   master_column_name            varchar(50) DEFAULT NULL COMMENT '主表字段名称',
   slave_column_id               varchar(32) DEFAULT NULL COMMENT '从表字段ID',
   slave_column_name             varchar(50) DEFAULT NULL COMMENT '从表字段称',
+  left_join                     char(1) DEFAULT NULL COMMENT '是否左关联',
+  cascade_delete                char(1) DEFAULT NULL COMMENT '是否级联删除',
   create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',
   create_time                   datetime DEFAULT NULL COMMENT '创建时间',
   update_user                   varchar(32) DEFAULT NULL COMMENT '修改人',

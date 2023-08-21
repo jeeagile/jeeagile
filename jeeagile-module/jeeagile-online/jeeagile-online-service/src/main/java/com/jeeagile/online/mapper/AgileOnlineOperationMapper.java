@@ -20,9 +20,9 @@ public interface AgileOnlineOperationMapper {
     /**
      * 执行动态查询，查询字典数据
      *
-     * @param tableName   表名称
+     * @param tableName    表名称
      * @param selectFields 返回字段列表，逗号分隔
-     * @param filterList  SQL过滤条件列表
+     * @param filterList   SQL过滤条件列表
      * @return 查询结果集
      */
     @Select("<script>"
@@ -52,7 +52,7 @@ public interface AgileOnlineOperationMapper {
      *
      * @param tableName    表名称
      * @param joinInfoList 关联表信息列表
-     * @param selectFields  返回字段列表，逗号分隔
+     * @param selectFields 返回字段列表，逗号分隔
      * @param filterList   SQL过滤条件列表
      * @param orderBy      排序字符串
      * @return 查询结果集
@@ -71,7 +71,7 @@ public interface AgileOnlineOperationMapper {
             + "</if>"
             + "<where>"
             + "    <if test=\"filterList != null\">"
-            + "        <foreach collection=\"filterList\" item=\"filter\">"
+            + "        <foreach collection=\"filterList\" item=\"filter\" index=\"index\">"
             + "            <if test=\"filter.filterType == '02'\">"
             + "                AND ${filter.tableName}.${filter.columnName} = #{filter.columnValue} "
             + "            </if>"
@@ -80,8 +80,8 @@ public interface AgileOnlineOperationMapper {
             + "                AND ${filter.tableName}.${filter.columnName} &lt;= #{filter.columnValueEnd} "
             + "            </if>"
             + "            <if test=\"filter.filterType == '04'\">"
-            + "                <bind name = \"safeColumnValue\" value = \"'%' + filter.columnValue + '%'\" />"
-            + "                AND ${filter.tableName}.${filter.columnName} LIKE #{safeColumnValue} "
+            + "                <bind name = \"columnValue\" value= \"'%' + filter.columnValue + '%'\" />"
+            + "                AND ${filter.tableName}.${filter.columnName} LIKE #{columnValue} "
             + "            </if>"
             + "            <if test=\"filter.filterType == '05'\">"
             + "                AND ${filter.tableName}.${filter.columnName} IN "
@@ -109,7 +109,7 @@ public interface AgileOnlineOperationMapper {
      *
      * @param tableName    主表名称
      * @param joinInfoList 关联表信息列表
-     * @param selectFields  返回字段列表，逗号分隔
+     * @param selectFields 返回字段列表，逗号分隔
      * @param filterList   SQL过滤条件列表
      * @return 查询结果
      */
@@ -158,7 +158,7 @@ public interface AgileOnlineOperationMapper {
      * 执行动态SQL,插入表数据
      *
      * @param tableName       表名称
-     * @param columnNames      字段名，逗号隔开
+     * @param columnNames     字段名，逗号隔开
      * @param columnValueList 字段值
      */
     @Insert("<script>"

@@ -28,6 +28,7 @@ import RightToolbar from '@/components/RightToolbar'
 import Directive from '@/directive'
 import ProcessDesigner from '@/components/ProcessDesigner/ProcessDesigner'
 import ProcessView from '@/components/ProcessDesigner/ProcessView'
+import InputNumberRange from '@/components/InputNumberRange'
 import TreeSelect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
@@ -47,6 +48,7 @@ Vue.component('RightToolbar', RightToolbar)
 Vue.component('TreeSelect', TreeSelect)
 Vue.component('ProcessDesigner', ProcessDesigner)
 Vue.component('ProcessView', ProcessView)
+Vue.component('InputNumberRange', InputNumberRange)
 Vue.use(Directive)
 Vue.use(VueParticles)
 

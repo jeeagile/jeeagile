@@ -34,7 +34,7 @@
         <commons-crypto.version>1.1.0</commons-crypto.version>
         <commons-pool2.version>2.11.1</commons-pool2.version>
         <fastjson.version>2.0.38</fastjson.version>
-        <mybatis-plus.version>3.5.3</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
         <dubbo.version>3.0.8</dubbo.version>
 
         <hibernate-validator.version>7.0.0.Final</hibernate-validator.version>

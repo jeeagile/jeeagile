@@ -6,6 +6,7 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.online.constants.OnlineFieldKind;
+import com.jeeagile.online.constants.OnlineFilterType;
 import com.jeeagile.online.constants.OnlineTableType;
 import com.jeeagile.frame.constants.SysYesNo;
 import com.jeeagile.online.entity.AgileOnlineColumn;
@@ -62,11 +63,12 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
 
         Map<String, AgileOnlineTable> onlineTableMap = new HashMap();
         onlineTableMap.put(agileOnlineTable.getId(), agileOnlineTable);
-        this.checkFieldFilter(onlineTableMap, agileOnlineTable, onlineQueryParam.getFilterList());
-        String selectFields = this.makeTableSelectField(onlineTableMap, agileOnlineTable, onlineQueryParam.getQueryList());
+        this.checkFieldFilter(agileOnlineTable, onlineTableMap, onlineQueryParam.getFilterList());
+        String selectFields = this.makeTableSelectField(agileOnlineTable, onlineTableMap, onlineQueryParam.getQueryList());
         String orderBy = this.makeTableOrderBy(onlineTableMap, onlineQueryParam.getOrderList());
         AgilePage<Map> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
-        return agileOnlineOperationMapper.getPageData(agilePage, agileOnlineTable.getTableName(), selectFields, null, onlineQueryParam.getFilterList(), orderBy);
+        List<OnlineJoinTable> joinTableList = this.makeJoinTable(agileOnlineTable, onlineTableMap);
+        return agileOnlineOperationMapper.getPageData(agilePage, agileOnlineTable.getTableName(), selectFields, joinTableList, onlineQueryParam.getFilterList(), orderBy);
     }
 
     @Override
@@ -88,28 +90,37 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         if (OnlineTableType.MASTER.equals(agileOnlineTable.getTableType()) && AgileStringUtil.isNotEmpty(slaveData)) {
             List<OnlineColumnData> masterTableColumnDataList = this.makeColumnData(tableColumnList, masterData);
             this.saveTableData(agileOnlineTable, masterTableColumnDataList);
-            for (Object key : slaveData.keySet()) {
-                AgileOnlineTable slaveOnlineTable = this.agileOnlineTableService.getById(key.toString());
-                if (slaveOnlineTable == null || slaveOnlineTable.isEmptyPk()) {
-                    continue;
-                }
-                OnlineColumnData masterTableColumnData = masterTableColumnDataList.stream().filter(onlineTableColumn -> onlineTableColumn.getId().equals(slaveOnlineTable.getMasterColumnId())).findFirst().get();
-                if (masterTableColumnData == null || masterTableColumnData.isEmptyPk()) {
-                    continue;
-                }
-                if (AgileStringUtil.isEmpty(masterTableColumnData.getColumnValue())) {
-                    throw new AgileValidateException("主表关联字段值不能为空！");
-                }
-                List<AgileOnlineColumn> slaveOnlineColumnList = this.getOnlineColumnList(slaveOnlineTable);
-                AgileOnlineColumn slaveTableColumn = slaveOnlineColumnList.stream().filter(onlineTableColumn -> onlineTableColumn.getId().equals(slaveOnlineTable.getSlaveColumnId())).findFirst().get();
-                if (slaveTableColumn == null || slaveTableColumn.isEmptyPk()) {
-                    continue;
-                }
-                List<Map> slaveTableDataList = (List<Map>) slaveData.get(key);
-                for (Map slaveDataMap : slaveTableDataList) {
-                    slaveDataMap.put(slaveTableColumn.getColumnName(), masterTableColumnData.getColumnValue());
-                    List<OnlineColumnData> slaveTableColumnDataList = this.makeColumnData(slaveOnlineColumnList, slaveDataMap);
-                    this.saveTableData(slaveOnlineTable, slaveTableColumnDataList);
+            if (AgileStringUtil.isNotEmpty(slaveData)) {
+                for (Object key : slaveData.keySet()) {
+                    AgileOnlineTable slaveOnlineTable = this.agileOnlineTableService.getById(key.toString());
+                    if (slaveOnlineTable == null || slaveOnlineTable.isEmptyPk()) {
+                        continue;
+                    }
+                    OnlineColumnData masterTableColumnData = masterTableColumnDataList.stream().filter(onlineTableColumn -> onlineTableColumn.getId().equals(slaveOnlineTable.getMasterColumnId())).findFirst().get();
+                    if (masterTableColumnData == null || masterTableColumnData.isEmptyPk()) {
+                        continue;
+                    }
+                    if (AgileStringUtil.isEmpty(masterTableColumnData.getColumnValue())) {
+                        throw new AgileValidateException("主表关联字段值不能为空！");
+                    }
+                    List<AgileOnlineColumn> slaveOnlineColumnList = this.getOnlineColumnList(slaveOnlineTable);
+                    AgileOnlineColumn slaveTableColumn = slaveOnlineColumnList.stream().filter(onlineTableColumn -> onlineTableColumn.getId().equals(slaveOnlineTable.getSlaveColumnId())).findFirst().get();
+                    if (slaveTableColumn == null || slaveTableColumn.isEmptyPk()) {
+                        continue;
+                    }
+                    if (OnlineTableType.ONE_TO_ONE.equals(slaveOnlineTable.getTableType())) {
+                        Map slaveTableData = (Map) slaveData.get(key);
+                        slaveTableData.put(slaveTableColumn.getColumnName(), masterTableColumnData.getColumnValue());
+                        List<OnlineColumnData> slaveTableColumnDataList = this.makeColumnData(slaveOnlineColumnList, slaveTableData);
+                        this.saveTableData(slaveOnlineTable, slaveTableColumnDataList);
+                    } else {
+                        List<Map> slaveTableDataList = (List<Map>) slaveData.get(key);
+                        for (Map slaveDataMap : slaveTableDataList) {
+                            slaveDataMap.put(slaveTableColumn.getColumnName(), masterTableColumnData.getColumnValue());
+                            List<OnlineColumnData> slaveTableColumnDataList = this.makeColumnData(slaveOnlineColumnList, slaveDataMap);
+                            this.saveTableData(slaveOnlineTable, slaveTableColumnDataList);
+                        }
+                    }
                 }
             }
         } else {
@@ -120,30 +131,25 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
     }
 
     @Override
-    public boolean updateTableData(String tableId, Map tableData) {
+    public boolean updateTableData(String tableId, Map masterData, Map slaveData) {
         AgileOnlineTable agileOnlineTable = this.agileOnlineTableService.getById(tableId);
         if (agileOnlineTable == null || agileOnlineTable.isEmptyPk()) {
             throw new AgileValidateException("数据从表不存在！");
         }
-        List<AgileOnlineColumn> tableColumnList = this.getOnlineColumnList(agileOnlineTable);
-        List<OnlineColumnData> tableColumnDataList = this.makeColumnData(tableColumnList, tableData);
-        List<OnlineColumnData> updateColumnList = new LinkedList<>();
-        List<OnlineColumnData> whereColumnList = new LinkedList<>();
-        for (OnlineColumnData columnData : tableColumnDataList) {
-            if (SysYesNo.YES.equals(columnData.getPrimaryFlag())) {
-                whereColumnList.add(columnData);
-                continue;
+        if (OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
+            if (AgileStringUtil.isNotEmpty(slaveData)) {
+                for (Object key : slaveData.keySet()) {
+                    AgileOnlineTable slaveOnlineTable = this.agileOnlineTableService.getById(key.toString());
+                    if (slaveOnlineTable == null || slaveOnlineTable.isEmptyPk()) {
+                        continue;
+                    }
+                    this.updateTableData(slaveOnlineTable, (Map) slaveData.get(key));
+                }
             }
-            if (!OnlineFieldKind.CREATE_USER.equals(columnData.getFieldKind())
-                    && !OnlineFieldKind.CREATE_TIME.equals(columnData.getFieldKind())) {
-                updateColumnList.add(columnData);
-            }
+            return this.updateTableData(agileOnlineTable, masterData);
+        } else {
+            return this.updateTableData(agileOnlineTable, slaveData);
         }
-        if (AgileStringUtil.isEmpty(updateColumnList)) {
-            return true;
-        }
-        return agileOnlineOperationMapper.update(agileOnlineTable.getTableName(), updateColumnList, whereColumnList) == 1;
-
     }
 
     @Override
@@ -195,13 +201,14 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
      * @param onlineTableMap
      * @param fieldFilterList
      */
-    private void checkFieldFilter(Map<String, AgileOnlineTable> onlineTableMap, AgileOnlineTable agileOnlineTable, List<OnlineFieldFilter> fieldFilterList) {
+    private void checkFieldFilter(AgileOnlineTable agileOnlineTable, Map<String, AgileOnlineTable> onlineTableMap, List<OnlineFieldFilter> fieldFilterList) {
         // 如果为从表 校验过滤条件是否存在关联字段 避免全表查询
         if (!OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
             if (!fieldFilterList.stream().anyMatch(onlineFieldFilter -> onlineFieldFilter.getColumnId().equals(agileOnlineTable.getSlaveColumnId()))) {
                 throw new AgileValidateException("缺少从表关联字段查询条件！");
             }
         }
+
         StringBuffer errorMessage = new StringBuffer();
         for (OnlineFieldFilter onlineFieldFilter : fieldFilterList) {
             AgileOnlineColumn agileOnlineColumn = this.agileOnlineColumnService.getById(onlineFieldFilter.getColumnId());
@@ -232,72 +239,12 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
     }
 
     /**
-     * 根据主键获取主表数据
-     *
-     * @param agileOnlineTable
-     * @param dataId
-     * @return
-     */
-    private Map getOneData(AgileOnlineTable agileOnlineTable, Object dataId) {
-        if (AgileStringUtil.isEmpty(dataId)) {
-            throw new AgileValidateException("数据主键值不能为空！");
-        }
-        String selectFields = this.makeTableSelectField(agileOnlineTable);
-        List<OnlineFieldFilter> fieldFilterList = new ArrayList<>();
-        fieldFilterList.add(this.makeTableFieldFilter(agileOnlineTable.getTableName(), agileOnlineTable.getPrimaryColumnName(), dataId));
-        return agileOnlineOperationMapper.getOneData(agileOnlineTable.getTableName(), selectFields, null, fieldFilterList);
-    }
-
-    /**
-     * 保存表数据
-     *
-     * @param agileOnlineTable     数据表信息
-     * @param onlineColumnDataList 表字段值信息
-     */
-    private void saveTableData(AgileOnlineTable agileOnlineTable, List<OnlineColumnData> onlineColumnDataList) {
-        List<Object> columnValueList = new LinkedList<>();
-        String columnName = this.makeColumnName(onlineColumnDataList);
-        for (OnlineColumnData onlineColumnData : onlineColumnDataList) {
-            columnValueList.add(onlineColumnData.getColumnValue());
-        }
-        agileOnlineOperationMapper.insert(agileOnlineTable.getTableName(), columnName, columnValueList);
-    }
-
-    /**
-     * 查询关联从表
-     *
-     * @param formId  表单ID
-     * @param tableId 主表ID
-     * @return
-     */
-    private List<AgileOnlineTable> getSlaveOnlineTable(String formId, String tableId) {
-        LambdaQueryWrapper<AgileOnlineTable> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileOnlineTable::getFormId, formId);
-        lambdaQueryWrapper.eq(AgileOnlineTable::getMasterTableId, tableId);
-        return this.agileOnlineTableService.list(lambdaQueryWrapper);
-    }
-
-
-    /**
-     * 获取数据表对应字段
-     *
-     * @param agileOnlineTable 数据表信息
-     * @return
-     */
-    private List<AgileOnlineColumn> getOnlineColumnList(AgileOnlineTable agileOnlineTable) {
-        LambdaQueryWrapper<AgileOnlineColumn> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileOnlineColumn::getFormId, agileOnlineTable.getFormId());
-        lambdaQueryWrapper.eq(AgileOnlineColumn::getTableId, agileOnlineTable.getId());
-        return agileOnlineColumnService.list(lambdaQueryWrapper);
-    }
-
-    /**
      * 拼装分页查询字段
      *
      * @param queryFieldList
      * @return
      */
-    private String makeTableSelectField(Map<String, AgileOnlineTable> onlineTableMap, AgileOnlineTable agileOnlineTable, List<OnlineFieldQuery> queryFieldList) {
+    private String makeTableSelectField(AgileOnlineTable agileOnlineTable, Map<String, AgileOnlineTable> onlineTableMap, List<OnlineFieldQuery> queryFieldList) {
         List<OnlineFieldQuery> newQueryFieldList = new ArrayList<>();
         if (AgileStringUtil.isEmpty(queryFieldList)) queryFieldList = new ArrayList<>();
         for (OnlineFieldQuery onlineFieldQuery : queryFieldList) {
@@ -322,34 +269,27 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
                 newQueryFieldList.add(onlineFieldQuery);
             }
         }
-        // 判断是否存在主键、关联字段查询字段，如果不存在则添加
-        onlineTableMap.values().forEach(queryOnlineTable -> {
-            if (!newQueryFieldList.stream().anyMatch(queryField -> queryField.getColumnId().equals(queryOnlineTable.getPrimaryColumnId()))) {
-                OnlineFieldQuery onlineFieldQuery = makeTableQueryField(queryOnlineTable, queryOnlineTable.getPrimaryColumnId());
-                if (onlineFieldQuery != null) newQueryFieldList.add(onlineFieldQuery);
-            }
-            if (!OnlineTableType.MASTER.equals(queryOnlineTable.getTableType())) {
-                if (!newQueryFieldList.stream().anyMatch(queryField -> queryField.getColumnId().equals(queryOnlineTable.getSlaveColumnId()))) {
-                    OnlineFieldQuery onlineFieldQuery = makeTableQueryField(queryOnlineTable, queryOnlineTable.getSlaveColumnId());
-                    if (onlineFieldQuery != null) newQueryFieldList.add(onlineFieldQuery);
-                }
-            }
-        });
-        // 查看所有从表关联字段是否存在查询字段，如果不存在则添加
+        // 添加主表主键查询字段
+        if (!newQueryFieldList.stream().anyMatch(queryField -> queryField.getColumnId().equals(agileOnlineTable.getPrimaryColumnId()))) {
+            OnlineFieldQuery onlineFieldQuery = makeTableQueryField(agileOnlineTable, agileOnlineTable.getPrimaryColumnId());
+            if (onlineFieldQuery != null) newQueryFieldList.add(onlineFieldQuery);
+        }
+
+        // 添加主表关联字段
         if (OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
             List<AgileOnlineTable> slaveOnlineTableList = this.getSlaveOnlineTable(agileOnlineTable.getFormId(), agileOnlineTable.getId());
             slaveOnlineTableList.forEach(slaveOnlineTable -> {
                 if (newQueryFieldList.stream().anyMatch(queryField -> queryField.getColumnId().equals(slaveOnlineTable.getSlaveColumnId()))) {
-                    OnlineFieldQuery onlineFieldQuery = makeTableQueryField(slaveOnlineTable, agileOnlineTable.getSlaveColumnId());
+                    OnlineFieldQuery onlineFieldQuery = makeTableQueryField(agileOnlineTable, agileOnlineTable.getMasterColumnId());
                     if (onlineFieldQuery != null) newQueryFieldList.add(onlineFieldQuery);
                 }
             });
         }
+        // 拼装查询字段
         StringBuilder selectFieldBuilder = new StringBuilder();
         newQueryFieldList.forEach(onlineFieldQuery -> {
-            selectFieldBuilder
-                    .append(onlineFieldQuery.getTableName()).append(".")
-                    .append(onlineFieldQuery.getColumnName()).append(' ');
+            selectFieldBuilder.append(onlineFieldQuery.getTableName()).append(".");
+            selectFieldBuilder.append(onlineFieldQuery.getColumnName()).append(' ');
             if (!OnlineTableType.MASTER.equals(onlineFieldQuery.getTableType())) {
                 selectFieldBuilder.append(onlineFieldQuery.getModelName()).append("__");
             }
@@ -387,9 +327,8 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
     private String makeTableSelectField(AgileOnlineTable agileOnlineTable) {
         StringBuilder selectFieldBuilder = new StringBuilder();
         getOnlineColumnList(agileOnlineTable).forEach(agileOnlineColumn -> {
-            selectFieldBuilder
-                    .append(agileOnlineTable.getTableName()).append(".")
-                    .append(agileOnlineColumn.getColumnName()).append(' ');
+            selectFieldBuilder.append(agileOnlineTable.getTableName()).append(".");
+            selectFieldBuilder.append(agileOnlineColumn.getColumnName()).append(' ');
             if (!OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
                 selectFieldBuilder.append(agileOnlineTable.getModelName()).append("__");
             }
@@ -413,7 +352,6 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         onlineFieldFilter.setColumnValue(columnValue);
         return onlineFieldFilter;
     }
-
 
     /**
      * 组装排序字段
@@ -445,14 +383,151 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         }
         StringBuilder orderFieldBuilder = new StringBuilder();
         newFieldOrderList.forEach(onlineFieldOrder -> {
-            orderFieldBuilder
-                    .append(onlineFieldOrder.getTableName()).append(".")
-                    .append(onlineFieldOrder.getColumnName()).append(' ');
+            orderFieldBuilder.append(onlineFieldOrder.getTableName()).append(".");
+            orderFieldBuilder.append(onlineFieldOrder.getColumnName()).append(' ');
             if (!onlineFieldOrder.isAsc()) {
                 orderFieldBuilder.append(" DESC,");
             }
         });
         return orderFieldBuilder.substring(0, orderFieldBuilder.length() - 1);
+    }
+
+    /**
+     * 添加关联表
+     *
+     * @param onlineTableMap
+     * @return
+     */
+    private List<OnlineJoinTable> makeJoinTable(AgileOnlineTable agileOnlineTable, Map<String, AgileOnlineTable> onlineTableMap) {
+        List<OnlineJoinTable> joinTableList = new ArrayList<>();
+        if (!OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) return joinTableList;
+        onlineTableMap.values().forEach(slaveOnlineTable -> {
+            if (OnlineTableType.ONE_TO_ONE.equals(slaveOnlineTable.getTableType())) {
+                OnlineJoinTable onlineJoinTable = new OnlineJoinTable();
+                onlineJoinTable.setJoinTableName(slaveOnlineTable.getTableName());
+                AgileOnlineTable masterOnlineTable = onlineTableMap.get(slaveOnlineTable.getMasterTableId());
+                onlineJoinTable.setLeftJoin(SysYesNo.YES.equals(slaveOnlineTable.getLeftJoin()));
+                onlineJoinTable.setJoinCondition(this.makeJoinCondition(masterOnlineTable, slaveOnlineTable));
+                joinTableList.add(onlineJoinTable);
+            }
+        });
+        return joinTableList;
+    }
+
+    /**
+     * 拼装关联条件
+     *
+     * @param masterOnlineTable
+     * @param slaveOnlineTable
+     * @return
+     */
+    private String makeJoinCondition(AgileOnlineTable masterOnlineTable, AgileOnlineTable slaveOnlineTable) {
+        StringBuilder conditionBuilder = new StringBuilder(64);
+        conditionBuilder
+                .append(masterOnlineTable.getTableName())
+                .append(".")
+                .append(slaveOnlineTable.getMasterColumnName())
+                .append(" = ")
+                .append(slaveOnlineTable.getTableName())
+                .append(".")
+                .append(slaveOnlineTable.getSlaveColumnName());
+        return conditionBuilder.toString();
+    }
+
+    /**
+     * 根据主键获取主表数据
+     *
+     * @param agileOnlineTable
+     * @param dataId
+     * @return
+     */
+    private Map getOneData(AgileOnlineTable agileOnlineTable, Object dataId) {
+        if (AgileStringUtil.isEmpty(dataId)) {
+            throw new AgileValidateException("数据主键值不能为空！");
+        }
+        String selectFields = this.makeTableSelectField(agileOnlineTable);
+        List<OnlineJoinTable> joinTableList = null;
+        if (OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
+            List<AgileOnlineTable> slaveOnlineTableList = this.getSlaveOnlineTable(agileOnlineTable.getFormId(), agileOnlineTable.getId());
+            Map<String, AgileOnlineTable> onlineTableMap = new HashMap<>();
+            onlineTableMap.put(agileOnlineTable.getId(), agileOnlineTable);
+            StringBuilder slaveSelectFields = new StringBuilder();
+            for (AgileOnlineTable slaveOnlineTable : slaveOnlineTableList) {
+                onlineTableMap.put(slaveOnlineTable.getId(), slaveOnlineTable);
+                if (OnlineTableType.ONE_TO_ONE.equals(slaveOnlineTable.getTableType())) { // 添加从表查询字段
+                    slaveSelectFields.append(",").append(this.makeTableSelectField(slaveOnlineTable));
+                }
+            }
+            selectFields = selectFields + slaveSelectFields.toString();
+            joinTableList = this.makeJoinTable(agileOnlineTable, onlineTableMap);
+        }
+
+        List<OnlineFieldFilter> fieldFilterList = new ArrayList<>();
+        fieldFilterList.add(this.makeTableFieldFilter(agileOnlineTable.getTableName(), agileOnlineTable.getPrimaryColumnName(), dataId));
+        return agileOnlineOperationMapper.getOneData(agileOnlineTable.getTableName(), selectFields, joinTableList, fieldFilterList);
+    }
+
+    /**
+     * 保存表数据
+     *
+     * @param agileOnlineTable     数据表信息
+     * @param onlineColumnDataList 表字段值信息
+     */
+    private void saveTableData(AgileOnlineTable agileOnlineTable, List<OnlineColumnData> onlineColumnDataList) {
+        List<Object> columnValueList = new LinkedList<>();
+        String columnName = this.makeColumnName(onlineColumnDataList);
+        for (OnlineColumnData onlineColumnData : onlineColumnDataList) {
+            columnValueList.add(onlineColumnData.getColumnValue());
+        }
+        agileOnlineOperationMapper.insert(agileOnlineTable.getTableName(), columnName, columnValueList);
+    }
+
+    private boolean updateTableData(AgileOnlineTable agileOnlineTable, Map tableData) {
+        List<AgileOnlineColumn> tableColumnList = this.getOnlineColumnList(agileOnlineTable);
+        List<OnlineColumnData> tableColumnDataList = this.makeColumnData(tableColumnList, tableData);
+        List<OnlineColumnData> updateColumnList = new LinkedList<>();
+        List<OnlineColumnData> whereColumnList = new LinkedList<>();
+        for (OnlineColumnData columnData : tableColumnDataList) {
+            if (SysYesNo.YES.equals(columnData.getPrimaryFlag())) {
+                whereColumnList.add(columnData);
+                continue;
+            }
+            if (!OnlineFieldKind.CREATE_USER.equals(columnData.getFieldKind())
+                    && !OnlineFieldKind.CREATE_TIME.equals(columnData.getFieldKind())) {
+                updateColumnList.add(columnData);
+            }
+        }
+        if (AgileStringUtil.isEmpty(updateColumnList)) {
+            return true;
+        }
+        return agileOnlineOperationMapper.update(agileOnlineTable.getTableName(), updateColumnList, whereColumnList) == 1;
+    }
+
+    /**
+     * 查询关联从表
+     *
+     * @param formId  表单ID
+     * @param tableId 主表ID
+     * @return
+     */
+    private List<AgileOnlineTable> getSlaveOnlineTable(String formId, String tableId) {
+        LambdaQueryWrapper<AgileOnlineTable> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileOnlineTable::getFormId, formId);
+        lambdaQueryWrapper.eq(AgileOnlineTable::getMasterTableId, tableId);
+        return this.agileOnlineTableService.list(lambdaQueryWrapper);
+    }
+
+    /**
+     * 获取数据表对应字段
+     *
+     * @param agileOnlineTable 数据表信息
+     * @return
+     */
+    private List<AgileOnlineColumn> getOnlineColumnList(AgileOnlineTable agileOnlineTable) {
+        LambdaQueryWrapper<AgileOnlineColumn> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileOnlineColumn::getFormId, agileOnlineTable.getFormId());
+        lambdaQueryWrapper.eq(AgileOnlineColumn::getTableId, agileOnlineTable.getId());
+        return agileOnlineColumnService.list(lambdaQueryWrapper);
     }
 
     /**

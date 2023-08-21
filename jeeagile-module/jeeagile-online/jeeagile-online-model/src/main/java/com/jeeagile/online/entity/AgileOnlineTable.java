@@ -83,6 +83,16 @@ public class AgileOnlineTable extends AgileBaseTenantModel<AgileOnlineTable> {
      */
     @ApiModelProperty("从表字段名称")
     private String slaveColumnName;
+    /**
+     * 是否左关联
+     */
+    @ApiModelProperty("是否左关联")
+    private String leftJoin;
+    /**
+     * 是否级联删除
+     */
+    @ApiModelProperty("是否级联删除")
+    private String cascadeDelete;
 
     public AgileOnlineTable() {
 

@@ -121,6 +121,19 @@
               this.masterTable.tableColumnList.forEach(onlineColumn => {
                 masterData[onlineColumn.columnName] = this.formPageData[onlineColumn.fieldName]
               })
+              // 获取一对一表数据
+              let slaveData = {}
+              this.pageTableList.forEach(onlineTable => {
+                if (onlineTable.tableType === this.OnlineTableType.ONE_TO_ONE) {
+                  let tableData = {}
+                  onlineTable.tableColumnList.forEach(onlineColumn => {
+                    const fieldName = this.getColumnFieldName(onlineTable, onlineColumn)
+                    tableData[onlineColumn.columnName] = this.formPageData[fieldName]
+                  })
+                  slaveData[onlineTable.tableId] = tableData
+                }
+              })
+              params.slaveData = slaveData
               params.masterData = masterData
             }
 
@@ -149,19 +162,19 @@
                     ...this.params
                   }
                 }
-                params.slaveData = slaveData
+                if (params.slaveData) {
+                  params.slaveData = {
+                    ...slaveData,
+                    ...params.slaveData
+                  }
+                } else {
+                  params.slaveData = slaveData
+                }
                 if (this.operationType === 'ADD') {
                   saveTableData(params).then(res => {
                     this.onCancel(true, this.formPageData)
                   })
                 } else {
-                  if (this.masterTable.tableType === this.OnlineTableType.MASTER) {
-                    params.tableData = params.masterData
-                  } else {
-                    params.tableData = params.slaveData
-                  }
-                  params.masterData = undefined
-                  params.slaveData = undefined
                   updateTableData(params).then(res => {
                     this.onCancel(true, this.formPageData)
                   })

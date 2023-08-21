@@ -153,11 +153,7 @@
         this.$refs.form.validate(valid => {
           if (!valid) return
           this.formData.onlineTable = this.getCurrentTable
-          if (this.getCurrentTable.tableType === this.OnlineTableType.MASTER) {
-            this.formData.tableId = this.getCurrentTable.tableId
-          } else {
-            this.formData.tableId = undefined
-          }
+          this.formData.tableId = this.getCurrentTable.tableId
           this.formData.onlineColumn = findItemFromList(this.getTableColumnList, this.formData.columnId, 'columnId')
           this.onCancel(true)
         })

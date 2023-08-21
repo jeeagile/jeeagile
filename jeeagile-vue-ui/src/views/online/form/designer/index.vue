@@ -884,24 +884,24 @@
           }
         }
         // eslint-disable-next-line default-case
-        switch (column.fieldKind) {
-        case this.OnlineFieldKind.UPLOAD_FILE:
-        case this.OnlineFieldKind.UPLOAD_IMAGE: {
-          return {
-            ...DefaultWidgetAttributes.Upload,
-            isImage: column.fieldKind === this.OnlineFieldKind.UPLOAD_IMAGE,
-            ...this.buildUploadWidgetUrlInfo(column)
+        switch(column.fieldKind){
+          case this.OnlineFieldKind.UPLOAD_FILE:
+          case this.OnlineFieldKind.UPLOAD_IMAGE:{
+            return {
+              ...DefaultWidgetAttributes.Upload,
+              isImage: column.fieldKind === this.OnlineFieldKind.UPLOAD_IMAGE,
+              ...this.buildUploadWidgetUrlInfo(column)
+            }
           }
-        }
-        case this.OnlineFieldKind.RICH_TEXT:
-          return { ...DefaultWidgetAttributes.RichEditor }
-        case this.OnlineFieldKind.CREATE_TIME:
-        case this.OnlineFieldKind.UPDATE_TIME:
-          return { ...DefaultWidgetAttributes.Date }
-        case this.OnlineFieldKind.CREATE_USER:
-        case this.OnlineFieldKind.UPDATE_USER:
-        case this.OnlineFieldKind.LOGIC_DELETE:
-          return { ...DefaultWidgetAttributes.Label }
+          case this.OnlineFieldKind.RICH_TEXT:
+            return { ...DefaultWidgetAttributes.RichEditor }
+          case this.OnlineFieldKind.CREATE_TIME:
+          case this.OnlineFieldKind.UPDATE_TIME:
+            return { ...DefaultWidgetAttributes.Date }
+          case this.OnlineFieldKind.CREATE_USER:
+          case this.OnlineFieldKind.UPDATE_USER:
+          case this.OnlineFieldKind.LOGIC_DELETE:
+            return { ...DefaultWidgetAttributes.Label }
         }
         if (column.dictId && column.dictId !== '' && column.onlineDict) {
           return column.onlineDict.treeFlag == this.SysYesNo.YES ? { ...DefaultWidgetAttributes.Cascader } : { ...DefaultWidgetAttributes.Select }
@@ -939,7 +939,8 @@
           showName: column.fieldLabel,
           variableName: this.handleWidgetVariableName(column.fieldName),
           widgetKind: this.onlinePage.pageType === this.OnlinePageType.QUERY ? this.OnlineWidgetKind.Filter : attrs.widgetKind,
-          onlineColumn: column
+          onlineColumn: column,
+          onlineTable: this.findTreeNodePath(this.pageTableList, column.tableId, 'tableId')
         }
       },
       /** 获取数据表字段 */
@@ -1017,7 +1018,6 @@
       /** 组装表格组件 */
       buildTableWidgetInfo(tableWidget) {
         if (tableWidget != null) {
-          const v=this.handleWidgetVariableName()
           let onlineTable = findItemFromList(this.pageTableList, tableWidget.tableId, 'tableId')
           if (onlineTable != null) {
             tableWidget.onlineTable = onlineTable
@@ -1064,27 +1064,27 @@
       },
       /** 日期类型组件 */
       dateTypeChange(type) {
-        switch (type) {
-        case 'year':
-          this.currentWidget.format = 'yyyy'
-          this.currentWidget.valueFormat = 'yyyy'
-          break
-        case 'month':
-          this.currentWidget.format = 'yyyy-MM'
-          this.currentWidget.valueFormat = 'yyyy-MM'
-          break
-        case 'date':
-          this.currentWidget.format = 'yyyy-MM-dd'
-          this.currentWidget.valueFormat = 'yyyy-MM-dd'
-          break
-        case 'datetime':
-          this.currentWidget.format = 'yyyy-MM-dd HH:mm:ss'
-          this.currentWidget.valueFormat = 'yyyy-MM-dd HH:mm:ss'
-          break
-        default:
-          this.currentWidget.format = 'yyyy-MM-dd HH:mm:ss'
-          this.currentWidget.valueFormat = 'yyyy-MM-dd HH:mm:ss'
-          break
+        switch(type){
+          case 'year':
+            this.currentWidget.format = 'yyyy'
+            this.currentWidget.valueFormat = 'yyyy'
+            break
+          case 'month':
+            this.currentWidget.format = 'yyyy-MM'
+            this.currentWidget.valueFormat = 'yyyy-MM'
+            break
+          case 'date':
+            this.currentWidget.format = 'yyyy-MM-dd'
+            this.currentWidget.valueFormat = 'yyyy-MM-dd'
+            break
+          case 'datetime':
+            this.currentWidget.format = 'yyyy-MM-dd HH:mm:ss'
+            this.currentWidget.valueFormat = 'yyyy-MM-dd HH:mm:ss'
+            break
+          default:
+            this.currentWidget.format = 'yyyy-MM-dd HH:mm:ss'
+            this.currentWidget.valueFormat = 'yyyy-MM-dd HH:mm:ss'
+            break
         }
       },
       /** 删除表格字段 */

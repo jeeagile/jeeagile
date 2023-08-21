@@ -297,13 +297,9 @@ const OnlinePageMixins = {
         case this.OnlineParamValueType.FORM_PARAM:
           return this.params ? this.params[valueData] : undefined
         case this.OnlineParamValueType.TABLE_COLUMN:{
-          let onlineColumn = this.onlineColumnMap.get(valueData)
-          let columnValue = null
-          if (this.pageConfig.pageType === this.OnlinePageType.QUERY) {
-            columnValue = this.formPageData.pageFilterCopy[onlineColumn.columnName]
-          } else {
-            columnValue = this.formPageData[onlineColumn.columnName]
-          }
+          const onlineColumn = this.onlineColumnMap.get(valueData)
+          const onlineTable = this.onlineTableMap.get(onlineColumn.tableId)
+          const columnValue = this.formPageData[this.getColumnFieldName(onlineTable, onlineColumn)]
           if (onlineColumn == null || columnValue == null || columnValue === '') {
             return null
           } else {

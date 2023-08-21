@@ -55,7 +55,7 @@ public interface IAgileOnlineOperationService {
      * @param masterData 表数据
      * @return
      */
-    boolean updateTableData(String tableId, Map masterData);
+    boolean updateTableData(String tableId, Map masterData, Map slaveData);
 
     /**
      * 删除数据

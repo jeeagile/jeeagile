@@ -29,7 +29,7 @@
                            :index="tableWidget.getTableIndex"/>
           <template v-for="tableColumn in widgetConfig.tableColumnList">
             <el-table-column v-if="(tableColumn.onlineColumn || {}).fieldType === 'Boolean'"
-                             :key="tableColumn.dataFieldName"
+                             :key="tableColumn.variableName"
                              :label="tableColumn.showName" :width="tableColumn.columnWidth + 'px'"
                              :prop="tableColumn.onlineColumn.fieldName"
                              :sortable="tableColumn.sortable ? 'custom' : false"
@@ -47,7 +47,7 @@
                                v-if="tableColumn.onlineColumn &&
                   (tableColumn.onlineColumn.fieldKind === OnlineFieldKind.UPLOAD ||
                   tableColumn.onlineColumn.fieldKind === OnlineFieldKind.UPLOAD_IMAGE)"
-                               :key="(tableColumn.onlineColumn || {}).fieldName"
+                               :key="(tableColumn.onlineColumn || {}).variableName"
                                :width="tableColumn.columnWidth + 'px'"
                                :align="tableColumn.columnAlign"
               >
@@ -56,7 +56,7 @@
                     <el-image
                       v-for="item in parseTableUploadData(tableColumn, scope.row)"
                       :preview-src-list="getTablePictureList(tableColumn, scope.row)"
-                      class="table-cell-image" :key="item.url" :src="item.url" fit="fill">
+                      class="table-cell-image" :key="item.variableName" :src="item.url" fit="fill">
                       <div slot="error" class="table-cell-image">
                         <i class="el-icon-picture-outline"></i>
                       </div>
@@ -70,7 +70,7 @@
                   </template>
                 </template>
               </el-table-column>
-              <el-table-column v-else :key="(tableColumn.onlineColumn || {}).fieldName"
+              <el-table-column v-else :key="(tableColumn.onlineColumn || {}).variableName"
                                :label="tableColumn.showName" :prop="tableColumn.dataFieldName"
                                :width="tableColumn.columnWidth + 'px'"
                                :sortable="tableColumn.sortable ? 'custom' : false"
@@ -78,7 +78,7 @@
               />
             </template>
             <!-- 字典字段 -->
-            <el-table-column v-else :key="(tableColumn.onlineColumn || {}).fieldName"
+            <el-table-column v-else :key="(tableColumn.onlineColumn || {}).variableName"
                              :label="tableColumn.showName" :width="tableColumn.columnWidth + 'px'"
                              :prop="tableColumn.dataFieldName"
                              :sortable="tableColumn.sortable ? 'custom' : false"
@@ -233,7 +233,6 @@
       },
       /** 加载表数据 */
       loadTableData(params) {
-        debugger
         if (this.widgetConfig.onlineTable == null || this.isDesigner || this.isNew || this.preview()) {
           return Promise.resolve({
             dataList: this.tableWidget.dataList,

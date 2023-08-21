@@ -62,8 +62,8 @@ public class AgileOnlineOperationController extends AgileBaseController {
 
     @PostMapping(value = "/updateTableData")
     @ApiOperation(value = "保存数据", notes = "保存数据")
-    public AgileResult updateTableData(@SingleRequestBody String tableId, @SingleRequestBody Map tableData) {
-        if (agileOnlineOperationService.updateTableData(tableId, tableData)) {
+    public AgileResult updateTableData(@SingleRequestBody String tableId, @SingleRequestBody Map masterData, @SingleRequestBody Map slaveData) {
+        if (agileOnlineOperationService.updateTableData(tableId, masterData, slaveData)) {
             return this.success("数据更新成功！");
         } else {
             return this.success(AgileResultCode.FAIL_OPS_UPDATE, "数据更新失败！");

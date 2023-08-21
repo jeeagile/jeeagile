@@ -259,18 +259,18 @@
                   </el-row>
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="是否级联删除" prop="cascadeDelete">
+                      <el-form-item label="是否左关联" prop="leftJoin">
                         <el-switch
-                          v-model="onlineTable.cascadeDelete"
+                          v-model="onlineTable.leftJoin"
                           active-value="1"
                           inactive-value="0"
                         ></el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="是否左关联" prop="leftJoin">
+                      <el-form-item label="是否级联删除" prop="cascadeDelete">
                         <el-switch
-                          v-model="onlineTable.leftJoin"
+                          v-model="onlineTable.cascadeDelete"
                           active-value="1"
                           inactive-value="0"
                         ></el-switch>
@@ -560,19 +560,19 @@
       /** 过滤表单页面可选数据表 */
       filterPageTableList() {
         return this.onlineTableList.filter(item => {
-          switch (this.onlinePage.pageType) {
+          switch(this.onlinePage.pageType){
             // 工单列表页面和工作流流程页面，只能选择主表
-          case this.OnlinePageType.FLOW:
-          case this.OnlinePageType.ORDER:
-            return item.tableType === this.OnlineTableType.MASTER
+            case this.OnlinePageType.FLOW:
+            case this.OnlinePageType.ORDER:
+              return item.tableType === this.OnlineTableType.MASTER
             // 流程编辑页面只支持一对多从表，普通编辑页面只支持主表和一对多从表
-          case this.OnlinePageType.EDIT:
-            return this.onlineForm.formType === this.OnlineFormType.FLOW ? item.tableType === this.OnlineTableType.ONE_TO_MANY : (item.tableType === this.OnlineTableType.MASTER || item.tableType === this.OnlineTableType.ONE_TO_MANY)
+            case this.OnlinePageType.EDIT:
+              return this.onlineForm.formType === this.OnlineFormType.FLOW ? item.tableType === this.OnlineTableType.ONE_TO_MANY : (item.tableType === this.OnlineTableType.MASTER || item.tableType === this.OnlineTableType.ONE_TO_MANY)
             // 查询页面可以选择主表或者一对多从表
-          case this.OnlinePageType.QUERY:
-            return item.tableType === this.OnlineTableType.MASTER || item.tableType === this.OnlineTableType.ONE_TO_MANY
-          default:
-            return false
+            case this.OnlinePageType.QUERY:
+              return item.tableType === this.OnlineTableType.MASTER || item.tableType === this.OnlineTableType.ONE_TO_MANY
+            default:
+              return false
           }
         })
       }
@@ -787,7 +787,9 @@
           masterColumnId: undefined,
           masterColumnName: undefined,
           slaveColumnId: undefined,
-          slaveColumnName: undefined
+          slaveColumnName: undefined,
+          leftJoin: undefined,
+          cascadeDelete: undefined
         }
         this.slaveTableColumnList = []
         this.resetForm('onlineTable')
@@ -944,7 +946,7 @@
             tableColumnList: [],
             variableName: this.onlinePage.pageCode,
             showName: this.onlinePage.pageName,
-            operationList: this.onlinePage.pageType === this.OnlinePageType.QUERY ? [...DefaultWidgetAttributes.Table.operationList] : [],
+            operationList: this.onlinePage.pageType === this.OnlinePageType.QUERY ? [...DefaultWidgetAttributes.Table.operationList] : []
           }
         }
         this.onlinePage.widgetJson = JSON.stringify({

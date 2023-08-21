@@ -11,7 +11,7 @@
                                 :widgetConfig="widget"
                                 :pageConfig="pageConfig"
                                 :dropdownParam="getDropdownParam"
-                                v-model="formPageData.pageFilter[widget.onlineColumn.columnName]"
+                                v-model="formPageData[getWidgetFieldName(widget)]"
           />
         </el-col>
         <div slot="operator" style="padding: 13px 10px;" v-for="operation in getTableOperation(false)"
@@ -70,6 +70,12 @@
     },
     inject: ['preview'],
     methods: {
+      /** 获取组件字段名 */
+      getWidgetFieldName(widget) {
+        if (widget && widget.onlineTable && widget.onlineColumn) {
+          return this.getColumnFieldName(widget.onlineTable, widget.onlineColumn)
+        }
+      },
       getTableOperation(rowOperation) {
         if (this.pageConfig.pageQueryTable == null || !Array.isArray(this.pageConfig.pageQueryTable.operationList)) return []
         return this.pageConfig.pageQueryTable.operationList.filter(operation => {
@@ -77,6 +83,7 @@
         })
       },
       getTableQueryParam(widget) {
+
         let queryParams = []
         if (Array.isArray(widget.queryParamList)) {
           queryParams = widget.queryParamList.map(item => {
@@ -85,6 +92,7 @@
             let temp = {
               tableId: item.onlineTable.tableId,
               tableName: item.onlineTable.tableName,
+              columnId: item.onlineColumn.columnId,
               columnName: item.onlineColumn.columnName,
               filterType: item.onlineColumn.filterType,
               columnValue: item.onlineColumn.filterType !== this.OnlineFilterType.RANFGE ? paramValue : undefined
