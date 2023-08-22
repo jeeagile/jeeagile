@@ -5,8 +5,8 @@ import java.util.Map;
 
 /**
  * @author JeeAgile
- * @date 2027-07-17
- * @description 在线表单 发布状态字典常量
+ * @date 2023-07-17
+ * @description 发布状态字典常量
  */
 public class SysPublishStatus {
     /**

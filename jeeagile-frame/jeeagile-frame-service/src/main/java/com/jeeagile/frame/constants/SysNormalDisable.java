@@ -7,26 +7,26 @@ import java.util.Map;
 
 /**
  * @author JeeAgile
- * @date 2023-07-17
- * @description 是否字典常量
+ * @date 2023-08-22
+ * @description 正常停用
  */
-public class SysYesNo {
+public class SysNormalDisable {
     /**
-     * 否
+     * 正常
      */
-    public static final String NO = "0";
+    public static final String NORMAL = "0";
     /**
-     * 是
+     * 停用
      */
-    public static final String YES = "1";
+    public static final String DISABLE = "1";
     /**
      * MAP
      */
     private static final Map<String, String> SYS_YES_NO_MAP = new HashMap<>(2);
 
     static {
-        SYS_YES_NO_MAP.put(NO, "否");
-        SYS_YES_NO_MAP.put(YES, "是");
+        SYS_YES_NO_MAP.put(NORMAL, "正常");
+        SYS_YES_NO_MAP.put(DISABLE, "停用");
     }
 
     /**
@@ -47,6 +47,6 @@ public class SysYesNo {
     /**
      * 私有构造函数
      */
-    private SysYesNo() {
+    private SysNormalDisable() {
     }
 }

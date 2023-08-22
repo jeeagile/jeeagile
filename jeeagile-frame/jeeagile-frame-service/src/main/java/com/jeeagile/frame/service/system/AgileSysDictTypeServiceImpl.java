@@ -3,10 +3,11 @@ package com.jeeagile.frame.service.system;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.constants.SysNormalDisable;
+import com.jeeagile.frame.constants.SysYesNo;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.frame.entity.system.AgileSysDictData;
 import com.jeeagile.frame.entity.system.AgileSysDictType;
@@ -15,10 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static com.jeeagile.core.constants.AgileConstants.SYS_NORMAL_DISABLE;
-import static com.jeeagile.core.constants.AgileConstants.SYS_YES_NO;
-
 
 /**
  * @author JeeAgile
@@ -56,8 +53,8 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
     public List<AgileSysDictType> selectExportData(AgileSysDictType agileSysDictType) {
         List<AgileSysDictType> agileSysDictTypeList = this.selectList(agileSysDictType);
         agileSysDictTypeList.forEach(item -> {
-            item.setDictStatus(agileSysDictDataService.getSysDictLabel(SYS_NORMAL_DISABLE, item.getDictStatus()));
-            item.setSystemFlag(agileSysDictDataService.getSysDictLabel(SYS_YES_NO, item.getSystemFlag()));
+            item.setDictStatus(SysNormalDisable.getDesc(item.getDictStatus()));
+            item.setSystemFlag(SysYesNo.getDesc(item.getSystemFlag()));
         });
         return agileSysDictTypeList;
     }
@@ -83,7 +80,7 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
     @Override
     public boolean deleteModel(Serializable id) {
         AgileSysDictType agileSysDictType = this.getById(id);
-        if (agileSysDictType.getSystemFlag().equals(AgileFlagEnum.YES.getCode())) {
+        if (SysYesNo.YES.equals(agileSysDictType.getSystemFlag())) {
             throw new AgileValidateException("系统内置，不能删除！");
         }
         this.deleteDictData(agileSysDictType);

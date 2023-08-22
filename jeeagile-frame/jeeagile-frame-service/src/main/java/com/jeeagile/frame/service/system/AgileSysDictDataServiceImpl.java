@@ -2,10 +2,11 @@ package com.jeeagile.frame.service.system;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.constants.SysNormalDisable;
+import com.jeeagile.frame.constants.SysYesNo;
 import com.jeeagile.frame.service.AgileTreeServiceImpl;
 import com.jeeagile.frame.entity.system.AgileSysDictData;
 import com.jeeagile.frame.mapper.system.AgileSysDictDataMapper;
@@ -13,9 +14,6 @@ import org.springframework.cache.annotation.Cacheable;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static com.jeeagile.core.constants.AgileConstants.SYS_NORMAL_DISABLE;
-import static com.jeeagile.core.constants.AgileConstants.SYS_YES_NO;
 
 
 /**
@@ -54,8 +52,8 @@ public class AgileSysDictDataServiceImpl extends AgileTreeServiceImpl<AgileSysDi
     public List<AgileSysDictData> selectExportData(AgileSysDictData agileSysDictData) {
         List<AgileSysDictData> agileSysDictDataList = this.selectList(agileSysDictData);
         agileSysDictDataList.forEach(item -> {
-            item.setDictStatus(this.getSysDictLabel(SYS_NORMAL_DISABLE, item.getDictStatus()));
-            item.setSystemFlag(this.getSysDictLabel(SYS_YES_NO, item.getSystemFlag()));
+            item.setDictStatus(SysNormalDisable.getDesc(item.getDictStatus()));
+            item.setSystemFlag(SysYesNo.getDesc(item.getSystemFlag()));
         });
         return agileSysDictDataList;
     }
@@ -112,7 +110,7 @@ public class AgileSysDictDataServiceImpl extends AgileTreeServiceImpl<AgileSysDi
     @Override
     public boolean deleteModel(Serializable id) {
         AgileSysDictData agileSysDictData = this.getById(id);
-        if (agileSysDictData.getSystemFlag().equals(AgileFlagEnum.YES.getCode())) {
+        if (SysYesNo.YES.equals(agileSysDictData.getSystemFlag())) {
             throw new AgileValidateException("系统内置，不能删除！");
         }
         return this.removeById(id);

@@ -13,8 +13,8 @@
       </el-form-item>
       <el-form-item label="状态" prop="dictStatus">
         <el-select v-model="queryParam.queryCond.dictStatus" placeholder="数据状态" clearable size="small">
-          <el-option v-for="dictStatusOption in dictStatusOptionList" :key="dictStatusOption.dictValue"
-                     :label="dictStatusOption.dictLabel" :value="dictStatusOption.dictValue"/>
+          <el-option v-for="item in SysNormalDisable.getList()" :key="item.value"
+                     :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -56,7 +56,11 @@
       <el-table-column label="字典标签" align="center" prop="dictLabel"/>
       <el-table-column label="字典键值" align="center" prop="dictValue"/>
       <el-table-column label="字典排序" align="center" prop="dictSort"/>
-      <el-table-column label="状态" align="center" prop="dictStatus" :formatter="dictStatusFormat"/>
+      <el-table-column label="状态" align="center" prop="dictStatus">
+        <template slot-scope="scope">
+          {{SysNormalDisable.getLabel(scope.row.dictStatus)}}
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -93,9 +97,8 @@
         </el-form-item>
         <el-form-item label="状态" prop="dictStatus">
           <el-radio-group v-model="form.dictStatus">
-            <el-radio v-for="dictStatusOption in dictStatusOptionList" :key="dictStatusOption.dictValue"
-                      :label="dictStatusOption.dictValue">
-              {{ dictStatusOption.dictLabel }}
+            <el-radio v-for="item in SysNormalDisable.getList()" :key="item.value" :label="item.value">
+              {{ item.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -146,8 +149,6 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
-        // 状态数据字典
-        dictStatusOptionList: [],
         // 类型数据字典
         dictTypeOptionList: [],
         // 查询参数
@@ -182,9 +183,6 @@
       const dictTypeId = this.$route.params && this.$route.params.dictTypeId
       this.detailDictType(dictTypeId)
       this.getDictTypeList()
-      this.getSysDictDataList('sys_normal_disable').then(response => {
-        this.dictStatusOptionList = response.data
-      })
     },
     methods: {
       /** 查询字典类型详细 */
@@ -209,10 +207,6 @@
           this.dictDataList = response.data.records
           this.loading = false
         })
-      },
-      /** 数据状态字典翻译 */
-      dictStatusFormat(row) {
-        return this.handleDictLabel(this.dictStatusOptionList, row.dictStatus)
       },
       /**  取消按钮 */
       cancel() {
