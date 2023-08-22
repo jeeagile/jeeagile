@@ -2,6 +2,9 @@ drop table if exists agile_online_dict;
 drop table if exists agile_online_form;
 drop table if exists agile_online_table;
 drop table if exists agile_online_column;
+drop table if exists agile_online_rule;
+drop table if exists agile_online_column_rule;
+drop table if exists agile_online_page;
 
 /*==============================================================*/
 /* table: agile_online_dict 字典类型表                          */
