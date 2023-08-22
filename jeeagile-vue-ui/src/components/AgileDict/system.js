@@ -111,17 +111,94 @@ Vue.prototype.SysNormalDisable = SysNormalDisable
 
 const SysSuccessFail = new AgileBaseDict('成功失败', [
   {
-    value: 0,
+    value: '0',
     label: '成功',
+    tag: 'success',
     symbol: 'SUCCESS'
   },
   {
-    value: 1,
+    value: '1',
     label: '失败',
+    tag: 'danger',
     symbol: 'FAIL'
   }
 ])
 Vue.prototype.SysSuccessFail = SysSuccessFail
+
+const SysOperateType = new AgileBaseDict('日志操作类型', [
+  {
+    value: 'SELECT',
+    label: '查询数据',
+    symbol: 'SELECT'
+  },
+  {
+    value: 'DETAIL',
+    label: '查看明细',
+    symbol: 'DETAIL'
+  },
+  {
+    value: 'ADD',
+    label: '添加数据',
+    symbol: 'ADD'
+  },
+  {
+    value: 'UPDATE',
+    label: '更新数据',
+    symbol: 'UPDATE'
+  },
+  {
+    value: 'DELETE',
+    label: '删除数据',
+    symbol: 'DELETE'
+  },
+  {
+    value: 'CLEAR',
+    label: '清空数据',
+    symbol: 'CLEAR'
+  },
+  {
+    value: 'GRANT',
+    label: '用户授权',
+    symbol: 'GRANT'
+  },
+  {
+    value: 'EXPORT',
+    label: '导出数据',
+    symbol: 'EXPORT'
+  },
+  {
+    value: 'IMPORT',
+    label: '导入数据',
+    symbol: 'IMPORT'
+  },
+  {
+    value: 'LOGIN',
+    label: '用户登录',
+    symbol: 'LOGIN'
+  },
+  {
+    value: 'FORCE',
+    label: '用户强退',
+    symbol: 'FORCE'
+  },
+  {
+    value: 'GENERATOR',
+    label: '生成代码',
+    symbol: 'GENERATOR'
+  },
+  {
+    value: 'CLEAN',
+    label: '清空数据',
+    symbol: 'CLEAN'
+  },
+  {
+    value: 'OTHER',
+    label: '其它操作',
+    symbol: 'OTHER'
+  }
+])
+Vue.prototype.SysOperateType = SysOperateType
+
 export {
   SysUserStatus,
   SysUserSex,

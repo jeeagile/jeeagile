@@ -13,7 +13,7 @@ import com.jeeagile.core.util.spring.AgileServletUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.entity.AgileModel;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.excel.AgileExcelListener;
 import com.jeeagile.frame.excel.AgileDefaultExcelListener;
 import com.jeeagile.frame.page.AgilePage;
@@ -60,7 +60,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
 
     @PostMapping(value = "/page")
     @AgileRequiresPermissions("page")
-    @AgileLogger(notes = "根据条件分页查询数据", type = AgileLoggerType.SELECT)
+    @AgileLogger(notes = "根据条件分页查询数据", type = SysOperateType.SELECT)
     @ApiOperation(value = "分页查询", notes = "分页查询数据接口")
     public AgileResult<AgilePage<T>> selectPage(@RequestBody AgilePageable<T> agilePageable) {
         return AgileResult.success(agileService.selectPage(agilePageable));
@@ -68,7 +68,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
 
     @PostMapping(value = "/list")
     @AgileRequiresPermissions("list")
-    @AgileLogger(notes = "根据条件查询数据", type = AgileLoggerType.SELECT)
+    @AgileLogger(notes = "根据条件查询数据", type = SysOperateType.SELECT)
     @ApiOperation(value = "查询列表", notes = "根据条件查询数据")
     public AgileResult<List<T>> selectList(@RequestBody T agileModel) {
         return AgileResult.success(agileService.selectList(agileModel));
@@ -76,7 +76,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
 
     @PostMapping("/detail")
     @AgileRequiresPermissions("detail")
-    @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
+    @AgileLogger(notes = "根据主键查看明细", type = SysOperateType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<T> detail(@SingleRequestBody Serializable id) {
         return AgileResult.success(agileService.selectModel(id));
@@ -84,7 +84,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
 
     @GetMapping("/{id}")
     @AgileRequiresPermissions("detail")
-    @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
+    @AgileLogger(notes = "根据主键查看明细", type = SysOperateType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<T> detailInfo(@PathVariable Serializable id) {
         return AgileResult.success(agileService.selectModel(id));
@@ -93,7 +93,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileDemo
     @RequestMapping(value = "/add", method = {RequestMethod.POST, RequestMethod.PUT})
     @AgileRequiresPermissions("add")
-    @AgileLogger(notes = "新增数据", type = AgileLoggerType.ADD)
+    @AgileLogger(notes = "新增数据", type = SysOperateType.ADD)
     @ApiOperation(value = "新增数据", notes = "新增数据")
     public AgileResult<T> add(@RequestBody T agileModel) {
         this.saveModelValidate(agileModel);
@@ -103,7 +103,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileDemo
     @PostMapping("/update")
     @AgileRequiresPermissions("update")
-    @AgileLogger(notes = "根据主键更新数据", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "根据主键更新数据", type = SysOperateType.UPDATE)
     @ApiOperation(value = "更新数据", notes = "根据主键更新数据")
     public AgileResult update(@RequestBody T agileModel) {
         this.updateModelValidate(agileModel);
@@ -117,7 +117,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileDemo
     @PostMapping("/delete")
     @AgileRequiresPermissions("delete")
-    @AgileLogger(notes = "根据主键删除数据", type = AgileLoggerType.DELETE)
+    @AgileLogger(notes = "根据主键删除数据", type = SysOperateType.DELETE)
     @ApiOperation(value = "删除数据", notes = "删除业务数据")
     public AgileResult delete(@SingleRequestBody Serializable id) {
         if (agileService.deleteModel(id)) {
@@ -130,7 +130,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileDemo
     @DeleteMapping("/{id}")
     @AgileRequiresPermissions("delete")
-    @AgileLogger(notes = "根据主键删除数据", type = AgileLoggerType.DELETE)
+    @AgileLogger(notes = "根据主键删除数据", type = SysOperateType.DELETE)
     @ApiOperation(value = "删除数据", notes = "根据主键删除数据")
     public AgileResult deleteInfo(@PathVariable Serializable id) {
         if (agileService.deleteModel(id)) {
@@ -143,7 +143,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
     @AgileDemo
     @PostMapping(value = "/import")
     @AgileRequiresPermissions("import")
-    @AgileLogger(notes = "导入数据", type = AgileLoggerType.IMPORT)
+    @AgileLogger(notes = "导入数据", type = SysOperateType.IMPORT)
     @ApiOperation(value = "导入数据", notes = "导入数据接口")
     public AgileResult importExcel(@RequestParam("importExcel") MultipartFile multipartFile) {
         try {
@@ -183,7 +183,7 @@ public abstract class AgileCrudController<I extends IAgileBaseService<T>, T exte
 
     @PostMapping(value = "/export")
     @AgileRequiresPermissions("export")
-    @AgileLogger(notes = "导出数据", type = AgileLoggerType.EXPORT)
+    @AgileLogger(notes = "导出数据", type = SysOperateType.EXPORT)
     @ApiOperation(value = "导出数据", notes = "导出数据接口")
     public void exportExcel(@RequestBody T agileModel) {
         String excelName = agileModel.getExcelName();

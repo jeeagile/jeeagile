@@ -1288,7 +1288,7 @@
       /** 预览表单页面 */
       previewOnlinePage() {
         let dialogPos = {
-          area: this.pageConfig.pageType === '01' ? ['60vw', '80vh'] : this.pageConfig.width + 'px',
+          area: this.pageConfig.pageType === this.OnlinePageType.QUERY ? ['60vw', '80vh'] : this.pageConfig.width + 'px',
           offset: '80px'
         }
         this.$dialog.show(this.onlinePage.pageName, OnlinePagePreview, dialogPos, {

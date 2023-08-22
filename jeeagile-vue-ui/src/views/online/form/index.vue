@@ -755,6 +755,7 @@
       getOnlinePageList() {
         this.formLoading = true
         this.resetOnlinePage()
+        this.onlinePageList = []
         selectOnlinePageList({ formId: this.onlineForm.id }).then(response => {
             this.onlinePageList = response.data
             this.formLoading = false
@@ -893,10 +894,9 @@
           tableId: undefined,
           pageCode: undefined,
           pageName: undefined,
-          pageType: this.onlineForm.formTag === this.OnlineFormType.FLOW ? this.OnlinePageType.FLOW : this.OnlinePageType.QUERY,
+          pageType: this.onlineForm.formType === this.OnlineFormType.FLOW ? this.OnlinePageType.FLOW : this.OnlinePageType.QUERY,
           pageKind: this.OnlinePageKind.JUMP
         }
-        this.onlinePageList = []
         this.resetForm('onlinePage')
       },
       /** 新增表单页面 */

@@ -7,8 +7,8 @@
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParam.queryCond.status" placeholder="登录状态" clearable size="small" style="width: 240px">
-          <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
-                     :value="dict.dictValue"/>
+          <el-option v-for="item in SysSuccessFail.getList()" :key="item.value" :label="item.label"
+                     :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item label="操作时间">
@@ -51,7 +51,13 @@
       <el-table-column label="设备名称" align="center" prop="loginDevice" :show-overflow-tooltip="true"/>
       <el-table-column label="操作系统" align="center" prop="loginOs" :show-overflow-tooltip="true"/>
       <el-table-column label="浏览器" align="center" prop="loginBrowser" :show-overflow-tooltip="true"/>
-      <el-table-column label="登录状态" align="center" prop="status" :formatter="statusFormat"/>
+      <el-table-column label="登录状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag size="mini" :type="SysSuccessFail.getTag(scope.row.status)">
+            {{SysSuccessFail.getLabel(scope.row.status)}}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="登录信息" align="center" prop="message" :show-overflow-tooltip="true"/>
       <el-table-column label="登录日期" align="center" prop="loginTime" width="180"/>
     </el-table>
@@ -83,10 +89,6 @@
         loginList: [],
         // 是否显示弹出层
         openDialog: false,
-        // 类型数据字典
-        typeOptions: [],
-        // 类型数据字典
-        statusOptions: [],
         // 日期范围
         dateRange: [],
         // 表单参数
@@ -108,9 +110,6 @@
     },
     created() {
       this.getLoginList()
-      this.getSysDictDataList('sys_common_status').then(response => {
-        this.statusOptions = response.data
-      })
     },
     methods: {
       /** 查询登录日志 */
@@ -122,14 +121,6 @@
             this.loading = false
           }
         )
-      },
-      /** 操作日志状态字典翻译 */
-      statusFormat(row) {
-        return this.handleDictLabel(this.statusOptions, row.status)
-      },
-      /** 操作日志类型字典翻译 */
-      typeFormat(row) {
-        return this.handleDictLabel(this.typeOptions, row.type)
       },
       /** 搜索按钮操作 */
       handleQuery() {

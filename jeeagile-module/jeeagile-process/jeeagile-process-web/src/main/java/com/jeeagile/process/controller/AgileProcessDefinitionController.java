@@ -5,7 +5,7 @@ import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
@@ -39,7 +39,7 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
     }
 
     @PostMapping("/info")
-    @AgileLogger(notes = "根据主键查看明细", type = AgileLoggerType.DETAIL)
+    @AgileLogger(notes = "根据主键查看明细", type = SysOperateType.DETAIL)
     @ApiOperation(value = "查看明细", notes = "根据主键查看明细")
     public AgileResult<AgileProcessDefinition> info(@SingleRequestBody Serializable id) {
         return AgileResult.success(agileService.selectModel(id));
@@ -47,7 +47,7 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
 
     @PostMapping("/active")
     @AgileRequiresPermissions("active")
-    @AgileLogger(notes = "流程定义激活", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "流程定义激活", type = SysOperateType.UPDATE)
     @ApiOperation(value = "流程定义激活", notes = "流程定义激活")
     public AgileResult<AgileProcessDefinition> active(@SingleRequestBody String id) {
         try {
@@ -59,7 +59,7 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
 
     @PostMapping("/suspend")
     @AgileRequiresPermissions("suspend")
-    @AgileLogger(notes = "流程定义挂起", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "流程定义挂起", type = SysOperateType.UPDATE)
     @ApiOperation(value = "流程定义挂起", notes = "流程定义挂起")
     public AgileResult<AgileProcessDefinition> suspend(@SingleRequestBody String id) {
         try {
@@ -71,7 +71,7 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
 
     @PostMapping("/updateMainVersion")
     @AgileRequiresPermissions("main")
-    @AgileLogger(notes = "设置主版本", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "设置主版本", type = SysOperateType.UPDATE)
     @ApiOperation(value = "设置主版本", notes = "设置主版本")
     public AgileResult<AgileProcessDefinition> updateMainVersion(@SingleRequestBody String id) {
         try {

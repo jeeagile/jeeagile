@@ -11,7 +11,7 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.entity.system.AgileSysTenant;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.service.system.IAgileSysTenantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +36,7 @@ import java.util.Map;
 public class AgileSysTenantController extends AgileCrudController<IAgileSysTenantService, AgileSysTenant> {
     @PostMapping("/audit")
     @AgileRequiresGuest
-    @AgileLogger(notes = "租户审核", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "租户审核", type = SysOperateType.UPDATE)
     @ApiOperation(value = "租户审核", notes = "租户审核")
     public AgileResult<AgileSysTenant> audit(@RequestBody AgileSysTenant agileSysTenant) {
         if (agileSysTenant.getTenantType().equals("1")) {

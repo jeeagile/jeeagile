@@ -8,7 +8,7 @@ import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.online.constants.OnlineFieldKind;
 import com.jeeagile.online.constants.OnlinePageType;
 import com.jeeagile.online.constants.OnlineTableType;
-import com.jeeagile.frame.constants.SysYesNo;
+import com.jeeagile.core.constants.SysYesNo;
 import com.jeeagile.online.entity.AgileOnlineColumn;
 import com.jeeagile.online.entity.AgileOnlineColumnRule;
 import com.jeeagile.online.entity.AgileOnlinePage;

@@ -6,7 +6,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.entity.system.AgileSysMenu;
 import com.jeeagile.frame.service.system.IAgileSysMenuService;
 import com.jeeagile.frame.vo.system.AgileMenuSort;
@@ -34,7 +34,7 @@ public class AgileSysMenuController extends AgileCrudController<IAgileSysMenuSer
     @AgileDemo
     @PostMapping("/updateSort")
     @AgileRequiresPermissions("sort")
-    @AgileLogger(notes = "修改菜单排序", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "修改菜单排序", type = SysOperateType.UPDATE)
     @ApiOperation(value = "修改菜单排序", notes = "修改菜单排序")
     public AgileResult<String> updateSort(@RequestBody List<AgileMenuSort> agileMenuSortList) {
         this.agileService.updateMenuSort(agileMenuSortList);

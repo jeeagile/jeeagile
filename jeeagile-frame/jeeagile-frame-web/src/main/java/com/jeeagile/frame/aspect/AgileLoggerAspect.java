@@ -12,7 +12,7 @@ import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.entity.system.AgileSysLogger;
 import com.jeeagile.frame.entity.system.AgileSysLogin;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -112,7 +112,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (agileLogger != null && servletRequestAttributes != null) {
                 HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
-                if (agileLogger.type() == AgileLoggerType.LOGIN) {
+                if (agileLogger.type() == SysOperateType.LOGIN) {
                     AgileLoginUser agileLoginUser = null;
                     for (Object object : joinPoint.getArgs()) {
                         if (object instanceof AgileLoginUser) {
@@ -139,7 +139,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                     AgileSysLogger agileSysLogger = getAgileSysLogger(httpServletRequest, throwable);
                     agileSysLogger.setOperateModule(getModuleName(joinPoint, agileLogger));
                     agileSysLogger.setOperateNotes(agileLogger.notes());
-                    agileSysLogger.setOperateType(agileLogger.type().name());
+                    agileSysLogger.setOperateType(agileLogger.type());
                     agileSysLogger.setExecuteTime(executeTime);
                     String className = joinPoint.getTarget().getClass().getName();
                     String methodName = joinPoint.getSignature().getName();

@@ -6,7 +6,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.frame.entity.system.AgileSysUser;
 import com.jeeagile.frame.service.system.IAgileSysUserService;
@@ -32,7 +32,7 @@ public class AgileSysUserController extends AgileCrudController<IAgileSysUserSer
     @AgileDemo
     @PostMapping(value = "/password")
     @ApiOperation(value = "重置用户密码", notes = "重置用户密码")
-    @AgileLogger(notes = "重置用户密码", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "重置用户密码", type = SysOperateType.UPDATE)
     @AgileRequiresPermissions("password")
     public AgileResult<Object> resetUserPassword(@SingleRequestBody String userId, @SingleRequestBody String password) {
         this.agileService.resetUserPassword(userId, password);
@@ -42,7 +42,7 @@ public class AgileSysUserController extends AgileCrudController<IAgileSysUserSer
     @AgileDemo
     @PostMapping(value = "/status")
     @ApiOperation(value = "更新用户状态", notes = "更新用户状态")
-    @AgileLogger(notes = "更新用户状态", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新用户状态", type = SysOperateType.UPDATE)
     public AgileResult<Object> changeStatus(@SingleRequestBody String userId, @SingleRequestBody String userStatus) {
         this.agileService.changeUserStatus(userId, userStatus);
         return this.success();

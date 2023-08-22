@@ -1,4 +1,4 @@
-package com.jeeagile.frame.constants;
+package com.jeeagile.core.constants;
 
 import java.util.HashMap;
 import java.util.Map;

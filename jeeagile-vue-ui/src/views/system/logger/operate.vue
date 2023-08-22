@@ -12,13 +12,14 @@
       <el-form-item label="操作类型" prop="operateType">
         <el-select v-model="queryParam.queryCond.operateType" placeholder="操作类型" clearable size="small"
                    style="width: 240px">
-          <el-option v-for="dict in typeOptions" :key="dict.dictValue" :label="dict.dictLabel" :value="dict.dictValue"/>
+          <el-option v-for="item in SysOperateType.getList()" :key="item.value" :label="item.label"
+                     :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParam.queryCond.status" placeholder="操作状态" clearable size="small" style="width: 240px">
-          <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
-                     :value="dict.dictValue"/>
+          <el-option v-for="item in SysSuccessFail.getList()" :key="item.value" :label="item.label"
+                     :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item label="操作时间">
@@ -54,12 +55,22 @@
     <el-table v-loading="loading" :data="loggerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="操作模块" align="center" prop="operateModule" :show-overflow-tooltip="true"/>
-      <el-table-column label="操作类型" align="center" prop="operateType" :formatter="typeFormat"/>
+      <el-table-column label="操作类型" align="center" prop="operateType">
+        <template slot-scope="scope">
+          {{SysOperateType.getLabel(scope.row.operateType)}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作人员" align="center" prop="operateUser"/>
       <el-table-column label="请求方式" align="center" prop="requestMethod"/>
       <el-table-column label="操作主机" align="center" prop="operateIp" width="130" :show-overflow-tooltip="true"/>
       <el-table-column label="操作地址" align="center" prop="operateAddress" :show-overflow-tooltip="true"/>
-      <el-table-column label="操作状态" align="center" prop="status" :formatter="statusFormat"/>
+      <el-table-column label="操作状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag size="mini" :type="SysSuccessFail.getTag(scope.row.status)">
+            {{SysSuccessFail.getLabel(scope.row.status)}}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作日期" align="center" prop="createTime" width="180"/>
       <el-table-column label="执行时间" align="center" prop="executeTime" :show-overflow-tooltip="true">
         <template slot-scope="scope">
@@ -88,7 +99,8 @@
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="操作模块：">{{ form.operateModule }} / {{ typeFormat(form) }}</el-form-item>
+            <el-form-item label="操作模块：">{{ form.operateModule }} / {{SysOperateType.getLabel(form.operateType)}}
+            </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="操作描述：">{{ form.operateNotes }}</el-form-item>
@@ -116,7 +128,11 @@
             <el-form-item label="返回参数：">{{ form.responseParam }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="操作状态：">{{ statusFormat(form) }}</el-form-item>
+            <el-form-item label="操作状态：">
+              <el-tag size="mini" :type="SysSuccessFail.getTag(form.status)">
+                {{SysSuccessFail.getLabel(form.status)}}
+              </el-tag>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="操作时间：">{{ form.createTime }}</el-form-item>
@@ -154,10 +170,6 @@
         loggerList: [],
         // 是否显示弹出层
         openDialog: false,
-        // 类型数据字典
-        typeOptions: [],
-        // 类型数据字典
-        statusOptions: [],
         // 日期范围
         dateRange: [],
         // 表单参数
@@ -179,12 +191,6 @@
     },
     created() {
       this.getLoggerList()
-      this.getSysDictDataList('sys_logger_type').then(response => {
-        this.typeOptions = response.data
-      })
-      this.getSysDictDataList('sys_logger_status').then(response => {
-        this.statusOptions = response.data
-      })
     },
     methods: {
       /** 查询登录日志 */
@@ -196,14 +202,6 @@
             this.loading = false
           }
         )
-      },
-      /** 操作日志状态字典翻译 */
-      statusFormat(row) {
-        return this.handleDictLabel(this.statusOptions, row.status)
-      },
-      /** 操作日志类型字典翻译 */
-      typeFormat(row) {
-        return this.handleDictLabel(this.typeOptions, row.operateType)
       },
       /** 搜索按钮操作 */
       handleQuery() {

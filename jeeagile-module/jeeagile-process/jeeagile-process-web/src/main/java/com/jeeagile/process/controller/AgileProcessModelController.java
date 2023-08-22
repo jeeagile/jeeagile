@@ -7,7 +7,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.process.entity.AgileProcessModel;
 import com.jeeagile.process.service.IAgileProcessModelService;
@@ -32,7 +32,7 @@ public class AgileProcessModelController extends AgileCrudController<IAgileProce
     @AgileDemo
     @PostMapping("/designer")
     @AgileRequiresPermissions("designer")
-    @AgileLogger(notes = "保存流程设计", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "保存流程设计", type = SysOperateType.UPDATE)
     @ApiOperation(value = "保存流程设计", notes = "保存流程设计")
     public AgileResult<AgileProcessModel> designer(@SingleRequestBody String modelId, @SingleRequestBody String modelXml) {
         return AgileResult.success(agileService.saveProcessDesigner(modelId, modelXml));
@@ -41,7 +41,7 @@ public class AgileProcessModelController extends AgileCrudController<IAgileProce
     @AgileDemo
     @PostMapping("/deployment")
     @AgileRequiresPermissions("deployment")
-    @AgileLogger(notes = "流程发布", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "流程发布", type = SysOperateType.UPDATE)
     @ApiOperation(value = "流程发布", notes = "流程发布")
     public AgileResult<AgileProcessModel> deployment(@SingleRequestBody String modelId) {
         if (agileService.processDeployment(modelId)) {

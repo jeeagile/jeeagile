@@ -7,7 +7,7 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.online.constants.OnlineFormStatus;
 import com.jeeagile.online.constants.OnlinePageType;
-import com.jeeagile.frame.constants.SysPublishStatus;
+import com.jeeagile.core.constants.SysPublishStatus;
 import com.jeeagile.online.entity.*;
 import com.jeeagile.online.mapper.AgileOnlineFormMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;

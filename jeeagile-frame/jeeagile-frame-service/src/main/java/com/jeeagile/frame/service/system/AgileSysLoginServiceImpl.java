@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.core.constants.SysSuccessFail;
 import com.jeeagile.frame.entity.system.AgileSysLogin;
 import com.jeeagile.frame.mapper.system.AgileSysLoginMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+
+import java.util.List;
 
 /**
  * @author JeeAgile
@@ -29,6 +32,15 @@ public class AgileSysLoginServiceImpl extends AgileBaseServiceImpl<AgileSysLogin
         }
         lambdaQueryWrapper.orderByDesc(AgileSysLogin::getLoginTime);
         return lambdaQueryWrapper;
+    }
+
+    @Override
+    public List<AgileSysLogin> selectExportData(AgileSysLogin agileSysLogin) {
+        List<AgileSysLogin> agileSysLoginList = this.selectList(agileSysLogin);
+        agileSysLoginList.forEach(item -> {
+            item.setStatus(SysSuccessFail.getDesc(item.getStatus()));
+        });
+        return agileSysLoginList;
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.jeeagile.core.util.file.AgileFileUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.service.system.IAgileSysPersonService;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.frame.vo.system.AgilePersonInfo;
@@ -44,7 +44,7 @@ public class AgileSysPersonController extends AgileBaseController {
     @AgileRequiresUser
     @PostMapping("/update")
     @ApiOperation(value = "更新个人信息", notes = "更新个人信息")
-    @AgileLogger(notes = "更新个人信息", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新个人信息", type = SysOperateType.UPDATE)
     public AgileResult<Object> updateInfo(@RequestBody AgilePersonInfo agilePersonInfo) {
         agileSysPersonService.updatePersonInfo(agilePersonInfo);
         return this.success("个人信息更新成功！");
@@ -54,7 +54,7 @@ public class AgileSysPersonController extends AgileBaseController {
     @AgileRequiresUser
     @PostMapping("/password")
     @ApiOperation(value = "更新个人密码", notes = "更新个人密码")
-    @AgileLogger(notes = "更新个人密码", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新个人密码", type = SysOperateType.UPDATE)
     public AgileResult<Object> updatePwd(@SingleRequestBody String oldPwd, @SingleRequestBody String newPwd) {
         agileSysPersonService.updatePersonPassword(oldPwd, newPwd);
         return this.success("个人密码修改成功！");
@@ -65,7 +65,7 @@ public class AgileSysPersonController extends AgileBaseController {
     @AgileRequiresUser
     @PostMapping("/avatar")
     @ApiOperation(value = "上传头像", notes = "上传头像")
-    @AgileLogger(notes = "上传头像", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "上传头像", type = SysOperateType.UPDATE)
     public AgileResult<String> uploadAvatar(@RequestParam("userAvatar") MultipartFile multipartFile) {
         String userAvatarBasePath = AgileUtil.getUploadPath() + AgileFileUtil.getFileSeparator() + "avatar";
         String userAvatarFilePath = AgileFileUtil.upload(multipartFile, userAvatarBasePath);

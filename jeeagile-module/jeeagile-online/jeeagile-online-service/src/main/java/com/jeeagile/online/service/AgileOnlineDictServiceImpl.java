@@ -5,7 +5,7 @@ import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.online.constants.OnlineDictType;
-import com.jeeagile.frame.constants.SysYesNo;
+import com.jeeagile.core.constants.SysYesNo;
 import com.jeeagile.online.entity.AgileOnlineDict;
 import com.jeeagile.online.mapper.AgileOnlineDictMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;

@@ -12,7 +12,7 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.entity.system.AgileSysMenu;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.user.AgileUserData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +37,7 @@ public class AgileSysAuthController extends AgileBaseController {
 
     @PostMapping("/login")
     @ApiOperation(value = "用户登录", notes = "用户登录")
-    @AgileLogger(module = "系统内部用户登录", notes = "用户登录", type = AgileLoggerType.LOGIN)
+    @AgileLogger(module = "系统内部用户登录", notes = "用户登录", type = SysOperateType.LOGIN)
     public AgileResult<AgileUserData> login(@RequestBody AgileLoginUser agileLoginUser) {
         if (AgileStringUtil.isEmpty(agileLoginUser.getUserName())) {
             return this.error(AgileResultCode.FAIL_AUTH, "登录名不能为空!");

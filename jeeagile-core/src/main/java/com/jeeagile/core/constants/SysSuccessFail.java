@@ -1,4 +1,4 @@
-package com.jeeagile.frame.constants;
+package com.jeeagile.core.constants;
 
 import com.jeeagile.core.util.AgileStringUtil;
 
@@ -8,25 +8,25 @@ import java.util.Map;
 /**
  * @author JeeAgile
  * @date 2023-08-22
- * @description 正常停用
+ * @description 成功失败
  */
-public class SysNormalDisable {
+public class SysSuccessFail {
     /**
-     * 正常
+     * 成功
      */
-    public static final String NORMAL = "0";
+    public static final String SUCCESS = "0";
     /**
-     * 停用
+     * 失败
      */
-    public static final String DISABLE = "1";
+    public static final String FAIL = "1";
     /**
      * MAP
      */
     private static final Map<String, String> SYS_YES_NO_MAP = new HashMap<>(2);
 
     static {
-        SYS_YES_NO_MAP.put(NORMAL, "正常");
-        SYS_YES_NO_MAP.put(DISABLE, "停用");
+        SYS_YES_NO_MAP.put(SUCCESS, "成功");
+        SYS_YES_NO_MAP.put(FAIL, "失败");
     }
 
     /**
@@ -39,7 +39,7 @@ public class SysNormalDisable {
     public static String getDesc(String value) {
         String desc = SYS_YES_NO_MAP.get(value);
         if (AgileStringUtil.isEmpty(desc)) {
-            desc = "否";
+            desc = "失败";
         }
         return desc;
     }
@@ -47,6 +47,6 @@ public class SysNormalDisable {
     /**
      * 私有构造函数
      */
-    private SysNormalDisable() {
+    private SysSuccessFail() {
     }
 }

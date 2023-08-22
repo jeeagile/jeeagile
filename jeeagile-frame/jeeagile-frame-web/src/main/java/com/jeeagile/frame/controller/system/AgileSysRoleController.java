@@ -7,7 +7,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.frame.entity.system.AgileSysRole;
 import com.jeeagile.frame.service.system.IAgileSysRoleService;
@@ -32,7 +32,7 @@ public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleSer
     @AgileDemo
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "更新角色状态", notes = "更新角色状态")
-    @AgileLogger(notes = "更新角色状态", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新角色状态", type = SysOperateType.UPDATE)
     public AgileResult<String> changeRoleStatus(@SingleRequestBody String roleId, @SingleRequestBody String roleStatus) {
         if (this.agileService.changeRoleStatus(roleId, roleStatus)) {
             return this.success();
@@ -45,7 +45,7 @@ public class AgileSysRoleController extends AgileCrudController<IAgileSysRoleSer
     @PostMapping(value = "/scope")
     @AgileRequiresPermissions("scope")
     @ApiOperation(value = "更新角色权限范围", notes = "更新角色权限范围")
-    @AgileLogger(notes = "更新角色权限范围", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "更新角色权限范围", type = SysOperateType.UPDATE)
     public AgileResult<String> dataScope(@RequestBody AgileSysRole agileSysRole) {
         if (this.agileService.updateRoleDataScope(agileSysRole)) {
             return this.success();

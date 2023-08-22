@@ -5,7 +5,7 @@ import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
-import com.jeeagile.frame.enums.AgileLoggerType;
+import com.jeeagile.core.constants.SysOperateType;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.process.entity.AgileProcessForm;
 import com.jeeagile.process.service.IAgileProcessFormService;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AgileProcessFormController extends AgileCrudController<IAgileProcessFormService, AgileProcessForm> {
     @PostMapping("/designer")
     @AgileRequiresPermissions("designer")
-    @AgileLogger(notes = "保存流程表单设计", type = AgileLoggerType.UPDATE)
+    @AgileLogger(notes = "保存流程表单设计", type = SysOperateType.UPDATE)
     @ApiOperation(value = "保存流程表单设计", notes = "保存流程表单设计")
     public AgileResult<AgileProcessForm> designer(@SingleRequestBody String formId, @SingleRequestBody String formConf, @SingleRequestBody String formFields) {
         return AgileResult.success(agileService.saveProcessFormDesigner(formId, formConf, formFields));
