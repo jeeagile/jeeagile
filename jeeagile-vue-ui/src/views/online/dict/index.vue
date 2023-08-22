@@ -234,7 +234,8 @@
                 </el-table-column>
               </el-table>
               <pagination v-show="dictDataList.length>0" :total-page="dictDataList.length"
-                          :current-page.sync="dictDataPage.currentPage" :limit.sync="dictDataPage.pageSize"/>
+                          :current-page.sync="dictDataPage.currentPage" :page-size="dictDataPage.pageSize"
+                          :limit.sync="dictDataPage.pageSize"/>
             </el-col>
           </el-row>
         </template>
