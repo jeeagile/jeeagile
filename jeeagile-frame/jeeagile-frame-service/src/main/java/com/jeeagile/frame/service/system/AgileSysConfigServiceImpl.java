@@ -1,20 +1,16 @@
 package com.jeeagile.frame.service.system;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.jeeagile.core.enums.AgileFlagEnum;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.constants.SysYesNo;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.frame.entity.system.AgileSysConfig;
 import com.jeeagile.frame.mapper.system.AgileSysConfigMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static com.jeeagile.core.constants.AgileConstants.SYS_YES_NO;
 
 /**
  * @author JeeAgile
@@ -23,9 +19,6 @@ import static com.jeeagile.core.constants.AgileConstants.SYS_YES_NO;
  */
 @AgileService
 public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConfigMapper, AgileSysConfig> implements IAgileSysConfigService {
-    @Autowired
-    private IAgileSysDictDataService agileSysDictDataService;
-
     @Override
     public LambdaQueryWrapper<AgileSysConfig> queryWrapper(AgileSysConfig agileSysConfig) {
         LambdaQueryWrapper<AgileSysConfig> lambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -46,7 +39,7 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     @Override
     public List<AgileSysConfig> selectExportData(AgileSysConfig agileSysConfig) {
         List<AgileSysConfig> agileSysConfigList = this.selectList(agileSysConfig);
-        agileSysConfigList.forEach(item -> item.setSystemFlag(agileSysDictDataService.getSysDictLabel(SYS_YES_NO, item.getSystemFlag())));
+        agileSysConfigList.forEach(item -> item.setSystemFlag(SysYesNo.getDesc(item.getSystemFlag())));
         return agileSysConfigList;
     }
 
@@ -70,7 +63,7 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     @Override
     public void deleteModelValidate(Serializable id) {
         AgileSysConfig agileSysConfig = this.getById(id);
-        if (agileSysConfig.getSystemFlag().equals(AgileFlagEnum.YES.getCode())) {
+        if (SysYesNo.YES.equals(agileSysConfig.getSystemFlag())) {
             throw new AgileValidateException("系统内置类型为‘是’的，不能删除！");
         }
     }

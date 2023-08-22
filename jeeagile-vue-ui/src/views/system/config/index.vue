@@ -11,8 +11,7 @@
       </el-form-item>
       <el-form-item label="系统内置" prop="systemFlag">
         <el-select v-model="queryParam.queryCond.systemFlag" placeholder="系统内置" clearable size="small">
-          <el-option v-for="flagOption in flagOptionList" :key="flagOption.dictValue" :label="flagOption.dictLabel"
-                     :value="flagOption.dictValue"/>
+          <el-option v-for="item in SysYesNo.getList()" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -59,7 +58,11 @@
       <el-table-column label="参数名称" align="center" prop="configName" :show-overflow-tooltip="true"/>
       <el-table-column label="参数键名" align="center" prop="configKey" :show-overflow-tooltip="true"/>
       <el-table-column label="参数键值" align="center" prop="configValue"/>
-      <el-table-column label="系统内置" align="center" prop="systemFlag" :formatter="flagOptionFormat"/>
+      <el-table-column label="系统内置" align="center" prop="systemFlag">
+        <template slot-scope="scope">
+            {{SysYesNo.getLabel(scope.row.systemFlag)}}
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -94,8 +97,8 @@
         </el-form-item>
         <el-form-item label="系统内置" prop="systemFlag">
           <el-radio-group v-model="form.systemFlag">
-            <el-radio v-for="flagOption in flagOptionList" :key="flagOption.dictValue" :label="flagOption.dictValue">
-              {{ flagOption.dictLabel }}
+            <el-radio v-for="item in SysYesNo.getList()" :key="item.value" :label="item.value">
+              {{ item.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -142,8 +145,6 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
-        // 类型数据字典
-        flagOptionList: [],
         // 查询参数
         queryParam: {
           pageTotal: 0,
@@ -174,9 +175,6 @@
     },
     created() {
       this.getConfigList()
-      this.getSysDictDataList('sys_yes_no').then(response => {
-        this.flagOptionList = response.data
-      })
     },
     methods: {
       /** 查询参数列表 */
@@ -188,10 +186,6 @@
             this.loading = false
           }
         )
-      },
-      // 参数系统内置字典翻译
-      flagOptionFormat(row, column) {
-        return this.handleDictLabel(this.flagOptionList, row.systemFlag)
       },
       // 取消按钮
       cancel() {
