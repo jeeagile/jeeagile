@@ -7,8 +7,8 @@
       </el-form-item>
       <el-form-item label="状态" prop="menuStatus">
         <el-select v-model="queryParam.menuStatus" placeholder="菜单状态" clearable size="small">
-          <el-option v-for="menuStatusOption in menuStatusOptionList" :key="menuStatusOption.dictValue"
-                     :label="menuStatusOption.dictLabel" :value="menuStatusOption.dictValue"/>
+          <el-option v-for="item in SysNormalDisable.getList()" :key="item.value"
+                     :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -142,17 +142,17 @@
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="是否外链">
               <el-radio-group v-model="form.menuFrame">
-                <el-radio label="0">&nbsp;是&emsp;</el-radio>
-                <el-radio label="1">&nbsp;否</el-radio>
+                <el-radio v-for="item in SysYesNo.getList()" :key="item.value" :label="item.value">
+                  {{ item.label }}
+                </el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="显示状态">
               <el-radio-group v-model="form.menuVisible">
-                <el-radio v-for="menuVisibleOption in menuVisibleOptionList" :key="menuVisibleOption.dictValue"
-                          :label="menuVisibleOption.dictValue">
-                  {{ menuVisibleOption.dictLabel }}
+                <el-radio v-for="item in SysShowHide.getList()" :key="item.value" :label="item.value">
+                  {{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -160,9 +160,8 @@
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="菜单状态">
               <el-radio-group v-model="form.menuStatus">
-                <el-radio v-for="menuStatusOption in menuStatusOptionList" :key="menuStatusOption.dictValue"
-                          :label="menuStatusOption.dictValue">
-                  {{ menuStatusOption.dictLabel }}
+                <el-radio v-for="item in SysNormalDisable.getList()" :key="item.value" :label="item.value">
+                  {{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -199,10 +198,6 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
-        // 显示状态数据字典
-        menuVisibleOptionList: [],
-        // 菜单状态数据字典
-        menuStatusOptionList: [],
         // 修改菜单排序记录
         menuSortList: [],
         // 查询参数
@@ -228,13 +223,6 @@
     },
     created() {
       this.getMenuList()
-      this.getSysDictDataList('sys_show_visible').then(response => {
-        this.menuVisibleOptionList = response.data
-      })
-
-      this.getSysDictDataList('sys_normal_disable').then(response => {
-        this.menuStatusOptionList = response.data
-      })
     },
     methods: {
       /** 选择图标 */
@@ -274,14 +262,14 @@
         if (row.menuType == 'F') {
           return ''
         }
-        return this.handleDictLabel(this.menuStatusOptionList, row.menuStatus)
+        return this.SysNormalDisable.getLabel(row.menuStatus)
       },
       /** 菜单显示状态字典翻译 */
       menuVisibleFormat(row) {
         if (row.menuType == 'F') {
           return ''
         }
-        return this.handleDictLabel(this.menuVisibleOptionList, row.menuVisible)
+        return this.SysShowHide.getLabel(row.menuVisible)
       },
       /** 取消按钮 */
       cancel() {

@@ -108,6 +108,19 @@ const SysNormalDisable = new AgileBaseDict('正常停用', [
 ])
 Vue.prototype.SysNormalDisable = SysNormalDisable
 
+const SysShowHide = new AgileBaseDict('显示隐藏', [
+  {
+    value: '0',
+    label: '显示',
+    symbol: 'SHOW'
+  },
+  {
+    value: '1',
+    label: '隐藏',
+    symbol: 'HIDE'
+  }
+])
+Vue.prototype.SysShowHide = SysShowHide
 
 const SysSuccessFail = new AgileBaseDict('成功失败', [
   {
