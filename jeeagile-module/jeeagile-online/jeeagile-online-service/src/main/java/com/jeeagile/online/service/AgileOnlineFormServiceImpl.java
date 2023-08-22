@@ -8,10 +8,7 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.online.constants.OnlineFormStatus;
 import com.jeeagile.online.constants.OnlinePageType;
 import com.jeeagile.frame.constants.SysPublishStatus;
-import com.jeeagile.online.entity.AgileOnlineColumn;
-import com.jeeagile.online.entity.AgileOnlineForm;
-import com.jeeagile.online.entity.AgileOnlinePage;
-import com.jeeagile.online.entity.AgileOnlineTable;
+import com.jeeagile.online.entity.*;
 import com.jeeagile.online.mapper.AgileOnlineFormMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.online.vo.OnlinePageRender;
@@ -26,7 +23,7 @@ import java.util.Map;
 
 /**
  * @author JeeAgile
- * @date 2021-07-19
+ * @date 2023-07-19
  * @description 在线表单 表单管理 接口实现
  */
 @AgileService
@@ -37,7 +34,10 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
     @Autowired
     private IAgileOnlineColumnService agileOnlineColumnService;
     @Autowired
+    private IAgileOnlineColumnRuleService agileOnlineColumnRuleService;
+    @Autowired
     private IAgileOnlinePageService agileOnlinePageService;
+
 
     @Override
     public LambdaQueryWrapper<AgileOnlineForm> queryWrapper(AgileOnlineForm agileOnlineForm) {
@@ -159,6 +159,7 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
     public boolean deleteModel(Serializable id) {
         this.deleteOnlineTable(id);
         this.deleteOnlineColumn(id);
+        this.deleteOnlineColumnRule(id);
         this.deleteOnlinePage(id);
         return this.removeById(id);
     }
@@ -184,7 +185,16 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
         lambdaQueryWrapper.eq(AgileOnlineColumn::getFormId, formId);
         agileOnlineColumnService.remove(lambdaQueryWrapper);
     }
-
+    /**
+     * 删除在线表单数据表字段规则配置
+     *
+     * @param formId
+     */
+    private void deleteOnlineColumnRule(Serializable formId) {
+        LambdaQueryWrapper<AgileOnlineColumnRule> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileOnlineColumnRule::getFormId, formId);
+        agileOnlineColumnRuleService.remove(lambdaQueryWrapper);
+    }
     /**
      * 删除在线表单数据表字段
      *

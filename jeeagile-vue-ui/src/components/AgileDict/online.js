@@ -363,6 +363,47 @@ const OnlineParamValueType = new AgileBaseDict('表单页面参数值类型', [
 ])
 Vue.prototype.OnlineParamValueType = OnlineParamValueType
 
+
+const OnlineRuleType = new AgileBaseDict('验证规则类型', [
+  {
+    value: '01',
+    label: '只允许整数',
+    symbol: 'INTEGER_ONLY'
+  },
+  {
+    value: '02',
+    label: '只允许数字',
+    symbol: 'DIGITAL_ONLY'
+  },
+  {
+    value: '03',
+    label: '只允许英文字符',
+    symbol: 'LETTER_ONLY'
+  },
+  {
+    value: '04',
+    label: '范围验证',
+    symbol: 'RANGE'
+  },
+  {
+    value: '05',
+    label: '邮箱格式验证',
+    symbol: 'EMAIL'
+  },
+  {
+    value: '06',
+    label: '手机格式验证',
+    symbol: 'MOBILE'
+  },
+  {
+    value: '99',
+    label: '自定义验证',
+    symbol: 'CUSTOM'
+  }
+])
+Vue.prototype.OnlineRuleType = OnlineRuleType
+
+
 export {
   OnlineDictType,
   OnlineFormStatus,
@@ -375,5 +416,6 @@ export {
   OnlineWidgetType,
   OnlineWidgetKind,
   OnlineOperationType,
-  OnlineParamValueType
+  OnlineParamValueType,
+  OnlineRuleType
 }

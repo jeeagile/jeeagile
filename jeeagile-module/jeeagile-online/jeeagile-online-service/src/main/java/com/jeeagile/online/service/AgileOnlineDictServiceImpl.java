@@ -12,7 +12,7 @@ import com.jeeagile.frame.service.AgileBaseServiceImpl;
 
 /**
  * @author JeeAgile
- * @date 2021-07-17
+ * @date 2023-07-17
  * @description 在线表单 字典管理 接口实现
  */
 @AgileService

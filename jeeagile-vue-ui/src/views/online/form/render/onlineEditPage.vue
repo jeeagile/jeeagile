@@ -162,20 +162,18 @@
                     ...this.params
                   }
                 }
-                if (params.slaveData) {
-                  params.slaveData = {
-                    ...slaveData,
-                    ...params.slaveData
-                  }
-                } else {
-                  params.slaveData = slaveData
+                params.slaveData = {
+                  ...slaveData,
+                  ...params.slaveData
                 }
                 if (this.operationType === 'ADD') {
                   saveTableData(params).then(res => {
+                    this.messageSuccess('数据保存成功！')
                     this.onCancel(true, this.formPageData)
                   })
                 } else {
                   updateTableData(params).then(res => {
+                    this.messageSuccess('数据更新成功！')
                     this.onCancel(true, this.formPageData)
                   })
                 }

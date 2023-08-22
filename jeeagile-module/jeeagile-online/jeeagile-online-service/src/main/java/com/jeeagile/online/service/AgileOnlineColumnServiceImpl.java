@@ -5,16 +5,23 @@ import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.online.entity.AgileOnlineColumn;
+import com.jeeagile.online.entity.AgileOnlineColumnRule;
 import com.jeeagile.online.mapper.AgileOnlineColumnMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.Serializable;
 
 /**
  * @author JeeAgile
- * @date 2021-07-27
+ * @date 2023-07-27
  * @description 在线表单 表单数据表字段 接口实现
  */
 @AgileService
 public class AgileOnlineColumnServiceImpl extends AgileBaseServiceImpl<AgileOnlineColumnMapper, AgileOnlineColumn> implements IAgileOnlineColumnService {
+
+    @Autowired
+    private IAgileOnlineColumnRuleService agileOnlineColumnRuleService;
 
     @Override
     public LambdaQueryWrapper<AgileOnlineColumn> queryWrapper(AgileOnlineColumn agileOnlineColumn) {
@@ -30,6 +37,7 @@ public class AgileOnlineColumnServiceImpl extends AgileBaseServiceImpl<AgileOnli
         lambdaQueryWrapper.orderByAsc(AgileOnlineColumn::getColumnSort);
         return lambdaQueryWrapper;
     }
+
     @Override
     public boolean updateModel(AgileOnlineColumn agileOnlineColumn) {
         AgileOnlineColumn oldOnlineColumn = this.getById(agileOnlineColumn.getId());
@@ -41,5 +49,22 @@ public class AgileOnlineColumnServiceImpl extends AgileBaseServiceImpl<AgileOnli
         oldOnlineColumn.setDictId(agileOnlineColumn.getDictId());
         oldOnlineColumn.setFieldKind(agileOnlineColumn.getFieldKind());
         return this.updateById(oldOnlineColumn);
+    }
+
+    @Override
+    public boolean deleteModel(Serializable columnId) {
+        this.deleteOnlineColumnRule(columnId);
+        return super.deleteModel(columnId);
+    }
+
+    /**
+     * 删除在线表单数据表字段规则配置
+     *
+     * @param columnId
+     */
+    private void deleteOnlineColumnRule(Serializable columnId) {
+        LambdaQueryWrapper<AgileOnlineColumnRule> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileOnlineColumnRule::getColumnId, columnId);
+        agileOnlineColumnRuleService.remove(lambdaQueryWrapper);
     }
 }

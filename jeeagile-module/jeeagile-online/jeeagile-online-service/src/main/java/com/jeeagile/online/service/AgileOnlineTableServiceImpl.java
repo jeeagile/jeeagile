@@ -10,6 +10,7 @@ import com.jeeagile.online.constants.OnlinePageType;
 import com.jeeagile.online.constants.OnlineTableType;
 import com.jeeagile.frame.constants.SysYesNo;
 import com.jeeagile.online.entity.AgileOnlineColumn;
+import com.jeeagile.online.entity.AgileOnlineColumnRule;
 import com.jeeagile.online.entity.AgileOnlinePage;
 import com.jeeagile.online.entity.AgileOnlineTable;
 import com.jeeagile.online.mapper.AgileOnlineTableMapper;
@@ -27,7 +28,7 @@ import java.util.List;
 
 /**
  * @author JeeAgile
- * @date 2021-07-25
+ * @date 2023-07-25
  * @description 在线表单 表单数据模型 接口实现
  */
 @AgileService
@@ -37,6 +38,8 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
     private IAgileSysJdbcService agileSysJdbcService;
     @Autowired
     private IAgileOnlineColumnService agileOnlineColumnService;
+    @Autowired
+    private IAgileOnlineColumnRuleService agileOnlineColumnRuleService;
     @Autowired
     private IAgileOnlinePageService agileOnlinePageService;
     @Autowired
@@ -100,11 +103,32 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
     }
 
     @Override
-    public boolean deleteModel(Serializable id) {
+    public boolean deleteModel(Serializable tableId) {
+        this.deleteOnlineColumnRule(tableId);
+        this.deleteOnlineColumn(tableId);
+        return this.removeById(tableId);
+    }
+
+    /**
+     * 删除表字段
+     *
+     * @param tableId
+     */
+    private void deleteOnlineColumn(Serializable tableId) {
         LambdaQueryWrapper<AgileOnlineColumn> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileOnlineColumn::getTableId, id);
+        lambdaQueryWrapper.eq(AgileOnlineColumn::getTableId, tableId);
         agileOnlineColumnService.remove(lambdaQueryWrapper);
-        return this.removeById(id);
+    }
+
+    /**
+     * 删除表字段
+     *
+     * @param tableId
+     */
+    private void deleteOnlineColumnRule(Serializable tableId) {
+        LambdaQueryWrapper<AgileOnlineColumnRule> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileOnlineColumnRule::getTableId, tableId);
+        agileOnlineColumnRuleService.remove(lambdaQueryWrapper);
     }
 
     /**

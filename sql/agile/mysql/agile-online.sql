@@ -50,6 +50,30 @@ CREATE TABLE agile_online_form (
 alter table agile_online_form comment '在线表单信息表';
 
 /*==============================================================*/
+/* table: agile_online_rule 在线表单 规则配置                    */
+/*==============================================================*/
+CREATE TABLE agile_online_rule (
+  id                            varchar(32) NOT NULL COMMENT '主键Id',
+  rule_name                     varchar(64) NOT NULL COMMENT '规则名称',
+  rule_type                     varchar(2) NOT NULL COMMENT '规则类型',
+  pattern                       varchar(500) DEFAULT NULL COMMENT '规则表达式',
+  create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',
+  create_time                   datetime DEFAULT NULL COMMENT '创建时间',
+  update_user                   varchar(32) DEFAULT NULL COMMENT '修改人',
+  update_time                   datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (id) USING BTREE
+) ;
+alter table agile_online_rule comment '在线表单 规则配置';
+
+INSERT INTO agile_online_rule VALUES ('1', '只允许整数', '01', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO agile_online_rule VALUES ('2', '只允许数字', '02', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO agile_online_rule VALUES ('3', '只允许英文字符', '03', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO agile_online_rule VALUES ('4', '范围验证', '04', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO agile_online_rule VALUES ('5', '邮箱格式验证', '05', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO agile_online_rule VALUES ('6', '手机格式验证', '06', NULL, NULL, NULL, NULL, NULL);
+
+
+/*==============================================================*/
 /* table: agile_online_table 在线表单数据表                      */
 /*==============================================================*/
 CREATE TABLE agile_online_table (
@@ -111,6 +135,23 @@ CREATE TABLE agile_online_column (
 );
 alter table agile_online_column comment '在线表单 数据表字段';
 
+/*==============================================================*/
+/* table: agile_online_column_rule 在线表单 表字段规则配置       */
+/*==============================================================*/
+CREATE TABLE agile_online_column_rule (
+  id                            varchar(32) NOT NULL COMMENT '主键ID',
+  form_id                       varchar(32) NOT NULL COMMENT '在线表单主键ID',
+  table_id                      varchar(32) NOT NULL COMMENT '数据表主键ID',
+  column_id                     varchar(32) NOT NULL COMMENT '数据表字段ID',
+  rule_id                       varchar(32) NOT NULL COMMENT '规则类型ID',
+  rule_config                   varchar(50) NOT NULL COMMENT '规则配置',
+  create_user                   varchar(32) DEFAULT NULL COMMENT '创建人',
+  create_time                   datetime DEFAULT NULL COMMENT '创建时间',
+  update_user                   varchar(32) DEFAULT NULL COMMENT '修改人',
+  update_time                   datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (id)
+);
+alter table agile_online_column_rule comment '在线表单 表字段规则配置';
 
 /*==============================================================*/
 /* table: agile_online_page 在线表单 页面管理                    */
@@ -134,6 +175,7 @@ CREATE TABLE agile_online_page (
 );
 alter table agile_online_page comment '在线表单 表单页面';
 
+
 INSERT INTO agile_sys_menu VALUES ('5', '0', '在线表单', '5', '', 'online', 'online', 'M', '0', '0', '1', '', '',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('501','5','字典管理',1,'online/dict/index','dict','dict','C','0','0','1','online:dict:page','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50101','501','字典明细',1,'','','#','F','0','0','1','online:dict:detail','',NULL,NULL,NULL,NULL);
@@ -147,5 +189,6 @@ INSERT INTO agile_sys_menu VALUES ('50202','502','新增表单',2,'','','#','F',
 INSERT INTO agile_sys_menu VALUES ('50203','502','修改表单',3,'','','#','F','0','0','1','online:form:update','',NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_menu VALUES ('50204','502','删除表单',4,'','','#','F','0','0','1','online:form:delete','',NULL,NULL,NULL,NULL);
 
-UPDATE `agile_sys_menu` SET `menu_comp` = 'system/menu/index_1.0' WHERE `id` = '103';
-UPDATE `agile_sys_menu` SET `menu_kind` = '01' where `menu_type`='C' ;
+UPDATE agile_sys_menu SET menu_comp = 'system/menu/index_1.0' WHERE id = '103';
+UPDATE agile_sys_menu SET menu_kind = '01' where menu_type='C' ;
+

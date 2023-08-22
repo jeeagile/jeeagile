@@ -30,13 +30,13 @@ import java.util.List;
 @Api(value = "表单数据模型管理", tags = "表单数据模型管理")
 public class AgileOnlineTableController extends AgileCrudController<IAgileOnlineTableService, AgileOnlineTable> {
     @PostMapping(value = "/addOnlineColumn")
-    @ApiOperation(value = "修改表单状态", notes = "修改表单状态")
+    @ApiOperation(value = "添加表字段", notes = "添加表字段")
     public AgileResult<AgileOnlineColumn> addOnlineColumn(@RequestBody AgileOnlineColumn agileOnlineColumn) {
         return AgileResult.success(agileService.addOnlineColumn(agileOnlineColumn));
     }
 
     @PostMapping(value = "/refreshOnlineColumn")
-    @ApiOperation(value = "修改表单状态", notes = "修改表单状态")
+    @ApiOperation(value = "添加表字段", notes = "添加表字段")
     public AgileResult<AgileOnlineColumn> refreshOnlineColumn(@RequestBody AgileOnlineColumn agileOnlineColumn) {
         return AgileResult.success(agileService.refreshOnlineColumn(agileOnlineColumn));
     }
