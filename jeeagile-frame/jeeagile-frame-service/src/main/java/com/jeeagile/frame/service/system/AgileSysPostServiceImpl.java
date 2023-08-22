@@ -1,6 +1,7 @@
 package com.jeeagile.frame.service.system;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.constants.SysNormalDisable;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -52,7 +53,7 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
     @Override
     public List<AgileSysPost> selectExportData(AgileSysPost agileSysPost) {
         List<AgileSysPost> agileSysPostList = this.selectList(agileSysPost);
-        agileSysPostList.forEach(item -> item.setPostStatus(agileSysDictDataService.getSysDictLabel(SYS_NORMAL_DISABLE, item.getPostStatus())));
+        agileSysPostList.forEach(item -> item.setPostStatus(SysNormalDisable.getDesc(item.getPostStatus())));
         return agileSysPostList;
     }
 

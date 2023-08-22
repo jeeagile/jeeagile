@@ -11,8 +11,8 @@
       </el-form-item>
       <el-form-item label="状态" prop="postStatus">
         <el-select v-model="queryParam.queryCond.postStatus" placeholder="岗位状态" clearable size="small">
-          <el-option v-for="postStatusOption in postStatusOptionList" :key="postStatusOption.dictValue"
-                     :label="postStatusOption.dictLabel" :value="postStatusOption.dictValue"/>
+          <el-option v-for="item in SysNormalDisable.getList()" :key="item.value"
+                     :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -53,7 +53,11 @@
       <el-table-column label="岗位编码" align="center" prop="postCode"/>
       <el-table-column label="岗位名称" align="center" prop="postName"/>
       <el-table-column label="岗位排序" align="center" prop="postSort"/>
-      <el-table-column label="状态" align="center" prop="postStatus" :formatter="postStatusFormat"/>
+      <el-table-column label="状态" align="center" prop="postStatus">
+        <template slot-scope="scope">
+          {{SysNormalDisable.getLabel(scope.row.postStatus)}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -86,9 +90,8 @@
         </el-form-item>
         <el-form-item label="岗位状态" prop="postStatus">
           <el-radio-group v-model="form.postStatus">
-            <el-radio v-for="postStatusOption in postStatusOptionList" :key="postStatusOption.dictValue"
-                      :label="postStatusOption.dictValue">
-              {{ postStatusOption.dictLabel }}
+            <el-radio v-for="item in SysNormalDisable.getList()" :key="item.value" :label="item.value">
+              {{ item.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -129,8 +132,6 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
-        // 状态数据字典
-        postStatusOptionList: [],
         // 查询参数
         queryParam: {
           pageTotal: 0,
@@ -161,9 +162,6 @@
     },
     created() {
       this.getPostList()
-      this.getSysDictDataList('sys_normal_disable').then(response => {
-        this.postStatusOptionList = response.data
-      })
     },
     methods: {
       /** 查询岗位列表 */
@@ -174,10 +172,6 @@
           this.postList = response.data.records
           this.loading = false
         })
-      },
-      /** 岗位状态字典翻译 */
-      postStatusFormat(row, column) {
-        return this.handleDictLabel(this.postStatusOptionList, row.postStatus)
       },
       /** 取消按钮 */
       cancel() {
