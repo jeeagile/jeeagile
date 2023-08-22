@@ -7,8 +7,8 @@
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParam.deptStatus" placeholder="部门状态" clearable size="small">
-          <el-option v-for="deptStatusOption in deptStatusOptionList" :key="deptStatusOption.dictValue"
-                     :label="deptStatusOption.dictLabel" :value="deptStatusOption.dictValue"/>
+          <el-option v-for="item in SysNormalDisable.getList()" :key="item.value"
+                     :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -31,7 +31,11 @@
       <el-table-column prop="deptName" label="部门名称"/>
       <el-table-column prop="deptCode" label="部门编码"/>
       <el-table-column prop="deptSort" label="排序"/>
-      <el-table-column prop="deptStatus" label="状态" :formatter="deptStatusFormat"/>
+      <el-table-column prop="deptStatus" label="状态">
+        <template slot-scope="scope">
+          {{SysNormalDisable.getLabel(scope.row.deptStatus)}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="250">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)"
@@ -78,9 +82,8 @@
           <el-col :span="12">
             <el-form-item label="部门状态">
               <el-radio-group v-model="form.deptStatus">
-                <el-radio v-for="deptStatusOption in deptStatusOptionList" :key="deptStatusOption.dictValue"
-                          :label="deptStatusOption.dictValue">
-                  {{ deptStatusOption.dictLabel }}
+                <el-radio v-for="item in SysNormalDisable.getList()" :key="item.value" :label="item.value">
+                  {{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -112,8 +115,6 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
-        // 状态数据字典
-        deptStatusOptionList: [],
         // 查询参数
         queryParam: {
           deptName: undefined,
@@ -138,9 +139,6 @@
     },
     created() {
       this.getDeptTreeList()
-      this.getSysDictDataList('sys_normal_disable').then(response => {
-        this.deptStatusOptionList = response.data
-      })
     },
     methods: {
       /** 查询部门列表 */
@@ -161,10 +159,6 @@
           label: node.deptName,
           children: node.children
         }
-      },
-      // 字典状态字典翻译
-      deptStatusFormat(row, column) {
-        return this.handleDictLabel(this.deptStatusOptionList, row.deptStatus)
       },
       // 取消按钮
       cancel() {

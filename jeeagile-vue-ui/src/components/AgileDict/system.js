@@ -80,10 +80,55 @@ const SysPublishStatus = new AgileBaseDict('发布状态', [
 ])
 Vue.prototype.SysPublishStatus = SysPublishStatus
 
+const SysSwitchStatus = new AgileBaseDict('开关状态', [
+  {
+    value: '0',
+    label: '停用',
+    symbol: 'DISABLE'
+  },
+  {
+    value: '1',
+    label: '启用',
+    symbol: 'ENABLE'
+  }
+])
+Vue.prototype.SysSwitchStatus = SysSwitchStatus
+
+const SysNormalDisable = new AgileBaseDict('正常停用', [
+  {
+    value: '0',
+    label: '正常',
+    symbol: 'NORMAL'
+  },
+  {
+    value: '1',
+    label: '停用',
+    symbol: 'DISABLE'
+  }
+])
+Vue.prototype.SysNormalDisable = SysNormalDisable
+
+
+const SysSuccessFail = new AgileBaseDict('成功失败', [
+  {
+    value: 0,
+    label: '成功',
+    symbol: 'SUCCESS'
+  },
+  {
+    value: 1,
+    label: '失败',
+    symbol: 'FAIL'
+  }
+])
+Vue.prototype.SysSuccessFail = SysSuccessFail
 export {
   SysUserStatus,
   SysUserSex,
   SysYesNo,
   SysPublishStatus,
-  SysMenuKind
+  SysMenuKind,
+  SysSwitchStatus,
+  SysNormalDisable,
+  SysSuccessFail
 }
