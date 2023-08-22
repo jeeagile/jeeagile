@@ -234,6 +234,7 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
             if (AgileStringUtil.isNotEmpty(agileOnlineColumn.getDictId())) {
                 onlineTableColumn.setOnlineDict(agileOnlineDictService.getById(agileOnlineColumn.getDictId()));
             }
+            onlineTableColumn.setRuleList(agileOnlineColumnRuleService.columnRuleList(agileOnlineColumn.getId()));
             onlineTableColumnList.add(onlineTableColumn);
         });
         return onlineTableColumnList;

@@ -368,17 +368,17 @@ const OnlineRuleType = new AgileBaseDict('验证规则类型', [
   {
     value: '01',
     label: '只允许整数',
-    symbol: 'INTEGER_ONLY'
+    symbol: 'INTEGER'
   },
   {
     value: '02',
     label: '只允许数字',
-    symbol: 'DIGITAL_ONLY'
+    symbol: 'DIGITAL'
   },
   {
     value: '03',
     label: '只允许英文字符',
-    symbol: 'LETTER_ONLY'
+    symbol: 'LETTER'
   },
   {
     value: '04',

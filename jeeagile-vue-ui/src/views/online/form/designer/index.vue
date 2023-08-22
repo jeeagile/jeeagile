@@ -642,7 +642,7 @@
   import EditWidgetTableColumn from './editWidgetTableColumn'
   import EditWidgetTableOperation from './editWidgetTableOperation'
   import EditWidgetTableQueryParam from './editWidgetTableQueryParam'
-  import EditWidgtDictParam from './editWidgtDictParam'
+  import EditWidgetDictParam from './editWidgetDictParam'
   import * as SystemStaticDict from '@/components/AgileDict/system'
   import OnlinePagePreview from '../../index'
 
@@ -1203,7 +1203,7 @@
             return (this.pageConfig.pageType !== this.OnlinePageType.QUERY || column.filterType !== this.OnlineFilterType.NONE)
           })
         }
-        this.$dialog.show('字典参数设置', EditWidgtDictParam, {
+        this.$dialog.show('字典参数设置', EditWidgetDictParam, {
           area: '400px'
         }, {
           rowData: param,

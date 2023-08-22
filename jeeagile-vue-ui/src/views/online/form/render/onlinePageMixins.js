@@ -3,6 +3,7 @@ import { formPageRender } from '@/api/online/form'
 import * as SystemStaticDict from '@/components/AgileDict/system'
 import OnlinePagePreview from '../../index'
 import { selectOneData, deleteTableData } from '@/api/online/operation'
+import { pattern } from '@/components/AgileUtil/validate'
 
 const OnlinePageMixins = {
   props: {
@@ -291,6 +292,98 @@ const OnlinePageMixins = {
     },
     /** 初始化组件效验规则 */
     initWidgetRule(pageConfig) {
+      if (Array.isArray(pageConfig.pageWidgetList)) {
+        let rules = {}
+        pageConfig.pageWidgetList.forEach(widget => {
+          this.buildWidgetRule(widget, rules)
+        })
+        this.$set(this, 'rules', rules)
+        this.$nextTick(() => {
+          if (this.$refs.form) this.$refs.form.clearValidate()
+        })
+      }
+    },
+    buildWidgetRule(widget, rules) {
+      if (widget != null && widget.onlineTable != null && widget.onlineColumn != null) {
+        let widgetRuleKey = this.getColumnFieldName(widget.onlineTable, widget.onlineColumn)
+        // 必填字段以及设置了验证规则的字段
+        if (widget.onlineColumn.columnNullable === this.SysYesNo.NO || Array.isArray(widget.onlineColumn.ruleList)) {
+          rules[widgetRuleKey] = []
+          // 必填验证
+          if (widget.onlineColumn.columnNullable === this.SysYesNo.NO) {
+            rules[widgetRuleKey].push(
+              { required: true, message: widget.showName + '不能为空！', trigger: 'blur' }
+            )
+          }
+          // 其他验证
+          if (Array.isArray(widget.onlineColumn.ruleList)) {
+            widget.onlineColumn.ruleList.forEach(columnRule => {
+              let ruleItem = this.buildRuleItem(widget, columnRule)
+              if (ruleItem) rules[widgetRuleKey].push(ruleItem)
+            })
+          }
+        }
+      }
+    },
+    buildRuleItem(widget, rule) {
+      if (rule.ruleConfig) rule.data = JSON.parse(rule.ruleConfig)
+      if (widget != null && rule != null) {
+        switch(rule.ruleType){
+          case this.OnlineRuleType.INTEGER: // 只允许整数
+            return {
+              type: 'integer',
+              message: rule.data.message,
+              trigger: 'blur',
+              transform: (value) => Number(value)
+            }
+          case this.OnlineRuleType.DIGITAL: // 只允许数字
+            return {
+              type: 'number',
+              message: rule.data.message,
+              trigger: 'blur',
+              transform: (value) => Number(value)
+            }
+          case this.OnlineRuleType.LETTER: // 只允许英文字符
+            return {
+              type: 'string',
+              pattern: pattern.english,
+              message: rule.data.message,
+              trigger: 'blur'
+            }
+          case this.OnlineRuleType.RANGE: // 范围验证
+            if (widget.column) {
+              let isNumber = ['Boolean', 'Date', 'String'].indexOf(widget.column.objectFieldType) === -1
+              return {
+                type: isNumber ? 'number' : 'string',
+                min: rule.data.min,
+                max: rule.data.max,
+                message: rule.data.message,
+                trigger: 'blur'
+              }
+            }
+            break
+          case this.OnlineRuleType.EMAIL: // 邮箱格式验证
+            return {
+              type: 'email',
+              message: rule.data.message,
+              trigger: 'blur'
+            }
+          case  this.OnlineRuleType.MOBILE: // 手机格式验证
+            return {
+              type: 'string',
+              pattern: pattern.mobile,
+              message: rule.data.message,
+              trigger: 'blur'
+            }
+          case this.OnlineRuleType.CUSTOM: // 自定义验证
+            return {
+              type: 'string',
+              pattern: new RegExp(rule.data.pattern),
+              message: rule.data.message,
+              trigger: 'blur'
+            }
+        }
+      }
     },
     getParamValue(valueType, valueData) {
       switch(valueType){

@@ -28,6 +28,6 @@ public class OnlineTableColumn extends AgileOnlineColumn {
      * 校验规则
      */
     @ApiModelProperty("校验规则")
-    private List<Object> ruleList;
+    private List<OnlineColumnRule> ruleList;
 
 }
