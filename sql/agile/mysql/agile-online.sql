@@ -118,6 +118,7 @@ CREATE TABLE agile_online_column (
   column_nullable               char(1) NOT NULL COMMENT '字段必填标识（0:否 1:是）',
   column_length                 int DEFAULT NULL COMMENT '字段长度',
   column_precision              int DEFAULT NULL COMMENT '字段精度',
+  column_scale                  int DEFAULT NULL COMMENT '字段范围',
   column_default                varchar(50) DEFAULT NULL COMMENT '字段默认值',
   column_extra                  varchar(200) DEFAULT NULL COMMENT '字段扩展',
   column_type                   varchar(50) NOT NULL COMMENT '字段类型',

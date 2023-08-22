@@ -913,7 +913,10 @@
         } else if (column.fieldType === 'String') {
           return { ...DefaultWidgetAttributes.Input }
         } else {
-          return { ...DefaultWidgetAttributes.NumberInput }
+          return {
+            ...DefaultWidgetAttributes.NumberInput,
+            precision: column.columnScale
+          }
         }
       },
       /** 克隆组件 */

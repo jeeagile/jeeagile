@@ -59,6 +59,12 @@ public class AgileOnlineColumn extends AgileBaseTenantModel<AgileOnlineColumn> {
      */
     @ApiModelProperty(value = "字段精度")
     private String columnPrecision;
+
+    /**
+     * 数据范围 小数点后位数
+     */
+    @ApiModelProperty(value = "数据范围")
+    private String columnScale;
     /**
      * 字段默认值
      */
