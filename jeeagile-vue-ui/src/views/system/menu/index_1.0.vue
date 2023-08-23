@@ -7,7 +7,7 @@
       </el-form-item>
       <el-form-item label="状态" prop="menuStatus">
         <el-select v-model="queryParam.menuStatus" placeholder="菜单状态" clearable size="small">
-          <el-option v-for="item in SysNormalDisable.getList()" :key="item.value"
+          <el-option v-for="item in AgileNormalDisable.getList()" :key="item.value"
                      :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
@@ -164,7 +164,7 @@
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="是否外链">
               <el-radio-group v-model="form.menuFrame">
-                <el-radio v-for="item in SysYesNo.getList()" :key="item.value" :label="item.value">
+                <el-radio v-for="item in AgileYesNo.getList()" :key="item.value" :label="item.value">
                   {{ item.label }}
                 </el-radio>
               </el-radio-group>
@@ -173,7 +173,7 @@
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="显示状态">
               <el-radio-group v-model="form.menuVisible">
-                <el-radio v-for="item in SysShowHide.getList()" :key="item.value" :label="item.value">
+                <el-radio v-for="item in AgileShowHide.getList()" :key="item.value" :label="item.value">
                   {{ item.label }}
                 </el-radio>
               </el-radio-group>
@@ -182,7 +182,7 @@
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="菜单状态">
               <el-radio-group v-model="form.menuStatus">
-                <el-radio v-for="item in SysNormalDisable.getList()" :key="item.value" :label="item.value">
+                <el-radio v-for="item in AgileNormalDisable.getList()" :key="item.value" :label="item.value">
                   {{ item.label }}
                 </el-radio>
               </el-radio-group>
@@ -328,14 +328,14 @@
         if (row.menuType == 'F') {
           return ''
         }
-        return this.SysNormalDisable.getLabel(row.menuStatus)
+        return this.AgileNormalDisable.getLabel(row.menuStatus)
       },
       /** 菜单显示状态字典翻译 */
       menuVisibleFormat(row) {
         if (row.menuType == 'F') {
           return ''
         }
-        return this.SysShowHide.getLabel(row.menuVisible)
+        return this.AgileShowHide.getLabel(row.menuVisible)
       },
       /** 取消按钮 */
       cancel() {

@@ -7,7 +7,7 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.online.constants.OnlineFormStatus;
 import com.jeeagile.online.constants.OnlinePageType;
-import com.jeeagile.core.constants.SysPublishStatus;
+import com.jeeagile.core.constants.AgilePublishStatus;
 import com.jeeagile.online.entity.*;
 import com.jeeagile.online.mapper.AgileOnlineFormMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -62,7 +62,7 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
     @Override
     public void saveModelValidate(AgileOnlineForm agileOnlineForm) {
         agileOnlineForm.setFormStatus(OnlineFormStatus.DATA_MODEL);
-        agileOnlineForm.setPublishStatus(SysPublishStatus.UNPUBLISHED);
+        agileOnlineForm.setPublishStatus(AgilePublishStatus.UNPUBLISHED);
         this.validateData(agileOnlineForm);
     }
 
@@ -92,14 +92,14 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
 
     @Override
     public boolean publish(String id, String publishStatus) {
-        if (!SysPublishStatus.isValid(publishStatus)) {
+        if (!AgilePublishStatus.isValid(publishStatus)) {
             throw new AgileValidateException("非法发布状态值！");
         }
         AgileOnlineForm agileOnlineForm = this.getById(id);
         if (agileOnlineForm == null || agileOnlineForm.isEmptyPk()) {
             throw new AgileValidateException("表单已不存在！");
         }
-        if (SysPublishStatus.PUBLISHED.equals(publishStatus) && !OnlineFormStatus.PAGE_DESIGN.equals(agileOnlineForm.getFormStatus())) {
+        if (AgilePublishStatus.PUBLISHED.equals(publishStatus) && !OnlineFormStatus.PAGE_DESIGN.equals(agileOnlineForm.getFormStatus())) {
             throw new AgileValidateException("表单还处于" + OnlineFormStatus.getDesc(agileOnlineForm.getFormStatus()) + "不能进行发布！");
         }
         LambdaUpdateWrapper<AgileOnlineForm> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
@@ -141,7 +141,7 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
     public Map getFormPageList() {
         Map rtnMap = new HashMap();
         LambdaQueryWrapper<AgileOnlineForm> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileOnlineForm::getPublishStatus, SysPublishStatus.PUBLISHED);
+        lambdaQueryWrapper.eq(AgileOnlineForm::getPublishStatus, AgilePublishStatus.PUBLISHED);
         List<AgileOnlineForm> agileOnlineFormList = this.list(lambdaQueryWrapper);
         List<AgileOnlinePage> agileOnlinePageList = new ArrayList<>();
         agileOnlineFormList.forEach(agileOnlineForm -> {

@@ -72,7 +72,7 @@
             <el-col>
               <el-form-item label="字段名：">
                 <span :title="onlineColumn.columnComment">{{ onlineColumn.columnName }}</span>
-                <el-tag v-if="onlineColumn.primaryFlag==SysYesNo.YES" size="mini" type="warning"
+                <el-tag v-if="onlineColumn.primaryFlag==AgileYesNo.YES" size="mini" type="warning"
                         style="margin-left: 20px;"
                 >主键
                 </el-tag>

@@ -11,14 +11,14 @@
       </el-form-item>
       <el-form-item label="启用状态" prop="enableStatus">
         <el-select v-model="queryParam.queryCond.enableStatus" placeholder="租户状态" clearable size="small">
-          <el-option v-for="enableStatusOption in enableStatusOptionList" :key="enableStatusOption.dictValue"
-                     :label="enableStatusOption.dictLabel" :value="enableStatusOption.dictValue"/>
+          <el-option v-for="item in AgileSwitchStatus.getList()" :key="item.value"
+                     :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item label="审核状态" prop="auditStatus">
         <el-select v-model="queryParam.queryCond.auditStatus" placeholder="租户状态" clearable size="small">
-          <el-option v-for="auditStatusOption in auditStatusOptionList" :key="auditStatusOption.dictValue"
-                     :label="auditStatusOption.dictLabel" :value="auditStatusOption.dictValue"/>
+          <el-option v-for="item in AgileAuditStatus.getList()" :key="item.value"
+                     :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -52,8 +52,18 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="租户编码" align="center" prop="tenantCode"/>
       <el-table-column label="租户名称" align="center" prop="tenantName"/>
-      <el-table-column label="启用状态" align="center" prop="enableStatus" :formatter="enableStatusFormat"/>
-      <el-table-column label="审核状态" align="center" prop="auditStatus" :formatter="auditStatusFormat"/>
+      <el-table-column label="启用状态" align="center" prop="enableStatus">
+        <template slot-scope="scope">
+          {{AgileSwitchStatus.getLabel(scope.row.enableStatus)}}
+        </template>
+      </el-table-column>
+      <el-table-column label="审核状态" align="center" prop="auditStatus">
+        <template slot-scope="scope">
+          <el-tag size="mini" :type="AgileAuditStatus.getTag(scope.row.auditStatus)">
+            {{AgileAuditStatus.getLabel(scope.row.auditStatus)}}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="有效期" align="center" prop="expirationDate" :formatter="expirationDateFormat"/>
       <el-table-column label="操作" align="center" width="250px">
         <template slot-scope="scope">
@@ -103,9 +113,8 @@
         </el-form-item>
         <el-form-item label="启用状态" prop="enableStatus">
           <el-radio-group v-model="form.enableStatus">
-            <el-radio v-for="enableStatusOption in enableStatusOptionList" :key="enableStatusOption.dictValue"
-                      :label="enableStatusOption.dictValue">
-              {{ enableStatusOption.dictLabel }}
+            <el-radio v-for="item in AgileSwitchStatus.getList()" :key="item.value" :label="item.value">
+              {{ item.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -169,12 +178,14 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="启用状态：">
-              {{ enableStatusFormat(form) }}
+              {{ AgileSwitchStatus.getLabel(form.enableStatus) }}
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="审核状态：">
-              {{ auditStatusFormat(form) }}
+              <el-tag size="mini" :type="AgileAuditStatus.getTag(form.auditStatus)">
+                {{AgileAuditStatus.getLabel(form.auditStatus)}}
+              </el-tag>
             </el-form-item>
           </el-col>
         </el-row>
@@ -230,10 +241,6 @@
         openDialog: false,
         auditDialog: false,
         viewDialog: false,
-        // 状态数据字典
-        enableStatusOptionList: [],
-        // 审核状态字典
-        auditStatusOptionList: [],
         datePickerOptions: {
           disabledDate(time) {
             return time.getTime() < Date.now()
@@ -279,12 +286,6 @@
     },
     created() {
       this.getTenantList()
-      this.getSysDictDataList('sys_enable_status').then(response => {
-        this.enableStatusOptionList = response.data
-      })
-      this.getSysDictDataList('sys_audit_status').then(response => {
-        this.auditStatusOptionList = response.data
-      })
     },
     methods: {
       /** 查询租户列表 */
@@ -295,14 +296,6 @@
           this.tenantList = response.data.records
           this.loading = false
         })
-      },
-      /** 启用状态字典翻译 */
-      enableStatusFormat(row, column) {
-        return this.handleDictLabel(this.enableStatusOptionList, row.enableStatus)
-      },
-      /** 审核状态字典翻译 */
-      auditStatusFormat(row, column) {
-        return this.handleDictLabel(this.auditStatusOptionList, row.auditStatus)
       },
       /** 租户类型翻译 */
       tenantTypeFormat(tenantType) {

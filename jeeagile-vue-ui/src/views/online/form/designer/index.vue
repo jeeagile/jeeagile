@@ -706,7 +706,7 @@
               return item.filterType !== this.OnlineFilterType.NONE
             } else {
               // 编辑页面表单参数为主表的主键字段
-              return item.columnPrimary === this.SysYesNo.YES
+              return item.columnPrimary === this.AgileYesNo.YES
             }
           })
         } else {
@@ -904,7 +904,7 @@
             return { ...DefaultWidgetAttributes.Label }
         }
         if (column.dictId && column.dictId !== '' && column.onlineDict) {
-          return column.onlineDict.treeFlag == this.SysYesNo.YES ? { ...DefaultWidgetAttributes.Cascader } : { ...DefaultWidgetAttributes.Select }
+          return column.onlineDict.treeFlag == this.AgileYesNo.YES ? { ...DefaultWidgetAttributes.Cascader } : { ...DefaultWidgetAttributes.Select }
         }
         if (column.fieldType === 'Boolean') {
           return { ...DefaultWidgetAttributes.Switch }

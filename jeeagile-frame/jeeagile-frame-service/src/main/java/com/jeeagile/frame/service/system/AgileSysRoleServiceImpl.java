@@ -1,6 +1,8 @@
 package com.jeeagile.frame.service.system;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.constants.AgileDataScope;
+import com.jeeagile.core.constants.AgileNormalDisable;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileCollectionUtil;
@@ -19,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.jeeagile.core.constants.AgileConstants.*;
 
 /**
  * @author JeeAgile
@@ -78,8 +78,8 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     public List<AgileSysRole> selectExportData(AgileSysRole agileSysRole) {
         List<AgileSysRole> agileSysRoleList = this.selectList(agileSysRole);
         agileSysRoleList.forEach(item -> {
-            item.setRoleStatus(agileSysDictDataService.getSysDictLabel(SYS_NORMAL_DISABLE, item.getRoleStatus()));
-            item.setDataScope(agileSysDictDataService.getSysDictLabel(SYS_DATA_SCOPE, item.getDataScope()));
+            item.setRoleStatus(AgileNormalDisable.getDesc(item.getRoleStatus()));
+            item.setDataScope(AgileDataScope.getDesc(item.getDataScope()));
         });
         return agileSysRoleList;
     }
@@ -89,7 +89,7 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
     public AgileSysRole selectModel(Serializable roleId) {
         AgileSysRole agileSysRole = this.getById(roleId);
         agileSysRole.setMenuIdList(this.selectRoleMenuIdList(roleId));
-        if (AGILE_DATA_SCOPE_05.equals(agileSysRole.getDataScope())) {
+        if (AgileDataScope.CUSTOM.equals(agileSysRole.getDataScope())) {
             agileSysRole.setDeptIdList(this.selectRoleDeptIdList(roleId));
         }
         return agileSysRole;
@@ -136,7 +136,7 @@ public class AgileSysRoleServiceImpl extends AgileBaseServiceImpl<AgileSysRoleMa
             agileSysRole.setDataScope(dataScope);
             this.updateById(agileSysRole);
             this.deleteRoleDept(agileSysRole.getId());
-            if (AGILE_DATA_SCOPE_05.equals(agileSysRole.getDataScope())) {
+            if (AgileDataScope.CUSTOM.equals(agileSysRole.getDataScope())) {
                 agileSysRole.setDeptIdList(deptIdList);
                 this.saveRoleDept(agileSysRole);
             }

@@ -8,38 +8,38 @@ import java.util.Map;
 /**
  * @author JeeAgile
  * @date 2023-08-22
- * @description 成功失败
+ * @description 用户状态
  */
-public class SysSuccessFail {
+public class AgileUserStatus {
     /**
-     * 成功
+     * 正常
      */
-    public static final String SUCCESS = "0";
+    public static final String NORMAL = "0";
     /**
-     * 失败
+     * 停用
      */
-    public static final String FAIL = "1";
+    public static final String DISABLE = "1";
     /**
      * MAP
      */
-    private static final Map<String, String> SYS_YES_NO_MAP = new HashMap<>(2);
+    private static final Map<String, String> DICT_MAP = new HashMap<>(2);
 
     static {
-        SYS_YES_NO_MAP.put(SUCCESS, "成功");
-        SYS_YES_NO_MAP.put(FAIL, "失败");
+        DICT_MAP.put(NORMAL, "正常");
+        DICT_MAP.put(DISABLE, "停用");
     }
 
     /**
      * 判断是否当前常量字典的合法值。
      */
     public static boolean isValid(String value) {
-        return value != null && SYS_YES_NO_MAP.containsKey(value);
+        return value != null && DICT_MAP.containsKey(value);
     }
 
     public static String getDesc(String value) {
-        String desc = SYS_YES_NO_MAP.get(value);
+        String desc = DICT_MAP.get(value);
         if (AgileStringUtil.isEmpty(desc)) {
-            desc = "失败";
+            desc = "停用";
         }
         return desc;
     }
@@ -47,6 +47,6 @@ public class SysSuccessFail {
     /**
      * 私有构造函数
      */
-    private SysSuccessFail() {
+    private AgileUserStatus() {
     }
 }

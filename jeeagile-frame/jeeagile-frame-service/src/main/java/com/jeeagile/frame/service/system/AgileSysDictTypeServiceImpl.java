@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.constants.SysNormalDisable;
-import com.jeeagile.core.constants.SysYesNo;
+import com.jeeagile.core.constants.AgileNormalDisable;
+import com.jeeagile.core.constants.AgileYesNo;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.frame.entity.system.AgileSysDictData;
 import com.jeeagile.frame.entity.system.AgileSysDictType;
@@ -53,8 +53,8 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
     public List<AgileSysDictType> selectExportData(AgileSysDictType agileSysDictType) {
         List<AgileSysDictType> agileSysDictTypeList = this.selectList(agileSysDictType);
         agileSysDictTypeList.forEach(item -> {
-            item.setDictStatus(SysNormalDisable.getDesc(item.getDictStatus()));
-            item.setSystemFlag(SysYesNo.getDesc(item.getSystemFlag()));
+            item.setDictStatus(AgileNormalDisable.getDesc(item.getDictStatus()));
+            item.setSystemFlag(AgileYesNo.getDesc(item.getSystemFlag()));
         });
         return agileSysDictTypeList;
     }
@@ -80,7 +80,7 @@ public class AgileSysDictTypeServiceImpl extends AgileBaseServiceImpl<AgileSysDi
     @Override
     public boolean deleteModel(Serializable id) {
         AgileSysDictType agileSysDictType = this.getById(id);
-        if (SysYesNo.YES.equals(agileSysDictType.getSystemFlag())) {
+        if (AgileYesNo.YES.equals(agileSysDictType.getSystemFlag())) {
             throw new AgileValidateException("系统内置，不能删除！");
         }
         this.deleteDictData(agileSysDictType);

@@ -6,7 +6,7 @@ import com.jeeagile.core.security.annotation.AgileRequiresPermissions;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
-import com.jeeagile.core.constants.SysOperateType;
+import com.jeeagile.core.constants.AgileOperateType;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.quartz.entity.AgileQuartzJob;
 import com.jeeagile.quartz.service.IAgileQuartzJobService;
@@ -31,7 +31,7 @@ public class AgileQuartzJobController extends AgileCrudController<IAgileQuartzJo
     @AgileDemo
     @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "更新任务状态", notes = "更新任务状态")
-    @AgileLogger(notes = "更新任务状态", type = SysOperateType.UPDATE)
+    @AgileLogger(notes = "更新任务状态", type = AgileOperateType.UPDATE)
     public AgileResult<String> changeJobStatus(@RequestBody AgileQuartzJob agileQuartzJob) {
         agileService.changeQuartzJobStatus(agileQuartzJob);
         return this.success();
@@ -39,7 +39,7 @@ public class AgileQuartzJobController extends AgileCrudController<IAgileQuartzJo
 
     @PostMapping("/execute")
     @ApiOperation(value = "执行任务", notes = "执行任务")
-    @AgileLogger(notes = "执行任务", type = SysOperateType.OTHER)
+    @AgileLogger(notes = "执行任务", type = AgileOperateType.OTHER)
     @AgileRequiresPermissions("execute")
     public AgileResult execute(@SingleRequestBody String quartzJobId) {
         agileService.executeQuartzJob(quartzJobId);

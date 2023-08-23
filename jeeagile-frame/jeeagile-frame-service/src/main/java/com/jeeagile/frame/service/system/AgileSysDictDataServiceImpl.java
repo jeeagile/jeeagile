@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.constants.SysNormalDisable;
-import com.jeeagile.core.constants.SysYesNo;
+import com.jeeagile.core.constants.AgileNormalDisable;
+import com.jeeagile.core.constants.AgileYesNo;
 import com.jeeagile.frame.service.AgileTreeServiceImpl;
 import com.jeeagile.frame.entity.system.AgileSysDictData;
 import com.jeeagile.frame.mapper.system.AgileSysDictDataMapper;
@@ -52,8 +52,8 @@ public class AgileSysDictDataServiceImpl extends AgileTreeServiceImpl<AgileSysDi
     public List<AgileSysDictData> selectExportData(AgileSysDictData agileSysDictData) {
         List<AgileSysDictData> agileSysDictDataList = this.selectList(agileSysDictData);
         agileSysDictDataList.forEach(item -> {
-            item.setDictStatus(SysNormalDisable.getDesc(item.getDictStatus()));
-            item.setSystemFlag(SysYesNo.getDesc(item.getSystemFlag()));
+            item.setDictStatus(AgileNormalDisable.getDesc(item.getDictStatus()));
+            item.setSystemFlag(AgileYesNo.getDesc(item.getSystemFlag()));
         });
         return agileSysDictDataList;
     }
@@ -110,7 +110,7 @@ public class AgileSysDictDataServiceImpl extends AgileTreeServiceImpl<AgileSysDi
     @Override
     public boolean deleteModel(Serializable id) {
         AgileSysDictData agileSysDictData = this.getById(id);
-        if (SysYesNo.YES.equals(agileSysDictData.getSystemFlag())) {
+        if (AgileYesNo.YES.equals(agileSysDictData.getSystemFlag())) {
             throw new AgileValidateException("系统内置，不能删除！");
         }
         return this.removeById(id);

@@ -1,6 +1,6 @@
 package com.jeeagile.frame.annotation;
 
-import com.jeeagile.core.constants.SysOperateType;
+import com.jeeagile.core.constants.AgileOperateType;
 import lombok.NonNull;
 import org.springframework.core.annotation.AliasFor;
 
@@ -44,7 +44,7 @@ public @interface AgileLogger {
      * @return
      */
     @NonNull
-    String type() default SysOperateType.OTHER;
+    String type() default AgileOperateType.OTHER;
 
     /**
      * 是否保存请求和返回数据

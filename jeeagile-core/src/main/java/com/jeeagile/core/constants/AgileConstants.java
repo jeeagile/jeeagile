@@ -29,27 +29,9 @@ public class AgileConstants {
 
     public static final String AGILE_TOKEN = "AGILE_TOKEN";
 
-    // 数据范围 01 全部数据权限
-    public static final String AGILE_DATA_SCOPE_01 = "01";
-    // 数据范围 02 本部门数据权限
-    public static final String AGILE_DATA_SCOPE_02 = "02";
-    // 数据范围 03 本部门及以下数据权限
-    public static final String AGILE_DATA_SCOPE_03 = "03";
-    // 数据范围 04 仅本人数据权限
-    public static final String AGILE_DATA_SCOPE_04 = "04";
-    // 数据范围 05 自定义部门数据权限
-    public static final String AGILE_DATA_SCOPE_05 = "05";
-
 
     //资源映射路径 前缀
     public static final String AGILE_RESOURCE_PREFIX = "/resource";
 
-
-    // 字典类型常量
-    public static final String SYS_USER_SEX = "sys_user_sex";
-    public static final String SYS_USER_STATUS = "sys_user_status";
-    public static final String SYS_DATA_SCOPE = "sys_data_scope";
-    public static final String SYS_NORMAL_DISABLE = "sys_normal_disable";
-    public static final String SYS_YES_NO = "sys_yes_no";
 
 }

@@ -3,12 +3,11 @@ package com.jeeagile.frame.plugins.datascope;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
-import com.jeeagile.core.constants.AgileConstants;
+import com.jeeagile.core.constants.AgileDataScope;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
-import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.spring.AgileSpringUtil;
@@ -111,19 +110,19 @@ public class AgileDataScopeInterceptor extends AgileSqlParserSupport implements 
         List<String> dataScopeList = agileUserDetailsService.getUserDataScopeList(agileBaseUser);
         Parenthesis parenthesis = new Parenthesis();
         if (AgileCollectionUtil.isNotEmpty(dataScopeList)) {
-            if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_01)) {
+            if (dataScopeList.contains(AgileDataScope.ALL)) {
                 return null;
             }
             InExpression deptCondition = null;
-            if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_02)
-                    || dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_03)
-                    || dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_05)) {
+            if (dataScopeList.contains(AgileDataScope.DEPT)
+                    || dataScopeList.contains(AgileDataScope.DEPT_AND_CHILD)
+                    || dataScopeList.contains(AgileDataScope.CUSTOM)) {
                 Set<String> deptList = getUserDeptList(agileUserDetailsService, agileBaseUser, dataScopeList);
                 ItemsList itemsList = new ExpressionList(deptList.stream().map(StringValue::new).collect(Collectors.toList()));
                 deptCondition = new InExpression(new Column(agileDataScopeProperty.getDeptColumn().getDotAliasName()), itemsList);
             }
             EqualsTo userCondition = null;
-            if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_04)) {
+            if (dataScopeList.contains(AgileDataScope.SELF)) {
                 userCondition = new EqualsTo();
                 userCondition.setLeftExpression(new Column(agileDataScopeProperty.getUserColumn().getDotAliasName()));
                 userCondition.setRightExpression(new StringValue(agileBaseUser.getUserId()));
@@ -145,15 +144,15 @@ public class AgileDataScopeInterceptor extends AgileSqlParserSupport implements 
 
     private Set<String> getUserDeptList(IAgileUserDetailsService agileUserDetailsService, AgileBaseUser agileBaseUser, List<String> dataScopeList) {
         Set<String> userDeptList = new HashSet<>();
-        if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_02)) {
+        if (dataScopeList.contains(AgileDataScope.DEPT)) {
             userDeptList.add(agileBaseUser.getDeptId());
         }
-        if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_03)) {
+        if (dataScopeList.contains(AgileDataScope.DEPT_AND_CHILD)) {
             userDeptList.add(agileBaseUser.getDeptId());
-            userDeptList.addAll(agileUserDetailsService.getUserDeptScopeList(agileBaseUser, AgileConstants.AGILE_DATA_SCOPE_03));
+            userDeptList.addAll(agileUserDetailsService.getUserDeptScopeList(agileBaseUser, AgileDataScope.DEPT_AND_CHILD));
         }
-        if (dataScopeList.contains(AgileConstants.AGILE_DATA_SCOPE_05)) {
-            userDeptList.addAll(agileUserDetailsService.getUserDeptScopeList(agileBaseUser, AgileConstants.AGILE_DATA_SCOPE_05));
+        if (dataScopeList.contains(AgileDataScope.CUSTOM)) {
+            userDeptList.addAll(agileUserDetailsService.getUserDeptScopeList(agileBaseUser, AgileDataScope.CUSTOM));
         }
         //防止没有分配任何部门权限
         if (userDeptList.isEmpty()) {

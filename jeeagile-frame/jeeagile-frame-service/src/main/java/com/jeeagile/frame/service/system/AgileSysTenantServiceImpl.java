@@ -2,8 +2,8 @@ package com.jeeagile.frame.service.system;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.jeeagile.core.enums.AgileAuditStatus;
-import com.jeeagile.core.enums.AgileUserStatus;
+import com.jeeagile.core.constants.AgileAuditStatus;
+import com.jeeagile.core.constants.AgileUserStatus;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
@@ -87,7 +87,7 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         if(!AgileTenantUtil.isTenantEnable()){
             throw new AgileFrameException("租户模式未开启请勿创建租户！");
         }
-        agileSysTenant.setAuditStatus(AgileAuditStatus.AUDIT.getCode());
+        agileSysTenant.setAuditStatus(AgileAuditStatus.AUDIT);
         this.validateData(agileSysTenant);
     }
 
@@ -96,7 +96,7 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysTenant.setTenantCode(null);
         this.updateModelValidate(agileSysTenant);
         AgileSysTenant agileSysTenantOld = this.getById(agileSysTenant.getId());
-        if (AgileAuditStatus.PASS.getCode().equals(agileSysTenantOld.getAuditStatus())) {
+        if (AgileAuditStatus.PASS.equals(agileSysTenantOld.getAuditStatus())) {
             AgileSecurityContext.putTenantId(agileSysTenantOld.getId());
             if (!agileSysTenant.getTenantName().equals(agileSysTenantOld.getTenantName())) {
                 this.updateTenantAdminUser(agileSysTenant);
@@ -148,7 +148,7 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         if (agileSysTenant == null || agileSysTenant.isEmptyPk()) {
             throw new AgileFrameException("租户信息已不存在！");
         }
-        if (AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
+        if (AgileAuditStatus.PASS.equals(agileSysTenant.getAuditStatus())) {
             this.deleteTenantInfo(agileSysTenant);
         }
         this.removeById(id);
@@ -170,7 +170,7 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
             throw new AgileFrameException("租户信息已不存在！");
         }
 
-        if (AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
+        if (AgileAuditStatus.PASS.equals(agileSysTenant.getAuditStatus())) {
             initTenantInfo(agileSysTenantOld);
         }
         return this.updateModel(agileSysTenant);
@@ -214,7 +214,7 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         AgileSysUser agileSysUser = new AgileSysUser();
         agileSysUser.setUserName(agileSysTenant.getTenantCode());
         agileSysUser.setNickName(agileSysTenant.getTenantName());
-        agileSysUser.setUserStatus(AgileUserStatus.NORMAL.getCode());
+        agileSysUser.setUserStatus(AgileUserStatus.NORMAL);
         agileSysUser.setUserSort(0);
         agileSysUser.setUserPwd(AgileSecurityUtil.encryptPassword(agileSysTenant.getTenantCode()));
         agileSysUserService.save(agileSysUser);

@@ -52,7 +52,7 @@
       <el-table-column label="是否树字典" align="center">
         <template slot-scope="scope">
           <el-tag size="mini" :type="scope.row.treeFlag ? 'success' : 'danger'">
-            {{SysYesNo.getLabel(scope.row.treeFlag)}}
+            {{AgileYesNo.getLabel(scope.row.treeFlag)}}
           </el-tag>
         </template>
       </el-table-column>
@@ -153,7 +153,7 @@
               <el-form-item label="树状字典">
                 <el-radio-group v-model="form.treeFlag">
                   <el-radio
-                    v-for="option in SysYesNo.getList()"
+                    v-for="option in AgileYesNo.getList()"
                     :key="option.value"
                     :label="option.value"
                   >{{option.label}}
@@ -410,7 +410,7 @@
           dictType: this.OnlineDictType.TABLE,
           systemDictType: undefined,
           tableName: undefined,
-          treeFlag: this.SysYesNo.NO,
+          treeFlag: this.AgileYesNo.NO,
           parentKeyColumnName: undefined,
           keyColumnName: undefined,
           valueColumnName: undefined,

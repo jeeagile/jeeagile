@@ -8,7 +8,7 @@ import com.jeeagile.core.util.validate.AgileValidateUtil;
 import com.jeeagile.online.constants.OnlineFieldKind;
 import com.jeeagile.online.constants.OnlinePageType;
 import com.jeeagile.online.constants.OnlineTableType;
-import com.jeeagile.core.constants.SysYesNo;
+import com.jeeagile.core.constants.AgileYesNo;
 import com.jeeagile.online.entity.AgileOnlineColumn;
 import com.jeeagile.online.entity.AgileOnlineColumnRule;
 import com.jeeagile.online.entity.AgileOnlinePage;
@@ -68,7 +68,7 @@ public class AgileOnlineTableServiceImpl extends AgileBaseServiceImpl<AgileOnlin
                     agileOnlineTable.setSlaveColumnId(agileOnlineColumn.getId());
                 }
             }
-            if (SysYesNo.YES.equals(agileOnlineColumn.getPrimaryFlag())) {
+            if (AgileYesNo.YES.equals(agileOnlineColumn.getPrimaryFlag())) {
                 agileOnlineTable.setPrimaryColumnId(agileOnlineColumn.getId());
                 agileOnlineTable.setPrimaryColumnName(agileOnlineColumn.getColumnName());
             }

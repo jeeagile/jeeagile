@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.constants.SysYesNo;
+import com.jeeagile.core.constants.AgileYesNo;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.frame.entity.system.AgileSysConfig;
 import com.jeeagile.frame.mapper.system.AgileSysConfigMapper;
@@ -39,7 +39,7 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     @Override
     public List<AgileSysConfig> selectExportData(AgileSysConfig agileSysConfig) {
         List<AgileSysConfig> agileSysConfigList = this.selectList(agileSysConfig);
-        agileSysConfigList.forEach(item -> item.setSystemFlag(SysYesNo.getDesc(item.getSystemFlag())));
+        agileSysConfigList.forEach(item -> item.setSystemFlag(AgileYesNo.getDesc(item.getSystemFlag())));
         return agileSysConfigList;
     }
 
@@ -63,7 +63,7 @@ public class AgileSysConfigServiceImpl extends AgileBaseServiceImpl<AgileSysConf
     @Override
     public void deleteModelValidate(Serializable id) {
         AgileSysConfig agileSysConfig = this.getById(id);
-        if (SysYesNo.YES.equals(agileSysConfig.getSystemFlag())) {
+        if (AgileYesNo.YES.equals(agileSysConfig.getSystemFlag())) {
             throw new AgileValidateException("系统内置类型为‘是’的，不能删除！");
         }
     }

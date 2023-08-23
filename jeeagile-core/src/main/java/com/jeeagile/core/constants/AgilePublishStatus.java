@@ -8,7 +8,7 @@ import java.util.Map;
  * @date 2023-07-17
  * @description 发布状态字典常量
  */
-public class SysPublishStatus {
+public class AgilePublishStatus {
     /**
      * 已发布
      */
@@ -45,6 +45,6 @@ public class SysPublishStatus {
     /**
      * 私有构造函数
      */
-    private SysPublishStatus() {
+    private AgilePublishStatus() {
     }
 }

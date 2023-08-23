@@ -12,8 +12,8 @@
       <el-form-item label="状态" prop="roleStatus">
         <el-select v-model="queryParam.queryCond.roleStatus" placeholder="角色状态" clearable size="small"
                    style="width: 240px">
-          <el-option v-for="roleStatusOption in roleStatusOptionList" :key="roleStatusOption.dictValue"
-                     :label="roleStatusOption.dictLabel" :value="roleStatusOption.dictValue"/>
+          <el-option v-for="item in AgileSwitchStatus.getList()" :key="item.value"
+                     :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -96,9 +96,8 @@
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.roleStatus">
-            <el-radio v-for="roleStatusOption in roleStatusOptionList" :key="roleStatusOption.dictValue"
-                      :label="roleStatusOption.dictValue">
-              {{ roleStatusOption.dictLabel }}
+            <el-radio v-for="item in AgileSwitchStatus.getList()" :key="item.value" :label="item.value">
+              {{ item.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -130,11 +129,11 @@
         </el-form-item>
         <el-form-item label="数据范围">
           <el-select v-model="form.dataScope">
-            <el-option v-for="dataScopeOption in dataScopeOptionList" :key="dataScopeOption.dictValue"
-                       :label="dataScopeOption.dictLabel" :value="dataScopeOption.dictValue"/>
+            <el-option v-for="item in AgileDataScope.getList()" :key="item.value" :label="item.label"
+                       :value="item.value"/>
           </el-select>
         </el-form-item>
-        <el-form-item v-show="form.dataScope == '05'" label="数据权限">
+        <el-form-item v-show="form.dataScope == AgileDataScope.CUSTOM" label="数据权限">
           <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand($event, 'dept')">展开/折叠</el-checkbox>
           <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll($event, 'dept')">全选/全不选</el-checkbox>
           <el-tree ref="dept" class="tree-border" :data="deptTreeOptionList" show-checkbox default-expand-all
@@ -191,10 +190,6 @@
         deptNodeAll: false,
         // 日期范围
         dateRange: [],
-        // 状态数据字典
-        roleStatusOptionList: [],
-        // 数据范围
-        dataScopeOptionList: [],
         // 菜单列表
         menuTreeOptionList: [],
         // 部门列表
@@ -238,12 +233,6 @@
     created() {
       this.initData()
       this.getRoleList()
-      this.getSysDictDataList('sys_normal_disable').then(response => {
-        this.roleStatusOptionList = response.data
-      })
-      this.getSysDictDataList('sys_data_scope').then(response => {
-        this.dataScopeOptionList = response.data
-      })
     },
     methods: {
       /** 初始化数据 */

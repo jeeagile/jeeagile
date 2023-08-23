@@ -9,7 +9,7 @@ import java.util.Map;
  * @date 2021-03-21
  * @description 日志类型
  */
-public class SysOperateType {
+public class AgileOperateType {
     /**
      * 查询数据
      */
@@ -75,7 +75,7 @@ public class SysOperateType {
     /**
      *
      */
-    private static final Map<String, String> DICT_MAP = new HashMap<>(2);
+    private static final Map<String, String> DICT_MAP = new HashMap<>(14);
 
     static {
         DICT_MAP.put(SELECT, "查询数据");
@@ -111,6 +111,6 @@ public class SysOperateType {
     /**
      * 私有构造函数
      */
-    private SysOperateType() {
+    private AgileOperateType() {
     }
 }

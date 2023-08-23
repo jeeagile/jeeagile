@@ -307,10 +307,10 @@ const OnlinePageMixins = {
       if (widget != null && widget.onlineTable != null && widget.onlineColumn != null) {
         let widgetRuleKey = this.getColumnFieldName(widget.onlineTable, widget.onlineColumn)
         // 必填字段以及设置了验证规则的字段
-        if (widget.onlineColumn.columnNullable === this.SysYesNo.NO || Array.isArray(widget.onlineColumn.ruleList)) {
+        if (widget.onlineColumn.columnNullable === this.AgileYesNo.NO || Array.isArray(widget.onlineColumn.ruleList)) {
           rules[widgetRuleKey] = []
           // 必填验证
-          if (widget.onlineColumn.columnNullable === this.SysYesNo.NO) {
+          if (widget.onlineColumn.columnNullable === this.AgileYesNo.NO) {
             rules[widgetRuleKey].push(
               { required: true, message: widget.showName + '不能为空！', trigger: 'blur' }
             )

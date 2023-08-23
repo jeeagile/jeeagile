@@ -8,36 +8,36 @@ import java.util.Map;
 /**
  * @author JeeAgile
  * @date 2023-08-22
- * @description 正常停用
+ * @description 开关状态
  */
-public class SysNormalDisable {
-    /**
-     * 正常
-     */
-    public static final String NORMAL = "0";
+public class AgileSwitchStatus {
     /**
      * 停用
      */
-    public static final String DISABLE = "1";
+    public static final String DISABLE = "0";
+    /**
+     * 启用
+     */
+    public static final String ENABLE = "1";
     /**
      * MAP
      */
-    private static final Map<String, String> SYS_YES_NO_MAP = new HashMap<>(2);
+    private static final Map<String, String> DICT_MAP = new HashMap<>(2);
 
     static {
-        SYS_YES_NO_MAP.put(NORMAL, "正常");
-        SYS_YES_NO_MAP.put(DISABLE, "停用");
+        DICT_MAP.put(DISABLE, "停用");
+        DICT_MAP.put(ENABLE, "启用");
     }
 
     /**
      * 判断是否当前常量字典的合法值。
      */
     public static boolean isValid(String value) {
-        return value != null && SYS_YES_NO_MAP.containsKey(value);
+        return value != null && DICT_MAP.containsKey(value);
     }
 
     public static String getDesc(String value) {
-        String desc = SYS_YES_NO_MAP.get(value);
+        String desc = DICT_MAP.get(value);
         if (AgileStringUtil.isEmpty(desc)) {
             desc = "停用";
         }
@@ -47,6 +47,6 @@ public class SysNormalDisable {
     /**
      * 私有构造函数
      */
-    private SysNormalDisable() {
+    private AgileSwitchStatus() {
     }
 }

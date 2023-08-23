@@ -12,13 +12,13 @@
       <el-form-item label="操作类型" prop="operateType">
         <el-select v-model="queryParam.queryCond.operateType" placeholder="操作类型" clearable size="small"
                    style="width: 240px">
-          <el-option v-for="item in SysOperateType.getList()" :key="item.value" :label="item.label"
+          <el-option v-for="item in AgileOperateType.getList()" :key="item.value" :label="item.label"
                      :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParam.queryCond.status" placeholder="操作状态" clearable size="small" style="width: 240px">
-          <el-option v-for="item in SysSuccessFail.getList()" :key="item.value" :label="item.label"
+          <el-option v-for="item in AgileSuccessFail.getList()" :key="item.value" :label="item.label"
                      :value="item.value"/>
         </el-select>
       </el-form-item>
@@ -57,7 +57,7 @@
       <el-table-column label="操作模块" align="center" prop="operateModule" :show-overflow-tooltip="true"/>
       <el-table-column label="操作类型" align="center" prop="operateType">
         <template slot-scope="scope">
-          {{SysOperateType.getLabel(scope.row.operateType)}}
+          {{AgileOperateType.getLabel(scope.row.operateType)}}
         </template>
       </el-table-column>
       <el-table-column label="操作人员" align="center" prop="operateUser"/>
@@ -66,8 +66,8 @@
       <el-table-column label="操作地址" align="center" prop="operateAddress" :show-overflow-tooltip="true"/>
       <el-table-column label="操作状态" align="center" prop="status">
         <template slot-scope="scope">
-          <el-tag size="mini" :type="SysSuccessFail.getTag(scope.row.status)">
-            {{SysSuccessFail.getLabel(scope.row.status)}}
+          <el-tag size="mini" :type="AgileSuccessFail.getTag(scope.row.status)">
+            {{AgileSuccessFail.getLabel(scope.row.status)}}
           </el-tag>
         </template>
       </el-table-column>
@@ -99,7 +99,7 @@
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="操作模块：">{{ form.operateModule }} / {{SysOperateType.getLabel(form.operateType)}}
+            <el-form-item label="操作模块：">{{ form.operateModule }} / {{AgileOperateType.getLabel(form.operateType)}}
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -129,8 +129,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="操作状态：">
-              <el-tag size="mini" :type="SysSuccessFail.getTag(form.status)">
-                {{SysSuccessFail.getLabel(form.status)}}
+              <el-tag size="mini" :type="AgileSuccessFail.getTag(form.status)">
+                {{AgileSuccessFail.getLabel(form.status)}}
               </el-tag>
             </el-form-item>
           </el-col>

@@ -2,10 +2,10 @@ package com.jeeagile.frame.service.system;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.jeeagile.core.constants.SysOperateType;
+import com.jeeagile.core.constants.AgileOperateType;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
-import com.jeeagile.core.constants.SysSuccessFail;
+import com.jeeagile.core.constants.AgileSuccessFail;
 import com.jeeagile.frame.entity.system.AgileSysLogger;
 import com.jeeagile.frame.mapper.system.AgileSysLoggerMapper;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
@@ -42,8 +42,8 @@ public class AgileSysLoggerServiceImpl extends AgileBaseServiceImpl<AgileSysLogg
     public List<AgileSysLogger> selectExportData(AgileSysLogger agileSysLogger) {
         List<AgileSysLogger> agileSysLoggerList = this.selectList(agileSysLogger);
         agileSysLoggerList.forEach(item -> {
-            item.setStatus(SysSuccessFail.getDesc(item.getStatus()));
-            item.setOperateType(SysOperateType.getDesc(item.getOperateType()));
+            item.setStatus(AgileSuccessFail.getDesc(item.getStatus()));
+            item.setOperateType(AgileOperateType.getDesc(item.getOperateType()));
         });
         return agileSysLoggerList;
     }

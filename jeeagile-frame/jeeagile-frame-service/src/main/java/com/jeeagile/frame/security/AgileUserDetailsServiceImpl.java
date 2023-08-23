@@ -2,10 +2,10 @@ package com.jeeagile.frame.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.jeeagile.core.constants.AgileConstants;
-import com.jeeagile.core.enums.AgileAuditStatus;
-import com.jeeagile.core.enums.AgileEnableStatus;
-import com.jeeagile.core.enums.AgileUserStatus;
+import com.jeeagile.core.constants.AgileAuditStatus;
+import com.jeeagile.core.constants.AgileDataScope;
+import com.jeeagile.core.constants.AgileSwitchStatus;
+import com.jeeagile.core.constants.AgileUserStatus;
 import com.jeeagile.core.exception.AgileAuthException;
 import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.exception.AgileFrameException;
@@ -14,7 +14,6 @@ import com.jeeagile.core.result.AgileResultCode;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.security.userdetails.IAgileUserDetailsService;
-import com.jeeagile.core.security.util.AgileSecurityUtil;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.entity.system.*;
@@ -90,10 +89,10 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         if (!agileSysTenant.getTenantSign().equals(tenantSign)) {
             throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "非法租户签名！");
         }
-        if (!AgileEnableStatus.ENABLE.getCode().equals(agileSysTenant.getEnableStatus())) {
+        if (!AgileSwitchStatus.ENABLE.equals(agileSysTenant.getEnableStatus())) {
             throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "租户已被停用！");
         }
-        if (!AgileAuditStatus.PASS.getCode().equals(agileSysTenant.getAuditStatus())) {
+        if (!AgileAuditStatus.PASS.equals(agileSysTenant.getAuditStatus())) {
             throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "租户未审核通过，不能使用！");
         }
         if (agileSysTenant.getExpirationDate() != null) {
@@ -101,7 +100,6 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
                 throw new AgileFrameException(AgileResultCode.WARN_VALIDATE_PASSED, "租户已过使用期！");
             }
         }
-
     }
 
     private AgileSysUser getAgileSysUser(String userName) {
@@ -114,7 +112,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         if (agileSysUser == null) {
             throw new AgileAuthException(AgileResultCode.FAIL_USER_DISABLE, "用户不存在，请核实！");
         }
-        if (!AgileUserStatus.NORMAL.getCode().equals(agileSysUser.getUserStatus())) {
+        if (!AgileUserStatus.NORMAL.equals(agileSysUser.getUserStatus())) {
             throw new AgileAuthException(AgileResultCode.FAIL_USER_DISABLE, "用户已停用！");
         }
     }
@@ -221,11 +219,11 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         try {
             if (agileBaseUser != null) {
                 Set<String> userDeptList = new HashSet<>();
-                if (AgileConstants.AGILE_DATA_SCOPE_03.equals(dataScopeType)) {
+                if (AgileDataScope.DEPT_AND_CHILD.equals(dataScopeType)) {
                     List<AgileSysDept> agileSysDeptList = agileSysDeptService.selectAllChild(agileBaseUser.getDeptId());
                     agileSysDeptList.forEach(agileSysDept -> userDeptList.add(agileSysDept.getId()));
                 }
-                if (AgileConstants.AGILE_DATA_SCOPE_05.equals(dataScopeType)) {
+                if (AgileDataScope.CUSTOM.equals(dataScopeType)) {
                     userDeptList.addAll(this.getUserDeptScopeList(agileBaseUser.getUserId()));
                 }
                 return userDeptList;

@@ -12,7 +12,7 @@
       <el-form-item label="字典状态" prop="status">
         <el-select v-model="queryParam.queryCond.dictStatus" placeholder="字典状态" clearable size="small"
                    style="width: 240px">
-          <el-option v-for="item in SysNormalDisable.getList()" :key="item.value"
+          <el-option v-for="item in AgileNormalDisable.getList()" :key="item.value"
                      :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
@@ -68,7 +68,7 @@
       </el-table-column>
       <el-table-column label="字典状态" align="center" prop="dictStatus">
         <template slot-scope="scope">
-          {{SysNormalDisable.getLabel(scope.row.dictStatus)}}
+          {{AgileNormalDisable.getLabel(scope.row.dictStatus)}}
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
@@ -101,7 +101,7 @@
         </el-form-item>
         <el-form-item label="状态" prop="dictStatus">
           <el-radio-group v-model="form.dictStatus">
-            <el-radio v-for="item in SysNormalDisable.getList()" :key="item.value"
+            <el-radio v-for="item in AgileNormalDisable.getList()" :key="item.value"
                       :label="item.value">
               {{ item.label }}
             </el-radio>

@@ -11,7 +11,7 @@
       </el-form-item>
       <el-form-item label="状态" prop="postStatus">
         <el-select v-model="queryParam.queryCond.postStatus" placeholder="岗位状态" clearable size="small">
-          <el-option v-for="item in SysNormalDisable.getList()" :key="item.value"
+          <el-option v-for="item in AgileNormalDisable.getList()" :key="item.value"
                      :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
@@ -55,7 +55,7 @@
       <el-table-column label="岗位排序" align="center" prop="postSort"/>
       <el-table-column label="状态" align="center" prop="postStatus">
         <template slot-scope="scope">
-          {{SysNormalDisable.getLabel(scope.row.postStatus)}}
+          {{AgileNormalDisable.getLabel(scope.row.postStatus)}}
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -90,7 +90,7 @@
         </el-form-item>
         <el-form-item label="岗位状态" prop="postStatus">
           <el-radio-group v-model="form.postStatus">
-            <el-radio v-for="item in SysNormalDisable.getList()" :key="item.value" :label="item.value">
+            <el-radio v-for="item in AgileNormalDisable.getList()" :key="item.value" :label="item.value">
               {{ item.label }}
             </el-radio>
           </el-radio-group>

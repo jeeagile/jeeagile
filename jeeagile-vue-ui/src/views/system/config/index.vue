@@ -11,7 +11,7 @@
       </el-form-item>
       <el-form-item label="系统内置" prop="systemFlag">
         <el-select v-model="queryParam.queryCond.systemFlag" placeholder="系统内置" clearable size="small">
-          <el-option v-for="item in SysYesNo.getList()" :key="item.value" :label="item.label" :value="item.value"/>
+          <el-option v-for="item in AgileYesNo.getList()" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -60,7 +60,7 @@
       <el-table-column label="参数键值" align="center" prop="configValue"/>
       <el-table-column label="系统内置" align="center" prop="systemFlag">
         <template slot-scope="scope">
-            {{SysYesNo.getLabel(scope.row.systemFlag)}}
+            {{AgileYesNo.getLabel(scope.row.systemFlag)}}
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
@@ -97,7 +97,7 @@
         </el-form-item>
         <el-form-item label="系统内置" prop="systemFlag">
           <el-radio-group v-model="form.systemFlag">
-            <el-radio v-for="item in SysYesNo.getList()" :key="item.value" :label="item.value">
+            <el-radio v-for="item in AgileYesNo.getList()" :key="item.value" :label="item.value">
               {{ item.label }}
             </el-radio>
           </el-radio-group>

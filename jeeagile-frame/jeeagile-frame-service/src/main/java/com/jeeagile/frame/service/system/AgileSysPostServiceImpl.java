@@ -1,7 +1,7 @@
 package com.jeeagile.frame.service.system;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.jeeagile.core.constants.SysNormalDisable;
+import com.jeeagile.core.constants.AgileNormalDisable;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static com.jeeagile.core.constants.AgileConstants.SYS_NORMAL_DISABLE;
 
 
 /**
@@ -53,7 +51,7 @@ public class AgileSysPostServiceImpl extends AgileBaseServiceImpl<AgileSysPostMa
     @Override
     public List<AgileSysPost> selectExportData(AgileSysPost agileSysPost) {
         List<AgileSysPost> agileSysPostList = this.selectList(agileSysPost);
-        agileSysPostList.forEach(item -> item.setPostStatus(SysNormalDisable.getDesc(item.getPostStatus())));
+        agileSysPostList.forEach(item -> item.setPostStatus(AgileNormalDisable.getDesc(item.getPostStatus())));
         return agileSysPostList;
     }
 

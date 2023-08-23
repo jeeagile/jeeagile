@@ -12,7 +12,7 @@ import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
 import com.jeeagile.frame.entity.system.AgileSysLogger;
 import com.jeeagile.frame.entity.system.AgileSysLogin;
-import com.jeeagile.core.constants.SysOperateType;
+import com.jeeagile.core.constants.AgileOperateType;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -112,7 +112,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (agileLogger != null && servletRequestAttributes != null) {
                 HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
-                if (agileLogger.type() == SysOperateType.LOGIN) {
+                if (agileLogger.type() == AgileOperateType.LOGIN) {
                     AgileLoginUser agileLoginUser = null;
                     for (Object object : joinPoint.getArgs()) {
                         if (object instanceof AgileLoginUser) {

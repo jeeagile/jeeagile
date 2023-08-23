@@ -7,7 +7,7 @@
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParam.queryCond.status" placeholder="登录状态" clearable size="small" style="width: 240px">
-          <el-option v-for="item in SysSuccessFail.getList()" :key="item.value" :label="item.label"
+          <el-option v-for="item in AgileSuccessFail.getList()" :key="item.value" :label="item.label"
                      :value="item.value"/>
         </el-select>
       </el-form-item>
@@ -53,8 +53,8 @@
       <el-table-column label="浏览器" align="center" prop="loginBrowser" :show-overflow-tooltip="true"/>
       <el-table-column label="登录状态" align="center" prop="status">
         <template slot-scope="scope">
-          <el-tag size="mini" :type="SysSuccessFail.getTag(scope.row.status)">
-            {{SysSuccessFail.getLabel(scope.row.status)}}
+          <el-tag size="mini" :type="AgileSuccessFail.getTag(scope.row.status)">
+            {{AgileSuccessFail.getLabel(scope.row.status)}}
           </el-tag>
         </template>
       </el-table-column>

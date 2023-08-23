@@ -8,7 +8,7 @@ import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.entity.system.AgileSysLogger;
-import com.jeeagile.core.constants.SysOperateType;
+import com.jeeagile.core.constants.AgileOperateType;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.system.IAgileSysLoggerService;
@@ -44,7 +44,7 @@ public class AgileSysLoggerController extends AgileBaseController {
     @AgileDemo
     @PostMapping("/delete")
     @ApiOperation(value = "删除操作日志记录", notes = "删除操作日志记录")
-    @AgileLogger(notes = "删除操作日志记录", type = SysOperateType.DELETE)
+    @AgileLogger(notes = "删除操作日志记录", type = AgileOperateType.DELETE)
     public AgileResult<String> delete(@SingleRequestBody String configId) {
         agileSysLoggerService.deleteModel(configId);
         return this.success("操作日志记录删除成功！");
@@ -53,7 +53,7 @@ public class AgileSysLoggerController extends AgileBaseController {
     @AgileDemo
     @PostMapping("/clear")
     @ApiOperation(value = "清空操作日志记录", notes = "清空操作日志记录")
-    @AgileLogger(notes = "清空操作日志记录", type = SysOperateType.CLEAR)
+    @AgileLogger(notes = "清空操作日志记录", type = AgileOperateType.CLEAR)
     public AgileResult clear() {
         agileSysLoggerService.clearRecord();
         return this.success("操作日志记录清空成功！");
@@ -61,7 +61,7 @@ public class AgileSysLoggerController extends AgileBaseController {
 
     @PostMapping(value = "/export")
     @AgileRequiresPermissions("export")
-    @AgileLogger(notes = "导出数据", type = SysOperateType.EXPORT)
+    @AgileLogger(notes = "导出数据", type = AgileOperateType.EXPORT)
     @ApiOperation(value = "导出数据", notes = "导出数据接口")
     public void exportExcel(@RequestBody AgileSysLogger agileSysLogger) {
         String excelName = agileSysLogger.getExcelName();

@@ -7,7 +7,7 @@ import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.online.constants.OnlineFieldKind;
 import com.jeeagile.online.constants.OnlineTableType;
-import com.jeeagile.core.constants.SysYesNo;
+import com.jeeagile.core.constants.AgileYesNo;
 import com.jeeagile.online.entity.AgileOnlineColumn;
 import com.jeeagile.online.entity.AgileOnlineDict;
 import com.jeeagile.online.entity.AgileOnlineTable;
@@ -188,7 +188,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         sb.append(agileOnlineDict.getKeyColumnName()).append(" id, ");
         sb.append(agileOnlineDict.getValueColumnName()).append(" dictValue, ");
         sb.append(agileOnlineDict.getLabelColumnName()).append(" dictLabel");
-        if (!ignoreParentId && SysYesNo.YES.equals(agileOnlineDict.getTreeFlag())) {
+        if (!ignoreParentId && AgileYesNo.YES.equals(agileOnlineDict.getTreeFlag())) {
             sb.append(", ").append(agileOnlineDict.getParentKeyColumnName()).append(" parentId");
         }
         return sb.toString();
@@ -405,7 +405,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
                 OnlineJoinTable onlineJoinTable = new OnlineJoinTable();
                 onlineJoinTable.setJoinTableName(slaveOnlineTable.getTableName());
                 AgileOnlineTable masterOnlineTable = onlineTableMap.get(slaveOnlineTable.getMasterTableId());
-                onlineJoinTable.setLeftJoin(SysYesNo.YES.equals(slaveOnlineTable.getLeftJoin()));
+                onlineJoinTable.setLeftJoin(AgileYesNo.YES.equals(slaveOnlineTable.getLeftJoin()));
                 onlineJoinTable.setJoinCondition(this.makeJoinCondition(masterOnlineTable, slaveOnlineTable));
                 joinTableList.add(onlineJoinTable);
             }
@@ -487,7 +487,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         List<OnlineColumnData> updateColumnList = new LinkedList<>();
         List<OnlineColumnData> whereColumnList = new LinkedList<>();
         for (OnlineColumnData columnData : tableColumnDataList) {
-            if (SysYesNo.YES.equals(columnData.getPrimaryFlag())) {
+            if (AgileYesNo.YES.equals(columnData.getPrimaryFlag())) {
                 whereColumnList.add(columnData);
                 continue;
             }
@@ -554,7 +554,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
             OnlineColumnData onlineColumnData = new OnlineColumnData();
             BeanUtils.copyProperties(onlineColumn, onlineColumnData);
             onlineColumnData.setColumnValue(tableData.get(onlineColumnData.getColumnName()));
-            if (SysYesNo.NO.equals(onlineColumnData.getColumnNullable()) && AgileStringUtil.isEmpty(onlineColumnData.getColumnValue())) {
+            if (AgileYesNo.NO.equals(onlineColumnData.getColumnNullable()) && AgileStringUtil.isEmpty(onlineColumnData.getColumnValue())) {
                 onlineColumnData.setColumnValue(onlineColumnData.getColumnDefault());
             }
             this.makeColumnValue(onlineColumnData);
@@ -569,7 +569,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
      * @param onlineColumnData
      */
     private void makeColumnValue(OnlineColumnData onlineColumnData) {
-        if (SysYesNo.YES.equals(onlineColumnData.getPrimaryFlag())) {
+        if (AgileYesNo.YES.equals(onlineColumnData.getPrimaryFlag())) {
             if (onlineColumnData.getColumnValue() == null) {
                 if ("String".equals(onlineColumnData.getFieldType())) {
                     onlineColumnData.setColumnValue(AgileStringUtil.getUuid());
@@ -588,7 +588,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
                     onlineColumnData.setColumnValue(AgileSecurityContext.getUserId());
                     break;
                 case OnlineFieldKind.LOGIC_DELETE: //逻辑删除字段
-                    onlineColumnData.setColumnValue(SysYesNo.NO);
+                    onlineColumnData.setColumnValue(AgileYesNo.NO);
                     break;
                 default:
                     break;

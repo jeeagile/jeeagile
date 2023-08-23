@@ -1,7 +1,7 @@
 package com.jeeagile.generator.util;
 
 import com.jeeagile.core.constants.AgileConstants;
-import com.jeeagile.core.enums.AgileFlagEnum;
+import com.jeeagile.core.constants.AgileYesNo;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.util.AgileArrayUtil;
 import com.jeeagile.core.util.AgileCharUtil;
@@ -85,25 +85,25 @@ public class AgileGeneratorUtil {
         }
 
         // 插入字段（默认所有字段都需要插入）
-        agileGeneratorTableColumn.setInsertFlag(AgileFlagEnum.YES.getCode());
+        agileGeneratorTableColumn.setInsertFlag(AgileYesNo.YES);
 
-        if (!agileGeneratorTableColumn.getPkFlag().equals(AgileFlagEnum.YES.getCode())) {
+        if (!agileGeneratorTableColumn.getPkFlag().equals(AgileYesNo.YES)) {
             // 编辑字段
             if (!AgileArrayUtil.contains(AgileGeneratorConstants.COLUMN_NAME_NOT_EDIT, columnName)) {
-                agileGeneratorTableColumn.setEditFlag(AgileFlagEnum.YES.getCode());
+                agileGeneratorTableColumn.setEditFlag(AgileYesNo.YES);
             }
             // 列表字段
             if (!AgileArrayUtil.contains(AgileGeneratorConstants.COLUMN_NAME_NOT_LIST, columnName)) {
-                agileGeneratorTableColumn.setListFlag(AgileFlagEnum.YES.getCode());
+                agileGeneratorTableColumn.setListFlag(AgileYesNo.YES);
                 if (StringUtils.startsWithIgnoreCase(columnName, "parent")) {
-                    agileGeneratorTableColumn.setListFlag(AgileFlagEnum.NO.getCode());
+                    agileGeneratorTableColumn.setListFlag(AgileYesNo.NO);
                 }
             }
             // 查询字段
             if (!AgileArrayUtil.contains(AgileGeneratorConstants.COLUMN_NAME_NOT_QUERY, columnName)) {
-                agileGeneratorTableColumn.setQueryFlag(AgileFlagEnum.YES.getCode());
+                agileGeneratorTableColumn.setQueryFlag(AgileYesNo.YES);
                 if (StringUtils.endsWithIgnoreCase(columnName, "sort")) {
-                    agileGeneratorTableColumn.setQueryFlag(AgileFlagEnum.NO.getCode());
+                    agileGeneratorTableColumn.setQueryFlag(AgileYesNo.NO);
                 }
             }
         }
@@ -382,7 +382,7 @@ public class AgileGeneratorUtil {
     private static AgileGeneratorTableColumn getTablePkColumn(List<AgileGeneratorTableColumn> agileGeneratorTableColumnList) {
         if (agileGeneratorTableColumnList != null && !agileGeneratorTableColumnList.isEmpty()) {
             for (AgileGeneratorTableColumn agileGeneratorTableColumn : agileGeneratorTableColumnList) {
-                if (AgileFlagEnum.YES.getCode().equals(agileGeneratorTableColumn.getPkFlag())) {
+                if (AgileYesNo.YES.equals(agileGeneratorTableColumn.getPkFlag())) {
                     return agileGeneratorTableColumn;
                 }
             }

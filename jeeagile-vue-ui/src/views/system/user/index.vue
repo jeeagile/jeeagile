@@ -31,8 +31,8 @@
             <el-select v-model="queryParam.queryCond.userStatus" placeholder="用户状态" clearable size="small"
                        style="width: 240px"
             >
-              <el-option v-for="userStatusOption in userStatusOptionList" :key="userStatusOption.dictValue"
-                         :label="userStatusOption.dictLabel" :value="userStatusOption.dictValue"
+              <el-option v-for="item in AgileNormalDisable.getList()" :key="item.value"
+                         :label="item.label" :value="item.value"
               />
             </el-select>
           </el-form-item>
@@ -165,19 +165,16 @@
           <el-col :span="12">
             <el-form-item label="用户性别">
               <el-select v-model="form.userSex" placeholder="请选择">
-                <el-option v-for="userSexOption in userSexOptionList" :key="userSexOption.dictValue"
-                           :label="userSexOption.dictLabel" :value="userSexOption.dictValue"
-                />
+                <el-option v-for="item in SysUserSex.getList()" :key="item.value" :label="item.label"
+                           :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.userStatus">
-                <el-radio v-for="userStatusOption in userStatusOptionList" :key="userStatusOption.dictValue"
-                          :label="userStatusOption.dictValue"
-                >
-                  {{ userStatusOption.dictLabel }}
+                <el-radio v-for="item in AgileNormalDisable.getList()" :key="item.value" :label="item.value">
+                  {{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -294,10 +291,6 @@
         defaultPwd: undefined,
         // 日期范围
         dateRange: [],
-        // 状态数据字典
-        userStatusOptionList: [],
-        // 性别状态字典
-        userSexOptionList: [],
         // 岗位选项
         postList: [],
         // 角色选项
@@ -374,12 +367,6 @@
     created() {
       this.initData()
       this.getUserList()
-      this.getSysDictDataList('sys_normal_disable').then(response => {
-        this.userStatusOptionList = response.data
-      })
-      this.getSysDictDataList('sys_user_sex').then(response => {
-        this.userSexOptionList = response.data
-      })
       this.getSysConfig('sys.user.pwd').then(response => {
         this.defaultPwd = response.data.configValue
       })

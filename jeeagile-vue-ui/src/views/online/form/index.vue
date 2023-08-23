@@ -17,7 +17,7 @@
       </el-form-item>
       <el-form-item label="发布状态" prop="publishStatus">
         <el-select v-model="queryParam.queryCond.publishStatus" placeholder="发布状态" clearable size="small">
-          <el-option v-for="option in SysPublishStatus.getList()" :key="option.key" :label="option.label"
+          <el-option v-for="option in AgilePublishStatus.getList()" :key="option.key" :label="option.label"
                      :value="option.value"/>
         </el-select>
       </el-form-item>
@@ -596,7 +596,7 @@
           formName: undefined,
           formType: undefined,
           formStatus: this.OnlineFormStatus.FORM_BASIC,
-          publishStatus: this.SysPublishStatus.UNPUBLISHED,
+          publishStatus: this.AgilePublishStatus.UNPUBLISHED,
           remark: undefined
         }
         this.activeStep = 0
@@ -620,12 +620,12 @@
       },
       /** 修改发布状态 */
       handlePublishStatus(row) {
-        if (row.publishStatus === this.SysPublishStatus.PUBLISHED && row.formStatus !== this.OnlineFormStatus.PAGE_DESIGN) {
+        if (row.publishStatus === this.AgilePublishStatus.PUBLISHED && row.formStatus !== this.OnlineFormStatus.PAGE_DESIGN) {
           this.messageWarning('表单还处于' + this.OnlineFormStatus.getLabel(row.formStatus) + '不能进行发布！')
-          row.publishStatus = row.publishStatus === this.SysPublishStatus.PUBLISHED ? this.SysPublishStatus.UNPUBLISHED : this.SysPublishStatus.PUBLISHED
+          row.publishStatus = row.publishStatus === this.AgilePublishStatus.PUBLISHED ? this.AgilePublishStatus.UNPUBLISHED : this.AgilePublishStatus.PUBLISHED
           return
         }
-        let text = row.publishStatus === this.SysPublishStatus.PUBLISHED ? '发布' : '停用'
+        let text = row.publishStatus === this.AgilePublishStatus.PUBLISHED ? '发布' : '停用'
         this.$confirm('确认要' + text + '' + row.formName + '表单吗?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -636,7 +636,7 @@
         }).then(() => {
           this.messageSuccess(text + '成功')
         }).catch(() => {
-          row.publishStatus = row.publishStatus === this.SysPublishStatus.PUBLISHED ? this.SysPublishStatus.UNPUBLISHED : this.SysPublishStatus.PUBLISHED
+          row.publishStatus = row.publishStatus === this.AgilePublishStatus.PUBLISHED ? this.AgilePublishStatus.UNPUBLISHED : this.AgilePublishStatus.PUBLISHED
         })
       },
       /** 新增表单按钮操作 */
