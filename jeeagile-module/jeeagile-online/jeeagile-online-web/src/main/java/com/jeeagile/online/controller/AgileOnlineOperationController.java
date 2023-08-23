@@ -3,6 +3,7 @@ package com.jeeagile.online.controller;
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
+import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
 import com.jeeagile.frame.page.AgilePageable;
@@ -50,6 +51,7 @@ public class AgileOnlineOperationController extends AgileBaseController {
         return this.success(agileOnlineOperationService.selectOneData(tableId, dataId));
     }
 
+    @AgileDemo
     @PostMapping(value = "/saveTableData")
     @ApiOperation(value = "保存数据", notes = "保存数据")
     public AgileResult<Map> saveMasterData(@SingleRequestBody String tableId, @SingleRequestBody Map masterData, @SingleRequestBody Map slaveData) {
@@ -60,6 +62,7 @@ public class AgileOnlineOperationController extends AgileBaseController {
         }
     }
 
+    @AgileDemo
     @PostMapping(value = "/updateTableData")
     @ApiOperation(value = "保存数据", notes = "保存数据")
     public AgileResult updateTableData(@SingleRequestBody String tableId, @SingleRequestBody Map masterData, @SingleRequestBody Map slaveData) {
@@ -70,6 +73,7 @@ public class AgileOnlineOperationController extends AgileBaseController {
         }
     }
 
+    @AgileDemo
     @PostMapping(value = "/deleteTableData")
     @ApiOperation(value = "删除数据", notes = "删除数据")
     public AgileResult deleteTableData(@SingleRequestBody String tableId, @SingleRequestBody String dataId) {
