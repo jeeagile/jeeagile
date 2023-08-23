@@ -78,21 +78,17 @@ create table agile_sys_dict_type
 
 alter table agile_sys_dict_type comment '字典类型表';
 
-INSERT INTO agile_sys_dict_type VALUES ('1','用户性别','sys_user_sex','0','0','用户性别列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('2','菜单状态','sys_show_visible','0','0','菜单状态列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('3','系统开关','sys_normal_disable','0','0','系统开关列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('4','任务状态','sys_job_status','0','0','任务状态列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('5','系统是否','sys_yes_no','0','0','系统是否列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('6','数据范围','sys_data_scope','0','0','数据范围列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('7','系统状态','sys_common_status','0','0','登录状态列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('8','日志状态','sys_logger_status','0','0','日志状态列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('9','日志类型','sys_logger_type','0','0','日志类型列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('10','启用开关','sys_enable_status','0','0','启用开关列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('11','系统审核状态','sys_audit_status','0','0','启用开关列表',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('12', '流程发布状态', 'process_deployment_status', '0', '0', '流程发布状态', NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('13', '流程表单类型', 'process_form_type', '0', '0', '流程表单类型', NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('14', '流程任务状态', 'process_task_status', '0', '0', '流程任务状态', NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_type VALUES ('15', '流程实例状态', 'process_instance_status', '0', '0', '流程任务状态', NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('1','用户性别','sys_user_sex','0','0','用户性别',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('2','显示隐藏','sys_show_hide','0','0','显示隐藏',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('3','正常停用','sys_normal_disable','0','0','正常停用',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('4','系统是否','sys_yes_no','0','0','系统是否',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('5','数据范围','sys_data_scope','0','0','数据范围列表',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('6','成功失败','sys_success_fail','0','0','成功失败',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('7','操作类型','sys_operate_type','0','0','操作类型',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('9','开关状态','sys_switch_status','0','0','开关状态',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('10','审核状态','sys_audit_status','0','0','审核状态',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('11','发布状态','sys_publish_status','0','0','发布状态',NULL,NULL,NULL,NULL);
+
 
 /*==============================================================*/
 /* table: agile_sys_dict_data 字典数据表                         */
@@ -121,45 +117,46 @@ INSERT INTO agile_sys_dict_data VALUES ('11','0',1,'男','0','sys_user_sex','0',
 INSERT INTO agile_sys_dict_data VALUES ('12','0',2,'女','1','sys_user_sex','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('13','0',3,'未知','2','sys_user_sex','0','0',NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_dict_data VALUES ('21','0',1,'显示','0','sys_show_visible','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('22','0',2,'隐藏','1','sys_show_visible','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('21','0',1,'显示','0','sys_show_hide','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('22','0',2,'隐藏','1','sys_show_hide','0','0',NULL,NULL,NULL,NULL,NULL);
+
 INSERT INTO agile_sys_dict_data VALUES ('31','0',1,'正常','0','sys_normal_disable','0','0',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('32','0',2,'停用','1','sys_normal_disable','0','0',NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_dict_data VALUES ('41','0',1,'启用','0','sys_job_status','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('42','0',2,'暂停','1','sys_job_status','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('41','0',1,'是','1','sys_yes_no','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('42','0',2,'否','0','sys_yes_no','0','0',NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_dict_data VALUES ('51','0',1,'是','1','sys_yes_no','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('52','0',2,'否','0','sys_yes_no','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('51','0',0,'全部数据权限','01','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('52','0',1,'本部门数据权限','02','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('53','0',3,'本部门及以下数据权限','03','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('54','0',4,'仅本人数据权限','04','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('55','0',5,'自定义部门数据权限','05','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_dict_data VALUES ('61','0',0,'全部数据权限','01','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('62','0',1,'本部门数据权限','02','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('63','0',3,'本部门及以下数据权限','03','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('64','0',4,'仅本人数据权限','04','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('65','0',5,'自定义部门数据权限','05','sys_data_scope','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('61','0',1,'成功','0','sys_success_fail','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('62','0',2,'失败','1','sys_success_fail','0','0',NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_dict_data VALUES ('71','0',1,'成功','0','sys_common_status','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('72','0',2,'失败','1','sys_common_status','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('71','0',1,'查询数据','SELECT','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('72','0',2,'查看明细','DETAIL','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('73','0',3,'新增数据','ADD','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('74','0',4,'修改数据','UPDATE','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('75','0',5,'删除数据','DELETE','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('76','0',6,'用户授权','GRANT','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('77','0',7,'导出数据','EXPORT','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('78','0',8,'导入数据','IMPORT','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('79','0',9,'清空数据','CLEAR','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('710','0',10,'用户强退','FORCE','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('711','0',11,'代码生成','GENERATOR','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('712','0',12,'其他操作','OTHER','sys_operate_type','0','0',NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_dict_data VALUES ('81','0',0,'成功','0','sys_logger_status','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('82','0',1,'失败','1','sys_logger_status','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('91','0',0,'启用','0','sys_switch_status','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('92','0',1,'停用','1','sys_switch_status','0','0',NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_dict_data VALUES ('91','0',1,'查询数据','SELECT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('92','0',2,'查看明细','DETAIL','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('93','0',3,'新增数据','ADD','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('94','0',4,'修改数据','UPDATE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('95','0',5,'删除数据','DELETE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('96','0',6,'用户授权','GRANT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('97','0',7,'导出数据','EXPORT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('98','0',8,'导入数据','IMPORT','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('99','0',9,'清空数据','CLEAR','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('910','0',10,'用户强退','FORCE','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('911','0',11,'代码生成','GENERATOR','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('912','0',12,'其他操作','OTHER','sys_logger_type','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('101','0',0,'审核中','0','sys_audit_status','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('102','0',1,'审核通过','1','sys_audit_status','0','0',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('103','0',2,'审核拒绝','2','sys_audit_status','0','0',NULL,NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_dict_data VALUES ('101','0',0,'启用','0','sys_enable_status','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('102','0',1,'停用','1','sys_enable_status','0','0',NULL,NULL,NULL,NULL,NULL);
-
+INSERT INTO agile_sys_dict_data VALUES ('111', '0', 0, '已发布', '01', 'sys_publish_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_data VALUES ('112', '0', 1, '未发布', '02', 'sys_publish_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
 /* table: agile_sys_menu 菜单权限表                              */

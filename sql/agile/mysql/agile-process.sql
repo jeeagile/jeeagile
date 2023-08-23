@@ -159,9 +159,12 @@ alter table agile_process_expression comment '流程表达式配置表';
 /*==============================================================*/
 /* 字典配置                                                     */
 /*==============================================================*/
-INSERT INTO agile_sys_dict_data VALUES ('111','0',0,'审核中','0','sys_audit_status','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('112','0',1,'审核通过','1','sys_audit_status','0','0',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_dict_data VALUES ('113','0',2,'审核拒绝','2','sys_audit_status','0','0',NULL,NULL,NULL,NULL,NULL);
+
+INSERT INTO agile_sys_dict_type VALUES ('12', '流程发布状态', 'process_deployment_status', '0', '0', '流程发布状态', NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('13', '流程表单类型', 'process_form_type', '0', '0', '流程表单类型', NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('14', '流程任务状态', 'process_task_status', '0', '0', '流程任务状态', NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_dict_type VALUES ('15', '流程实例状态', 'process_instance_status', '0', '0', '流程任务状态', NULL,NULL,NULL,NULL);
+
 
 INSERT INTO agile_sys_dict_data VALUES ('121', '0', 0, '已发布', '1', 'process_deployment_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
 INSERT INTO agile_sys_dict_data VALUES ('122', '0', 1, '未发布', '2', 'process_deployment_status', '0', '0', NULL,NULL,NULL,NULL,NULL);
