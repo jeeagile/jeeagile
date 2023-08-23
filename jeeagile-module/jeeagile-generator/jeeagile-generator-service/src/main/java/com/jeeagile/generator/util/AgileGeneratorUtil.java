@@ -114,12 +114,10 @@ public class AgileGeneratorUtil {
         // 状态字段设置单选框
         if (StringUtils.endsWithIgnoreCase(columnName, "status")) {
             agileGeneratorTableColumn.setHtmlType(AgileGeneratorConstants.HTML_TYPE_RADIO);
-            agileGeneratorTableColumn.setDictType(AgileGeneratorConstants.DICT_TYPE_STATUS);
         }
         // 性别字段设置下拉框
         else if (StringUtils.endsWithIgnoreCase(columnName, "sex")) {
             agileGeneratorTableColumn.setHtmlType(AgileGeneratorConstants.HTML_TYPE_SELECT);
-            agileGeneratorTableColumn.setDictType(AgileGeneratorConstants.DICT_TYPE_SEX);
         }
         // 类型字段设置下拉框
         else if (StringUtils.endsWithIgnoreCase(columnName, "type")) {
@@ -132,7 +130,6 @@ public class AgileGeneratorUtil {
         //是否标识
         else if (StringUtils.endsWithIgnoreCase(columnName, "flag")) {
             agileGeneratorTableColumn.setHtmlType(AgileGeneratorConstants.HTML_TYPE_RADIO);
-            agileGeneratorTableColumn.setDictType(AgileGeneratorConstants.DICT_TYPE_FLAG);
         }
         //排序
         else if (StringUtils.endsWithIgnoreCase(columnName, "sort")) {

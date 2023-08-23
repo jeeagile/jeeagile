@@ -123,20 +123,6 @@ public class AgileGeneratorConstants {
      * 模糊查询
      */
     public static final String QUERY_TYPE_LIKE = "LIKE";
-    /**
-     * 字典类型 是否标识
-     */
-    public static final String DICT_TYPE_FLAG = "sys_yes_no";
-
-    /**
-     * 字典类型 状态标识
-     */
-    public static final String DICT_TYPE_STATUS = "sys_normal_disable";
-
-    /**
-     * 字典类型 状态标识
-     */
-    public static final String DICT_TYPE_SEX = "sys_user_sex";
 
     /**
      * 表类型 单表
