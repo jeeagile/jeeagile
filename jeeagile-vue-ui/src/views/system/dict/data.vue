@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="字典名称" prop="dictType">
-        <el-select v-model="queryParam.queryCond.dictType" size="small">
+        <el-select v-model="queryParam.queryCond.dictType" size="small" @change="handleQuery">
           <el-option v-for="dictTypeOption in dictTypeOptionList" :key="dictTypeOption.dictId"
                      :label="dictTypeOption.dictName" :value="dictTypeOption.dictType"/>
         </el-select>

@@ -13,7 +13,6 @@ import com.jeeagile.generator.entity.AgileGeneratorTableColumn;
 import com.jeeagile.generator.mapper.AgileGeneratorTableMapper;
 import com.jeeagile.generator.util.AgileGeneratorUtil;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 

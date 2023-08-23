@@ -171,3 +171,20 @@ ALTER TABLE agile_online_column
 ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER dict_id;
 
 update agile_online_column set tenant_id='jeeagile';
+
+
+ALTER TABLE agile_online_rule
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER pattern;
+
+update agile_online_rule set tenant_id='jeeagile';
+
+ALTER TABLE agile_online_column_rule
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER rule_config;
+
+update agile_online_column_rule set tenant_id='jeeagile';
+
+
+ALTER TABLE agile_online_page
+ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER remark;
+
+update agile_online_page set tenant_id='jeeagile';

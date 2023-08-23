@@ -64,10 +64,6 @@ public class AgileOperateType {
      */
     public static final String GENERATOR = "GENERATOR";
     /**
-     * 清空数据
-     */
-    public static final String CLEAN = "CLEAN";
-    /**
      * 其它操作
      */
     public static final String OTHER = "OTHER";
@@ -90,7 +86,6 @@ public class AgileOperateType {
         DICT_MAP.put(LOGIN, "用户登录");
         DICT_MAP.put(FORCE, "用户强退");
         DICT_MAP.put(GENERATOR, "生成代码");
-        DICT_MAP.put(CLEAN, "清空数据");
         DICT_MAP.put(OTHER, "其它操作");
     }
 
