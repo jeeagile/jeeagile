@@ -7,6 +7,7 @@ import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.frame.util.AgileBeanUtils;
+import com.jeeagile.process.constants.ProcessDeploymentStatus;
 import com.jeeagile.process.entity.AgileProcessDefinition;
 import com.jeeagile.process.entity.AgileProcessForm;
 import com.jeeagile.process.entity.AgileProcessModel;
@@ -116,7 +117,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
         }
         agileProcessModel.setModelXml(modelXml);
         handlerDeploymentStatus(agileProcessModel);
-        this.updateModel(agileProcessModel);
+        this.updateById(agileProcessModel);
         return agileProcessModel;
     }
 
@@ -125,7 +126,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
     public boolean processDeployment(String modelId) {
         AgileProcessModel agileProcessModel = this.getById(modelId);
         if (agileProcessModel != null && agileProcessModel.isNotEmptyPk()) {
-            if (agileProcessModel.getDeploymentStatus().equals("1")) {
+            if (ProcessDeploymentStatus.PUBLISHED.equals(agileProcessModel.getDeploymentStatus())) {
                 throw new AgileFrameException("当前流程已处于发布状态！");
             }
             if (AgileStringUtil.isEmpty(agileProcessModel.getModelXml())) {
@@ -144,7 +145,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
             //流程发布
             String deploymentId = agileProcessService.processDeployment(agileProcessModel);
             String definitionId = agileProcessService.getProcessDefinitionId(deploymentId);
-            agileProcessModel.setDeploymentStatus("1");
+            agileProcessModel.setDeploymentStatus(ProcessDeploymentStatus.PUBLISHED);
             agileProcessModel.setDeploymentTime(new Date());
             AgileProcessDefinition agileProcessDefinition = new AgileProcessDefinition();
             AgileBeanUtils.copyProperties(agileProcessModel, agileProcessDefinition);
@@ -170,12 +171,12 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
      */
     private synchronized void handlerDeploymentStatus(AgileProcessModel agileProcessModel) {
         String deploymentStatus = agileProcessModel.getDeploymentStatus();
-        if (AgileStringUtil.isNotEmpty(deploymentStatus) && deploymentStatus.equals("1")) {
-            agileProcessModel.setDeploymentStatus("2");
+        if (AgileStringUtil.isNotEmpty(deploymentStatus) && deploymentStatus.equals(ProcessDeploymentStatus.PUBLISHED)) {
+            agileProcessModel.setDeploymentStatus(ProcessDeploymentStatus.UNPUBLISHED);
             agileProcessModel.setDeploymentTime(null);
             agileProcessModel.setModelVersion(agileProcessModel.getModelVersion() + 1);
         } else {
-            agileProcessModel.setDeploymentStatus("2");
+            agileProcessModel.setDeploymentStatus(ProcessDeploymentStatus.UNPUBLISHED);
             agileProcessModel.setDeploymentTime(null);
         }
     }

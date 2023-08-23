@@ -11,9 +11,8 @@
       </el-form-item>
       <el-form-item label="发布状态" prop="deploymentStatus">
         <el-select v-model="queryParam.queryCond.deploymentStatus" placeholder="发布状态" clearable size="small">
-          <el-option v-for="processDeploymentStatusOption in processDeploymentStatusOptionList"
-                     :key="processDeploymentStatusOption.dictValue"
-                     :label="processDeploymentStatusOption.dictLabel" :value="processDeploymentStatusOption.dictValue"/>
+          <el-option v-for="item in ProcessDeploymentStatus.getList()" :key="item.value" :label="item.label"
+                     :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -53,8 +52,11 @@
           <span>v{{scope.row.modelVersion}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="发布状态" align="center" prop="deploymentStatus"
-                       :formatter="processDeploymentStatusFormat"/>
+      <el-table-column label="发布状态" align="center" prop="deploymentStatus">
+        <template slot-scope="scope">
+          {{ProcessDeploymentStatus.getLabel(scope.row.deploymentStatus)}}
+        </template>
+      </el-table-column>
       <el-table-column label="发布时间" align="center" prop="deploymentTime" width="150px"/>
       <el-table-column label="操作" width="350px" align="center" class-name="small-padding">
         <template slot-scope="scope">
@@ -178,8 +180,6 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
-        // 流程部署数据字典
-        processDeploymentStatusOptionList: [],
         // 流程表单类型
         processFormTypeOptionList: [],
         // 流程表单列表
@@ -226,9 +226,6 @@
     created() {
       this.getProcessFormList()
       this.getProcessModelList()
-      this.getSysDictDataList('process_deployment_status').then(response => {
-        this.processDeploymentStatusOptionList = response.data
-      })
       this.getSysDictDataList('process_form_type').then(response => {
         this.processFormTypeOptionList = response.data
       })
@@ -249,10 +246,6 @@
           this.modelList = response.data.records
           this.loading = false
         })
-      },
-      /** 流程状态字典翻译 */
-      processDeploymentStatusFormat(row, column) {
-        return this.handleDictLabel(this.processDeploymentStatusOptionList, row.deploymentStatus)
       },
       /** 取消按钮 */
       cancel() {
@@ -305,18 +298,18 @@
       },
       // 更多操作触发
       handleProcessCommand(command, row) {
-        switch (command) {
-        case 'handleProcessUpdate':
-          this.handleProcessUpdate(row)
-          break
-        case 'handleProcessDefinition':
-          this.handleProcessDefinition(row)
-          break
-        case 'handleProcessDelete':
-          this.handleProcessDelete(row)
-          break
-        default:
-          break
+        switch(command){
+          case 'handleProcessUpdate':
+            this.handleProcessUpdate(row)
+            break
+          case 'handleProcessDefinition':
+            this.handleProcessDefinition(row)
+            break
+          case 'handleProcessDelete':
+            this.handleProcessDelete(row)
+            break
+          default:
+            break
         }
       },
       /** 修改按钮操作 */

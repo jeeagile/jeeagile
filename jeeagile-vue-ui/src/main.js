@@ -40,6 +40,7 @@ import 'highlight.js/styles/atom-one-dark-reasonable.css'
 import '@/components/AgileDict'
 import '@/components/AgileDict/system'
 import '@/components/AgileDict/online'
+import '@/components/AgileDict/process'
 import '@/components/Dialog'
 
 // 全局组件挂载
