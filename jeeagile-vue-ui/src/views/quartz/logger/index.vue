@@ -16,8 +16,8 @@
       <el-form-item label="执行状态" prop="status">
         <el-select v-model="queryParam.queryCond.status" placeholder="请选择执行状态" clearable size="small"
                    style="width: 240px">
-          <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
-                     :value="dict.dictValue"/>
+          <el-option v-for="item in AgileSuccessFail.getList()" :key="item.value" :label="item.label"
+                     :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item label="执行时间">
@@ -54,7 +54,13 @@
       <el-table-column label="Bean名称" align="center" prop="beanName" :show-overflow-tooltip="true"/>
       <el-table-column label="执行方法" align="center" prop="methodName" :show-overflow-tooltip="true"/>
       <el-table-column label="执行时间" align="center" prop="startTime" width="150px"/>
-      <el-table-column label="执行状态" align="center" prop="status" :formatter="statusFormat"/>
+      <el-table-column label="执行状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <el-tag size="mini" :type="AgileSuccessFail.getTag(scope.row.status)">
+            {{AgileSuccessFail.getLabel(scope.row.status)}}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)"
@@ -101,7 +107,11 @@
             <el-form-item label="结束时间：">{{ form.stopTime }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="执行状态：">{{ statusFormat(form) }}</el-form-item>
+            <el-form-item label="执行状态：">
+              <el-tag size="mini" :type="AgileSuccessFail.getTag(form.status)">
+                {{AgileSuccessFail.getLabel(form.status)}}
+              </el-tag>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="执行时间：">{{ form.executeTime }}毫秒</el-form-item>
@@ -141,8 +151,6 @@
         openDialog: false,
         // 类型数据字典
         typeOptions: [],
-        // 类型数据字典
-        statusOptions: [],
         // 日期范围
         dateRange: [],
         // 表单参数
@@ -165,9 +173,6 @@
       const jobCode = this.$route.params && this.$route.params.jobCode
       this.queryParam.queryCond.jobCode = jobCode
       this.getLoggerList()
-      this.getSysDictDataList('sys_common_status').then(response => {
-        this.statusOptions = response.data
-      })
     },
     methods: {
       /** 查询登录日志 */
@@ -179,10 +184,6 @@
             this.loading = false
           }
         )
-      },
-      /** 执行状态字典翻译 */
-      statusFormat(row) {
-        return this.handleDictLabel(this.statusOptions, row.status)
       },
       /** 搜索按钮操作 */
       handleQuery() {

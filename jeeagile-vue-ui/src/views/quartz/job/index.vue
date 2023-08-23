@@ -11,8 +11,8 @@
       </el-form-item>
       <el-form-item label="任务状态" prop="status">
         <el-select v-model="queryParam.queryCond.jobStatus" placeholder="请选择任务状态" clearable size="small">
-          <el-option v-for="dict in jobStatusOption" :key="dict.dictValue" :label="dict.dictLabel"
-                     :value="dict.dictValue"/>
+          <el-option v-for="item in AgileSwitchStatus.getList()" :key="item.value" :label="item.label"
+                     :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -51,7 +51,7 @@
       <el-table-column label="Cron执行表达式" align="center" prop="jobCron" :show-overflow-tooltip="true"/>
       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.jobStatus" active-value="0" inactive-value="1"
+          <el-switch v-model="scope.row.jobStatus" active-value="1" inactive-value="0"
                      @change="handleStatusChange(scope.row)"/>
         </template>
       </el-table-column>
@@ -145,8 +145,8 @@
           <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.jobStatus">
-                <el-radio v-for="dict in jobStatusOption" :key="dict.dictValue" :label="dict.dictValue">
-                  {{ dict.dictLabel }}
+                <el-radio v-for="item in AgileSwitchStatus.getList()" :key="item.value" :label="item.value">
+                  {{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -187,7 +187,7 @@
             <el-form-item label="任务分组：">{{ form.jobGroup }}</el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="任务状态：">{{ jobStatusFormat(form) }}</el-form-item>
+            <el-form-item label="任务状态："> {{AgileSwitchStatus.getLabel(form.jobStatus)}}</el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Cron表达式：">{{ form.jobCron }}</el-form-item>
@@ -254,8 +254,6 @@
         open: false,
         // 是否显示详细弹出层
         openView: false,
-        // 状态字典
-        jobStatusOption: [],
         // 查询参数
         queryParam: {
           pageTotal: 0,
@@ -294,9 +292,6 @@
     },
     created() {
       this.getJobList()
-      this.getSysDictDataList('sys_job_status').then(response => {
-        this.jobStatusOption = response.data
-      })
     },
     methods: {
       /** 查询定时任务列表 */
@@ -307,10 +302,6 @@
           this.quartzJobList = response.data.records
           this.loading = false
         })
-      },
-      // 状态字典翻译
-      jobStatusFormat(row) {
-        return this.handleDictLabel(this.jobStatusOption, row.jobStatus)
       },
       // 取消按钮
       cancel() {
@@ -353,7 +344,7 @@
       },
       // 任务状态修改
       handleStatusChange(row) {
-        let text = row.jobStatus === '0' ? '启用' : '停用'
+        let text = row.jobStatus === '0' ? '停用' : '启用'
         this.$confirm('确认要"' + text + '""' + row.jobName + '"任务吗?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -381,15 +372,15 @@
       },
       // 更多操作触发
       handleCommand(command, row) {
-        switch (command) {
-        case 'handleView':
-          this.handleView(row)
-          break
-        case 'handleJobLogger':
-          this.handleJobLogger(row)
-          break
-        default:
-          break
+        switch(command){
+          case 'handleView':
+            this.handleView(row)
+            break
+          case 'handleJobLogger':
+            this.handleJobLogger(row)
+            break
+          default:
+            break
         }
       },
       /** 任务详细信息 */

@@ -1,13 +1,13 @@
 package com.jeeagile.quartz.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.constants.AgileSwitchStatus;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
 import com.jeeagile.quartz.entity.AgileQuartzJob;
-import com.jeeagile.quartz.enums.AgileJobStatus;
 import com.jeeagile.quartz.mapper.AgileQuartzJobMapper;
 import com.jeeagile.quartz.schedule.AgileScheduleUtil;
 import com.jeeagile.quartz.util.AgileCronUtil;
@@ -108,7 +108,7 @@ public class AgileQuartzJobServiceImpl extends AgileBaseServiceImpl<AgileQuartzJ
             agileQuartzJob.setJobStatus(jobStatus);
             boolean updateFlag = this.updateById(agileQuartzJob);
             if (updateFlag) {
-                if (AgileJobStatus.NORMAL.getCode().equals(jobStatus)) {
+                if (AgileSwitchStatus.ENABLE.equals(jobStatus)) {
                     AgileScheduleUtil.resumeJob(agileQuartzJob);
                 } else {
                     AgileScheduleUtil.pauseJob(agileQuartzJob);

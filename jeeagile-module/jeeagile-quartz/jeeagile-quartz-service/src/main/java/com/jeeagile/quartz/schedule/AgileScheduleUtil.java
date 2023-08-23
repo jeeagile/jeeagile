@@ -1,9 +1,9 @@
 package com.jeeagile.quartz.schedule;
 
+import com.jeeagile.core.constants.AgileSwitchStatus;
 import com.jeeagile.core.exception.AgileBaseException;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.quartz.entity.AgileQuartzJob;
-import com.jeeagile.quartz.enums.AgileJobStatus;
 import com.jeeagile.quartz.schedule.job.AgileConcurrentJob;
 import com.jeeagile.quartz.schedule.job.AgileDisallowConcurrentJob;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class AgileScheduleUtil {
             jobDetail.getJobDataMap().put(AgileScheduleConstants.TASK_JOB_PROPERTIES, agileQuartzJob);
             agileScheduler.scheduleJob(jobDetail, cronTrigger);
             // 暂停任务
-            if (agileQuartzJob.getJobStatus().equals(AgileJobStatus.DISABLE.getCode())) {
+            if (agileQuartzJob.getJobStatus().equals(AgileSwitchStatus.DISABLE)) {
                 AgileScheduleUtil.pauseJob(agileQuartzJob);
             }
         } catch (SchedulerException ex) {
