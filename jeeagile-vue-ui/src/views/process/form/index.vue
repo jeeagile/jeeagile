@@ -11,8 +11,8 @@
       </el-form-item>
       <el-form-item label="状态" prop="formStatus">
         <el-select v-model="queryParam.queryCond.formStatus" placeholder="表单状态" clearable size="small">
-          <el-option v-for="formStatusOption in formStatusOptionList" :key="formStatusOption.dictValue"
-                     :label="formStatusOption.dictLabel" :value="formStatusOption.dictValue"/>
+          <el-option v-for="item in AgileNormalDisable.getList()" :key="item.value"
+                     :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -46,7 +46,11 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="表单编码" align="center" prop="formCode"/>
       <el-table-column label="表单名称" align="center" prop="formName" :show-overflow-tooltip="true"/>
-      <el-table-column label="状态" align="center" prop="formStatus" :formatter="formStatusFormat"/>
+      <el-table-column label="状态" align="center" prop="formStatus">
+        <template slot-scope="scope">
+          {{AgileNormalDisable.getLabel(scope.row.formStatus)}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="300px">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -84,9 +88,8 @@
         </el-form-item>
         <el-form-item label="表单状态" prop="formStatus">
           <el-radio-group v-model="form.formStatus">
-            <el-radio v-for="formStatusOption in formStatusOptionList" :key="formStatusOption.dictValue"
-                      :label="formStatusOption.dictValue">
-              {{ formStatusOption.dictLabel }}
+            <el-radio v-for="item in AgileNormalDisable.getList()" :key="item.value" :label="item.value">
+              {{ item.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -138,8 +141,6 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
-        // 状态数据字典
-        formStatusOptionList: [],
         // 查询参数
         queryParam: {
           pageTotal: 0,
@@ -170,9 +171,6 @@
     },
     created() {
       this.getProcessFormList()
-      this.getSysDictDataList('sys_normal_disable').then(response => {
-        this.formStatusOptionList = response.data
-      })
     },
     methods: {
       /** 查询表单列表 */

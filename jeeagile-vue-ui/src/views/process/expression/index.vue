@@ -11,9 +11,8 @@
       </el-form-item>
       <el-form-item label="状态" prop="expressionStatus">
         <el-select v-model="queryParam.queryCond.expressionStatus" placeholder="表达式状态" clearable size="small">
-          <el-option v-for="expressionStatusOption in expressionStatusOptionList"
-                     :key="expressionStatusOption.dictValue"
-                     :label="expressionStatusOption.dictLabel" :value="expressionStatusOption.dictValue"/>
+          <el-option v-for="item in AgileNormalDisable.getList()" :key="item.value" :label="item.label"
+                     :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -54,7 +53,11 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="表达式编码" align="center" prop="expressionCode"/>
       <el-table-column label="表达式名称" align="center" prop="expressionName"/>
-      <el-table-column label="状态" align="center" prop="expressionStatus" :formatter="expressionStatusFormat"/>
+      <el-table-column label="状态" align="center" prop="expressionStatus">
+        <template slot-scope="scope">
+          {{AgileNormalDisable.getLabel(scope.row.expressionStatus)}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -87,10 +90,8 @@
         </el-form-item>
         <el-form-item label="表达式状态" prop="expressionStatus">
           <el-radio-group v-model="form.expressionStatus">
-            <el-radio v-for="expressionStatusOption in expressionStatusOptionList"
-                      :key="expressionStatusOption.dictValue"
-                      :label="expressionStatusOption.dictValue">
-              {{ expressionStatusOption.dictLabel }}
+            <el-radio v-for="item in AgileNormalDisable.getList()" :key="item.value" :label="item.value">
+              {{ item.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -138,8 +139,6 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
-        // 状态数据字典
-        expressionStatusOptionList: [],
         // 查询参数
         queryParam: {
           pageTotal: 0,
@@ -170,9 +169,6 @@
     },
     created() {
       this.getExpressionList()
-      this.getSysDictDataList('sys_normal_disable').then(response => {
-        this.expressionStatusOptionList = response.data
-      })
     },
     methods: {
       /** 查询表达式列表 */
@@ -183,10 +179,6 @@
           this.expressionList = response.data.records
           this.loading = false
         })
-      },
-      /** 表达式状态字典翻译 */
-      expressionStatusFormat(row, column) {
-        return this.handleDictLabel(this.expressionStatusOptionList, row.expressionStatus)
       },
       /** 取消按钮 */
       cancel() {
