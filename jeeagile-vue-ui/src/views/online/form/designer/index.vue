@@ -643,7 +643,7 @@
   import EditWidgetTableOperation from './editWidgetTableOperation'
   import EditWidgetTableQueryParam from './editWidgetTableQueryParam'
   import EditWidgetDictParam from './editWidgetDictParam'
-  import * as SystemStaticDict from '@/components/AgileDict/system'
+  import * as SystemStaticDict from '@/components/AgileDict'
   import OnlinePagePreview from '../../index'
 
   Vue.component('drag-widget-item', DragWidgetItem)

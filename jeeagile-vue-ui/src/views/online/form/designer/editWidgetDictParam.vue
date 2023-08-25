@@ -63,7 +63,7 @@
 </template>
 
 <script>
-  import * as SystemStaticDict from '@/components/AgileDict/system'
+  import * as SystemStaticDict from '@/components/AgileDict'
 
   export default {
     name: 'EditWidgetDictParam',

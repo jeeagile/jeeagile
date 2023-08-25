@@ -1,6 +1,6 @@
 import { mapMutations } from 'vuex'
 import { formPageRender } from '@/api/online/form'
-import * as SystemStaticDict from '@/components/AgileDict/system'
+import * as SystemStaticDict from '@/components/AgileDict'
 import OnlinePagePreview from '../../index'
 import { selectOneData, deleteTableData } from '@/api/online/operation'
 import { pattern } from '@/components/AgileUtil/validate'

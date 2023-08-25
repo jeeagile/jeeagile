@@ -87,7 +87,7 @@
 
 <script>
   import { findItemFromList } from '../util'
-  import * as SystemStaticDict from '@/components/AgileDict/system'
+  import * as SystemStaticDict from '@/components/AgileDict'
 
 
   export default {
