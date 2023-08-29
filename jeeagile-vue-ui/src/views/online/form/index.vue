@@ -396,7 +396,7 @@
     updateOnlineForm,
     exportOnlineForm,
     publishOnlineForm,
-    changeFormStatus
+    changeOnlineFormStatus
   } from '@/api/online/form'
   import {
     selectOnlineTableList,
@@ -688,7 +688,7 @@
         if (this.activeStep === 2) {
           this.designerVisible = false
           if (this.onlineForm.formStatus !== this.OnlineFormStatus.PAGE_DESIGN) {
-            changeFormStatus({ id: this.onlineForm.id, formStatus: this.OnlineFormStatus.PAGE_DESIGN })
+            changeOnlineFormStatus({ id: this.onlineForm.id, formStatus: this.OnlineFormStatus.PAGE_DESIGN })
           }
           this.getOnlinePageList()
         }

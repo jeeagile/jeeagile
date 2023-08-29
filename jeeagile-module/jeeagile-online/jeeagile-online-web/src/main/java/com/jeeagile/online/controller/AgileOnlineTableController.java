@@ -36,13 +36,13 @@ public class AgileOnlineTableController extends AgileCrudController<IAgileOnline
     }
 
     @PostMapping(value = "/refreshOnlineColumn")
-    @ApiOperation(value = "添加表字段", notes = "添加表字段")
+    @ApiOperation(value = "刷新表字段", notes = "刷新表字段")
     public AgileResult<AgileOnlineColumn> refreshOnlineColumn(@RequestBody AgileOnlineColumn agileOnlineColumn) {
         return AgileResult.success(agileService.refreshOnlineColumn(agileOnlineColumn));
     }
 
     @PostMapping(value = "/pageTableList")
-    @ApiOperation(value = "修改表单状态", notes = "修改表单状态")
+    @ApiOperation(value = "获取表单数据表", notes = "获取表单数据表")
     public AgileResult<List<OnlinePageTable>> pageTableList(@SingleRequestBody String pageId) {
         return AgileResult.success(agileService.pageTableList(pageId));
     }

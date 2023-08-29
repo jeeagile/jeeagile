@@ -33,14 +33,14 @@ export const publishOnlineForm = data => postApi('/online/form/publish', data)
 /**
  * 修改表单状态
  */
-export const changeFormStatus = data => postApi('/online/form/changeFormStatus', data)
+export const changeOnlineFormStatus = data => postApi('/online/form/changeStatus', data)
 
 /**
  * 加载表单
  */
-export const formPageRender = data => postApi('/online/form/render', data)
+export const renderOnlineFormPage = data => postApi('/online/form/render', data)
 
 /**
  * 表单页面列表
  */
-export const formPageList = data => postApi('/online/form/formPageList', data)
+export const selectOnlineFormPageList = data => postApi('/online/form/formPageList', data)

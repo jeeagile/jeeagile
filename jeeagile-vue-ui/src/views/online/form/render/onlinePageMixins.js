@@ -1,5 +1,5 @@
 import { mapMutations } from 'vuex'
-import { formPageRender } from '@/api/online/form'
+import { renderOnlineFormPage } from '@/api/online/form'
 import * as SystemStaticDict from '@/components/AgileDict'
 import OnlinePagePreview from '../../index'
 import { selectOneData, deleteTableData } from '@/api/online/operation'
@@ -77,7 +77,7 @@ const OnlinePageMixins = {
     },
     loadOnlinePageConfig() {
       return new Promise((resolve, reject) => {
-        formPageRender({ pageId: this.pageId }).then(response => {
+        renderOnlineFormPage({ pageId: this.pageId }).then(response => {
           let onlinePage = response.data.onlinePage
           let pageConfigData = JSON.parse(onlinePage.widgetJson)
           this.pageTableList = response.data.pageTableList
@@ -514,7 +514,7 @@ const OnlinePageMixins = {
     handlerOperation(operation, row, widget) {
       if (this.preview()) return
       if (operation.pageId != null) {
-        formPageRender({ pageId: operation.pageId }).then(response => {
+        renderOnlineFormPage({ pageId: operation.pageId }).then(response => {
           let onlinePage = response.data.onlinePage
           if (onlinePage != null) {
             let params = this.buildSubFormParams(operation, onlinePage, row)

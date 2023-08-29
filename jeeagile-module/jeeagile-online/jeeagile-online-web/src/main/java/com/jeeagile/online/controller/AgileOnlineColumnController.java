@@ -1,10 +1,8 @@
 package com.jeeagile.online.controller;
 
-import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.security.annotation.AgilePermissionsPrefix;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
-import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import com.jeeagile.online.entity.AgileOnlineColumn;
 import com.jeeagile.online.service.IAgileOnlineColumnService;
 import io.swagger.annotations.Api;

@@ -3,7 +3,7 @@ import { postApi } from '@/utils/axios'
 /**
  * 查询规则类型列表
  */
-export const selectRuleList = data => postApi('/online/rule/list', data)
+export const selectOnlineRuleList = data => postApi('/online/rule/list', data)
 
 /**
  * 新增规则配置

@@ -31,10 +31,10 @@ public class AgileOnlineFormController extends AgileCrudController<IAgileOnlineF
         return this.success(agileService.publish(id, publishStatus));
     }
 
-    @PostMapping(value = "/changeFormStatus")
+    @PostMapping(value = "/changeStatus")
     @ApiOperation(value = "修改表单状态", notes = "修改表单状态")
     public AgileResult<Object> changeFormStatus(@SingleRequestBody String id, @SingleRequestBody String formStatus) {
-        return this.success(agileService.changeFormStatus(id, formStatus));
+        return this.success(agileService.changeStatus(id, formStatus));
     }
 
     @PostMapping(value = "/render")
@@ -44,9 +44,9 @@ public class AgileOnlineFormController extends AgileCrudController<IAgileOnlineF
     }
 
     @PostMapping(value = "/formPageList")
-    @ApiOperation(value = "表单加载", notes = "表单加载")
+    @ApiOperation(value = "获取表单页面列表", notes = "获取表单页面列表")
     public AgileResult<Object> formPageList() {
-        return this.success(agileService.getFormPageList());
+        return this.success(agileService.selectFormPageList());
     }
 
 }

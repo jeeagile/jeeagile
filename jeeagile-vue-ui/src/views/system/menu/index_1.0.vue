@@ -200,7 +200,7 @@
 
 <script>
   import { selectMenuList, detailMenu, deleteMenu, addMenu, updateMenu, updateMenuSort } from '@/api/system/menu'
-  import { formPageList } from '@/api/online/form'
+  import { selectOnlineFormPageList } from '@/api/online/form'
   import IconSelect from '@/components/IconSelect'
   import _ from 'lodash'
 
@@ -271,7 +271,7 @@
       },
       /** 查询在线表单页面列表 */
       getFormPageList() {
-        formPageList().then(response => {
+        selectOnlineFormPageList().then(response => {
           let formList = response.data.onlineFormList
           let pageList = response.data.onlinePageList
           if (!Array.isArray(formList) || !Array.isArray(pageList)) {

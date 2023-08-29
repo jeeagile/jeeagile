@@ -233,7 +233,7 @@
   import { selectDictList } from '@/api/online/dict'
   import { selectOnlineColumnList, updateOnlineColumn, deleteOnlineColumn } from '@/api/online/column'
   import { addOnlineColumn, refreshOnlineColumn } from '@/api/online/table'
-  import { selectRuleList, addOnlineRule, updateOnlineRule, deleteOnlineRule } from '@/api/online/rule'
+  import { selectOnlineRuleList, addOnlineRule, updateOnlineRule, deleteOnlineRule } from '@/api/online/rule'
   import { selectColumnRuleList, addColumnRule, updateColumnRule, deleteColumnRule } from '@/api/online/column_rule'
   import { findItemFromList } from '../util'
 
@@ -348,7 +348,7 @@
         )
       },
       getOnlineRuleList() {
-        return selectRuleList().then(response => {
+        return selectOnlineRuleList().then(response => {
             this.onlineRuleList = response.data
           }
         )

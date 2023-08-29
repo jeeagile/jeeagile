@@ -109,7 +109,7 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
     }
 
     @Override
-    public boolean changeFormStatus(String id, String formStatus) {
+    public boolean changeStatus(String id, String formStatus) {
         if (!OnlineFormStatus.isValid(formStatus)) {
             throw new AgileValidateException("非法表单状态值！");
         }
@@ -138,7 +138,7 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
     }
 
     @Override
-    public Map getFormPageList() {
+    public Map selectFormPageList() {
         Map rtnMap = new HashMap();
         LambdaQueryWrapper<AgileOnlineForm> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(AgileOnlineForm::getPublishStatus, AgilePublishStatus.PUBLISHED);

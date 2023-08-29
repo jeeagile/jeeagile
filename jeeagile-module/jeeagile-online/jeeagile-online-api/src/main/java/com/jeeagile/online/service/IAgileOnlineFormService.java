@@ -28,7 +28,7 @@ public interface IAgileOnlineFormService extends IAgileBaseService<AgileOnlineFo
      * @param formStatus
      * @return
      */
-    boolean changeFormStatus(String id, String formStatus);
+    boolean changeStatus(String id, String formStatus);
 
     /**
      * 加载表单页面
@@ -43,5 +43,5 @@ public interface IAgileOnlineFormService extends IAgileBaseService<AgileOnlineFo
      *
      * @return
      */
-    Map getFormPageList();
+    Map selectFormPageList();
 }
