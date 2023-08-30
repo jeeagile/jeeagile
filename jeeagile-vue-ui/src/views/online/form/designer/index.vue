@@ -164,7 +164,7 @@
         </el-row>
       </el-main>
       <el-aside class="page-designer-right" style="width: 280px;overflow: hidden">
-        <el-tabs class="tab-box" v-model="activeTabName">
+        <el-tabs v-model="activeTabName">
           <el-tab-pane :label="currentWidget == null ? '表单属性' : '组件属性'" name="widget">
             <el-scrollbar style="height:calc(100vh - 210px);">
               <el-row v-if="currentWidget != null" class="scroll-box">

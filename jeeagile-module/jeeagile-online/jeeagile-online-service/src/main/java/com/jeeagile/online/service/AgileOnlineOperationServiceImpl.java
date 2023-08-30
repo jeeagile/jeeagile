@@ -278,8 +278,8 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         if (OnlineTableType.MASTER.equals(agileOnlineTable.getTableType())) {
             List<AgileOnlineTable> slaveOnlineTableList = this.getSlaveOnlineTable(agileOnlineTable.getFormId(), agileOnlineTable.getId());
             slaveOnlineTableList.forEach(slaveOnlineTable -> {
-                if (newQueryFieldList.stream().anyMatch(queryField -> queryField.getColumnId().equals(slaveOnlineTable.getSlaveColumnId()))) {
-                    OnlineFieldQuery onlineFieldQuery = makeTableQueryField(agileOnlineTable, agileOnlineTable.getMasterColumnId());
+                if (!newQueryFieldList.stream().anyMatch(queryField -> queryField.getColumnId().equals(slaveOnlineTable.getMasterColumnId()))) {
+                    OnlineFieldQuery onlineFieldQuery = makeTableQueryField(agileOnlineTable, slaveOnlineTable.getMasterColumnId());
                     if (onlineFieldQuery != null) newQueryFieldList.add(onlineFieldQuery);
                 }
             });
