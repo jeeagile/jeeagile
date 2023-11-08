@@ -26,7 +26,7 @@
       :current-page.sync="pageInfo.currentPage"
       layout="prev, pager, next"
     />
-    <el-dialog title="参数配置" :visible.sync="fieldVisible" width="350px" append-to-body destroy-on-close>
+    <el-dialog title="参数配置" :visible.sync="fieldVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="fieldInfo" :model="fieldInfo" :rules="rules" :inline="false" label-width="100px" size="small"
                label-position="right">
         <el-form-item label="字段名称:" prop="name">

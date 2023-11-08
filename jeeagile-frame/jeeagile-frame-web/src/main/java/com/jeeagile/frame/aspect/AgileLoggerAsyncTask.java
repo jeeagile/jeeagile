@@ -24,7 +24,7 @@ public class AgileLoggerAsyncTask {
     @AgileReference
     private IAgileSysLoginService agileSysLoginService;
 
-    @Async("AgileAsyncTask")
+    @Async("AgileLoggerTask")
     public void saveAgileSysLogger(AgileSysLogger agileSysLogger) {
         try {
             agileSysLogger.setOperateAddress(AgileNetUtil.getAddressByIp(agileSysLogger.getOperateIp()));
@@ -34,7 +34,7 @@ public class AgileLoggerAsyncTask {
         }
     }
 
-    @Async("AgileAsyncTask")
+    @Async("AgileLoggerTask")
     public void saveAgileSysLogin(AgileSysLogin agileSysLogin) {
         try {
             agileSysLogin.setLoginAddress(AgileNetUtil.getAddressByIp(agileSysLogin.getLoginIp()));

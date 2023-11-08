@@ -34,7 +34,7 @@
           </template>
         </el-table-column>
         <el-table-column label="发布时间" align="center" prop="deploymentTime" width="150px"/>
-        <el-table-column label="操作" width="350px" align="center" class-name="small-padding">
+        <el-table-column label="操作" width="450px" align="center" class-name="small-padding">
           <template slot-scope="scope">
             <el-button size="mini" type="text" icon="el-icon-view" @click="handleFormView(scope.row)">
               表单预览

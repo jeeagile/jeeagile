@@ -81,7 +81,7 @@
         <el-main class="process-designer__center">
           <div ref="canvas" class="process-designer__canvas"/>
         </el-main>
-        <el-aside class="process-designer__right" :width="panelFold ? '350px':'70px'">
+        <el-aside class="process-designer__right" :width="panelFold ? '380px':'70px'">
           <div class="panel-title">
             <div v-if="panelFold" class="node-name">{{ processInfo.elementName }}</div>
             <div class="panel-fold" :title="panelFold ? '折叠':'展开'" @click="handlerPanelFold()">

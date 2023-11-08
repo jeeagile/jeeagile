@@ -13,5 +13,13 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "agile.web")
 public class AgileWebProperties {
+    private AgilePoolProperties loggerPool;
 
+    public AgilePoolProperties getLoggerPool() {
+        if (this.loggerPool == null) {
+            return new AgilePoolProperties();
+        } else {
+            return this.loggerPool;
+        }
+    }
 }

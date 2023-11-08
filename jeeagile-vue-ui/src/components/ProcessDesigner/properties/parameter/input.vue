@@ -22,7 +22,7 @@
     <div class="button-drawer__line">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="openInputParameterInfo">添加参数</el-button>
     </div>
-    <el-dialog title="参数配置" :visible.sync="inputParameterVisible" width="350px" append-to-body destroy-on-close>
+    <el-dialog title="参数配置" :visible.sync="inputParameterVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="inputParameterInfo" :model="inputParameterInfo" :rules="rules" :inline="false" label-width="100px" size="small" label-position="right">
         <el-form-item label="参数名称:" prop="name">
           <el-input v-model="inputParameterInfo.name"/>

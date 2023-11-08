@@ -26,7 +26,7 @@
     <div class="button-drawer__line">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="openPropertyInfo">新增属性</el-button>
     </div>
-    <el-dialog title="属性配置" :visible.sync="propertyVisible" width="350px" append-to-body destroy-on-close>
+    <el-dialog title="属性配置" :visible.sync="propertyVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="propertyInfo" :model="propertyInfo" :rules="rules" :inline="false" label-width="100px" size="small"
                label-position="right">
         <el-form-item label="属性编号:" prop="id">

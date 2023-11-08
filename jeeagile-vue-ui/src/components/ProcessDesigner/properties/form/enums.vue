@@ -26,7 +26,7 @@
     <div class="button-drawer__line">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="openEnumInfo">新增枚举</el-button>
     </div>
-    <el-dialog title="枚举配置" :visible.sync="enumVisible" width="350px" append-to-body destroy-on-close>
+    <el-dialog title="枚举配置" :visible.sync="enumVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="enumInfo" :model="enumInfo" :rules="rules" :inline="false" label-width="100px" size="small" label-position="right">
         <el-form-item label="枚举值编号:" prop="id">
           <el-input v-model="enumInfo.id"/>

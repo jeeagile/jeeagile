@@ -29,7 +29,7 @@
     <div class="button-drawer__line">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="openTaskListenerInfo">添加监听器</el-button>
     </div>
-    <el-dialog title="任务监听器" :visible.sync="taskListenerVisible" width="360px" append-to-body destroy-on-close>
+    <el-dialog title="任务监听器" :visible.sync="taskListenerVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="taskListenerInfo" :model="taskListenerInfo" :rules="rules" :inline="false" label-width="100px" size="small" label-position="right">
         <el-form-item label="事件类型:" prop="event">
           <el-select v-model="taskListenerInfo.event">
@@ -69,7 +69,7 @@
         <el-button size="mini" type="primary" @click="createTaskListenerInfo">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="参数配置" :visible.sync="taskListenerFieldVisible" width="360px" append-to-body destroy-on-close>
+    <el-dialog title="参数配置" :visible.sync="taskListenerFieldVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="taskListenerInfo" :model="taskListenerInfo" :rules="rules">
         <field-config ref="taskListenerInfo" v-model="taskListenerInfo.fieldList" :fields="taskListenerInfo.fieldList"/>
       </el-form>

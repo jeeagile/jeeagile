@@ -13,7 +13,7 @@ const port = process.env.port || process.env.npm_config_port || 80 // 端口
 // vue.config.js 配置说明
 module.exports = {
   // 应用部署地址。
-  publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : '/',
   // 输出目录
   outputDir: 'dist',
   // 静态资源目录
@@ -31,8 +31,9 @@ module.exports = {
       [process.env.VUE_APP_BASE_API]: {
         target: `http://localhost:9901`,
         changeOrigin: true,
+        cookiePathRewrite: '/',
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
+          ['^' + process.env.VUE_APP_BASE_API]: process.env.BASE_URL
         }
       }
     },

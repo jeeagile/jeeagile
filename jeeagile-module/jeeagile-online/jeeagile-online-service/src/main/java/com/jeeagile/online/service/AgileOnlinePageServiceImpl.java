@@ -46,7 +46,7 @@ public class AgileOnlinePageServiceImpl extends AgileBaseServiceImpl<AgileOnline
     @Override
     public void updateModelValidate(AgileOnlinePage agileOnlinePage) {
         AgileOnlinePage oldOnlinePage = this.getById(agileOnlinePage.getId());
-        if (!oldOnlinePage.getTableId().equals(agileOnlinePage.getTableId())) {
+        if (oldOnlinePage.getTableId().equals(agileOnlinePage.getTableId())) {
             agileOnlinePage.setWidgetJson(oldOnlinePage.getWidgetJson());
             agileOnlinePage.setParamJson(oldOnlinePage.getParamJson());
         }

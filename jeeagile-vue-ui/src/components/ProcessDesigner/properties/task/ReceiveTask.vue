@@ -11,7 +11,7 @@
       </el-form-item>
     </el-form>
 
-    <el-dialog :visible.sync="messageVisible" title="创建新消息" width="350px" destroy-on-close append-to-body>
+    <el-dialog :visible.sync="messageVisible" title="创建新消息" width="450px" destroy-on-close append-to-body>
       <el-form :model="newMessageInfo" size="mini" label-width="90px" @submit.native.prevent>
         <el-form-item label="消息ID:">
           <el-input v-model="newMessageInfo.id" clearable/>

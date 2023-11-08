@@ -46,16 +46,6 @@ public class AgileShiroAutoConfigure {
 
     @Resource
     private AgileSecurityProperties agileSecurityProperties;
-    @Autowired
-    private Environment environment;
-
-    private String getContextPath() {
-        String contextPath = environment.getProperty("server.servlet.context-path");
-        if (AgileStringUtil.isNotEmpty(contextPath)) {
-            return contextPath;
-        }
-        return "";
-    }
 
     @Bean("AgileSecurity")
     @ConditionalOnMissingBean
@@ -175,9 +165,9 @@ public class AgileShiroAutoConfigure {
         Map<String, String> filterChainMap = new HashMap<>();
         filterChainMap.put("/static/**", "anon");
         filterChainMap.put("/index.html", "anon");
-        filterChainMap.put(getContextPath() + "/system/kaptcha/**", "anon");
-        filterChainMap.put(getContextPath() + "/system/auth/login", "anon");
-        filterChainMap.put(getContextPath() + "/system/tenant/info", "anon");
+        filterChainMap.put("/system/kaptcha/**", "anon");
+        filterChainMap.put("/system/auth/login", "anon");
+        filterChainMap.put("/system/tenant/info", "anon");
         for (String strUrl : agileSecurityProperties.getAnonUrl()) {
             filterChainMap.put(strUrl, "anon");
         }

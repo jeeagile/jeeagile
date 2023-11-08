@@ -29,7 +29,7 @@
     <div class="button-drawer__line">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="openExecutionListenerInfo">添加监听器</el-button>
     </div>
-    <el-dialog title="执行监听器" :visible.sync="executionListenerVisible" width="360px" append-to-body destroy-on-close>
+    <el-dialog title="执行监听器" :visible.sync="executionListenerVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="executionListenerInfo" :model="executionListenerInfo" :rules="rules" :inline="false" label-width="100px" size="small" label-position="right">
         <el-form-item label="事件类型:" prop="event">
           <el-select v-model="executionListenerInfo.event">
@@ -69,7 +69,7 @@
         <el-button size="mini" type="primary" @click="createExecutionListenerInfo">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="参数配置" :visible.sync="executionListenerFieldVisible" width="360px" append-to-body destroy-on-close>
+    <el-dialog title="参数配置" :visible.sync="executionListenerFieldVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="executionListenerInfo" :model="executionListenerInfo" :rules="rules">
         <field-config v-model="executionListenerInfo.fieldList" :fields="executionListenerInfo.fieldList"/>
       </el-form>

@@ -1,6 +1,7 @@
 <template>
   <div class="process-properties">
-    <el-collapse v-model="activeItem" accordion :class="panelFold?'process-properties__fold':'process-properties__unfold'">
+    <el-collapse v-model="activeItem" accordion
+                 :class="panelFold?'process-properties__fold':'process-properties__unfold'">
       <el-collapse-item v-for="item in activeItemList" :key="item.name" :name="item.name">
         <div slot="title" class="panel-tab__title" @click="handlerCollapse">
           <i :class="item.icon" :title="item.title" @click="handlerActiveItem(item)"/>
@@ -12,7 +13,7 @@
         />
       </el-collapse-item>
     </el-collapse>
-    <el-dialog :title="activeTitle" :visible.sync="activeVisible" width="380px" append-to-body destroy-on-close>
+    <el-dialog :title="activeTitle" :visible.sync="activeVisible" width="450px" append-to-body destroy-on-close>
       <component :is="activeComponent" v-if="activeElement" :process-info="processInfo"
                  :process-modeler="processModeler"
                  :active-element="activeElement"
@@ -101,6 +102,7 @@
       /** 处理流程节点 */
       handlerActiveElement(element) {
         if (!element || element.type === 'label') return
+        this.activeElement = null
         this.activeElement = element
         this.handlerActiveItemList(element)
         this.handlerActiveElementName(element)
@@ -161,8 +163,11 @@
       handlerActiveItem(activeItem) {
         if (this.panelFold) return
         this.activeVisible = true
-        this.activeComponent = activeItem.component
         this.activeTitle = activeItem.title
+        this.activeComponent = null
+        this.$nextTick(() => {
+          this.activeComponent = activeItem.component
+        })
       },
       /** 处理折叠后点击图标不在展开对应属性配置 */
       handlerCollapse(e) {

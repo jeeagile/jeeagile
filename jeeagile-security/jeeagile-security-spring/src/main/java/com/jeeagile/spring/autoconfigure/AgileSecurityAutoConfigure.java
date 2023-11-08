@@ -52,16 +52,6 @@ public class AgileSecurityAutoConfigure extends WebSecurityConfigurerAdapter {
     private AgileAuthenticationEntryPoint agileAuthenticationEntryPoint;
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
-    @Autowired
-    private Environment environment;
-
-    private String getContextPath() {
-        String contextPath = environment.getProperty("server.servlet.context-path");
-        if (AgileStringUtil.isNotEmpty(contextPath)) {
-            return contextPath;
-        }
-        return "";
-    }
 
     @Bean("AgileSecurity")
     @ConditionalOnMissingBean

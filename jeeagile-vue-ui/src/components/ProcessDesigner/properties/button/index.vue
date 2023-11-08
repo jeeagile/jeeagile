@@ -25,7 +25,7 @@
     <div class="button-drawer__line">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="openButtonInfo">添加按钮</el-button>
     </div>
-    <el-dialog title="按钮配置" :visible.sync="buttonVisible" width="350px" append-to-body destroy-on-close>
+    <el-dialog title="按钮配置" :visible.sync="buttonVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="buttonInfo" :model="buttonInfo" :rules="rules" :inline="false" label-width="100px" size="small" label-position="right">
         <el-form-item label="按钮名称:" prop="name">
           <el-input v-model="buttonInfo.name"/>

@@ -28,7 +28,7 @@
     <div class="button-drawer__line">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="openFormPropertyInfo">添加字段</el-button>
     </div>
-    <el-dialog class="form-property__dialog" title="字段配置" :visible.sync="formPropertyVisible" width="360px" append-to-body destroy-on-close>
+    <el-dialog class="form-property__dialog" title="字段配置" :visible.sync="formPropertyVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="formPropertyInfo" :model="formPropertyInfo" :rules="rules" :inline="false" label-width="100px" size="small" label-position="right">
         <el-form-item label="字段编号:" prop="id">
           <el-input v-model="formPropertyInfo.id" clearable/>
@@ -76,7 +76,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="formPropertyOptionTitle" :visible.sync="formPropertyOptionVisible" width="360px" append-to-body destroy-on-close>
+    <el-dialog :title="formPropertyOptionTitle" :visible.sync="formPropertyOptionVisible" width="450px" append-to-body destroy-on-close>
       <component :is="formPropertyOptionComponent" v-model="formPropertyOptionList" :option-list="formPropertyOptionList"/>
       <div slot="footer">
         <el-button size="mini" @click="formPropertyOptionVisible = false">取 消</el-button>

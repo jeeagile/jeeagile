@@ -79,7 +79,7 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
     @Override
     public AgileProcessInstance selectProcessInstanceInfo(String processInstanceId) {
         AgileProcessInstance agileProcessInstance = this.getById(processInstanceId);
-        if (agileProcessInstance == null && agileProcessInstance.isEmptyPk()) {
+        if (agileProcessInstance == null || agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例已不存在！");
         }
         agileProcessInstance.setHighLineData(agileProcessService.getProcessInstanceHighLineData(agileProcessInstance.getDefinitionId(), processInstanceId));
@@ -89,7 +89,7 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
     @Override
     public List<AgileProcessHistory> selectProcessInstanceHistory(String processInstanceId) {
         AgileProcessInstance agileProcessInstance = this.getById(processInstanceId);
-        if (agileProcessInstance == null && agileProcessInstance.isEmptyPk()) {
+        if (agileProcessInstance == null || agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例已不存在！");
         }
         List<AgileProcessHistory> agileProcessHistoryList = agileProcessService.getProcessInstanceHistoric(processInstanceId);

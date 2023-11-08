@@ -9,6 +9,7 @@ import com.jeeagile.core.security.properties.AgileSecurityProperties;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.AgileUtil;
 import com.jeeagile.core.util.file.AgileFileUtil;
+import com.jeeagile.frame.properties.AgileWebProperties;
 import com.jeeagile.frame.support.interceptor.AgileSecurityInterceptor;
 import com.jeeagile.frame.support.resolver.SingleRequestBodyResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,22 +42,13 @@ import java.util.List;
 @EnableAsync
 @Configuration
 @ComponentScan({"com.jeeagile"})
-@EnableConfigurationProperties({AgileSecurityProperties.class, AgileProperties.class})
+@EnableConfigurationProperties({AgileSecurityProperties.class, AgileProperties.class, AgileWebProperties.class})
 public class AgileWebAutoConfigure implements WebMvcConfigurer {
     @Resource
     private AgileSecurityProperties agileSecurityProperties;
 
-
-    @Autowired
-    private Environment environment;
-
-    private String getContextPath() {
-        String contextPath = environment.getProperty("server.servlet.context-path");
-        if (AgileStringUtil.isNotEmpty(contextPath)) {
-            return contextPath;
-        }
-        return "";
-    }
+    @Resource
+    private AgileWebProperties agileWebProperties;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
@@ -76,7 +68,7 @@ public class AgileWebAutoConfigure implements WebMvcConfigurer {
         if (agileSecurityProperties.getAnonUrl() != null && !agileSecurityProperties.getAnonUrl().isEmpty()) {
             interceptorRegistration.excludePathPatterns(agileSecurityProperties.getAnonUrl());
         }
-        interceptorRegistration.excludePathPatterns(getContextPath() + "/system/auth/login", getContextPath() + "/system/kaptcha/**");
+        interceptorRegistration.excludePathPatterns("/system/auth/login", "/system/kaptcha/**");
     }
 
     @Bean
@@ -106,14 +98,14 @@ public class AgileWebAutoConfigure implements WebMvcConfigurer {
         return fastConverter;
     }
 
-    @Bean("AgileAsyncTask")
-    public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
+    @Bean("AgileLoggerTask")
+    public ThreadPoolTaskExecutor loggerTaskExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-        threadPoolTaskExecutor.setCorePoolSize(50);
-        threadPoolTaskExecutor.setMaxPoolSize(80);
-        threadPoolTaskExecutor.setQueueCapacity(30);
-        threadPoolTaskExecutor.setKeepAliveSeconds(200);
-        threadPoolTaskExecutor.setThreadNamePrefix("AgileAsyncTask");
+        threadPoolTaskExecutor.setCorePoolSize(agileWebProperties.getLoggerPool().getCorePoolSize());
+        threadPoolTaskExecutor.setMaxPoolSize(agileWebProperties.getLoggerPool().getMaxPoolSize());
+        threadPoolTaskExecutor.setQueueCapacity(agileWebProperties.getLoggerPool().getQueueCapacity());
+        threadPoolTaskExecutor.setKeepAliveSeconds(agileWebProperties.getLoggerPool().getKeepAliveSeconds());
+        threadPoolTaskExecutor.setThreadNamePrefix("AgileLoggerTask");
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
     }

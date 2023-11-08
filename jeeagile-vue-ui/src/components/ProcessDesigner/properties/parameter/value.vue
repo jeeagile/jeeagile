@@ -22,7 +22,7 @@
       :current-page.sync="pageInfo.currentPage"
       layout="prev, pager, next"
     />
-    <el-dialog title="添加值" :visible.sync="valueVisible" width="350px" append-to-body destroy-on-close>
+    <el-dialog title="添加值" :visible.sync="valueVisible" width="450px" append-to-body destroy-on-close>
       <el-form ref="valueInfo" :model="valueInfo" :rules="rules" :inline="false" label-width="100px" size="small" label-position="right">
         <el-form-item label="值:" prop="value">
           <el-input v-model="valueInfo.value"/>
