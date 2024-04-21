@@ -1,7 +1,7 @@
 ## 开发
 
 # 进入项目目录
-cd jeeagile-ui
+cd jeeagile-vue-ui
 
 # 安装依赖
 npm install
