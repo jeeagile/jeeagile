@@ -86,7 +86,7 @@
 #### 租户开启
 1、配置文件开启租户
 ```
-agile.tenant.enable=true
+agile.tenant.enable=true 
 ```
 2、执行数据库脚本
 ```
