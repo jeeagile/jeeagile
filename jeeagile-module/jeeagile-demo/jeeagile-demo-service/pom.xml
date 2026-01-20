@@ -26,10 +26,6 @@
         </dependency>
         <dependency>
             <groupId>com.jeeagile</groupId>
-            <artifactId>jeeagile-online-service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jeeagile</groupId>
             <artifactId>jeeagile-demo-api</artifactId>
             <version>${project.version}</version>
         </dependency>

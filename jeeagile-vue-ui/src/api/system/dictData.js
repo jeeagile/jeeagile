@@ -1,4 +1,4 @@
-import {postApi} from '@/utils/axios'
+import { postApi } from '@/utils/axios'
 
 /**
  * 查询字典数据列表

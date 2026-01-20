@@ -103,7 +103,7 @@ http://localhost/login?tenantId=jeeagile&tenantSign=08ba7d68a2e24774ced85c281ac8
 jeeagile      
 ├─jeeagile-core       核心模块 包括用户安全认证、缓存、工具类等
 │  
-├─jeeagile-frame      开发框架基础依赖模块 
+├─jeeagile-frame      开发框架基础依赖模块（系统管理、系统监控、在线表单） 
 │  ├─jeeagile-frame-api       开发框架api层
 │  │
 │  ├─jeeagile-frame-model     开发框架model层
@@ -131,15 +131,6 @@ jeeagile
 │  │  ├─jeeagile-quartz-service    队列管理模块service层
 │  │  │
 │  │  └─jeeagile-quartz-web        队列管理模块web层
-│  │  
-│  ├─jeeagile-online          在线表单
-│  │  ├─jeeagile-online-api         在线表单api层
-│  │  │
-│  │  ├─jeeagile-online-model       在线表单model层
-│  │  │
-│  │  ├─jeeagile-online-service     在线表单service层
-│  │  │
-│  │  └─jeeagile-online-web         在线表单web层
 │  │  
 │  ├─jeeagile-process     工作流模块
 │  │  ├─jeeagile-process-api        工作流模块api层

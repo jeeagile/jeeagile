@@ -1,4 +1,4 @@
-import {postApi} from '@/utils/axios'
+import { postApi } from '@/utils/axios'
 
 /**
  * 获取服务器监控信息

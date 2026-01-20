@@ -117,16 +117,41 @@
               </el-popover>
             </el-form-item>
           </el-col>
-
+          <el-col :span="12">
+            <el-form-item v-if="form.menuType == 'C'" label="菜单分类" prop="menuKind">
+              <el-select v-model="form.menuKind" placeholder="菜单分类" clearable>
+                <el-option
+                  v-for="option in SysMenuKind.getList()"
+                  :key="option.key"
+                  :label="option.label"
+                  :value="option.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="form.menuType == 'C' && form.menuKind == SysMenuKind.ONLINE" :span="12">
+            <el-form-item label="在线表单" prop="pageId">
+              <el-cascader v-model="pageId" :options="businessPageData" filterable
+                           :clearable="true" placeholder="请选择绑定的在线表单"
+                           :props="{value: 'id', label: 'name'}"
+                           @change="changeOnlinePage"/>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="form.menuType == 'C' && form.menuKind == SysMenuKind.ORDER" :span="12">
+            <el-form-item label="工单列表" prop="pageId">
+              <el-cascader v-model="pageId" :options="flowPageData" filterable
+                           :clearable="true" placeholder="选择绑定的在线表单"
+                           :props="{value: 'id', label: 'name'}"
+                           @change="changeOnlinePage"/>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="路由地址" prop="menuPath">
               <el-input v-model="form.menuPath" placeholder="请输入路由地址"/>
             </el-form-item>
           </el-col>
-        </el-row>
 
-        <el-row>
-          <el-col v-if="form.menuType == 'C'" :span="12">
+          <el-col v-if="form.menuType == 'C' && form.menuKind == SysMenuKind.ROUTER" :span="12">
             <el-form-item label="组件路径" prop="menuComp">
               <el-input v-model="form.menuComp" placeholder="请输入组件路径"/>
             </el-form-item>
@@ -136,9 +161,6 @@
               <el-input v-model="form.menuPerm" placeholder="请权限标识" maxlength="50"/>
             </el-form-item>
           </el-col>
-        </el-row>
-
-        <el-row>
           <el-col :span="12">
             <el-form-item v-if="form.menuType != 'F'" label="是否外链">
               <el-radio-group v-model="form.menuFrame">
@@ -178,6 +200,7 @@
 
 <script>
   import { selectMenuList, detailMenu, deleteMenu, addMenu, updateMenu, updateMenuSort } from '@/api/system/menu'
+  import { selectOnlineFormPageList } from '@/api/online/form'
   import IconSelect from '@/components/IconSelect'
   import _ from 'lodash'
 
@@ -205,6 +228,11 @@
           menuName: undefined,
           menuVisible: undefined
         },
+        // 表单页面ID
+        pageId: undefined,
+        formPageData: [],
+        businessPageData: [],
+        flowPageData: [],
         // 表单参数
         form: {},
         // 表单校验
@@ -217,12 +245,16 @@
           ],
           menusPath: [
             { required: true, message: '路由地址不能为空', trigger: 'blur' }
+          ],
+          menusKind: [
+            { required: true, message: '菜单分类不能为空', trigger: 'blur' }
           ]
         }
       }
     },
     created() {
       this.getMenuList()
+      this.getFormPageList()
     },
     methods: {
       /** 选择图标 */
@@ -235,6 +267,40 @@
         selectMenuList(this.queryParam).then(response => {
           this.menuTreeList = this.handleTree(response.data)
           this.loading = false
+        })
+      },
+      /** 查询在线表单页面列表 */
+      getFormPageList() {
+        selectOnlineFormPageList().then(response => {
+          let formList = response.data.onlineFormList
+          let pageList = response.data.onlinePageList
+          if (!Array.isArray(formList) || !Array.isArray(pageList)) {
+            this.businessPageData = []
+            this.flowPageData = []
+            return
+          }
+          formList.map(form => {
+            let children = pageList.filter(page => {
+              return form.id === page.formId
+            }).map(page => {
+              return {
+                id: page.id,
+                name: page.pageName
+              }
+            })
+            const pageData = {
+              id: form.id,
+              name: form.formName,
+              children
+            }
+            if (form.formType === this.OnlineFormType.BUSINESS) {
+              this.businessPageData.push(pageData)
+            }
+            if (form.formType === this.OnlineFormType.FLOW) {
+              this.flowPageData.push(pageData)
+            }
+          })
+          this.formPageData = this.businessPageData.concat(this.flowPageData)
         })
       },
       /** 转换菜单数据结构 */
@@ -287,12 +353,15 @@
           menuPath: '',
           menuType: 'M',
           menuSort: 0,
+          menuKind: '01',
+          pageId: undefined,
           menuPerm: '',
           menuFrame: '1',
           menuVisible: '0',
           menuStatus: '0'
         }
         this.menuSortList = []
+        this.pageId = undefined
         this.resetForm('form')
       },
       /** 更改菜单排序 */
@@ -316,6 +385,10 @@
         this.resetForm('queryForm')
         this.handleQuery()
       },
+      /** 修改在线表单 */
+      changeOnlinePage(values) {
+        this.form.pageId = values[1]
+      },
       /** 新增按钮操作 */
       handleAdd(row) {
         this.reset()
@@ -334,12 +407,26 @@
         this.getMenuTreeSelect()
         detailMenu(row.id).then(response => {
           this.form = response.data
+          if (this.form.pageId) {
+            this.pageId = this.findTreeNodePath(this.formPageData, this.form.pageId, 'id')
+          }
           this.openDialog = true
           this.dialogTitle = '修改菜单'
         })
       },
       /** 提交按钮 */
       submitForm: function () {
+        if (this.form.menuType !== 'C') {
+          this.form.menuKind = undefined
+          this.form.pageId = undefined
+        }
+        if (this.form.menuKind === this.SysMenuKind.ROUTER) {
+          this.form.pageId = undefined
+        }
+        if (this.form.menuType == 'C' && this.form.menuKind !== this.SysMenuKind.ROUTER && !this.form.pageId) {
+          this.messageWarning('表单ID不能为空！')
+          return
+        }
         this.$refs.form.validate(valid => {
           if (valid) {
             if (this.form.id != undefined) {

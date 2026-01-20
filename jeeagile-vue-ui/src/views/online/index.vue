@@ -19,14 +19,14 @@
                         @close="onClose"
                         @ready="onPageReady"
       />
-      <online-order-page ref="form" v-if="pageType === this.OnlinePageType.ORDER"
-                         :entryId="entryId"
-                         :pageId="pageId"
-                         :key="pageKey"
-                         :isPreview="isPreview"
-                         :readOnly="readOnly"
-                         @ready="onPageReady"
-      />
+<!--      <online-order-page ref="form" v-if="pageType === this.OnlinePageType.ORDER"-->
+<!--                         :entryId="entryId"-->
+<!--                         :pageId="pageId"-->
+<!--                         :key="pageKey"-->
+<!--                         :isPreview="isPreview"-->
+<!--                         :readOnly="readOnly"-->
+<!--                         @ready="onPageReady"-->
+<!--      />-->
       <label v-if="closeVisible === '1'" class="page-close-box">
         <el-button type="text" @click="onClose(true)" icon="el-icon-close"/>
       </label>
@@ -37,7 +37,7 @@
 <script>
   import OnlineQueryPage from './form/render/onlineQueryPage'
   import OnlineEditPage from './form/render/onlineEditPage'
-  import OnlineOrderPage from './form/render/onlineOrderPage'
+  // import OnlineOrderPage from './form/render/onlineOrderPage'
 
   export default {
     props: {
@@ -83,8 +83,7 @@
     },
     components: {
       OnlineQueryPage,
-      OnlineEditPage,
-      OnlineOrderPage
+      OnlineEditPage
     },
     data() {
       return {

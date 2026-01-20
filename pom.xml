@@ -376,29 +376,6 @@
                 <version>${jeeagile.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-online-api</artifactId>
-                <version>${jeeagile.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-online-model</artifactId>
-                <version>${jeeagile.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-online-service</artifactId>
-                <version>${jeeagile.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.jeeagile</groupId>
-                <artifactId>jeeagile-online-web</artifactId>
-                <version>${jeeagile.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
