@@ -1,5 +1,5 @@
-drop table if exists agile_generator_table;
 drop table if exists agile_generator_table_column;
+drop table if exists agile_generator_table;
 
 /*==============================================================*/
 /* Table: agile_generator_table 代码生成业务表                   */
