@@ -356,7 +356,7 @@
           menuKind: '01',
           pageId: undefined,
           menuPerm: '',
-          menuFrame: '1',
+          menuFrame: '0',
           menuVisible: '0',
           menuStatus: '0'
         }

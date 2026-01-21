@@ -171,7 +171,7 @@ function buildUserRoutes(userMenu) {
 function handleMenuPath(menu) {
   let routerPath = menu.menuPath
   // 非外链并且是一级目录（类型为目录）
-  if (menu.parentId === '0' && 'M' === menu.menuType && menu.menuFrame === '1') {
+  if (menu.parentId === '0' && 'M' === menu.menuType && menu.menuFrame === '0') {
     routerPath = '/' + menu.menuPath
   } else if (isMenuFrame(menu)) {
     routerPath = '/'
@@ -192,7 +192,7 @@ function handleMenuComponent(menu) {
 }
 
 function isMenuFrame(menu) {
-  return menu.parentId === '0' && 'C' === menu.menuType && menu.menuFrame === '1'
+  return menu.parentId === '0' && 'C' === menu.menuType && menu.menuFrame === '0'
 }
 
 function isRouteView(menu) {
