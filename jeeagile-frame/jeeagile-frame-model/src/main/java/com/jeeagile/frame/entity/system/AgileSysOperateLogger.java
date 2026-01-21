@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AgileSysLogger extends AgileBaseTenantModel<AgileSysLogger> {
+public class AgileSysOperateLogger extends AgileBaseTenantModel<AgileSysOperateLogger> {
     /**
      * 操作模块
      */

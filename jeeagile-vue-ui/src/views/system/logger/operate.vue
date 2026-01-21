@@ -150,7 +150,7 @@
 </template>
 
 <script>
-  import { selectLoggerPage, deleteLogger, clearLogger, exportLogger } from '@/api/system/logger'
+  import { selectOperateLoggerPage, deleteOperateLogger, clearOperateLogger, exportOperateLogger } from '@/api/system/logger/operate'
 
   export default {
     name: 'Operate',
@@ -196,7 +196,7 @@
       /** 查询登录日志 */
       getLoggerList() {
         this.loading = true
-        selectLoggerPage(this.queryParam).then(response => {
+        selectOperateLoggerPage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
             this.loggerList = response.data.records
             this.loading = false
@@ -233,7 +233,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return deleteLogger(row.id)
+          return deleteOperateLogger(row.id)
         }).then(() => {
           this.getLoggerList()
           this.messageSuccess('删除成功')
@@ -246,7 +246,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return clearLogger()
+          return clearOperateLogger()
         }).then(() => {
           this.getLoggerList()
           this.messageSuccess('清空成功')
@@ -259,7 +259,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return exportLogger(this.queryParam.queryCond)
+          return exportOperateLogger(this.queryParam.queryCond)
         })
       }
     }

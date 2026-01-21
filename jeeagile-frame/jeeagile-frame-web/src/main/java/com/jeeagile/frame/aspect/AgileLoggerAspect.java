@@ -10,8 +10,8 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.system.util.AgileSystemUtil;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileCrudController;
-import com.jeeagile.frame.entity.system.AgileSysLogger;
-import com.jeeagile.frame.entity.system.AgileSysLogin;
+import com.jeeagile.frame.entity.system.AgileSysOperateLogger;
+import com.jeeagile.frame.entity.system.AgileSysLoginLogger;
 import com.jeeagile.core.constants.AgileOperateType;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +112,7 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (agileLogger != null && servletRequestAttributes != null) {
                 HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
-                if (agileLogger.type() == AgileOperateType.LOGIN) {
+                if (agileLogger.type().equals(AgileOperateType.LOGIN)) {
                     AgileLoginUser agileLoginUser = null;
                     for (Object object : joinPoint.getArgs()) {
                         if (object instanceof AgileLoginUser) {
@@ -124,30 +124,30 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
                         log.warn("用户登录接口参数不是《AgileSysLogin》，暂无法记录登录信息！");
                         return;
                     }
-                    AgileSysLogin agileSysLogin = getAgileSysLogin(httpServletRequest, throwable);
-                    agileSysLogin.setLoginName(agileLoginUser.getUserName());
-                    agileSysLogin.setLoginModule(getModuleName(joinPoint, agileLogger));
+                    AgileSysLoginLogger agileSysLoginLogger = getAgileSysLogin(httpServletRequest, throwable);
+                    agileSysLoginLogger.setLoginName(agileLoginUser.getUserName());
+                    agileSysLoginLogger.setLoginModule(getModuleName(joinPoint, agileLogger));
                     //登录失败情况下无法记录租户ID 此处需进行存放
                     String tenantId = agileLoginUser.getTenantId();
                     if (AgileStringUtil.isEmpty(tenantId)) {
                         tenantId = "非法租户";
                     }
                     AgileSecurityContext.putTenantId(tenantId);
-                    agileLoggerAsyncTask.saveAgileSysLogin(agileSysLogin);
+                    agileLoggerAsyncTask.saveAgileSysLogin(agileSysLoginLogger);
                     AgileSecurityContext.removeTenant();
                 } else {
-                    AgileSysLogger agileSysLogger = getAgileSysLogger(httpServletRequest, throwable);
-                    agileSysLogger.setOperateModule(getModuleName(joinPoint, agileLogger));
-                    agileSysLogger.setOperateNotes(agileLogger.notes());
-                    agileSysLogger.setOperateType(agileLogger.type());
-                    agileSysLogger.setExecuteTime(executeTime);
+                    AgileSysOperateLogger agileSysOperateLogger = getAgileSysLogger(httpServletRequest, throwable);
+                    agileSysOperateLogger.setOperateModule(getModuleName(joinPoint, agileLogger));
+                    agileSysOperateLogger.setOperateNotes(agileLogger.notes());
+                    agileSysOperateLogger.setOperateType(agileLogger.type());
+                    agileSysOperateLogger.setExecuteTime(executeTime);
                     String className = joinPoint.getTarget().getClass().getName();
                     String methodName = joinPoint.getSignature().getName();
-                    agileSysLogger.setExecuteMethod(className + ":" + methodName);
+                    agileSysOperateLogger.setExecuteMethod(className + ":" + methodName);
                     if (this.isSaveParam(joinPoint, agileLogger)) {
-                        this.putParam(joinPoint, rtnObject, agileSysLogger);
+                        this.putParam(joinPoint, rtnObject, agileSysOperateLogger);
                     }
-                    agileLoggerAsyncTask.saveAgileSysLogger(agileSysLogger);
+                    agileLoggerAsyncTask.saveAgileSysLogger(agileSysOperateLogger);
                 }
             }
         } catch (Exception ex) {
@@ -203,9 +203,9 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
      *
      * @param joinPoint
      * @param rtnObject
-     * @param agileSysLogger
+     * @param agileSysOperateLogger
      */
-    private void putParam(ProceedingJoinPoint joinPoint, Object rtnObject, AgileSysLogger agileSysLogger) {
+    private void putParam(ProceedingJoinPoint joinPoint, Object rtnObject, AgileSysOperateLogger agileSysOperateLogger) {
         String requestParam = "";
         String responseParam = "";
         try {
@@ -223,35 +223,35 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
         } catch (Exception ex) {
             log.warn("请求参数转换JSON出现错误：{}", ex.getMessage());
         }
-        agileSysLogger.setRequestParam(requestParam);
-        agileSysLogger.setResponseParam(responseParam);
+        agileSysOperateLogger.setRequestParam(requestParam);
+        agileSysOperateLogger.setResponseParam(responseParam);
     }
 
-    private AgileSysLogin getAgileSysLogin(HttpServletRequest httpServletRequest, Throwable throwable) {
-        AgileSysLogin agileSysLogin = new AgileSysLogin();
-        agileSysLogin.setStatus(AgileConstants.SUCCESS);
-        agileSysLogin.setLoginTime(new Date());
-        agileSysLogin.setLoginIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
+    private AgileSysLoginLogger getAgileSysLogin(HttpServletRequest httpServletRequest, Throwable throwable) {
+        AgileSysLoginLogger agileSysLoginLogger = new AgileSysLoginLogger();
+        agileSysLoginLogger.setStatus(AgileConstants.SUCCESS);
+        agileSysLoginLogger.setLoginTime(new Date());
+        agileSysLoginLogger.setLoginIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
         String serverAddress = AgileSystemUtil.getHostInfo().getAddress() + ":" + serverPort;
-        agileSysLogin.setServerAddress(serverAddress);
+        agileSysLoginLogger.setServerAddress(serverAddress);
 
         UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
-        agileSysLogin.setLoginOs(userAgent.getOperatingSystem().getName());
-        agileSysLogin.setLoginDevice(userAgent.getOperatingSystem().getDeviceType().getName());
-        agileSysLogin.setLoginBrowser(userAgent.getBrowser().getName());
+        agileSysLoginLogger.setLoginOs(userAgent.getOperatingSystem().getName());
+        agileSysLoginLogger.setLoginDevice(userAgent.getOperatingSystem().getDeviceType().getName());
+        agileSysLoginLogger.setLoginBrowser(userAgent.getBrowser().getName());
         if (throwable != null) {
-            agileSysLogin.setStatus(AgileConstants.FAIL);
+            agileSysLoginLogger.setStatus(AgileConstants.FAIL);
             String excMessage = throwable.getMessage();
             if (excMessage.length() > 100) {
-                agileSysLogin.setMessage(excMessage.substring(100));
+                agileSysLoginLogger.setMessage(excMessage.substring(100));
             } else {
-                agileSysLogin.setMessage(throwable.getMessage());
+                agileSysLoginLogger.setMessage(throwable.getMessage());
             }
         } else {
-            agileSysLogin.setStatus(AgileConstants.SUCCESS);
-            agileSysLogin.setMessage("登录成功");
+            agileSysLoginLogger.setStatus(AgileConstants.SUCCESS);
+            agileSysLoginLogger.setMessage("登录成功");
         }
-        return agileSysLogin;
+        return agileSysLoginLogger;
     }
 
     /**
@@ -261,36 +261,36 @@ public class AgileLoggerAspect implements ApplicationListener<WebServerInitializ
      * @param throwable
      * @return
      */
-    private AgileSysLogger getAgileSysLogger(HttpServletRequest httpServletRequest, Throwable throwable) {
-        AgileSysLogger agileSysLogger = new AgileSysLogger();
+    private AgileSysOperateLogger getAgileSysLogger(HttpServletRequest httpServletRequest, Throwable throwable) {
+        AgileSysOperateLogger agileSysOperateLogger = new AgileSysOperateLogger();
         AgileBaseUser userData = AgileSecurityContext.getUserData();
         if (userData != null) {
-            agileSysLogger.setOperateUser(userData.getUserName());
-            agileSysLogger.setCreateUser(userData.getUserId());
-            agileSysLogger.setUpdateUser(userData.getUserId());
+            agileSysOperateLogger.setOperateUser(userData.getUserName());
+            agileSysOperateLogger.setCreateUser(userData.getUserId());
+            agileSysOperateLogger.setUpdateUser(userData.getUserId());
         }
-        agileSysLogger.setRequestUri(httpServletRequest.getRequestURI());
-        agileSysLogger.setRequestMethod(httpServletRequest.getMethod());
-        agileSysLogger.setOperateIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
+        agileSysOperateLogger.setRequestUri(httpServletRequest.getRequestURI());
+        agileSysOperateLogger.setRequestMethod(httpServletRequest.getMethod());
+        agileSysOperateLogger.setOperateIp(AgileAgentUtil.getUserClientIp(httpServletRequest));
         String serverAddress = AgileSystemUtil.getHostInfo().getAddress() + ":" + this.serverPort;
-        agileSysLogger.setServerAddress(serverAddress);
+        agileSysOperateLogger.setServerAddress(serverAddress);
 
         UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);
-        agileSysLogger.setOperateOs(userAgent.getOperatingSystem().getName());
-        agileSysLogger.setOperateDevice(userAgent.getOperatingSystem().getDeviceType().getName());
-        agileSysLogger.setOperateBrowser(userAgent.getBrowser().getName());
+        agileSysOperateLogger.setOperateOs(userAgent.getOperatingSystem().getName());
+        agileSysOperateLogger.setOperateDevice(userAgent.getOperatingSystem().getDeviceType().getName());
+        agileSysOperateLogger.setOperateBrowser(userAgent.getBrowser().getName());
         if (throwable != null) {
-            agileSysLogger.setStatus(AgileConstants.FAIL);
+            agileSysOperateLogger.setStatus(AgileConstants.FAIL);
             String excMessage = throwable.getMessage();
             if (excMessage.length() > 200) {
-                agileSysLogger.setMessage(excMessage.substring(200));
+                agileSysOperateLogger.setMessage(excMessage.substring(200));
             } else {
-                agileSysLogger.setMessage(excMessage);
+                agileSysOperateLogger.setMessage(excMessage);
             }
         } else {
-            agileSysLogger.setStatus(AgileConstants.SUCCESS);
+            agileSysOperateLogger.setStatus(AgileConstants.SUCCESS);
         }
-        return agileSysLogger;
+        return agileSysOperateLogger;
     }
 
     @Override

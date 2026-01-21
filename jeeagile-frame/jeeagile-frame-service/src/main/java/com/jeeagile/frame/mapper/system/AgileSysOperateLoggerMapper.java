@@ -1,7 +1,7 @@
 package com.jeeagile.frame.mapper.system;
 
 import com.jeeagile.frame.annotation.AgileMapper;
-import com.jeeagile.frame.entity.system.AgileSysLogger;
+import com.jeeagile.frame.entity.system.AgileSysOperateLogger;
 import com.jeeagile.frame.mapper.AgileBaseMapper;
 
 /**
@@ -10,6 +10,6 @@ import com.jeeagile.frame.mapper.AgileBaseMapper;
  * @description
  */
 @AgileMapper
-public interface AgileSysLoggerMapper extends AgileBaseMapper<AgileSysLogger> {
+public interface AgileSysOperateLoggerMapper extends AgileBaseMapper<AgileSysOperateLogger> {
 
 }

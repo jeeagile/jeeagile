@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  import { selectLoginPage, deleteLogin, cleanLogin, exportLogin } from '@/api/system/login'
+  import { selectLoginLoggerPage, deleteLoginLogger, cleanLoginLogger, exportLoginLogger } from '@/api/system/logger/login'
 
   export default {
     name: 'Login',
@@ -115,7 +115,7 @@
       /** 查询登录日志 */
       getLoginList() {
         this.loading = true
-        selectLoginPage(this.queryParam).then(response => {
+        selectLoginLoggerPage(this.queryParam).then(response => {
             this.queryParam.pageTotal = response.data.pageTotal
             this.loginList = response.data.records
             this.loading = false
@@ -152,7 +152,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return deleteLogin(row.id)
+          return deleteLoginLogger(row.id)
         }).then(() => {
           this.getLoginList()
           this.messageSuccess('删除成功')
@@ -165,7 +165,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return cleanLogin()
+          return cleanLoginLogger()
         }).then(() => {
           this.getLoginList()
           this.messageSuccess('清空成功')
@@ -178,7 +178,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          return exportLogin(this.queryParam.queryCond)
+          return exportLoginLogger(this.queryParam.queryCond)
         })
       }
     }

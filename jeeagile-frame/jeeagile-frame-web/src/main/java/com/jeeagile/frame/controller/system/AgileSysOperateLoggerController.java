@@ -7,11 +7,11 @@ import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
-import com.jeeagile.frame.entity.system.AgileSysLogger;
+import com.jeeagile.frame.entity.system.AgileSysOperateLogger;
 import com.jeeagile.core.constants.AgileOperateType;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
-import com.jeeagile.frame.service.system.IAgileSysLoggerService;
+import com.jeeagile.frame.service.system.IAgileSysOperateLoggerService;
 import com.jeeagile.frame.support.resolver.annotation.SingleRequestBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,15 +29,15 @@ import java.util.List;
  */
 @RestController
 @AgileLogger("操作日志")
-@RequestMapping("/system/logger")
+@RequestMapping("/system/operate/logger")
 @Api(value = "操作日志", tags = "操作日志")
-public class AgileSysLoggerController extends AgileBaseController {
+public class AgileSysOperateLoggerController extends AgileBaseController {
     @AgileReference
-    private IAgileSysLoggerService agileSysLoggerService;
+    private IAgileSysOperateLoggerService agileSysLoggerService;
 
     @PostMapping(value = "/page")
     @ApiOperation(value = "分页查询操作日志", notes = "分页查询操作日志")
-    public AgileResult<AgilePage<AgileSysLogger>> selectPage(@RequestBody AgilePageable<AgileSysLogger> agilePageable) {
+    public AgileResult<AgilePage<AgileSysOperateLogger>> selectPage(@RequestBody AgilePageable<AgileSysOperateLogger> agilePageable) {
         return this.success(agileSysLoggerService.selectPage(agilePageable));
     }
 
@@ -63,13 +63,13 @@ public class AgileSysLoggerController extends AgileBaseController {
     @AgileRequiresPermissions("export")
     @AgileLogger(notes = "导出数据", type = AgileOperateType.EXPORT)
     @ApiOperation(value = "导出数据", notes = "导出数据接口")
-    public void exportExcel(@RequestBody AgileSysLogger agileSysLogger) {
-        String excelName = agileSysLogger.getExcelName();
+    public void exportExcel(@RequestBody AgileSysOperateLogger agileSysOperateLogger) {
+        String excelName = agileSysOperateLogger.getExcelName();
         if (AgileStringUtil.isEmpty(excelName)) {
             excelName = "导出数据";
         }
 
-        List<AgileSysLogger> dataList = agileSysLoggerService.selectExportData(agileSysLogger);
-        this.exportExcel(dataList, excelName, AgileSysLogger.class);
+        List<AgileSysOperateLogger> dataList = agileSysLoggerService.selectExportData(agileSysOperateLogger);
+        this.exportExcel(dataList, excelName, AgileSysOperateLogger.class);
     }
 }

@@ -2,10 +2,10 @@ package com.jeeagile.frame.aspect;
 
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.util.AgileNetUtil;
-import com.jeeagile.frame.entity.system.AgileSysLogger;
-import com.jeeagile.frame.entity.system.AgileSysLogin;
-import com.jeeagile.frame.service.system.IAgileSysLoggerService;
-import com.jeeagile.frame.service.system.IAgileSysLoginService;
+import com.jeeagile.frame.entity.system.AgileSysOperateLogger;
+import com.jeeagile.frame.entity.system.AgileSysLoginLogger;
+import com.jeeagile.frame.service.system.IAgileSysOperateLoggerService;
+import com.jeeagile.frame.service.system.IAgileSysLoginLoggerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -19,26 +19,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class AgileLoggerAsyncTask {
     @AgileReference
-    private IAgileSysLoggerService agileSysLoggerService;
+    private IAgileSysOperateLoggerService agileSysLoggerService;
 
     @AgileReference
-    private IAgileSysLoginService agileSysLoginService;
+    private IAgileSysLoginLoggerService agileSysLoginService;
 
     @Async("AgileLoggerTask")
-    public void saveAgileSysLogger(AgileSysLogger agileSysLogger) {
+    public void saveAgileSysLogger(AgileSysOperateLogger agileSysOperateLogger) {
         try {
-            agileSysLogger.setOperateAddress(AgileNetUtil.getAddressByIp(agileSysLogger.getOperateIp()));
-            agileSysLoggerService.saveModel(agileSysLogger);
+            agileSysOperateLogger.setOperateAddress(AgileNetUtil.getAddressByIp(agileSysOperateLogger.getOperateIp()));
+            agileSysLoggerService.saveModel(agileSysOperateLogger);
         } catch (Exception ex) {
             log.warn("操作日志记录发生异常!", ex);
         }
     }
 
     @Async("AgileLoggerTask")
-    public void saveAgileSysLogin(AgileSysLogin agileSysLogin) {
+    public void saveAgileSysLogin(AgileSysLoginLogger agileSysLoginLogger) {
         try {
-            agileSysLogin.setLoginAddress(AgileNetUtil.getAddressByIp(agileSysLogin.getLoginIp()));
-            agileSysLoginService.saveModel(agileSysLogin);
+            agileSysLoginLogger.setLoginAddress(AgileNetUtil.getAddressByIp(agileSysLoginLogger.getLoginIp()));
+            agileSysLoginService.saveModel(agileSysLoginLogger);
         } catch (Exception ex) {
             log.warn("登录日志记录发生异常!", ex);
         }

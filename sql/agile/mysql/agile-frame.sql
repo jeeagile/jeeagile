@@ -10,8 +10,8 @@ drop table if exists agile_sys_post;
 drop table if exists agile_sys_role;
 drop table if exists agile_sys_menu;
 drop table if exists agile_sys_dept;
-drop table if exists agile_sys_login;
-drop table if exists agile_sys_logger;
+drop table if exists agile_sys_login_logger;
+drop table if exists agile_sys_operate_logger;
 drop table if exists agile_online_dict;
 drop table if exists agile_online_form;
 drop table if exists agile_online_table;
@@ -502,9 +502,9 @@ alter table agile_sys_user_role comment '用户角色关联表';
 INSERT INTO agile_sys_user_role VALUES ('1', '1', '1',NULL,NULL,NULL,NULL);
 
 /*==============================================================*/
-/* table: agile_sys_login 用户登录日志表                      */
+/* table: agile_sys_login_logger 用户登录日志表                      */
 /*==============================================================*/
-create table agile_sys_login
+create table agile_sys_login_logger
 (
     id                     varchar(32) not null comment '登录日志主键',
     login_module           varchar(150) not null comment '登录类型',
@@ -521,12 +521,12 @@ create table agile_sys_login
     primary key (id)
 );
 
-alter table agile_sys_login comment '用户登录日志表';
+alter table agile_sys_login_logger comment '用户登录日志表';
 
 /*==============================================================*/
 /* table: agile_sys_logger 用户操作日志表                    */
 /*==============================================================*/
-create table agile_sys_logger
+create table agile_sys_operate_logger
 (
     id                    varchar(32) not null comment '操作日志主键',
     operate_module        varchar(100) not null comment '操作模块',
@@ -554,7 +554,7 @@ create table agile_sys_logger
     primary key (id)
 );
 
-alter table agile_sys_logger comment '用户操作日志表';
+alter table agile_sys_operate_logger comment '用户操作日志表';
 
 
 /*==============================================================*/

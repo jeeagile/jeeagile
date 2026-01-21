@@ -1,6 +1,6 @@
 package com.jeeagile.frame.service.system;
 
-import com.jeeagile.frame.entity.system.AgileSysLogin;
+import com.jeeagile.frame.entity.system.AgileSysOperateLogger;
 import com.jeeagile.frame.service.IAgileBaseService;
 
 /**
@@ -8,7 +8,7 @@ import com.jeeagile.frame.service.IAgileBaseService;
  * @date 2021-03-21
  * @description
  */
-public interface IAgileSysLoginService extends IAgileBaseService<AgileSysLogin> {
+public interface IAgileSysOperateLoggerService extends IAgileBaseService<AgileSysOperateLogger> {
     /**
      * 清空日志记录
      */

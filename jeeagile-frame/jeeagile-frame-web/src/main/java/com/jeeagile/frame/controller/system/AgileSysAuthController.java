@@ -37,7 +37,7 @@ public class AgileSysAuthController extends AgileBaseController {
 
     @PostMapping("/login")
     @ApiOperation(value = "用户登录", notes = "用户登录")
-    @AgileLogger(module = "系统内部用户登录", notes = "用户登录", type = AgileOperateType.LOGIN)
+    @AgileLogger(module = "用户认证", notes = "用户登录", type = AgileOperateType.LOGIN)
     public AgileResult<AgileUserData> login(@RequestBody AgileLoginUser agileLoginUser) {
         if (AgileStringUtil.isEmpty(agileLoginUser.getUserName())) {
             return this.error(AgileResultCode.FAIL_AUTH, "登录名不能为空!");
