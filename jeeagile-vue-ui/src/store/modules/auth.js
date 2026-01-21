@@ -2,9 +2,11 @@ import { getUserInfo, getUserMenu, login, logout } from '@/api/auth'
 import { getUserToken, removeUserToken, setUserToken } from '@/utils/cookie'
 import { agileRouter } from '@/router'
 import Layout from '@/layout/index'
+import RouterView from '@/components/RouterView'
 import { handleTree } from '@/utils/agile'
 import { SysMenuKind } from '@/components/AgileDict/system'
 import { OnlinePageType } from '@/components/AgileDict/online'
+
 
 const state = {
   userName: '',
@@ -74,8 +76,9 @@ const actions = {
     return new Promise(resolve => {
       // 向后端请求路由数据
       getUserMenu().then(response => {
-        let asyncRoutes = handleUserMenuTree(response.data)
+        let asyncRoutes = buildUserRoutes(response.data)
         let accessedRoutes = filterAsyncRoutes(asyncRoutes)
+        debugger
         accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
         commit('SET_USER_ROUTE', accessedRoutes)
         resolve(accessedRoutes)
@@ -127,6 +130,8 @@ export function filterAsyncRoutes(asyncRoutes) {
       // Layout组件特殊处理
       if (route.component === 'Layout') {
         route.component = Layout
+      } else if (route.component === 'RouterView') {
+        route.component = RouterView
       } else {
         route.component = loadView(route.component)
       }
@@ -138,7 +143,7 @@ export function filterAsyncRoutes(asyncRoutes) {
   })
 }
 
-function handleUserMenuTree(userMenu) {
+function buildUserRoutes(userMenu) {
   const routerList = []
   userMenu.forEach(menu => {
     let router = {
@@ -180,12 +185,18 @@ function handleMenuComponent(menu) {
   }
   if (menu.menuComp && !isMenuFrame(menu)) {
     return menu.menuComp
+  } else if (!menu.menuComp && isRouteView(menu)) {
+    return 'RouterView'
   }
   return 'Layout'
 }
 
 function isMenuFrame(menu) {
   return menu.parentId === '0' && 'C' === menu.menuType && menu.menuFrame === '1'
+}
+
+function isRouteView(menu) {
+  return menu.parentId != '0' && 'M' === menu.menuType
 }
 
 export const loadView = (view) => {

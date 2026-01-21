@@ -74,7 +74,7 @@
         return route.path === this.$route.path
       },
       activeStyle(tag) {
-        if (!this.isActive(tag)) return {};
+        if (!this.isActive(tag)) return {}
         return {
           'background-color': this.theme,
           'border-color': this.theme

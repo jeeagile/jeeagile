@@ -43,7 +43,6 @@ export default {
       let firstTag = null
       let lastTag = null
 
-      // find first tag and last tag
       if (tagList.length > 0) {
         firstTag = tagList[0]
         lastTag = tagList[tagList.length - 1]
