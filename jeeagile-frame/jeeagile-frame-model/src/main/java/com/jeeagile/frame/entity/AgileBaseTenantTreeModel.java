@@ -1,5 +1,6 @@
 package com.jeeagile.frame.entity;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,6 +20,7 @@ public abstract class AgileBaseTenantTreeModel<T extends AgileBaseTenantTreeMode
     /**
      * 租户ID
      */
+    @ExcelIgnore
     @TableField(exist = false)
     @JSONField(serialize = false)
     @ApiModelProperty(hidden = true)
