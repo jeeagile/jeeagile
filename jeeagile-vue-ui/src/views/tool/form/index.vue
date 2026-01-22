@@ -469,5 +469,9 @@ export default {
 </script>
 
 <style lang='scss'>
-@import './styles/index';
+.container{
+  position: relative;
+  height: calc(100vh - 145px);
+  @import './styles/index';
+}
 </style>
