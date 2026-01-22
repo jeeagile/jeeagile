@@ -123,14 +123,14 @@ jeeagile
 │  │  │
 │  │  └─jeeagile-generator-web     代码生成模块web层
 │  │  
-│  ├─jeeagile-quartz         队列管理模块
-│  │  ├─jeeagile-quartz-api        队列管理模块api层
+│  ├─jeeagile-quartz          定时任务管理模块
+│  │  ├─jeeagile-quartz-api        定时任务管理模块api层
 │  │  │
-│  │  ├─jeeagile-quartz-model      队列管理模块model层
+│  │  ├─jeeagile-quartz-model      定时任务管理模块model层
 │  │  │
-│  │  ├─jeeagile-quartz-service    队列管理模块service层
+│  │  ├─jeeagile-quartz-service    定时任务管理模块service层
 │  │  │
-│  │  └─jeeagile-quartz-web        队列管理模块web层
+│  │  └─jeeagile-quartz-web        定时任务管理模块web层
 │  │  
 │  ├─jeeagile-process     工作流模块
 │  │  ├─jeeagile-process-api        工作流模块api层
