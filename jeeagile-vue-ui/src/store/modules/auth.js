@@ -78,7 +78,6 @@ const actions = {
       getUserMenu().then(response => {
         let asyncRoutes = buildUserRoutes(response.data)
         let accessedRoutes = filterAsyncRoutes(asyncRoutes)
-        debugger
         accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
         commit('SET_USER_ROUTE', accessedRoutes)
         resolve(accessedRoutes)
