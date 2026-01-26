@@ -11,6 +11,8 @@
 
     <artifactId>jeeagile-core</artifactId>
 
+    <description>核心工具包</description>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
