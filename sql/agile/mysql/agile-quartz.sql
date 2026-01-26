@@ -56,22 +56,22 @@ alter table agile_quartz_logger comment '定时任务执行日志表';
 /*==============================================================*/
 /* 菜单配置                                                      */
 /*==============================================================*/
-INSERT INTO agile_sys_menu VALUES ('5', '0', '任务管理',5,'', 'quartz', 'quartz', 'M', '0', '0', '0', '', '', '', '任务管理目录',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('5', '0', '任务管理',5,'', 'quartz', 'quartz', 'M', '0', '0', '0', '', '', '', '', '任务管理目录',NULL,NULL,NULL,NULL);
 
-INSERT INTO agile_sys_menu VALUES ('501', '5', '定时任务',1,'quartz/job/index', 'job', 'job', 'C', '0', '0', '0', '01', '', 'quartz:job:page', '定时任务菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50101', '501', '任务明细',1,'', '', '#', 'F', '0', '0', '0', '', '', 'quartz:job:detail', '',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50102', '501', '任务新增',2,'', '', '#', 'F', '0', '0', '0', '', '', 'quartz:job:add', '',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50103', '501', '任务修改',3,'', '', '#', 'F', '0', '0', '0', '', '', 'quartz:job:update', '',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50104', '501', '任务删除',4,'', '', '#', 'F', '0', '0', '0', '', '', 'quartz:job:delete', '',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50105', '501', '任务导入',5,'', '', '#', 'F', '0', '0', '0', '', '', 'quartz:job:import', '',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50106', '501', '任务导出',6,'', '', '#', 'F', '0', '0', '0', '', '', 'quartz:job:export', '',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50107', '501', '任务执行',7,'', '', '#', 'F', '0', '0', '0', '', '', 'quartz:job:execute', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('501', '5', '定时任务',1,'quartz/job/index', 'job', 'job', 'C', '0', '0', '0', '01', '', '', 'quartz:job:page', '定时任务菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50101', '501', '任务明细',1,'', '', '#', 'F', '0', '0', '0', '', '', '', 'quartz:job:detail', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50102', '501', '任务新增',2,'', '', '#', 'F', '0', '0', '0', '', '', '', 'quartz:job:add', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50103', '501', '任务修改',3,'', '', '#', 'F', '0', '0', '0', '', '', '', 'quartz:job:update', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50104', '501', '任务删除',4,'', '', '#', 'F', '0', '0', '0', '', '', '', 'quartz:job:delete', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50105', '501', '任务导入',5,'', '', '#', 'F', '0', '0', '0', '', '', '', 'quartz:job:import', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50106', '501', '任务导出',6,'', '', '#', 'F', '0', '0', '0', '', '', '', 'quartz:job:export', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50107', '501', '任务执行',7,'', '', '#', 'F', '0', '0', '0', '', '', '', 'quartz:job:execute', '',NULL,NULL,NULL,NULL);
 
 
-INSERT INTO agile_sys_menu VALUES ('502', '5', '执行日志',1,'quartz/logger/index', 'quartzLogger', 'logger', 'C', '0', '0', '0', '01', '', 'job:logger:page', '操作日志菜单',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50201', '502', '查看',1,'', '', '', 'F', '0', '0', '0', '', '', 'quartz:logger:detail', '',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50202', '502', '删除',2,'', '#', '#', 'F', '0', '0', '0', '', '', 'quartz:logger:delete', '',NULL,NULL,NULL,NULL);
-INSERT INTO agile_sys_menu VALUES ('50203', '502', '清空',3,'', '', '', 'F', '0', '0', '0', '', '', 'quartz:logger:clear', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('502', '5', '执行日志',1,'quartz/logger/index', 'quartzLogger', 'logger', 'C', '0', '0', '0', '01', '','','job:logger:page', '操作日志菜单',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50201', '502', '查看',1,'', '', '', 'F', '0', '0', '0', '', '', '', 'quartz:logger:detail', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50202', '502', '删除',2,'', '#', '#', 'F', '0', '0', '0', '', '', '', 'quartz:logger:delete', '',NULL,NULL,NULL,NULL);
+INSERT INTO agile_sys_menu VALUES ('50203', '502', '清空',3,'', '', '', 'F', '0', '0', '', '', '', '', 'quartz:logger:clear', '',NULL,NULL,NULL,NULL);
 
 
 

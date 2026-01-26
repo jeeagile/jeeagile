@@ -159,6 +159,7 @@ function buildUserRoutes(userMenu) {
     }
     if (menu.menuKind === SysMenuKind.ONLINE || menu.menuKind === SysMenuKind.ORDER) {
       router.props.pageId = menu.pageId
+      router.props.processId = menu.processId
       router.props.pageType = menu.menuKind === SysMenuKind.ONLINE ? OnlinePageType.QUERY : OnlinePageType.ORDER
     }
     routerList.push(router)

@@ -5,8 +5,12 @@ import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.constants.online.OnlinePageType;
+import com.jeeagile.frame.entity.online.AgileOnlinePage;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import com.jeeagile.frame.service.online.IAgileOnlinePageService;
 import com.jeeagile.frame.util.AgileBeanUtils;
+import com.jeeagile.process.constants.ProcessFormType;
 import com.jeeagile.process.constants.ProcessDeploymentStatus;
 import com.jeeagile.process.entity.AgileProcessDefinition;
 import com.jeeagile.process.entity.AgileProcessForm;
@@ -16,7 +20,7 @@ import com.jeeagile.process.support.IAgileProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author JeeAgile
@@ -31,6 +35,8 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
     private IAgileProcessFormService agileProcessFormService;
     @Autowired
     private IAgileProcessDefinitionService agileProcessDefinitionService;
+    @Autowired
+    private IAgileOnlinePageService agileOnlinePageService;
 
     @Override
     public LambdaQueryWrapper<AgileProcessModel> queryWrapper(AgileProcessModel agileProcessModel) {
@@ -179,5 +185,26 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
             agileProcessModel.setDeploymentStatus(ProcessDeploymentStatus.UNPUBLISHED);
             agileProcessModel.setDeploymentTime(null);
         }
+    }
+
+    @Override
+    public Map<String, Object> selectProcessOnlinePageList() {
+        Map rtnMap = new HashMap();
+        LambdaQueryWrapper<AgileProcessModel> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.select(AgileProcessModel::getId, AgileProcessModel::getFormId, AgileProcessModel::getModelName);
+        lambdaQueryWrapper.eq(AgileProcessModel::getDeploymentStatus, ProcessDeploymentStatus.PUBLISHED);
+        lambdaQueryWrapper.eq(AgileProcessModel::getFormType, ProcessFormType.ONLINE_FORM);
+        List<AgileProcessModel> agileProcessModelList = this.list(lambdaQueryWrapper);
+        List<AgileOnlinePage> agileOnlinePageList = new ArrayList<>();
+        agileProcessModelList.forEach(agileProcessModel -> {
+            LambdaQueryWrapper<AgileOnlinePage> pageQueryWrapper = new LambdaQueryWrapper<>();
+            pageQueryWrapper.select(AgileOnlinePage::getId, AgileOnlinePage::getFormId, AgileOnlinePage::getPageName, AgileOnlinePage::getPageType);
+            pageQueryWrapper.eq(AgileOnlinePage::getFormId, agileProcessModel.getFormId());
+            pageQueryWrapper.in(AgileOnlinePage::getPageType, OnlinePageType.ORDER);
+            agileOnlinePageList.addAll(this.agileOnlinePageService.list(pageQueryWrapper));
+        });
+        rtnMap.put("processList", agileProcessModelList);
+        rtnMap.put("orderPageList", agileOnlinePageList);
+        return rtnMap;
     }
 }

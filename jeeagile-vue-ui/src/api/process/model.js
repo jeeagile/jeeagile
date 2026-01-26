@@ -37,3 +37,8 @@ export const saveProcessDesigner = data => postApi('/process/model/designer', da
  * 流程发布
  */
 export const processDeployment = modelId => postApi('/process/model/deployment', modelId)
+
+/**
+ * 查询流程在线表单
+ */
+export const selectProcessOnlinePageList = data => postApi('/process/model/selectProcessOnlinePageList', data)

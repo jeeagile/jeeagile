@@ -91,10 +91,8 @@
               </template>
             </el-table-column>
           </template>
-          <el-table-column v-if="pageType === OnlinePageType.ORDER" label="当前任务"
-                           prop="(runtimeTaskInfo || {}).taskName"/>
-          <el-table-column v-if="pageType === OnlinePageType.ORDER" label="流程创建时间" width="180px" prop="createTime"/>
-          <el-table-column v-if="pageType === OnlinePageType.ORDER" label="流程状态" width="100px" prop="flowStatus"/>
+          <el-table-column v-if="pageType === OnlinePageType.ORDER" label="创建时间" fixed="right" width="200px" prop="createTime"/>
+          <el-table-column v-if="pageType === OnlinePageType.ORDER" label="流程状态" fixed="right" width="150px" prop="processStatus"/>
           <el-table-column
             v-if="getTableOperation(true).length > 0 || pageType === OnlinePageType.ORDER"
             label="操作" :width="(widgetConfig.operationWidth || 150) + 'px'" fixed="right" align="center"

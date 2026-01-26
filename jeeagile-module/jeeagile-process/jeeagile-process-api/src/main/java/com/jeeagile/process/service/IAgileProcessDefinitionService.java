@@ -43,4 +43,10 @@ public interface IAgileProcessDefinitionService extends IAgileBaseService<AgileP
      */
     boolean updateMainVersion(String id);
 
+    /**
+     * 查询流程主表版本
+     * @param id
+     * @return
+     */
+    AgileProcessDefinition selectMainProcessDefinition(String id);
 }

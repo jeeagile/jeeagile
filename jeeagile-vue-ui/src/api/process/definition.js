@@ -35,3 +35,7 @@ export const updateMainVersion = definitionId => postApi('/process/definition/up
  * 查询可发起流程定义列表
  */
 export const selectMainVersionProcess = data => postApi('/process/definition/selectMainVersion', data)
+/**
+ * 根据流程ID获取流程定义主版本
+ */
+export const selectMainProcessDefinition = data => postApi('/process/definition/selectMainProcessDefinition', data)

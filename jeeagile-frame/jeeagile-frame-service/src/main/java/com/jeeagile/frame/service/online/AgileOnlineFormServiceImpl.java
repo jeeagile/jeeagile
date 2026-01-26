@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.constants.online.OnlineFormType;
 import com.jeeagile.frame.entity.online.*;
 import com.jeeagile.frame.constants.online.OnlineFormStatus;
 import com.jeeagile.frame.constants.online.OnlinePageType;
@@ -156,6 +157,26 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
     }
 
     @Override
+    public Map<String, Object> selectOnlineProcessFormList() {
+        Map<String, Object> rtnMap = new HashMap<>();
+        LambdaQueryWrapper<AgileOnlineForm> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileOnlineForm::getPublishStatus, AgilePublishStatus.PUBLISHED);
+        lambdaQueryWrapper.eq(AgileOnlineForm::getFormType, OnlineFormType.FLOW);
+        List<AgileOnlineForm> agileOnlineFormList = this.list(lambdaQueryWrapper);
+        List<AgileOnlinePage> agileOnlinePageList = new ArrayList<>();
+        agileOnlineFormList.forEach(agileOnlineForm -> {
+            LambdaQueryWrapper<AgileOnlinePage> pageQueryWrapper = new LambdaQueryWrapper<>();
+            pageQueryWrapper.select(AgileOnlinePage::getId, AgileOnlinePage::getFormId, AgileOnlinePage::getPageName, AgileOnlinePage::getPageType);
+            pageQueryWrapper.eq(AgileOnlinePage::getFormId, agileOnlineForm.getId());
+            pageQueryWrapper.in(AgileOnlinePage::getPageType, OnlinePageType.FLOW);
+            agileOnlinePageList.addAll(this.agileOnlinePageService.list(pageQueryWrapper));
+        });
+        rtnMap.put("onlineFormList", agileOnlineFormList);
+        rtnMap.put("onlinePageList", agileOnlinePageList);
+        return rtnMap;
+    }
+
+    @Override
     public boolean deleteModel(Serializable id) {
         this.deleteOnlineTable(id);
         this.deleteOnlineColumn(id);
@@ -185,6 +206,7 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
         lambdaQueryWrapper.eq(AgileOnlineColumn::getFormId, formId);
         agileOnlineColumnService.remove(lambdaQueryWrapper);
     }
+
     /**
      * 删除在线表单数据表字段规则配置
      *
@@ -195,6 +217,7 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
         lambdaQueryWrapper.eq(AgileOnlineColumnRule::getFormId, formId);
         agileOnlineColumnRuleService.remove(lambdaQueryWrapper);
     }
+
     /**
      * 删除在线表单数据表字段
      *

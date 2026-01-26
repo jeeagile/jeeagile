@@ -50,4 +50,10 @@ public class AgileProcessModelController extends AgileCrudController<IAgileProce
             return AgileResult.error(AgileResultCode.FAIL_OPS, "流程发布失败！");
         }
     }
+
+    @PostMapping("/selectProcessOnlinePageList")
+    @ApiOperation(value = "查询流程在线表单", notes = "查询流程在线表单")
+    public AgileResult<Object> selectProcessOnlinePageList() {
+        return this.success(agileService.selectProcessOnlinePageList());
+    }
 }

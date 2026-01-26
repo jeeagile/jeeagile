@@ -107,9 +107,9 @@
                         <template v-if="onlinePage.pageType === OnlinePageType.ORDER">
                           <el-row>
                             <el-col :span="12">
-                              <el-form-item label="工单状态">
-                                <el-select class="filter-item" v-model="flowWorkStatus" :clearable="true"
-                                           placeholder="工单状态"/>
+                              <el-form-item label="流程状态">
+                                <el-select class="filter-item" v-model="processStatus" :clearable="true"  style="width: 250px"
+                                           placeholder="流程状态"/>
                               </el-form-item>
                             </el-col>
                             <el-col :span="12">
@@ -163,7 +163,7 @@
           </el-col>
         </el-row>
       </el-main>
-      <el-aside class="page-designer-right" style="width: 280px;overflow: hidden">
+      <el-aside class="page-designer-right" style="width: 300px;overflow: hidden">
         <el-tabs v-model="activeTabName">
           <el-tab-pane :label="currentWidget == null ? '表单属性' : '组件属性'" name="widget">
             <el-scrollbar style="height:calc(100vh - 210px);">
@@ -663,7 +663,7 @@
     data() {
       return {
         isLocked: false,
-        flowWorkStatus: undefined,
+        processStatus: undefined,
         pageTableList: [],
         onlinePageList: [],
         pageWidgetList: [],

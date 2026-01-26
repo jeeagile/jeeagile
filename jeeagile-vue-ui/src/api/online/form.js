@@ -44,3 +44,8 @@ export const renderOnlineFormPage = data => postApi('/online/form/render', data)
  * 表单页面列表
  */
 export const selectOnlineFormPageList = data => postApi('/online/form/formPageList', data)
+
+/**
+ * 查询在线流程表单
+ */
+export const selectOnlineProcessFormList = data => postApi('/online/form/selectOnlineProcessFormList', data)

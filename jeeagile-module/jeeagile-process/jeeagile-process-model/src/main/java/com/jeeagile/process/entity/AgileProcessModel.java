@@ -55,6 +55,10 @@ public class AgileProcessModel extends AgileBaseTenantModel<AgileProcessModel> {
      */
     private String formUrl;
     /**
+     * 在线表单页面ID
+     */
+    private String pageId;
+    /**
      * 流程部署状态 (1:已发布 2：未发布)
      */
     private String deploymentStatus;

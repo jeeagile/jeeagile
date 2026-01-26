@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author JeeAgile
  * @date 2023-07-17
- * @description 发布状态字典常量
+ * @description 流程部署状态字典常量
  */
 public class ProcessDeploymentStatus {
     /**

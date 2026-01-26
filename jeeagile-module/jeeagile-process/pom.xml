@@ -17,6 +17,4 @@
         <module>jeeagile-process-service</module>
         <module>jeeagile-process-web</module>
     </modules>
-
-
 </project>

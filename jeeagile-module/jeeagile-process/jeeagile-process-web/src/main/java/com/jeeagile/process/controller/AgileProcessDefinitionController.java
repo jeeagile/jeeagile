@@ -80,4 +80,13 @@ public class AgileProcessDefinitionController extends AgileCrudController<IAgile
             return AgileResult.error(ex, "流程定义设置主版本异常！");
         }
     }
+    @PostMapping("/selectMainProcessDefinition")
+    @ApiOperation(value = "查询流程主表版本", notes = "查询流程主表版本")
+    public AgileResult<AgileProcessDefinition> selectMainProcessDefinition(@SingleRequestBody String processId) {
+        try {
+            return AgileResult.success(agileService.selectMainProcessDefinition(processId));
+        } catch (Exception ex) {
+            return AgileResult.error(ex, "查询流程主表版本异常！");
+        }
+    }
 }

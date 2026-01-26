@@ -14,6 +14,7 @@ ADD /src/main/resources/application-demo.properties /data/config/application.pro
 #RUN bash -c "touch /demo.jar"
 #声明运行时容器提供服务端口，这只是一个声明，在运行时并不会因为这个声明应用就会开启这个端口的服务
 
+
 #指定容器启动程序及参数   <ENTRYPOINT> "<CMD>"
 ENTRYPOINT ["java","-jar","jeeagile-demo.jar","--spring.config.location=/data/config/application.properties"]
 

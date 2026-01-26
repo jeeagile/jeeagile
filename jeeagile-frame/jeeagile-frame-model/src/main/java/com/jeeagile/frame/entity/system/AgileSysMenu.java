@@ -104,6 +104,9 @@ public class AgileSysMenu extends AgileBaseTenantTreeModel<AgileSysMenu> {
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String pageId;
 
+    @ApiModelProperty("流程ID")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private String processId;
     /**
      * 备注信息
      */

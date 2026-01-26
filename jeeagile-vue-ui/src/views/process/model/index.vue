@@ -109,30 +109,38 @@
           <el-input v-model="form.modelName" placeholder="请输入模型名称"/>
         </el-form-item>
         <el-form-item label="表单类型" prop="formType">
-          <el-radio-group v-model="form.formType">
-            <el-radio v-for="processFormTypeOption in processFormTypeOptionList" :key="processFormTypeOption.dictValue"
-                      :label="processFormTypeOption.dictValue">
-              {{ processFormTypeOption.dictLabel }}
+          <el-radio-group v-model="form.formType" @change="formTypeChange">
+            <el-radio v-for="item in ProcessFormType.getList()" :key="item.value" :label="item.value">
+              {{ item.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="流程表单" prop="formId" v-if="form.formType=='1'">
-          <el-select v-model="form.formId" placeholder="请选择" style="width: 100%">
-            <el-option
-              v-for="processFormOption in processFormList"
-              :key="processFormOption.id"
-              :label="processFormOption.formName"
-              :value="processFormOption.id"
-              :disabled="processFormOption.formStatus==1"
-            ></el-option>
+
+
+        <el-form-item label="流程表单" prop="formId" v-if="form.formType === ProcessFormType.PROCESS_FORM">
+          <el-select v-model="form.formId" placeholder="请选择">
+            <el-option v-for="processFormOption in processFormList" :key="processFormOption.id"
+                       :label="processFormOption.formName" :value="processFormOption.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="表单名称" prop="formName" v-if="form.formType=='2'">
-          <el-input v-model="form.formName" placeholder="请输入表单名称"/>
+
+        <el-form-item label="业务表单" prop="formUrl" v-if="form.formType === ProcessFormType.BUSINESS_FORM">
+          <el-input v-model="form.formUrl" placeholder="请输入地址"/>
         </el-form-item>
-        <el-form-item label="表单地址" prop="formUrl" v-if="form.formType=='2'">
-          <el-input v-model="form.formUrl" placeholder="请输入表单地址"/>
+
+        <el-form-item label="在线表单" prop="formId" v-if="form.formType === ProcessFormType.ONLINE_FORM">
+          <el-select v-model="form.formId" placeholder="请选择" @change="onOnlineFormChange">
+            <el-option v-for="item in onlineFormList" :key="item.id" :label="item.formName" :value="item.id"/>
+          </el-select>
         </el-form-item>
+
+        <el-form-item label="默认页面" prop="pageId" v-if="form.formType === ProcessFormType.ONLINE_FORM">
+          <el-select v-model="form.pageId" placeholder="请选择">
+            <el-option v-for="item in defOnlinePageList" :key="item.id" :label="item.pageName" :value="item.id"/>
+          </el-select>
+        </el-form-item>
+
+
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
@@ -159,6 +167,7 @@
     processDeployment
   } from '@/api/process/model'
   import { selectProcessFormList } from '@/api/process/form'
+  import { selectOnlineProcessFormList } from '@/api/online/form'
 
   export default {
     name: 'ProcessModel',
@@ -168,6 +177,12 @@
         loading: true,
         // 已选择的列表
         selectRowList: [],
+        // 在线表单列表
+        onlineFormList: [],
+        // 在线表单页面
+        onlinePageList: [],
+        // 在线表单默认页面
+        defOnlinePageList: [],
         // 非单个禁用
         single: true,
         // 非多个禁用
@@ -180,8 +195,6 @@
         dialogTitle: '',
         // 是否显示弹出层
         openDialog: false,
-        // 流程表单类型
-        processFormTypeOptionList: [],
         // 流程表单列表
         processFormList: [],
         // 查询参数
@@ -226,9 +239,7 @@
     created() {
       this.getProcessFormList()
       this.getProcessModelList()
-      this.getSysDictDataList('process_form_type').then(response => {
-        this.processFormTypeOptionList = response.data
-      })
+      this.getOnlineProcessFormList()
     },
     methods: {
       /** 查询流程表单列表 */
@@ -237,6 +248,31 @@
             this.processFormList = response.data
           }
         )
+      },
+      /** 查询在线表单列表 */
+      getOnlineProcessFormList() {
+        selectOnlineProcessFormList().then(response => {
+            this.onlineFormList = response.data.onlineFormList
+            this.onlinePageList = response.data.onlinePageList
+          }
+        )
+      },
+      /** 表单类型修改事件 */
+      formTypeChange() {
+        this.form.formId = ''
+        this.form.formName = ''
+        this.form.pageId = ''
+        this.defOnlinePageList = []
+      },
+      onOnlineFormChange() {
+        const selectedForm = this.onlineFormList.find(item => item.id === this.form.formId)
+        this.defOnlinePageList = this.onlinePageList.filter(item => item.formId = this.form.formId)
+        if (selectedForm) {
+          this.form.formName = selectedForm.formName
+        } else {
+          this.form.pageId = undefined
+          this.defOnlinePageList = []
+        }
       },
       /** 查询流程列表 */
       getProcessModelList() {
@@ -258,10 +294,11 @@
           id: undefined,
           processCode: undefined,
           processName: undefined,
-          formType: '1',
+          formType: '01',
           formId: undefined,
           formName: undefined,
           formUrl: undefined,
+          pageId: undefined,
           remark: undefined
         }
         this.resetForm('form')
@@ -298,7 +335,7 @@
       },
       // 更多操作触发
       handleProcessCommand(command, row) {
-        switch(command){
+        switch (command) {
           case 'handleProcessUpdate':
             this.handleProcessUpdate(row)
             break

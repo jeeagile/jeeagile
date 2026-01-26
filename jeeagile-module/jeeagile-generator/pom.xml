@@ -17,6 +17,4 @@
         <module>jeeagile-generator-service</module>
         <module>jeeagile-generator-web</module>
     </modules>
-
-
 </project>

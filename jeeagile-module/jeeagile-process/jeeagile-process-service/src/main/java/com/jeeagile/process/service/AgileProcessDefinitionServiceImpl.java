@@ -102,14 +102,24 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
     @Override
     public AgileProcessDefinition saveModel(AgileProcessDefinition agileProcessDefinition) {
         this.updateNoMainVersion(agileProcessDefinition.getModelId());
-        //设置新流程定义为主版本
-        agileProcessDefinition.setMainVersion(1);
+        agileProcessDefinition.setMainVersion(1);//设置新流程定义为主版本
         this.save(agileProcessDefinition);
         return agileProcessDefinition;
     }
 
+    @Override
+    public AgileProcessDefinition selectMainProcessDefinition(String modelId) {
+        LambdaQueryWrapper<AgileProcessDefinition> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileProcessDefinition::getModelId, modelId);
+        lambdaQueryWrapper.eq(AgileProcessDefinition::getMainVersion, '1');
+        lambdaQueryWrapper.eq(AgileProcessDefinition::getSuspensionState, 1);
+        return this.getOne(lambdaQueryWrapper);
+    }
+
+    /**
+     * 将老版本更新为非主版本
+     */
     public void updateNoMainVersion(String modelId) {
-        //将老版本更新为非主版本
         LambdaUpdateWrapper<AgileProcessDefinition> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.set(AgileProcessDefinition::getMainVersion, "2");
         lambdaUpdateWrapper.eq(AgileProcessDefinition::getModelId, modelId);

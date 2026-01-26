@@ -49,4 +49,11 @@ public class AgileOnlineFormController extends AgileCrudController<IAgileOnlineF
         return this.success(agileService.selectFormPageList());
     }
 
+
+    @PostMapping(value = "/selectOnlineProcessFormList")
+    @ApiOperation(value = "查询在线工作流表单", notes = "查询在线工作流表单")
+    public AgileResult<Object> selectOnlineProcessFormList() {
+        return this.success(agileService.selectOnlineProcessFormList());
+    }
+
 }

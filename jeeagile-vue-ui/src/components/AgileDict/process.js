@@ -38,17 +38,38 @@ const ProcessOrderStatus = new AgileBaseDict('工单状态', [
   },
   {
     value: '05',
-    label: '终止',
+    label: '已终止',
     symbol: 'STOPPED'
   },
   {
     value: '06',
-    label: '撤销',
+    label: '已撤销',
     symbol: 'CANCEL'
   }
 ])
 Vue.prototype.ProcessOrderStatus = ProcessOrderStatus
 
+const ProcessFormType = new AgileBaseDict('表单类型', [
+  {
+    value: '01',
+    label: '流程表单',
+    symbol: 'PROCESS_FORM'
+  },
+  {
+    value: '02',
+    label: '业务表单',
+    symbol: 'BUSINESS_FORM'
+  },
+  {
+    value: '03',
+    label: '在线表单',
+    symbol: 'ONLINE_FORM'
+  }
+])
+Vue.prototype.ProcessFormType = ProcessFormType
+
 export {
-  ProcessDeploymentStatus
+  ProcessDeploymentStatus,
+  ProcessOrderStatus,
+  ProcessFormType
 }

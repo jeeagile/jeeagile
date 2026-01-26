@@ -209,27 +209,29 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         }
 
         StringBuffer errorMessage = new StringBuffer();
-        for (OnlineFieldFilter onlineFieldFilter : fieldFilterList) {
-            AgileOnlineColumn agileOnlineColumn = this.agileOnlineColumnService.getById(onlineFieldFilter.getColumnId());
-            if (agileOnlineColumn == null || agileOnlineColumn.isEmptyPk()) {
-                errorMessage.append("过滤条件条件，过滤字段《").append(onlineFieldFilter.getColumnName()).append("》已不存在！\r\n");
-                continue;
-            } else {
-                onlineFieldFilter.setTableId(agileOnlineColumn.getTableId());
-                onlineFieldFilter.setColumnName(agileOnlineColumn.getColumnName());
-            }
-            AgileOnlineTable filterOnlineTable = null;
-            if (onlineTableMap.containsKey(onlineFieldFilter.getTableId())) {
-                filterOnlineTable = onlineTableMap.get(onlineFieldFilter.getTableId());
-            } else {
-                filterOnlineTable = this.agileOnlineTableService.getById(onlineFieldFilter.getTableId());
-            }
-            if (filterOnlineTable == null || filterOnlineTable.isEmptyPk()) {
-                errorMessage.append("过滤条件条件，过滤表《").append(onlineFieldFilter.getTableName()).append("》已不存在！\r\n");
-                continue;
-            } else {
-                onlineTableMap.put(filterOnlineTable.getId(), filterOnlineTable);
-                onlineFieldFilter.setTableName(filterOnlineTable.getTableName());
+        if (AgileStringUtil.isNotEmpty(fieldFilterList)) {
+            for (OnlineFieldFilter onlineFieldFilter : fieldFilterList) {
+                AgileOnlineColumn agileOnlineColumn = this.agileOnlineColumnService.getById(onlineFieldFilter.getColumnId());
+                if (agileOnlineColumn == null || agileOnlineColumn.isEmptyPk()) {
+                    errorMessage.append("过滤条件条件，过滤字段《").append(onlineFieldFilter.getColumnName()).append("》已不存在！\r\n");
+                    continue;
+                } else {
+                    onlineFieldFilter.setTableId(agileOnlineColumn.getTableId());
+                    onlineFieldFilter.setColumnName(agileOnlineColumn.getColumnName());
+                }
+                AgileOnlineTable filterOnlineTable = null;
+                if (onlineTableMap.containsKey(onlineFieldFilter.getTableId())) {
+                    filterOnlineTable = onlineTableMap.get(onlineFieldFilter.getTableId());
+                } else {
+                    filterOnlineTable = this.agileOnlineTableService.getById(onlineFieldFilter.getTableId());
+                }
+                if (filterOnlineTable == null || filterOnlineTable.isEmptyPk()) {
+                    errorMessage.append("过滤条件条件，过滤表《").append(onlineFieldFilter.getTableName()).append("》已不存在！\r\n");
+                    continue;
+                } else {
+                    onlineTableMap.put(filterOnlineTable.getId(), filterOnlineTable);
+                    onlineFieldFilter.setTableName(filterOnlineTable.getTableName());
+                }
             }
         }
         if (AgileStringUtil.isNotEmpty(errorMessage)) {
