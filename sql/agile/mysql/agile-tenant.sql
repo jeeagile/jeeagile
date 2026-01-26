@@ -96,15 +96,15 @@ ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER role_id;
 
 update agile_sys_user_role set tenant_id='jeeagile';
 
-ALTER TABLE agile_sys_login
+ALTER TABLE agile_sys_login_logger
 ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER message;
 
-update agile_sys_login set tenant_id='jeeagile';
+update agile_sys_login_logger set tenant_id='jeeagile';
 
-ALTER TABLE agile_sys_logger
+ALTER TABLE agile_sys_operate_logger
 ADD COLUMN tenant_id VARCHAR(32) not null COMMENT '租户ID' AFTER message;
 
-update agile_sys_logger set tenant_id='jeeagile';
+update agile_sys_operate_logger set tenant_id='jeeagile';
 
 
 ALTER TABLE agile_quartz_job
