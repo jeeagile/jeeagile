@@ -314,13 +314,13 @@
               <el-table-column label="操作" width="220px" align="center">
                 <template slot-scope="scope">
                   <el-button size="mini" type="text" @click="designerOnlinePage(scope.row)">
-                    页面设计
+                    设计
                   </el-button>
                   <el-button size="mini" type="text" @click="editOnlinePage(scope.row)">
-                    编辑页面
+                    编辑
                   </el-button>
                   <el-button size="mini" type="text" @click="deleteOnlinePage(scope.row)">
-                    删除页面
+                    删除
                   </el-button>
                 </template>
               </el-table-column>

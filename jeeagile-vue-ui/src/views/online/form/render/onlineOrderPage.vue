@@ -134,6 +134,7 @@
       /** 启动流程 **/
       onStartProcess() {
         if (this.isPreview || this.processDefinitionId === null) return
+
       },
       onSubmit(row) {
 

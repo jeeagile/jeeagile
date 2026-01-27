@@ -98,7 +98,7 @@
           }
         )
       },
-      // 参数系统内置字典翻译
+      /** 参数系统内置字典翻译 */
       instanceStatusFormat(row, column) {
         return this.handleDictLabel(this.instanceStatusOptionList, row.instanceStatus)
       },

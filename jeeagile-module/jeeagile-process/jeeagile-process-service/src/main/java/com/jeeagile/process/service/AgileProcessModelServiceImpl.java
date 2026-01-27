@@ -80,7 +80,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
         if (AgileStringUtil.isEmpty(agileProcessModel.getFormType())) {
             throw new AgileValidateException("请选择表单类型！");
         }
-        if (agileProcessModel.getFormType().equals("1")) {
+        if (agileProcessModel.getFormType().equals(ProcessFormType.PROCESS_FORM)) {
             if (AgileStringUtil.isNotEmpty(agileProcessModel.getFormId())) {
                 agileProcessModel.setFormUrl("");
             } else {
@@ -88,7 +88,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
             }
         }
 
-        if (agileProcessModel.getFormType().equals("2")) {
+        if (agileProcessModel.getFormType().equals(ProcessFormType.BUSINESS_FORM)) {
             if (AgileStringUtil.isNotEmpty(agileProcessModel.getFormUrl())) {
                 agileProcessModel.setFormId("");
             } else {
@@ -139,7 +139,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
                 throw new AgileFrameException("请先进行流程设计！");
             }
             AgileProcessForm agileProcessForm = null;
-            if (agileProcessModel.getFormType().equals("1")) {
+            if (agileProcessModel.getFormType().equals(ProcessFormType.PROCESS_FORM)) {
                 agileProcessForm = agileProcessFormService.getById(agileProcessModel.getFormId());
                 if (agileProcessForm == null || agileProcessForm.isEmptyPk()) {
                     throw new AgileFrameException("流程表单不存在，请核实！");
@@ -155,7 +155,7 @@ public class AgileProcessModelServiceImpl extends AgileBaseServiceImpl<AgileProc
             agileProcessModel.setDeploymentTime(new Date());
             AgileProcessDefinition agileProcessDefinition = new AgileProcessDefinition();
             AgileBeanUtils.copyProperties(agileProcessModel, agileProcessDefinition);
-            if (agileProcessModel.getFormType().equals("1")) {
+            if (agileProcessModel.getFormType().equals(ProcessFormType.PROCESS_FORM)) {
                 agileProcessDefinition.setFormName(agileProcessForm.getFormName());
                 agileProcessDefinition.setFormConf(agileProcessForm.getFormConf());
                 agileProcessDefinition.setFormFields(agileProcessForm.getFormFields());

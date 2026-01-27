@@ -54,11 +54,11 @@
                   @pagination="getProcessDefinitionList"/>
 
       <!-- 流程模型图的预览 -->
-      <el-dialog title="流程图" :visible.sync="openProcessView" width="600px" append-to-body>
-        <process-view key="designer" v-model="processXml"/>
+      <el-dialog title="流程图" :visible.sync="openProcessView" width="600px" height="350px"  append-to-body>
+        <process-view key="designer" v-model="processXml" style="height: 300px"/>
       </el-dialog>
       <!-- 表单预览 -->
-      <el-dialog title="表单预览" :visible.sync="openFormView" width="500px" append-to-body>
+      <el-dialog title="表单预览" :visible.sync="openFormView" width="600px"  append-to-body>
         <div class="test-form">
           <form-parser :key="new Date().getTime()" :form-conf="parserForm"/>
         </div>
@@ -72,7 +72,7 @@
           <el-button style="float: right;" type="primary" size="mini" @click="selectProcess = true">选择其它流程</el-button>
         </div>
         <el-col :span="16" :offset="6">
-          <div>
+          <div v-if="processDefinition.formType === ProcessFormType.PROCESS_FORM">
             <form-parser :key="new Date().getTime()" :form-conf="parserForm" @submit="handleSubmitProcess"/>
           </div>
         </el-col>
@@ -116,7 +116,7 @@
         parserForm: {
           fields: []
         },
-        processDefinition: undefined,
+        processDefinition: {},
         // 查询参数
         queryParam: {
           pageTotal: 0,
@@ -159,7 +159,7 @@
         this.openFormView = false
         detailProcessDefinition(row.id).then(response => {
           this.$nextTick(() => {
-            if (response.data.formType === '1') {
+            if (response.data.formType === this.ProcessFormType.PROCESS_FORM) {
               if (response.data.formConf && response.data.formFields) {
                 let formConf = JSON.parse(response.data.formConf)
                 formConf.formBtns = false
@@ -175,21 +175,23 @@
       },
       /** 流程发起 */
       handleStartProcess(row) {
+        this.parserForm = undefined
+        this.processXml = undefined
         detailProcessDefinition(row.id).then(response => {
           this.processDefinition = response.data
           this.$nextTick(() => {
-            if (response.data.formType === '1') {
+            if (response.data.formType === this.ProcessFormType.PROCESS_FORM) {
               if (response.data.formConf && response.data.formFields) {
                 this.parserForm = {
                   fields: JSON.parse(response.data.formFields),
                   ...JSON.parse(response.data.formConf)
                 }
               }
-              this.processXml = response.data.modelXml
             }
+            this.processXml = response.data.modelXml
+            this.selectProcess = false
           })
         })
-        this.selectProcess = false
       },
       handleSubmitProcess(formData) {
         startProcessInstance({ processDefinitionId: this.processDefinition.id, formData: formData }).then(response => {

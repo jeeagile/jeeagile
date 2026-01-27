@@ -2,10 +2,12 @@
   <div class="app-container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="表单信息" name="formInfo">
-        <parser :key="new Date().getTime()" :form-conf="parserForm" :form-data="formData"/>
+        <process-form-parser :key="new Date().getTime()" :form-conf="parserForm" :form-data="formData"
+                             v-if="processInstances.formType === ProcessFormType.PROCESS_FORM"/>
       </el-tab-pane>
       <el-tab-pane label="流程视图" name="processView">
-        <process-view key="designer" v-model="processXml" :high-line-data="highLineData"/>
+        <process-view key="designer" v-model="processXml" :high-line-data="highLineData"
+                      style="width:100%;height: 500px"/>
       </el-tab-pane>
       <el-tab-pane label="流转信息" name="flowInfo">
         <el-table v-loading="loading" :data="flowInfoList">
@@ -23,7 +25,7 @@
 </template>
 
 <script>
-  import Parser from '@/components/FormDesigner/parser/Parser'
+  import ProcessFormParser from '@/components/FormDesigner/parser/Parser'
   import {
     detailProcessInstance,
     detailProcessHistory
@@ -32,12 +34,12 @@
   export default {
     name: 'DetailInstance',
     components: {
-      Parser
+      ProcessFormParser
     },
     data() {
       return {
         loading: true,
-        processInstances: undefined,
+        processInstances: {},
         activeName: 'formInfo',
         formView: false,
         parserForm: undefined,
@@ -53,18 +55,23 @@
     },
     methods: {
       getProcessInstanceInfo(instanceId) {
+        this.activeName = 'formInfo'
         detailProcessInstance(instanceId).then(response => {
           this.$nextTick(() => {
             this.processInstances = response.data
-            if (this.processInstances.formConf && this.processInstances.formFields) {
-              let formConf = JSON.parse(this.processInstances.formConf)
-              formConf.formBtns = false
-              formConf.disabled = true
-              this.parserForm = {
-                fields: JSON.parse(this.processInstances.formFields),
-                ...formConf
+            this.processXml = this.processInstances.modelXml
+            this.highLineData = this.processInstances.highLineData
+            if (this.processInstances.formType === this.ProcessFormType.PROCESS_FORM) { // 流程表单
+              if (this.processInstances.formConf && this.processInstances.formFields) {
+                let formConf = JSON.parse(this.processInstances.formConf)
+                formConf.formBtns = false
+                formConf.disabled = true
+                this.parserForm = {
+                  fields: JSON.parse(this.processInstances.formFields),
+                  ...formConf
+                }
+                this.fillFormData(this.parserForm, JSON.parse(this.processInstances.formData))
               }
-              this.fillFormData(this.parserForm, JSON.parse(this.processInstances.formData))
             }
           })
         })
@@ -78,11 +85,6 @@
         })
       },
       handleClick(tab, event) {
-        if (tab.name == 'processView' && !this.processXml) {
-          this.processXml = this.processInstances.modelXml
-          this.highLineData = this.processInstances.highLineData
-        }
-
         if (tab.name == 'flowInfo' && !this.flowInfoList) {
           this.loading = true
           detailProcessHistory(this.processInstances.id).then(response => {

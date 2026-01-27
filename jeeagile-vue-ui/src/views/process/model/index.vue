@@ -118,10 +118,14 @@
 
 
         <el-form-item label="流程表单" prop="formId" v-if="form.formType === ProcessFormType.PROCESS_FORM">
-          <el-select v-model="form.formId" placeholder="请选择">
+          <el-select v-model="form.formId" placeholder="请选择" @change="onProcessFormChange">
             <el-option v-for="processFormOption in processFormList" :key="processFormOption.id"
                        :label="processFormOption.formName" :value="processFormOption.id"></el-option>
           </el-select>
+        </el-form-item>
+
+        <el-form-item label="业务表单" prop="formName" v-if="form.formType === ProcessFormType.BUSINESS_FORM">
+          <el-input v-model="form.formName" placeholder="业务名称"/>
         </el-form-item>
 
         <el-form-item label="业务表单" prop="formUrl" v-if="form.formType === ProcessFormType.BUSINESS_FORM">
@@ -152,7 +156,7 @@
     </el-dialog>
     <!-- 流程模型图的预览 -->
     <el-dialog title="流程图" :visible.sync="openProcessView" width="600px" append-to-body>
-      <process-view key="designer" v-model="processXml"/>
+      <process-view key="designer" v-model="processXml" style="height: 300px"/>
     </el-dialog>
   </div>
 </template>
@@ -263,6 +267,12 @@
         this.form.formName = ''
         this.form.pageId = ''
         this.defOnlinePageList = []
+      },
+      onProcessFormChange(){
+        const selectedForm = this.processFormList.find(item => item.id === this.form.formId)
+        if (selectedForm) {
+          this.form.formName = selectedForm.formName
+        }
       },
       onOnlineFormChange() {
         const selectedForm = this.onlineFormList.find(item => item.id === this.form.formId)
