@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jeeagile-security</artifactId>
-    <version>安全认证</version>
+    <description>安全认证</description>
     <packaging>pom</packaging>
     <modules>
         <module>jeeagile-security-shiro</module>
