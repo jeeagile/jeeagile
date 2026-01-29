@@ -59,6 +59,14 @@ public class AgileProcessInstance extends AgileBaseTenantModel<AgileProcessInsta
      */
     private String formData;
     /**
+     * 在线表单页面ID
+     */
+    private String pageId;
+    /**
+     * 在线表单页面主键值
+     */
+    private String pageKey;
+    /**
      * 流程部署时间
      */
     private Date deploymentTime;
@@ -90,6 +98,12 @@ public class AgileProcessInstance extends AgileBaseTenantModel<AgileProcessInsta
      * 流程实例结束时间
      */
     private Date endTime;
+
+    /**
+     * 流程在线表单数据
+     */
+    @TableField(exist = false)
+    private Map<String, Object> pageData;
 
     /**
      * 流程实例高亮线

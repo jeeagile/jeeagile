@@ -126,25 +126,35 @@ const OnlineFieldKind = new AgileBaseDict('字段分类', [
   {
     value: '04',
     label: '创建人字段',
-    symbol: 'CREATE_USER'
+    symbol: 'CREATE_USER_ID'
   },
   {
     value: '05',
+    label: '创建人名称字段',
+    symbol: 'CREATE_USER_NAME'
+  },
+  {
+    value: '06',
     label: '创建时间字段',
     symbol: 'CREATE_TIME'
   },
   {
-    value: '06',
+    value: '07',
     label: '更新人字段',
-    symbol: 'UPDATE_USER'
+    symbol: 'UPDATE_USER_ID'
   },
   {
-    value: '07',
+    value: '08',
+    label: '更新人名称字段',
+    symbol: 'UPDATE_USER_NAME'
+  },
+  {
+    value: '09',
     label: '更新时间字段',
     symbol: 'UPDATE_TIME'
   },
   {
-    value: '08',
+    value: '10',
     label: '逻辑删除字段',
     symbol: 'LOGIC_DELETE'
   }

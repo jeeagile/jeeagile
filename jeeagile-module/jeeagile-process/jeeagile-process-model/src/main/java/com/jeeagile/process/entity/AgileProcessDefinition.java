@@ -60,6 +60,10 @@ public class AgileProcessDefinition extends AgileBaseTenantModel<AgileProcessDef
      */
     private String formUrl;
     /**
+     * 在线表单页面ID
+     */
+    private String pageId;
+    /**
      * 流程定义主版本（1：主版本 2：非主版本）
      */
     private int mainVersion;

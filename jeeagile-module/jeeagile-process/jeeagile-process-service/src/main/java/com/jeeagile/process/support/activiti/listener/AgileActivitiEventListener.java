@@ -8,6 +8,7 @@ import com.jeeagile.frame.entity.system.AgileSysUser;
 import com.jeeagile.frame.service.system.IAgileSysUserService;
 import com.jeeagile.frame.user.AgileUserData;
 import com.jeeagile.frame.util.AgileBeanUtils;
+import com.jeeagile.process.constants.ProcessFormType;
 import com.jeeagile.process.entity.AgileProcessDefinition;
 import com.jeeagile.process.entity.AgileProcessInstance;
 import com.jeeagile.process.entity.AgileProcessTask;
@@ -99,7 +100,12 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
         agileProcessInstance.setStartUser(agileUserData.getUserId());
         agileProcessInstance.setStartUserName(agileUserData.getNickName());
         agileProcessInstance.setStartTime(new Date());
-        agileProcessInstance.setFormData(JSON.toJSONString(processStartedEvent.getVariables()));
+        agileProcessInstance.setPageId(agileProcessDefinition.getPageId());
+        if (ProcessFormType.PROCESS_FORM.equals(agileProcessDefinition.getFormType())) {
+            agileProcessInstance.setFormData(JSON.toJSONString(processStartedEvent.getVariables()));
+        } else if (ProcessFormType.ONLINE_FORM.equals(agileProcessDefinition.getFormType())) {
+            agileProcessInstance.setPageKey((String) processStartedEvent.getVariables().get("pageKey"));
+        }
         agileProcessInstance.setInstanceStatus("1");
         agileProcessInstanceService.saveModel(agileProcessInstance);
     }

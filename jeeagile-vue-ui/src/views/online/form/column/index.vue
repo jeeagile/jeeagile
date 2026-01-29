@@ -371,8 +371,10 @@
           case this.OnlineFieldKind.UPLOAD_FILE:
           case this.OnlineFieldKind.UPLOAD_IMAGE:
           case this.OnlineFieldKind.RICH_TEXT:
-          case this.OnlineFieldKind.CREATE_USER:
-          case this.OnlineFieldKind.UPDATE_USER:
+          case this.OnlineFieldKind.CREATE_USER_ID:
+          case this.OnlineFieldKind.UPDATE_USER_ID:
+          case this.OnlineFieldKind.CREATE_USER_NAME:
+          case this.OnlineFieldKind.UPDATE_USER_NAME:
             return this.onlineColumn.fieldType !== 'String'
           case this.OnlineFieldKind.CREATE_TIME:
           case this.OnlineFieldKind.UPDATE_TIME:

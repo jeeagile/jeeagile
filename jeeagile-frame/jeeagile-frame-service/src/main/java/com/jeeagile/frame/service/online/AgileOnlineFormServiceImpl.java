@@ -139,10 +139,11 @@ public class AgileOnlineFormServiceImpl extends AgileBaseServiceImpl<AgileOnline
     }
 
     @Override
-    public Map selectFormPageList() {
-        Map rtnMap = new HashMap();
+    public Map<String, Object> selectOnlineFormPageList() {
+        Map<String, Object> rtnMap = new HashMap();
         LambdaQueryWrapper<AgileOnlineForm> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(AgileOnlineForm::getPublishStatus, AgilePublishStatus.PUBLISHED);
+        lambdaQueryWrapper.eq(AgileOnlineForm::getFormType, OnlineFormType.BUSINESS);
         List<AgileOnlineForm> agileOnlineFormList = this.list(lambdaQueryWrapper);
         List<AgileOnlinePage> agileOnlinePageList = new ArrayList<>();
         agileOnlineFormList.forEach(agileOnlineForm -> {

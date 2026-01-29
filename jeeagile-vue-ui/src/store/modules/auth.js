@@ -10,6 +10,7 @@ import { OnlinePageType } from '@/components/AgileDict/online'
 
 const state = {
   userName: '',
+  nickName: '',
   userAvatar: '',
   userRole: [],
   userPerm: [],
@@ -21,6 +22,9 @@ const state = {
 const mutations = {
   SET_USER_NAME: (state, userName) => {
     state.userName = userName
+  },
+  SET_NICK_NAME: (state, nickName) => {
+    state.nickName = nickName
   },
   SET_USER_AVATAR: (state, userAvatar) => {
     state.userAvatar = userAvatar
@@ -65,6 +69,7 @@ const actions = {
           commit('SET_USER_ROLE', ['ROLE_DEFAULT'])
         }
         commit('SET_USER_NAME', userInfo.userName)
+        commit('SET_NICK_NAME', userInfo.nickName)
         commit('SET_USER_AVATAR', userAvatar)
         resolve(userInfo)
       }).catch(error => {

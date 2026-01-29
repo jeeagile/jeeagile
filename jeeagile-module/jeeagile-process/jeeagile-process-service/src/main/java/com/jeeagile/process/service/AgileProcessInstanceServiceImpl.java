@@ -7,11 +7,15 @@ import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.entity.online.AgileOnlinePage;
 import com.jeeagile.frame.entity.system.AgileSysUser;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import com.jeeagile.frame.service.online.IAgileOnlineOperationService;
+import com.jeeagile.frame.service.online.IAgileOnlinePageService;
 import com.jeeagile.frame.service.system.IAgileSysUserService;
+import com.jeeagile.process.constants.ProcessFormType;
 import com.jeeagile.process.entity.AgileProcessDefinition;
 import com.jeeagile.process.entity.AgileProcessInstance;
 import com.jeeagile.process.mapper.AgileProcessInstanceMapper;
@@ -20,6 +24,7 @@ import com.jeeagile.process.vo.AgileProcessHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +42,10 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
     private IAgileProcessService agileProcessService;
     @Autowired
     private IAgileSysUserService agileSysUserService;
+    @Autowired
+    private IAgileOnlinePageService agileOnlinePageService;
+    @Autowired
+    private IAgileOnlineOperationService agileOnlineOperationService;
 
     @Override
     public boolean startProcessInstance(String processDefinitionId, Map<String, Object> formData) {
@@ -47,7 +56,33 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
         if (!agileProcessService.checkProcessDefinition(agileProcessDefinition.getId())) {
             throw new AgileValidateException("流程定义校验未通过，不能发起流程！");
         }
-        return agileProcessService.startProcessInstance(agileProcessDefinition.getId(), formData);
+        if (ProcessFormType.PROCESS_FORM.equals(agileProcessDefinition.getFormType())) {
+            String instanceId = agileProcessService.startProcessInstance(agileProcessDefinition.getId(), formData);
+            return AgileStringUtil.isNotEmpty(instanceId);
+        } else if (ProcessFormType.BUSINESS_FORM.equals(agileProcessDefinition.getFormType())) {
+            return true;
+        } else if (ProcessFormType.ONLINE_FORM.equals(agileProcessDefinition.getFormType())) {
+            if (AgileStringUtil.isEmpty(formData)) {
+                throw new AgileValidateException("请填写表单数据！");
+            }
+            // 保存表单数据 并返回表单主键ID
+            Object pageKey = agileOnlineOperationService.saveTableData((String) formData.get("tableId"), (Map) formData.get("masterData"), (Map) formData.get("slaveData"));
+            if (AgileStringUtil.isNotEmpty(pageKey)) {
+                Map<String, Object> variablesMap = new HashMap();
+                variablesMap.put("pageKey", pageKey);
+                String instanceId = agileProcessService.startProcessInstance(agileProcessDefinition.getId(), variablesMap);
+                if (AgileStringUtil.isNotEmpty(instanceId)) {
+
+                } else {
+                    throw new AgileValidateException("流程启动异常！");
+                }
+            } else {
+                throw new AgileValidateException("表单数据保存异常！");
+            }
+            return true;
+        } else {
+            throw new AgileValidateException("未知表单类型！");
+        }
     }
 
     @Override
@@ -81,6 +116,10 @@ public class AgileProcessInstanceServiceImpl extends AgileBaseServiceImpl<AgileP
         AgileProcessInstance agileProcessInstance = this.getById(processInstanceId);
         if (agileProcessInstance == null || agileProcessInstance.isEmptyPk()) {
             throw new AgileFrameException("流程实例已不存在！");
+        }
+        if (ProcessFormType.ONLINE_FORM.equals(agileProcessInstance.getFormType())) {
+            AgileOnlinePage agileOnlinePage = agileOnlinePageService.selectModel(agileProcessInstance.getPageId());
+            agileProcessInstance.setPageData(agileOnlineOperationService.selectOneData(agileOnlinePage.getTableId(), agileProcessInstance.getPageKey()));
         }
         agileProcessInstance.setHighLineData(agileProcessService.getProcessInstanceHighLineData(agileProcessInstance.getDefinitionId(), processInstanceId));
         return agileProcessInstance;

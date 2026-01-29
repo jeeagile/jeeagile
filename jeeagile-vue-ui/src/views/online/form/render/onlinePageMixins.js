@@ -60,7 +60,7 @@ const OnlinePageMixins = {
     getOperationPermCode(widget, operation) {
       const modelName = widget.onlineTable.modelName
       let operationStr = 'view'
-      switch(operation.type){
+      switch (operation.type) {
         case this.OnlineOperationType.ADD:
           operationStr = 'add'
           break
@@ -328,7 +328,7 @@ const OnlinePageMixins = {
     buildRuleItem(widget, rule) {
       if (rule.ruleConfig) rule.data = JSON.parse(rule.ruleConfig)
       if (widget != null && rule != null) {
-        switch(rule.ruleType){
+        switch (rule.ruleType) {
           case this.OnlineRuleType.INTEGER: // 只允许整数
             return {
               type: 'integer',
@@ -386,10 +386,10 @@ const OnlinePageMixins = {
       }
     },
     getParamValue(valueType, valueData) {
-      switch(valueType){
+      switch (valueType) {
         case this.OnlineParamValueType.FORM_PARAM:
           return this.params ? this.params[valueData] : undefined
-        case this.OnlineParamValueType.TABLE_COLUMN:{
+        case this.OnlineParamValueType.TABLE_COLUMN: {
           const onlineColumn = this.onlineColumnMap.get(valueData)
           const onlineTable = this.onlineTableMap.get(onlineColumn.tableId)
           const columnValue = this.formPageData[this.getColumnFieldName(onlineTable, onlineColumn)]
@@ -438,7 +438,7 @@ const OnlinePageMixins = {
     reload() {
       this.loadOnlinePageConfig().then(res => {
         this.loading = false
-        if (this.pageConfig.pageType === this.OnlinePageType.EDIT) {
+        if (this.pageConfig.pageType === this.OnlinePageType.EDIT || this.pageConfig.pageType === this.OnlinePageType.FLOW) {
           if (this.operationType === this.OnlineOperationType.EDIT && this.saveOnClose === '1') {
             let params = {
               tableId: this.masterTable.tableId,
@@ -454,9 +454,9 @@ const OnlinePageMixins = {
 
             return
           } else {
-            if (this.rowData != null) {
+            if (this.pageData != null) {
               this.formPageData = {
-                ...this.rowData
+                ...this.pageData
               }
             }
           }
@@ -465,35 +465,35 @@ const OnlinePageMixins = {
       })
     },
     /** 获取主键数据 */
-    getPrimaryColumnParam(onlineTable, row) {
+    getPrimaryColumnParam(onlineTable, pageData) {
       if (onlineTable) {
         let retObj = {}
-        retObj[onlineTable.primaryColumnName] = row ? row[this.getPrimaryFieldName(onlineTable)] : undefined
+        retObj[onlineTable.primaryColumnName] = pageData ? pageData[this.getPrimaryFieldName(onlineTable)] : undefined
         return retObj
       }
       return null
     },
     /** 组装子页面 */
-    buildSubFormParams(operation, subFormInfo, row) {
+    buildSubFormParams(operation, subFormInfo, pageData) {
       let subFormMasterTable = this.onlineTableMap.get(subFormInfo.tableId)
       if (subFormMasterTable == null) return null
       if (subFormMasterTable.tableType == this.OnlineTableType.MASTER) {
         if (operation.type === this.OnlineOperationType.EDIT) {
-          return this.getPrimaryColumnParam(this.masterTable, row)
+          return this.getPrimaryColumnParam(this.masterTable, pageData)
         } else {
           return null
         }
       } else {
         if (subFormInfo.pageType === this.OnlinePageType.QUERY) {
-          return this.getPrimaryColumnParam(this.masterTable, row)
+          return this.getPrimaryColumnParam(this.masterTable, pageData)
         } else {
           if (operation.type === this.OnlineOperationType.EDIT) {
             if (this.pageConfig.pageType === this.OnlinePageType.EDIT && this.operationType === this.OnlineOperationType.ADD) {
               return {
-                ...row
+                ...pageData
               }
             } else {
-              return this.getPrimaryColumnParam(subFormMasterTable, row)
+              return this.getPrimaryColumnParam(subFormMasterTable, pageData)
             }
           } else {
             if (this.params === null) {
@@ -511,13 +511,13 @@ const OnlinePageMixins = {
       }
     },
     /** 处理操作 */
-    handlerOperation(operation, row, widget) {
+    handlerOperation(operation, pageData, widget) {
       if (this.preview()) return
       if (operation.pageId != null) {
         renderOnlineFormPage({ pageId: operation.pageId }).then(response => {
           let onlinePage = response.data.onlinePage
           if (onlinePage != null) {
-            let params = this.buildSubFormParams(operation, onlinePage, row)
+            let params = this.buildSubFormParams(operation, onlinePage, pageData)
             if (onlinePage.pageKind === this.OnlinePageKind.JUMP) {
               let pageJsonData = JSON.parse(onlinePage.widgetJson)
               let area = (onlinePage.height != null) ? [(pageJsonData.pageConfig.width || 800) + 'px', pageJsonData.pageConfig.height + 'px'] : (pageJsonData.pageConfig.width || 800) + 'px'
@@ -525,7 +525,6 @@ const OnlinePageMixins = {
                 area: area,
                 offset: '100px'
               }, {
-                flowData: this.flowData,
                 pageId: onlinePage.id,
                 pageType: onlinePage.pageType,
                 operationType: operation.type,
@@ -534,8 +533,9 @@ const OnlinePageMixins = {
                   onlinePage.pageType === this.OnlinePageType.FLOW ||
                   this.pageConfig.pageType === this.OnlinePageType.FLOW ||
                   (onlinePage.pageType === this.OnlinePageType.EDIT && this.operationType === this.OnlineOperationType.ADD)
+                  // eslint-disable-next-line multiline-ternary
                 ) ? '0' : '1',
-                rowData: row
+                pageData: pageData
               }).then(res => {
                 let widgetObj = this.$refs[widget.variableName]
                 if (Array.isArray(widgetObj)) {
@@ -565,7 +565,6 @@ const OnlinePageMixins = {
               this.$router.push({
                 name: 'onlinePage',
                 query: {
-                  flowData: this.flowData,
                   pageId: onlinePage.pageId,
                   pageType: onlinePage.pageType,
                   closeVisible: '1',
@@ -575,8 +574,9 @@ const OnlinePageMixins = {
                     onlinePage.pageType === this.OnlinePageType.FLOW ||
                     this.pageConfig.pageType === this.OnlinePageType.FLOW ||
                     (onlinePage.pageType === this.OnlinePageType.EDIT && this.operationType === this.OnlineOperationType.ADD)
+                    // eslint-disable-next-line multiline-ternary
                   ) ? '0' : '1',
-                  rowData: row
+                  pageData: pageData
                 }
               })
             }
@@ -590,7 +590,7 @@ const OnlinePageMixins = {
               let params = {
                 tableId: (widget.onlineTable || {}).tableId
               }
-              params.dataId = row[this.getPrimaryFieldName(widget.onlineTable)]
+              params.dataId = pageData[this.getPrimaryFieldName(widget.onlineTable)]
               deleteTableData(params).then(response => {
                 this.messageSuccess('删除成功！')
                 let widgetObj = this.$refs[widget.variableName]
@@ -606,10 +606,10 @@ const OnlinePageMixins = {
               let widgetObj = this.$refs[widget.variableName]
               if (Array.isArray(widgetObj)) {
                 widgetObj.forEach(item => {
-                  item.refresh(row, operation.type)
+                  item.refresh(pageData, operation.type)
                 })
               } else {
-                widgetObj.refresh(row, operation.type)
+                widgetObj.refresh(pageData, operation.type)
               }
             }
           })

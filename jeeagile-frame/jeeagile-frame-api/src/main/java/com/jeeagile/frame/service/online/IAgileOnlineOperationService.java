@@ -36,7 +36,7 @@ public interface IAgileOnlineOperationService {
      * @param dataId  数据ID
      * @return
      */
-    Map selectOneData(String tableId, String dataId);
+    Map<String, Object> selectOneData(String tableId, String dataId);
 
     /**
      * 保存数据
@@ -44,9 +44,9 @@ public interface IAgileOnlineOperationService {
      * @param tableId    数据表ID
      * @param masterData 主表数据
      * @param slaveData  从表数据
-     * @return
+     * @return 返回表主键值
      */
-    boolean saveTableData(String tableId, Map masterData, Map slaveData);
+    Object saveTableData(String tableId, Map masterData, Map slaveData);
 
     /**
      * 更新数据

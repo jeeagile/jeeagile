@@ -43,7 +43,7 @@ export const renderOnlineFormPage = data => postApi('/online/form/render', data)
 /**
  * 表单页面列表
  */
-export const selectOnlineFormPageList = data => postApi('/online/form/formPageList', data)
+export const selectOnlineFormPageList = data => postApi('/online/form/selectOnlineFormPageList', data)
 
 /**
  * 查询在线流程表单

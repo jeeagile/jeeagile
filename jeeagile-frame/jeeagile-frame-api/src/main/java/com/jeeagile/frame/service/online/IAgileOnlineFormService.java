@@ -43,7 +43,7 @@ public interface IAgileOnlineFormService extends IAgileBaseService<AgileOnlineFo
      *
      * @return
      */
-    Map selectFormPageList();
+    Map<String, Object> selectOnlineFormPageList();
 
     /**
      * 获取工作流在线表单和表单页面列表

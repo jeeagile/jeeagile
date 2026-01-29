@@ -898,8 +898,10 @@
           case this.OnlineFieldKind.CREATE_TIME:
           case this.OnlineFieldKind.UPDATE_TIME:
             return { ...DefaultWidgetAttributes.Date }
-          case this.OnlineFieldKind.CREATE_USER:
-          case this.OnlineFieldKind.UPDATE_USER:
+          case this.OnlineFieldKind.CREATE_USER_ID:
+          case this.OnlineFieldKind.UPDATE_USER_ID:
+          case this.OnlineFieldKind.CREATE_USER_NAME:
+          case this.OnlineFieldKind.UPDATE_USER_NAME:
           case this.OnlineFieldKind.LOGIC_DELETE:
             return { ...DefaultWidgetAttributes.Label }
         }

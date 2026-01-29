@@ -61,9 +61,9 @@ public interface IAgileProcessService {
      *
      * @param definitionId
      * @param variables
-     * @return
+     * @return 返回流程实例ID
      */
-    boolean startProcessInstance(String definitionId, Map<String, Object> variables);
+    String startProcessInstance(String definitionId, Map<String, Object> variables);
 
 
     /**

@@ -5,6 +5,7 @@ import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.util.AgileStringUtil;
+import com.jeeagile.frame.user.AgileUserData;
 import com.jeeagile.frame.vo.online.*;
 import com.jeeagile.frame.constants.online.OnlineFieldKind;
 import com.jeeagile.frame.constants.online.OnlineTableType;
@@ -71,7 +72,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
     }
 
     @Override
-    public Map selectOneData(String tableId, String dataId) {
+    public Map<String, Object> selectOneData(String tableId, String dataId) {
         AgileOnlineTable agileOnlineTable = agileOnlineTableService.getById(tableId);
         if (agileOnlineTable == null || agileOnlineTable.isEmptyPk()) {
             throw new AgileValidateException("数据表已不存在！");
@@ -80,15 +81,18 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
     }
 
     @Override
-    public boolean saveTableData(String tableId, Map masterData, Map slaveData) {
+    public Object saveTableData(String tableId, Map masterData, Map slaveData) {
         AgileOnlineTable agileOnlineTable = agileOnlineTableService.getById(tableId);
         if (agileOnlineTable == null || agileOnlineTable.isEmptyPk()) {
             throw new AgileValidateException("数据表已不存在！");
         }
         List<AgileOnlineColumn> tableColumnList = this.getOnlineColumnList(agileOnlineTable);
+        Object dataId = null;// 表主键值
         if (OnlineTableType.MASTER.equals(agileOnlineTable.getTableType()) && AgileStringUtil.isNotEmpty(slaveData)) {
             List<OnlineColumnData> masterTableColumnDataList = this.makeColumnData(tableColumnList, masterData);
             this.saveTableData(agileOnlineTable, masterTableColumnDataList);
+            dataId = masterTableColumnDataList.stream().filter(onlineTableColumn -> onlineTableColumn.getId().equals(agileOnlineTable.getPrimaryColumnId())).findFirst().get().getColumnValue();
+            masterData.put(agileOnlineTable.getPrimaryColumnName(), dataId);
             if (AgileStringUtil.isNotEmpty(slaveData)) {
                 for (Object key : slaveData.keySet()) {
                     AgileOnlineTable slaveOnlineTable = this.agileOnlineTableService.getById(key.toString());
@@ -96,7 +100,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
                         continue;
                     }
                     OnlineColumnData masterTableColumnData = masterTableColumnDataList.stream().filter(onlineTableColumn -> onlineTableColumn.getId().equals(slaveOnlineTable.getMasterColumnId())).findFirst().get();
-                    if (masterTableColumnData == null || masterTableColumnData.isEmptyPk()) {
+                    if (masterTableColumnData.isEmptyPk()) {
                         continue;
                     }
                     if (AgileStringUtil.isEmpty(masterTableColumnData.getColumnValue())) {
@@ -104,7 +108,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
                     }
                     List<AgileOnlineColumn> slaveOnlineColumnList = this.getOnlineColumnList(slaveOnlineTable);
                     AgileOnlineColumn slaveTableColumn = slaveOnlineColumnList.stream().filter(onlineTableColumn -> onlineTableColumn.getId().equals(slaveOnlineTable.getSlaveColumnId())).findFirst().get();
-                    if (slaveTableColumn == null || slaveTableColumn.isEmptyPk()) {
+                    if (slaveTableColumn.isEmptyPk()) {
                         continue;
                     }
                     if (OnlineTableType.ONE_TO_ONE.equals(slaveOnlineTable.getTableType())) {
@@ -125,8 +129,10 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         } else {
             List<OnlineColumnData> slaveTableColumnDataList = this.makeColumnData(tableColumnList, slaveData);
             this.saveTableData(agileOnlineTable, slaveTableColumnDataList);
+            dataId = slaveTableColumnDataList.stream().filter(onlineTableColumn -> onlineTableColumn.getId().equals(agileOnlineTable.getPrimaryColumnId())).findFirst().get().getColumnValue();
+            slaveData.put(agileOnlineTable.getPrimaryColumnName(), dataId);
         }
-        return true;
+        return dataId;
     }
 
     @Override
@@ -442,7 +448,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
      * @param dataId
      * @return
      */
-    private Map getOneData(AgileOnlineTable agileOnlineTable, Object dataId) {
+    private Map<String, Object> getOneData(AgileOnlineTable agileOnlineTable, Object dataId) {
         if (AgileStringUtil.isEmpty(dataId)) {
             throw new AgileValidateException("数据主键值不能为空！");
         }
@@ -493,7 +499,7 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
                 whereColumnList.add(columnData);
                 continue;
             }
-            if (!OnlineFieldKind.CREATE_USER.equals(columnData.getFieldKind())
+            if (!OnlineFieldKind.CREATE_USER_ID.equals(columnData.getFieldKind())
                     && !OnlineFieldKind.CREATE_TIME.equals(columnData.getFieldKind())) {
                 updateColumnList.add(columnData);
             }
@@ -585,9 +591,17 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
                 case OnlineFieldKind.UPDATE_TIME: //更新时间字段
                     onlineColumnData.setColumnValue(new Date());
                     break;
-                case OnlineFieldKind.CREATE_USER: //创建人字段
-                case OnlineFieldKind.UPDATE_USER: //更新人字段
-                    onlineColumnData.setColumnValue(AgileSecurityContext.getUserId());
+                case OnlineFieldKind.CREATE_USER_ID: //创建人字段
+                case OnlineFieldKind.UPDATE_USER_ID: //更新人字段
+                    if (onlineColumnData.getColumnValue() == null) {
+                        onlineColumnData.setColumnValue(AgileSecurityContext.getUserId());
+                    }
+                    break;
+                case OnlineFieldKind.CREATE_USER_NAME: //创建人名称字段
+                case OnlineFieldKind.UPDATE_USER_NAME: //更新人名称字段
+                    if (onlineColumnData.getColumnValue() == null) {
+                        onlineColumnData.setColumnValue(((AgileUserData) AgileSecurityContext.getUserData()).getNickName());
+                    }
                     break;
                 case OnlineFieldKind.LOGIC_DELETE: //逻辑删除字段
                     onlineColumnData.setColumnValue(AgileYesNo.NO);

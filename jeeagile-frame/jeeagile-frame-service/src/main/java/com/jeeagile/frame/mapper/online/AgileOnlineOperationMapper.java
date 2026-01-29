@@ -149,7 +149,7 @@ public interface AgileOnlineOperationMapper {
             + "    </if>"
             + "</where>"
             + "</script>")
-    Map getOneData(@Param("tableName") String tableName,
+    Map<String, Object> getOneData(@Param("tableName") String tableName,
                    @Param("selectFields") String selectFields,
                    @Param("joinInfoList") List<OnlineJoinTable> joinInfoList,
                    @Param("filterList") List<OnlineFieldFilter> filterList);

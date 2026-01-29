@@ -14,13 +14,17 @@
                         :key="pageKey"
                         :params="params"
                         :operationType="operationType"
-                        :rowData="rowData"
-                        :flowData="flowData"
+                        :pageData="pageData"
                         @close="onClose"
                         @ready="onPageReady"
       />
+      <online-flow-page ref="form" v-if="pageType === this.OnlinePageType.FLOW"
+                        :pageId="pageId"
+                        :pageData="pageData"
+                        :readOnly="readOnly"
+                        @ready="onPageReady"
+      />
       <online-order-page ref="form" v-if="pageType === this.OnlinePageType.ORDER"
-                         :entryId="entryId"
                          :pageId="pageId"
                          :processId="processId"
                          :key="pageKey"
@@ -38,6 +42,7 @@
 <script>
   import OnlineQueryPage from './form/render/onlineQueryPage'
   import OnlineEditPage from './form/render/onlineEditPage'
+  import OnlineFlowPage from './form/render/onlineFlowPage'
   import OnlineOrderPage from './form/render/onlineOrderPage'
 
   export default {
@@ -72,7 +77,7 @@
         type: Boolean,
         default: false
       },
-      rowData: {
+      pageData: {
         type: Object
       },
       flowData: {
@@ -80,14 +85,12 @@
       },
       readOnly: {
         type: [String, Boolean]
-      },
-      entryId: {
-        type: String
       }
     },
     components: {
       OnlineQueryPage,
       OnlineEditPage,
+      OnlineFlowPage,
       OnlineOrderPage
     },
     data() {
@@ -102,20 +105,6 @@
           this.observer.cancel(isSuccess, data)
         } else {
           this.$router.go(-1)
-        }
-      },
-      setFormPageData(pageData, setPageData, flowData) {
-        if (this.$refs.form && this.$refs.form.setFormPageData) this.$refs.form.setFormPageData(pageData, setPageData, flowData)
-      },
-      getVariableData(variableList) {
-        let funGetVariableData = null
-        if (Array.isArray(this.$refs.form) && this.$refs.form.length > 0) {
-          funGetVariableData = this.$refs.form[0].getVariableData
-        } else {
-          if (this.$refs.form != null) funGetVariableData = this.$refs.form.getVariableData
-        }
-        if (typeof funGetVariableData === 'function') {
-          return funGetVariableData(variableList)
         }
       },
       getFormPageData() {

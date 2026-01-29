@@ -102,12 +102,12 @@ public class AgileActivitiProcessService implements IAgileProcessService {
     }
 
     @Override
-    public boolean startProcessInstance(String definitionId, Map<String, Object> variables) {
+    public String startProcessInstance(String definitionId, Map<String, Object> variables) {
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(definitionId, variables);
         if (processInstance == null || AgileStringUtil.isEmpty(processInstance.getId())) {
             throw new AgileFrameException("流程定义启动失败！");
         }
-        return true;
+        return processInstance.getId();
     }
 
     @Override

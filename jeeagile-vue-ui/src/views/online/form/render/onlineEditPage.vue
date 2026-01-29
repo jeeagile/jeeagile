@@ -82,10 +82,7 @@
         type: String,
         default: '1'
       },
-      rowData: {
-        type: Object
-      },
-      flowData: {
+      pageData: {
         type: Object
       }
     },
@@ -115,7 +112,7 @@
           this.$refs.form.validate(valid => {
             if (!valid) return
             let tableId = this.masterTable?.tableId
-            let params = { tableId }
+            let formData = { tableId }
             if (this.masterTable.tableType === this.OnlineTableType.MASTER) {
               let masterData = {}
               this.masterTable.tableColumnList.forEach(onlineColumn => {
@@ -133,8 +130,8 @@
                   slaveData[onlineTable.tableId] = tableData
                 }
               })
-              params.slaveData = slaveData
-              params.masterData = masterData
+              formData.slaveData = slaveData
+              formData.masterData = masterData
             }
 
             // 添加调用按钮接口代码
@@ -159,20 +156,20 @@
                   }, {})
                   slaveData = {
                     ...slaveData,
-                    ...this.params
+                    ...this.formData
                   }
                 }
-                params.slaveData = {
+                formData.slaveData = {
                   ...slaveData,
-                  ...params.slaveData
+                  ...formData.slaveData
                 }
                 if (this.operationType === 'ADD') {
-                  saveTableData(params).then(res => {
+                  saveTableData(formData).then(res => {
                     this.messageSuccess('数据保存成功！')
                     this.onCancel(true, this.formPageData)
                   })
                 } else {
-                  updateTableData(params).then(res => {
+                  updateTableData(formData).then(res => {
                     this.messageSuccess('数据更新成功！')
                     this.onCancel(true, this.formPageData)
                   })
@@ -242,7 +239,7 @@
             columnId: widget.onlineTable.slaveColumnId,
             columnName: widget.onlineTable.slaveColumnName,
             filterType: this.OnlineFilterType.EQUAL,
-            columnValue: this.rowData[fieldName]
+            columnValue: this.pageData[fieldName]
           }
           queryParams.push(temp)
         }
@@ -265,8 +262,8 @@
         }
       },
       /** 点击表格按钮 */
-      clickTableOperation(operation, row, widget) {
-        this.handlerOperation(operation, row, widget)
+      clickTableOperation(operation, rowData, widget) {
+        this.handlerOperation(operation, rowData, widget)
       }
     }
   }

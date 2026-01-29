@@ -4,10 +4,16 @@
       <el-tab-pane label="表单信息" name="formInfo">
         <process-form-parser :key="new Date().getTime()" :form-conf="parserForm" :form-data="formData"
                              v-if="processInstances.formType === ProcessFormType.PROCESS_FORM"/>
+        <online-form-parser ref="onlineForm" :key="new Date().getTime()" :page-id="processInstances.pageId"
+                            :process-id="processInstances.id" :read-only="true" :page-type="OnlinePageType.FLOW"
+                            :page-data="processInstances.pageData"
+                            v-if="processInstances.formType === ProcessFormType.ONLINE_FORM"/>
       </el-tab-pane>
       <el-tab-pane label="流程视图" name="processView">
-        <process-view key="designer" v-model="processXml" :high-line-data="highLineData"
-                      style="width:100%;height: 500px"/>
+        <div v-if="openProcessView">
+          <process-view key="designer" v-model="processXml" :high-line-data="highLineData"
+                        style="height: 500px"/>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="流转信息" name="flowInfo">
         <el-table v-loading="loading" :data="flowInfoList">
@@ -26,6 +32,7 @@
 
 <script>
   import ProcessFormParser from '@/components/FormDesigner/parser/Parser'
+  import OnlineFormParser from '../../online/index'
   import {
     detailProcessInstance,
     detailProcessHistory
@@ -34,7 +41,8 @@
   export default {
     name: 'DetailInstance',
     components: {
-      ProcessFormParser
+      ProcessFormParser,
+      OnlineFormParser
     },
     data() {
       return {
@@ -45,6 +53,7 @@
         parserForm: undefined,
         formData: undefined,
         processXml: undefined,
+        openProcessView: false,
         flowInfoList: undefined,
         highLineData: undefined
       }
@@ -59,8 +68,6 @@
         detailProcessInstance(instanceId).then(response => {
           this.$nextTick(() => {
             this.processInstances = response.data
-            this.processXml = this.processInstances.modelXml
-            this.highLineData = this.processInstances.highLineData
             if (this.processInstances.formType === this.ProcessFormType.PROCESS_FORM) { // 流程表单
               if (this.processInstances.formConf && this.processInstances.formFields) {
                 let formConf = JSON.parse(this.processInstances.formConf)
@@ -72,6 +79,9 @@
                 }
                 this.fillFormData(this.parserForm, JSON.parse(this.processInstances.formData))
               }
+            }
+            if (this.processInstances.formType === this.ProcessFormType.ONLINE_FORM) {
+
             }
           })
         })
@@ -85,6 +95,12 @@
         })
       },
       handleClick(tab, event) {
+        this.openProcessView = false
+        if (tab.name == 'processView') {
+          this.processXml = this.processInstances.modelXml
+          this.highLineData = this.processInstances.highLineData
+          this.openProcessView = true
+        }
         if (tab.name == 'flowInfo' && !this.flowInfoList) {
           this.loading = true
           detailProcessHistory(this.processInstances.id).then(response => {

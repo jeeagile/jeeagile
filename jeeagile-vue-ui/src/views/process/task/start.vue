@@ -54,13 +54,17 @@
                   @pagination="getProcessDefinitionList"/>
 
       <!-- 流程模型图的预览 -->
-      <el-dialog title="流程图" :visible.sync="openProcessView" width="600px" height="350px"  append-to-body>
+      <el-dialog title="流程图" :visible.sync="openProcessView" width="600px" height="350px" append-to-body>
         <process-view key="designer" v-model="processXml" style="height: 300px"/>
       </el-dialog>
       <!-- 表单预览 -->
-      <el-dialog title="表单预览" :visible.sync="openFormView" width="600px"  append-to-body>
-        <div class="test-form">
-          <form-parser :key="new Date().getTime()" :form-conf="parserForm"/>
+      <el-dialog title="表单预览" :visible.sync="openFormView" width="650px" append-to-body>
+        <div class="test-form" v-if="processDefinition.formType === this.ProcessFormType.PROCESS_FORM">
+          <process-form-parser :key="new Date().getTime()" :form-conf="parserForm"/>
+        </div>
+        <div class="test-form" v-if="processDefinition.formType === this.ProcessFormType.ONLINE_FORM">
+          <online-form-parser :key="new Date().getTime()" :page-id="processDefinition.pageId"
+                              :process-id="processDefinition.id" :page-type="OnlinePageType.FLOW"/>
         </div>
       </el-dialog>
 
@@ -72,8 +76,15 @@
           <el-button style="float: right;" type="primary" size="mini" @click="selectProcess = true">选择其它流程</el-button>
         </div>
         <el-col :span="16" :offset="6">
-          <div v-if="processDefinition.formType === ProcessFormType.PROCESS_FORM">
-            <form-parser :key="new Date().getTime()" :form-conf="parserForm" @submit="handleSubmitProcess"/>
+          <div v-if="processDefinition.formType === this.ProcessFormType.PROCESS_FORM">
+            <process-form-parser :key="new Date().getTime()" :form-conf="parserForm" @submit="submitProcessForm"/>
+          </div>
+          <div class="test-form" v-if="processDefinition.formType === this.ProcessFormType.ONLINE_FORM">
+            <online-form-parser ref="onlineForm" :key="new Date().getTime()" :page-id="processDefinition.pageId"
+                                :process-id="processDefinition.id" :page-type="OnlinePageType.FLOW"/>
+            <div style="height: 45px">
+              <el-button style="float: right;" type="primary" size="mini" @click="submitOnlineForm">提交</el-button>
+            </div>
           </div>
         </el-col>
       </el-card>
@@ -81,7 +92,7 @@
         <div slot="header" class="clearfix">
           <span class="el-icon-picture-outline">  {{ processDefinition.modelName }} </span>
         </div>
-        <process-view key="designer" v-model="processXml"/>
+        <process-view key="designer" v-model="processXml" style="height:450px"/>
       </el-card>
     </div>
   </div>
@@ -95,11 +106,12 @@
   import {
     startProcessInstance
   } from '@/api/process/instance'
-  import FormParser from '@/components/FormDesigner/parser/Parser'
+  import ProcessFormParser from '@/components/FormDesigner/parser/Parser'
+  import OnlineFormParser from '../../online/index'
 
   export default {
     name: 'Start',
-    components: { FormParser },
+    components: { ProcessFormParser, OnlineFormParser },
     data() {
       return {
         // 遮罩层
@@ -159,6 +171,7 @@
         this.openFormView = false
         detailProcessDefinition(row.id).then(response => {
           this.$nextTick(() => {
+            this.processDefinition = response.data
             if (response.data.formType === this.ProcessFormType.PROCESS_FORM) {
               if (response.data.formConf && response.data.formFields) {
                 let formConf = JSON.parse(response.data.formConf)
@@ -168,6 +181,9 @@
                   ...formConf
                 }
               }
+            }
+            if (response.data.formType === this.ProcessFormType.ONLINE_FORM) {
+
             }
             this.openFormView = true
           })
@@ -193,12 +209,23 @@
           })
         })
       },
-      handleSubmitProcess(formData) {
+      /** 提交流程表单 */
+      submitProcessForm(formData) {
         startProcessInstance({ processDefinitionId: this.processDefinition.id, formData: formData }).then(response => {
             this.messageSuccess('业务流程《' + this.processDefinition.modelName + '》发起成功')
             this.selectProcess = true
           }
         )
+      },
+      /** 提交在线表单 */
+      submitOnlineForm() {
+        this.$refs.onlineForm.getFormPageData().then(formData => {
+          startProcessInstance({ processDefinitionId: this.processDefinition.id, formData: formData }).then(response => {
+              this.messageSuccess('业务流程《' + this.processDefinition.modelName + '》发起成功')
+              this.selectProcess = true
+            }
+          )
+        })
       },
       /** 搜索按钮操作 */
       handleQuery() {

@@ -142,7 +142,20 @@
           ? new DropdownWidget(this.loadDropdownData, this.widgetConfig.widgetType === this.OnlineWidgetType.Cascader) : undefined
       }
     },
+    created() {
+      this.initData()
+    },
     methods: {
+      initData() {
+        if (this.widgetConfig.onlineColumn != null) {
+          const fieldKind = this.widgetConfig.onlineColumn.fieldKind
+          if (fieldKind === this.OnlineFieldKind.CREATE_USER_NAME || fieldKind === this.OnlineFieldKind.CREATE_USER_NAME) {
+            if (!this.value) {
+              this.$emit('input', this.$store.getters.nickName, this.widgetConfig)
+            }
+          }
+        }
+      },
       /** 重置 */
       reset() {
         this.handlerWidgetInput(undefined)

@@ -3,6 +3,7 @@ package com.jeeagile.frame.controller.online;
 import com.jeeagile.core.protocol.annotation.AgileReference;
 import com.jeeagile.core.result.AgileResult;
 import com.jeeagile.core.result.AgileResultCode;
+import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.annotation.AgileDemo;
 import com.jeeagile.frame.annotation.AgileLogger;
 import com.jeeagile.frame.controller.AgileBaseController;
@@ -55,7 +56,7 @@ public class AgileOnlineOperationController extends AgileBaseController {
     @PostMapping(value = "/saveTableData")
     @ApiOperation(value = "保存数据", notes = "保存数据")
     public AgileResult<Map> saveMasterData(@SingleRequestBody String tableId, @SingleRequestBody Map masterData, @SingleRequestBody Map slaveData) {
-        if (agileOnlineOperationService.saveTableData(tableId, masterData, slaveData)) {
+        if (AgileStringUtil.isNotEmpty(agileOnlineOperationService.saveTableData(tableId, masterData, slaveData))) {
             return this.success("数据保存成功！");
         } else {
             return this.success(AgileResultCode.FAIL_OPS_SAVE, "数据保存成功！");

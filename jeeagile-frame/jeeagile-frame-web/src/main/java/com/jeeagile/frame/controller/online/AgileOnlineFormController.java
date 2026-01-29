@@ -43,10 +43,10 @@ public class AgileOnlineFormController extends AgileCrudController<IAgileOnlineF
         return this.success(agileService.render(pageId));
     }
 
-    @PostMapping(value = "/formPageList")
+    @PostMapping(value = "/selectOnlineFormPageList")
     @ApiOperation(value = "获取表单页面列表", notes = "获取表单页面列表")
     public AgileResult<Object> formPageList() {
-        return this.success(agileService.selectFormPageList());
+        return this.success(agileService.selectOnlineFormPageList());
     }
 
 
