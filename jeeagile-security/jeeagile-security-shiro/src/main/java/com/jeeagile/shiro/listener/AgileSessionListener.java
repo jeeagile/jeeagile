@@ -25,13 +25,25 @@ public class AgileSessionListener implements SessionListener {
 
     @Override
     public void onStop(Session session) {
-        int current = count.decrementAndGet();
+        int current;
+        do {
+            current = count.get();
+            if (current <= 0) {
+                break;
+            }
+        } while (!count.compareAndSet(current, current - 1));
         logger.debug("当前在线人数：{}", current);
     }
 
     @Override
     public void onExpiration(Session session) {
-        int current = count.decrementAndGet();
+        int current;
+        do {
+            current = count.get();
+            if (current <= 0) {
+                break;
+            }
+        } while (!count.compareAndSet(current, current - 1));
         logger.debug("当前在线人数：{}", current);
     }
 }
