@@ -2,7 +2,7 @@ package com.jeeagile.process.support;
 
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
-import com.jeeagile.process.entity.AgileProcessModel;
+import com.jeeagile.process.entity.AgileProcessDesigner;
 import com.jeeagile.process.entity.AgileProcessTask;
 import com.jeeagile.process.vo.AgileProcessHistory;
 
@@ -19,10 +19,10 @@ public interface IAgileProcessService {
     /**
      * 流程发布
      *
-     * @param agileProcessModel
+     * @param agileProcessDesigner
      * @return
      */
-    String processDeployment(AgileProcessModel agileProcessModel);
+    String processDeployment(AgileProcessDesigner agileProcessDesigner);
 
     /**
      * 通过流程部署ID获取流程定义ID
@@ -63,7 +63,7 @@ public interface IAgileProcessService {
      * @param variables
      * @return 返回流程实例ID
      */
-    String startProcessInstance(String definitionId, Map<String, Object> variables);
+    String startProcess(String definitionId, Map<String, Object> variables);
 
 
     /**

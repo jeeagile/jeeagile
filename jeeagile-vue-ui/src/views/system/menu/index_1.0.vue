@@ -201,7 +201,7 @@
 <script>
   import { selectMenuList, detailMenu, deleteMenu, addMenu, updateMenu, updateMenuSort } from '@/api/system/menu'
   import { selectOnlineFormPageList } from '@/api/online/form'
-  import {selectProcessOnlinePageList} from '@/api/process/model'
+  import { selectProcessOnlinePageList } from '@/api/process/designer'
   import IconSelect from '@/components/IconSelect'
   import _ from 'lodash'
 
@@ -323,7 +323,7 @@
 
             return {
               id: process.id,
-              name: process.modelName,
+              name: process.processName,
               children
             }
           })

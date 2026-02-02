@@ -2,7 +2,7 @@ package com.jeeagile.process.mapper;
 
 import com.jeeagile.frame.annotation.AgileMapper;
 import com.jeeagile.frame.mapper.AgileBaseMapper;
-import com.jeeagile.process.entity.AgileProcessModel;
+import com.jeeagile.process.entity.AgileProcessDesigner;
 
 /**
  * @author JeeAgile
@@ -10,5 +10,5 @@ import com.jeeagile.process.entity.AgileProcessModel;
  * @description 流程模型
  */
 @AgileMapper
-public interface AgileProcessModelMapper extends AgileBaseMapper<AgileProcessModel> {
+public interface AgileProcessDesignerMapper extends AgileBaseMapper<AgileProcessDesigner> {
 }

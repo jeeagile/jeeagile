@@ -2,15 +2,15 @@
   <div class="app-container">
     <div v-if="selectProcess">
       <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-        <el-form-item label="模型编码" prop="modelCode">
-          <el-input v-model="queryParam.queryCond.modelCode" placeholder="请输入模型编码" clearable size="small"
+        <el-form-item label="流程编码" prop="processCode">
+          <el-input v-model="queryParam.queryCond.processCode" placeholder="请输入流程编码" clearable size="small"
                     @keyup.enter.native="handleQuery"/>
         </el-form-item>
-        <el-form-item label="模型名称" prop="modelName">
-          <el-input v-model="queryParam.queryCond.modelName" placeholder="请输入模型名称" clearable size="small"
+        <el-form-item label="流程名称" prop="processName">
+          <el-input v-model="queryParam.queryCond.processName" placeholder="请输入流程名称" clearable size="small"
                     @keyup.enter.native="handleQuery"/>
         </el-form-item>
-        <el-form-item label="表单名称" prop="modelName">
+        <el-form-item label="表单名称" prop="processName">
           <el-input v-model="queryParam.queryCond.formName" placeholder="请输入表单名称" clearable size="small"
                     @keyup.enter.native="handleQuery"/>
         </el-form-item>
@@ -25,12 +25,12 @@
       </el-row>
 
       <el-table v-loading="loading" :data="processList">
-        <el-table-column label="模型编码" align="center" prop="modelCode"/>
-        <el-table-column label="模型名称" align="center" prop="modelName" :show-overflow-tooltip="true"/>
+        <el-table-column label="流程编码" align="center" prop="processCode"/>
+        <el-table-column label="流程名称" align="center" prop="processName" :show-overflow-tooltip="true"/>
         <el-table-column label="表单名称" align="center" prop="formName" :show-overflow-tooltip="true"/>
-        <el-table-column label="流程版本" align="center" prop="modelVersion">
+        <el-table-column label="流程版本" align="center" prop="processVersion">
           <template slot-scope="scope">
-            <span>v{{scope.row.modelVersion}}</span>
+            <span>v{{scope.row.processVersion}}</span>
           </template>
         </el-table-column>
         <el-table-column label="发布时间" align="center" prop="deploymentTime" width="150px"/>
@@ -90,7 +90,7 @@
       </el-card>
       <el-card class="box-card" style="margin-top: 10px">
         <div slot="header" class="clearfix">
-          <span class="el-icon-picture-outline">  {{ processDefinition.modelName }} </span>
+          <span class="el-icon-picture-outline">  {{ processDefinition.processName }} </span>
         </div>
         <process-view key="designer" v-model="processXml" style="height:450px"/>
       </el-card>
@@ -104,8 +104,8 @@
     detailProcessDefinition
   } from '@/api/process/definition'
   import {
-    startProcessInstance
-  } from '@/api/process/instance'
+    startProcess
+  } from '@/api/process/order'
   import ProcessFormParser from '@/components/FormDesigner/parser/Parser'
   import OnlineFormParser from '../../online/index'
 
@@ -135,8 +135,8 @@
           pageSize: 10,
           currentPage: 1,
           queryCond: {
-            modelCode: undefined,
-            modelName: undefined,
+            processCode: undefined,
+            processName: undefined,
             formName: undefined
           }
         }
@@ -160,7 +160,7 @@
         this.openProcessView = false
         detailProcessDefinition(row.id).then(response => {
             this.$nextTick(() => {
-              this.processXml = response.data.modelXml
+              this.processXml = response.data.processXml
               this.openProcessView = true
             })
           }
@@ -204,15 +204,15 @@
                 }
               }
             }
-            this.processXml = response.data.modelXml
+            this.processXml = response.data.processXml
             this.selectProcess = false
           })
         })
       },
       /** 提交流程表单 */
       submitProcessForm(formData) {
-        startProcessInstance({ processDefinitionId: this.processDefinition.id, formData: formData }).then(response => {
-            this.messageSuccess('业务流程《' + this.processDefinition.modelName + '》发起成功')
+        startProcess({ processDefinitionId: this.processDefinition.id, orderData: formData }).then(response => {
+            this.messageSuccess('业务流程《' + this.processDefinition.processName + '》发起成功')
             this.selectProcess = true
           }
         )
@@ -220,8 +220,8 @@
       /** 提交在线表单 */
       submitOnlineForm() {
         this.$refs.onlineForm.getFormPageData().then(formData => {
-          startProcessInstance({ processDefinitionId: this.processDefinition.id, formData: formData }).then(response => {
-              this.messageSuccess('业务流程《' + this.processDefinition.modelName + '》发起成功')
+          startProcess({ processDefinitionId: this.processDefinition.id, orderData: formData }).then(response => {
+              this.messageSuccess('业务流程《' + this.processDefinition.processName + '》发起成功')
               this.selectProcess = true
             }
           )

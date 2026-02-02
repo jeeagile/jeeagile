@@ -1,23 +1,33 @@
 package com.jeeagile.process.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.jeeagile.core.exception.AgileFrameException;
+import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.core.util.AgileUtil;
+import com.jeeagile.frame.constants.online.OnlinePageType;
+import com.jeeagile.frame.entity.online.AgileOnlinePage;
 import com.jeeagile.frame.entity.system.*;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
+import com.jeeagile.frame.service.AgileBaseServiceImpl;
+import com.jeeagile.frame.service.online.IAgileOnlinePageService;
 import com.jeeagile.frame.service.system.IAgileSysDeptService;
 import com.jeeagile.frame.service.system.IAgileSysPostService;
 import com.jeeagile.frame.service.system.IAgileSysRoleService;
 import com.jeeagile.frame.service.system.IAgileSysUserService;
-import com.jeeagile.process.entity.AgileProcessExpression;
-import com.jeeagile.process.entity.AgileProcessScript;
+import com.jeeagile.frame.util.AgileBeanUtils;
+import com.jeeagile.process.constants.ProcessDeploymentStatus;
+import com.jeeagile.process.constants.ProcessFormType;
+import com.jeeagile.process.entity.*;
+import com.jeeagile.process.mapper.AgileProcessDesignerMapper;
+import com.jeeagile.process.support.IAgileProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author JeeAgile
@@ -25,8 +35,16 @@ import java.util.List;
  * @description 流程设计
  */
 @AgileService
-public class AgileProcessDesignerServiceImpl implements IAgileProcessDesignerService {
+public class AgileProcessDesignerServiceImpl extends AgileBaseServiceImpl<AgileProcessDesignerMapper, AgileProcessDesigner> implements IAgileProcessDesignerService {
 
+    @Autowired
+    private IAgileProcessService agileProcessService;
+    @Autowired
+    private IAgileProcessFormService agileProcessFormService;
+    @Autowired
+    private IAgileProcessDefinitionService agileProcessDefinitionService;
+    @Autowired
+    private IAgileOnlinePageService agileOnlinePageService;
     @Autowired
     private IAgileSysUserService agileSysUserService;
     @Autowired
@@ -37,6 +55,177 @@ public class AgileProcessDesignerServiceImpl implements IAgileProcessDesignerSer
     private IAgileSysPostService agileSysPostService;
     @Autowired
     private IAgileProcessExpressionService agileProcessExpressionService;
+
+    @Override
+    public LambdaQueryWrapper<AgileProcessDesigner> queryWrapper(AgileProcessDesigner agileProcessDesigner) {
+        LambdaQueryWrapper<AgileProcessDesigner> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.select(AgileProcessDesigner.class, i -> !"processXml".contains(i.getProperty()));
+        if (agileProcessDesigner != null) {
+            if (AgileStringUtil.isNotEmpty(agileProcessDesigner.getProcessCode())) {
+                lambdaQueryWrapper.eq(AgileProcessDesigner::getProcessCode, agileProcessDesigner.getProcessCode());
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessDesigner.getProcessName())) {
+                lambdaQueryWrapper.like(AgileProcessDesigner::getProcessName, agileProcessDesigner.getProcessName());
+            }
+            if (AgileStringUtil.isNotEmpty(agileProcessDesigner.getDeploymentStatus())) {
+                lambdaQueryWrapper.eq(AgileProcessDesigner::getDeploymentStatus, agileProcessDesigner.getDeploymentStatus());
+            }
+        }
+        return lambdaQueryWrapper;
+    }
+
+    @Override
+    public void saveModelValidate(AgileProcessDesigner agileProcessDesigner) {
+        handlerDeploymentStatus(agileProcessDesigner);
+        this.validateProcessForm(agileProcessDesigner);
+        this.validateProcessModel(agileProcessDesigner);
+    }
+
+    @Override
+    public void updateModelValidate(AgileProcessDesigner agileProcessDesigner) {
+        handlerDeploymentStatus(agileProcessDesigner);
+        agileProcessDesigner.setDeploymentTime(null);
+        this.validateProcessForm(agileProcessDesigner);
+        this.validateProcessModel(agileProcessDesigner);
+    }
+
+    /**
+     * 校验流程表单配置
+     *
+     * @param agileProcessDesigner
+     */
+    private void validateProcessForm(AgileProcessDesigner agileProcessDesigner) {
+        if (AgileStringUtil.isEmpty(agileProcessDesigner.getFormType())) {
+            throw new AgileValidateException("请选择表单类型！");
+        }
+        if (agileProcessDesigner.getFormType().equals(ProcessFormType.PROCESS_FORM)) {
+            if (AgileStringUtil.isNotEmpty(agileProcessDesigner.getFormId())) {
+                agileProcessDesigner.setFormUrl("");
+            } else {
+                throw new AgileValidateException("请选择流程表单！");
+            }
+        }
+
+        if (agileProcessDesigner.getFormType().equals(ProcessFormType.BUSINESS_FORM)) {
+            if (AgileStringUtil.isNotEmpty(agileProcessDesigner.getFormUrl())) {
+                agileProcessDesigner.setFormId("");
+            } else {
+                throw new AgileValidateException("请选择填写表单地址！");
+            }
+        }
+    }
+
+    /**
+     * 校验流程流程名称和流程编码是否存在
+     *
+     * @param agileProcessDesigner
+     */
+    private void validateProcessModel(AgileProcessDesigner agileProcessDesigner) {
+        LambdaQueryWrapper<AgileProcessDesigner> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (agileProcessDesigner.getId() != null) {
+            lambdaQueryWrapper.ne(AgileProcessDesigner::getId, agileProcessDesigner.getId());
+        }
+        lambdaQueryWrapper.and(queryWrapper ->
+                queryWrapper.eq(AgileProcessDesigner::getProcessCode, agileProcessDesigner.getProcessCode()).or().eq(AgileProcessDesigner::getProcessName, agileProcessDesigner.getProcessName())
+        );
+        if (this.count(lambdaQueryWrapper) > 0) {
+            throw new AgileValidateException("流程名称或流程编码已存在！");
+        }
+    }
+
+    @Override
+    public AgileProcessDesigner saveProcessXml(String processId, String processXml) {
+        AgileProcessDesigner agileProcessDesigner = this.getById(processId);
+        if (agileProcessDesigner == null || agileProcessDesigner.isEmptyPk()) {
+            throw new AgileValidateException("流程模型已不存在！");
+        }
+        agileProcessDesigner.setProcessXml(processXml);
+        handlerDeploymentStatus(agileProcessDesigner);
+        this.updateById(agileProcessDesigner);
+        return agileProcessDesigner;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean processDeployment(String processId) {
+        AgileProcessDesigner agileProcessDesigner = this.getById(processId);
+        if (agileProcessDesigner != null && agileProcessDesigner.isNotEmptyPk()) {
+            if (ProcessDeploymentStatus.PUBLISHED.equals(agileProcessDesigner.getDeploymentStatus())) {
+                throw new AgileFrameException("当前流程已处于发布状态！");
+            }
+            if (AgileStringUtil.isEmpty(agileProcessDesigner.getProcessXml())) {
+                throw new AgileFrameException("请先进行流程设计！");
+            }
+            AgileProcessForm agileProcessForm = null;
+            if (agileProcessDesigner.getFormType().equals(ProcessFormType.PROCESS_FORM)) {
+                agileProcessForm = agileProcessFormService.getById(agileProcessDesigner.getFormId());
+                if (agileProcessForm == null || agileProcessForm.isEmptyPk()) {
+                    throw new AgileFrameException("流程表单不存在，请核实！");
+                }
+                if ("1".equals(agileProcessForm.getFormStatus())) {
+                    throw new AgileFrameException("流程表单已停用！");
+                }
+            }
+            //流程发布
+            String deploymentId = agileProcessService.processDeployment(agileProcessDesigner);
+            String definitionId = agileProcessService.getProcessDefinitionId(deploymentId);
+            agileProcessDesigner.setDeploymentStatus(ProcessDeploymentStatus.PUBLISHED);
+            agileProcessDesigner.setDeploymentTime(new Date());
+            AgileProcessDefinition agileProcessDefinition = new AgileProcessDefinition();
+            AgileBeanUtils.copyProperties(agileProcessDesigner, agileProcessDefinition);
+            if (agileProcessDesigner.getFormType().equals(ProcessFormType.PROCESS_FORM)) {
+                agileProcessDefinition.setFormName(agileProcessForm.getFormName());
+                agileProcessDefinition.setFormConf(agileProcessForm.getFormConf());
+                agileProcessDefinition.setFormFields(agileProcessForm.getFormFields());
+            }
+            agileProcessDefinition.setSuspensionState(1);
+            agileProcessDefinition.setId(definitionId);
+            agileProcessDefinition.setProcessId(agileProcessDesigner.getId());
+            agileProcessDefinitionService.saveModel(agileProcessDefinition);
+
+            return this.updateById(agileProcessDesigner);
+        } else {
+            throw new AgileFrameException("流程已不存在无法进行发布操作！");
+        }
+    }
+
+
+    /**
+     * 处理发布状态 如果已处于发布状态则修改状态为未发布，且将版本号加一
+     */
+    private synchronized void handlerDeploymentStatus(AgileProcessDesigner agileProcessDesigner) {
+        String deploymentStatus = agileProcessDesigner.getDeploymentStatus();
+        if (AgileStringUtil.isNotEmpty(deploymentStatus) && deploymentStatus.equals(ProcessDeploymentStatus.PUBLISHED)) {
+            agileProcessDesigner.setDeploymentStatus(ProcessDeploymentStatus.UNPUBLISHED);
+            agileProcessDesigner.setDeploymentTime(null);
+            agileProcessDesigner.setProcessVersion(agileProcessDesigner.getProcessVersion() + 1);
+        } else {
+            agileProcessDesigner.setDeploymentStatus(ProcessDeploymentStatus.UNPUBLISHED);
+            agileProcessDesigner.setDeploymentTime(null);
+        }
+    }
+
+    @Override
+    public Map<String, Object> selectProcessOnlinePageList() {
+        Map rtnMap = new HashMap();
+        LambdaQueryWrapper<AgileProcessDesigner> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.select(AgileProcessDesigner::getId, AgileProcessDesigner::getFormId, AgileProcessDesigner::getProcessName);
+        lambdaQueryWrapper.eq(AgileProcessDesigner::getDeploymentStatus, ProcessDeploymentStatus.PUBLISHED);
+        lambdaQueryWrapper.eq(AgileProcessDesigner::getFormType, ProcessFormType.ONLINE_FORM);
+        List<AgileProcessDesigner> agileProcessDesignerList = this.list(lambdaQueryWrapper);
+        List<AgileOnlinePage> agileOnlinePageList = new ArrayList<>();
+        agileProcessDesignerList.forEach(agileProcessModel -> {
+            LambdaQueryWrapper<AgileOnlinePage> pageQueryWrapper = new LambdaQueryWrapper<>();
+            pageQueryWrapper.select(AgileOnlinePage::getId, AgileOnlinePage::getFormId, AgileOnlinePage::getPageName, AgileOnlinePage::getPageType);
+            pageQueryWrapper.eq(AgileOnlinePage::getFormId, agileProcessModel.getFormId());
+            pageQueryWrapper.in(AgileOnlinePage::getPageType, OnlinePageType.ORDER);
+            agileOnlinePageList.addAll(this.agileOnlinePageService.list(pageQueryWrapper));
+        });
+        rtnMap.put("processList", agileProcessDesignerList);
+        rtnMap.put("orderPageList", agileOnlinePageList);
+        return rtnMap;
+    }
+
     @Override
     public AgilePage<AgileSysUser> selectUserPage(AgilePageable<AgileSysUser> agilePageable) {
         AgilePage<AgileSysUser> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
@@ -123,7 +312,7 @@ public class AgileProcessDesignerServiceImpl implements IAgileProcessDesignerSer
     public AgilePage<AgileProcessExpression> selectExpressionPage(AgilePageable<AgileProcessExpression> agilePageable) {
         AgilePage<AgileProcessExpression> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         LambdaQueryWrapper<AgileProcessExpression> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.select(AgileProcessExpression::getId, AgileProcessExpression::getExpressionCode, AgileProcessExpression::getExpressionName,AgileProcessExpression::getExpressionValue);
+        lambdaQueryWrapper.select(AgileProcessExpression::getId, AgileProcessExpression::getExpressionCode, AgileProcessExpression::getExpressionName, AgileProcessExpression::getExpressionValue);
         AgileProcessExpression agileProcessExpression = agilePageable.getQueryCond();
         if (agileProcessExpression != null) {
             if (AgileStringUtil.isNotEmpty(agileProcessExpression.getExpressionCode())) {

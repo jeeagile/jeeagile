@@ -20,7 +20,7 @@
         </el-row>
       </el-col>
       <el-col :span="24">
-        <el-table size="mini" header-cell-class-name="table-header-gray" ref="tableImpl"
+        <el-table size="mini" header-cell-class-name="table-header-gray" ref="tableImpl" v-loading="loading"
                   :style="{height: (widgetConfig.height != null && widgetConfig.height !== '') ? widgetConfig.height + 'px' : undefined}"
                   :height="(widgetConfig.height != null && widgetConfig.height !== '') ? widgetConfig.height + 'px' : undefined"
                   :data="tableWidget.dataList" :row-key="getPrimaryFieldName"
@@ -91,8 +91,14 @@
               </template>
             </el-table-column>
           </template>
-          <el-table-column v-if="pageType === OnlinePageType.ORDER" label="创建时间" fixed="right" width="200px" prop="createTime"/>
-          <el-table-column v-if="pageType === OnlinePageType.ORDER" label="流程状态" fixed="right" width="150px" prop="processStatus"/>
+          <el-table-column v-if="pageType === OnlinePageType.ORDER" label="创建时间" fixed="right" width="200px"
+                           prop="startTime"/>
+          <el-table-column v-if="pageType === OnlinePageType.ORDER" label="流程状态" fixed="right" width="150px"
+                           prop="orderStatus">
+            <template slot-scope="scope">
+              {{ ProcessOrderStatus.getLabel(scope.row.orderStatus) }}
+            </template>
+          </el-table-column>
           <el-table-column
             v-if="getTableOperation(true).length > 0 || pageType === OnlinePageType.ORDER"
             label="操作" :width="(widgetConfig.operationWidth || 150) + 'px'" fixed="right" align="center"
@@ -168,7 +174,7 @@
       tableQueryParam: {
         type: Function
       },
-      loadDataFunc: {
+      loadTableDataFunc: {
         type: Function
       },
       flowData: {
@@ -186,6 +192,7 @@
     inject: ['preview'],
     data() {
       return {
+        loading: false,
         // 表格用到的字典数据
         tableDictValueListMap: new Map(),
         tableWidget: new TableWidget(
@@ -275,8 +282,16 @@
             orderList: orderList
           }
         }
+        this.loading = true
         return new Promise((resolve, reject) => {
+          if (typeof this.loadTableDataFunc === 'function') {
+            return this.loadTableDataFunc(queryParam).then(data => {
+              this.loading = false
+              resolve(data)
+            })
+          }
           selectPageData(queryParam).then(response => {
+              this.loading = false
               resolve({
                 dataList: response.data.records,
                 pageTotal: response.data.pageTotal

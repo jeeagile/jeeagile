@@ -1,6 +1,7 @@
 package com.jeeagile.process.support.activiti.listener;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -9,18 +10,18 @@ import com.jeeagile.frame.service.system.IAgileSysUserService;
 import com.jeeagile.frame.user.AgileUserData;
 import com.jeeagile.frame.util.AgileBeanUtils;
 import com.jeeagile.process.constants.ProcessFormType;
+import com.jeeagile.process.constants.ProcessOrderStatus;
 import com.jeeagile.process.entity.AgileProcessDefinition;
-import com.jeeagile.process.entity.AgileProcessInstance;
+import com.jeeagile.process.entity.AgileProcessOrder;
 import com.jeeagile.process.entity.AgileProcessTask;
 import com.jeeagile.process.service.IAgileProcessDefinitionService;
-import com.jeeagile.process.service.IAgileProcessInstanceService;
+import com.jeeagile.process.service.IAgileProcessOrderService;
 import com.jeeagile.process.service.IAgileProcessTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.event.ActivitiEvent;
 import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.activiti.engine.delegate.event.impl.ActivitiEntityEventImpl;
-import org.activiti.engine.delegate.event.impl.ActivitiProcessCancelledEventImpl;
 import org.activiti.engine.delegate.event.impl.ActivitiProcessStartedEventImpl;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
     private IAgileProcessDefinitionService agileProcessDefinitionService;
     @Lazy
     @Autowired
-    private IAgileProcessInstanceService agileProcessInstanceService;
+    private IAgileProcessOrderService agileProcessInstanceService;
     @Lazy
     @Autowired
     private IAgileProcessTaskService agileProcessTaskService;
@@ -92,36 +93,39 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
         if (agileProcessDefinition == null || agileProcessDefinition.isEmptyPk()) {
             throw new AgileFrameException("流程定义不存在！");
         }
-        AgileProcessInstance agileProcessInstance = new AgileProcessInstance();
-        AgileBeanUtils.copyProperties(agileProcessDefinition, agileProcessInstance);
-        agileProcessInstance.setId(processStartedEvent.getProcessInstanceId());
-        agileProcessInstance.setDefinitionId(agileProcessDefinition.getId());
+        AgileProcessOrder agileProcessOrder = new AgileProcessOrder();
+        AgileBeanUtils.copyProperties(agileProcessDefinition, agileProcessOrder);
+        agileProcessOrder.setDefinitionId(agileProcessDefinition.getId());
+        agileProcessOrder.setInstanceId(processStartedEvent.getProcessInstanceId());
         AgileUserData agileUserData = (AgileUserData) AgileSecurityContext.getUserData();
-        agileProcessInstance.setStartUser(agileUserData.getUserId());
-        agileProcessInstance.setStartUserName(agileUserData.getNickName());
-        agileProcessInstance.setStartTime(new Date());
-        agileProcessInstance.setPageId(agileProcessDefinition.getPageId());
+        agileProcessOrder.setStartUser(agileUserData.getUserId());
+        agileProcessOrder.setStartUserName(agileUserData.getNickName());
+        agileProcessOrder.setStartTime(new Date());
+        agileProcessOrder.setPageId(agileProcessDefinition.getPageId());
+        agileProcessOrder.setId(null);
         if (ProcessFormType.PROCESS_FORM.equals(agileProcessDefinition.getFormType())) {
-            agileProcessInstance.setFormData(JSON.toJSONString(processStartedEvent.getVariables()));
+            agileProcessOrder.setFormData(JSON.toJSONString(processStartedEvent.getVariables()));
         } else if (ProcessFormType.ONLINE_FORM.equals(agileProcessDefinition.getFormType())) {
-            agileProcessInstance.setPageKey((String) processStartedEvent.getVariables().get("pageKey"));
+            agileProcessOrder.setPageKey((String) processStartedEvent.getVariables().get("pageKey"));
         }
-        agileProcessInstance.setInstanceStatus("1");
-        agileProcessInstanceService.saveModel(agileProcessInstance);
+        agileProcessOrder.setOrderStatus(ProcessOrderStatus.SUBMITTED);
+        agileProcessInstanceService.saveModel(agileProcessOrder);
     }
 
     private void taskCreated(ActivitiEntityEventImpl activitiEntityEvent) {
-
-        AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(activitiEntityEvent.getProcessInstanceId());
-        if (agileProcessInstance == null || agileProcessInstance.isEmptyPk()) {
+        LambdaQueryWrapper<AgileProcessOrder> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileProcessOrder::getInstanceId, activitiEntityEvent.getProcessInstanceId());
+        AgileProcessOrder agileProcessOrder = agileProcessInstanceService.getOne(lambdaQueryWrapper);
+        if (agileProcessOrder == null || agileProcessOrder.isEmptyPk()) {
             throw new AgileFrameException("流程实例不存在！");
         }
         Task task = (Task) activitiEntityEvent.getEntity();
 
         AgileProcessTask agileProcessTask = new AgileProcessTask();
-        AgileBeanUtils.copyProperties(agileProcessInstance, agileProcessTask);
-        agileProcessTask.setInstanceId(agileProcessInstance.getId());
+        AgileBeanUtils.copyProperties(agileProcessOrder, agileProcessTask);
+        agileProcessTask.setInstanceId(agileProcessOrder.getInstanceId());
         agileProcessTask.setId(task.getId());
+        agileProcessTask.setOrderId(agileProcessOrder.getId());
         agileProcessTask.setTaskName(task.getName());
         agileProcessTask.setStartTime(task.getCreateTime());
 
@@ -148,11 +152,11 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
     }
 
     private void processCompleted(ActivitiEntityEventImpl activitiEntityEvent) {
-        AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(activitiEntityEvent.getProcessInstanceId());
-        agileProcessInstance.setInstanceStatus("2");
-        agileProcessInstance.setEndTime(new Date());
-        agileProcessInstance.setUpdateNullValue();
-        agileProcessInstanceService.updateById(agileProcessInstance);
+        AgileProcessOrder agileProcessOrder = agileProcessInstanceService.getById(activitiEntityEvent.getProcessInstanceId());
+        agileProcessOrder.setOrderStatus(ProcessOrderStatus.FINISHED);
+        agileProcessOrder.setEndTime(new Date());
+        agileProcessOrder.setUpdateNullValue();
+        agileProcessInstanceService.updateById(agileProcessOrder);
     }
 
 //    private void processCancelled(ActivitiProcessCancelledEventImpl processCancelledEvent) {

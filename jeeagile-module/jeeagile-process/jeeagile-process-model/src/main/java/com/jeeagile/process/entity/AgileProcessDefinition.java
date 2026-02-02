@@ -15,30 +15,30 @@ import java.util.Date;
 @Data
 public class AgileProcessDefinition extends AgileBaseTenantModel<AgileProcessDefinition> {
     /**
-     * 流程模型编码
+     * 流程编码
      */
     @NotEmpty(message = "流程模型ID不能为空！")
-    private String modelId;
+    private String processId;
     /**
-     * 流程模型编码
+     * 流程编码
      */
-    @NotEmpty(message = "流程模型编码不能为空！")
-    @Size(max = 10, message = "流程模型编码最大长度为10！")
-    private String modelCode;
+    @NotEmpty(message = "流程编码不能为空！")
+    @Size(max = 10, message = "流程编码最大长度为10！")
+    private String processCode;
     /**
-     * 流程模型名称
+     * 流程流程名称
      */
-    @NotEmpty(message = "流程模型名称不能为空！")
-    @Size(max = 50, message = "流程模型名称最大长度为50！")
-    private String modelName;
+    @NotEmpty(message = "流程流程名称不能为空！")
+    @Size(max = 50, message = "流程流程名称最大长度为50！")
+    private String processName;
     /**
-     * 流程模型版本
+     * 流程流程版本
      */
-    private int modelVersion;
+    private int processVersion;
     /**
      * 流程模型设计XMl
      */
-    private String modelXml;
+    private String processXml;
     /**
      * 流程表单类型（1:流程表单 2:业务表单）
      */

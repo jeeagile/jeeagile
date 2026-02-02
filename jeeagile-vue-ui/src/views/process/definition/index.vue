@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="流程模型" prop="modelId">
-        <el-select v-model="queryParam.queryCond.modelId" placeholder="流程模型" clearable size="small"
+      <el-form-item label="流程模型" prop="processId">
+        <el-select v-model="queryParam.queryCond.processId" placeholder="流程模型" clearable size="small"
                    @change="handleQuery">
           <el-option v-for="processModelOption in modelList"
                      :key="processModelOption.id"
-                     :label="processModelOption.modelName" :value="processModelOption.id"/>
+                     :label="processModelOption.processName" :value="processModelOption.id"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -16,33 +16,15 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <!--      <el-col :span="1.5">-->
-      <!--        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleProcessAdd"-->
-      <!--                   v-hasPerm="['process:model:add']">-->
-      <!--          新增-->
-      <!--        </el-button>-->
-      <!--      </el-col>-->
-      <!--      <el-col :span="1.5">-->
-      <!--        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleProcessUpdate"-->
-      <!--                   v-hasPerm="['process:model:update']">-->
-      <!--          修改-->
-      <!--        </el-button>-->
-      <!--      </el-col>-->
-      <!--      <el-col :span="1.5">-->
-      <!--        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleProcessDelete"-->
-      <!--                   v-hasPerm="['process:model:delete']">-->
-      <!--          删除-->
-      <!--        </el-button>-->
-      <!--      </el-col>-->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getProcessModelList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="definitionList">
-      <el-table-column label="模型编码" align="center" prop="modelCode"/>
-      <el-table-column label="模型名称" align="center" prop="modelName" :show-overflow-tooltip="true"/>
-      <el-table-column label="流程版本" align="center" prop="modelVersion">
+      <el-table-column label="流程编码" align="center" prop="processCode"/>
+      <el-table-column label="流程名称" align="center" prop="processName" :show-overflow-tooltip="true"/>
+      <el-table-column label="流程版本" align="center" prop="processVersion">
         <template slot-scope="scope">
-          <span>v{{scope.row.modelVersion}}</span>
+          <span>v{{scope.row.processVersion}}</span>
         </template>
       </el-table-column>
       <el-table-column label="发布时间" align="center" prop="deploymentTime" width="150px"/>
@@ -90,13 +72,17 @@
                 :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
                 @pagination="getProcessDefinitionList"/>
     <!-- 流程模型图的预览 -->
-    <el-dialog title="流程图" :visible.sync="openProcessView" width="600px" append-to-body>
-      <process-view key="designer" v-model="processXml"/>
+    <el-dialog title="流程图" :visible.sync="openProcessView" width="650px" append-to-body>
+      <process-view key="designer" v-model="processXml" style="height: 350px"/>
     </el-dialog>
     <!-- 表单预览 -->
-    <el-dialog title="表单预览" :visible.sync="openFormView" width="500px" append-to-body>
-      <div class="test-form">
-        <form-parser :key="new Date().getTime()" :form-conf="parserForm" @submit="submitFormData"/>
+    <el-dialog title="表单预览" :visible.sync="openFormView" width="650px" append-to-body>
+      <div class="test-form" v-if="processDefinition.formType === this.ProcessFormType.PROCESS_FORM">
+        <process-form-parser :key="new Date().getTime()" :form-conf="parserForm"/>
+      </div>
+      <div class="test-form" v-if="processDefinition.formType === this.ProcessFormType.ONLINE_FORM">
+        <online-form-parser :key="new Date().getTime()" :page-id="processDefinition.pageId"
+                            :process-id="processDefinition.id" :page-type="OnlinePageType.FLOW"/>
       </div>
     </el-dialog>
   </div>
@@ -112,13 +98,14 @@
     updateMainVersion
   } from '@/api/process/definition'
   import {
-    selectProcessModelList
-  } from '@/api/process/model'
-  import FormParser from '@/components/FormDesigner/parser/Parser'
+    selectProcessList
+  } from '@/api/process/designer'
+  import ProcessFormParser from '@/components/FormDesigner/parser/Parser'
+  import OnlineFormParser from '../../online/index'
 
   export default {
     name: 'ProcessDefinition',
-    components: { FormParser },
+    components: { ProcessFormParser, OnlineFormParser },
     data() {
       return {
         // 遮罩层
@@ -129,6 +116,7 @@
         modelList: [],
         // 流程表格数据
         definitionList: [],
+        processDefinition: {},
         openProcessView: false,
         processXml: undefined,
         openFormView: false,
@@ -141,21 +129,21 @@
           pageSize: 10,
           currentPage: 1,
           queryCond: {
-            modelId: undefined
+            processId: undefined
           }
         }
       }
     },
     created() {
-      const modelId = this.$route.params && this.$route.params.modelId
-      this.queryParam.queryCond.modelId = modelId
+      const processId = this.$route.params && this.$route.params.processId
+      this.queryParam.queryCond.processId = processId
       this.getProcessModelList()
       this.getProcessDefinitionList()
     },
     methods: {
       /** 查询流程模型列表 */
       getProcessModelList() {
-        selectProcessModelList().then(response => {
+        selectProcessList().then(response => {
           this.modelList = response.data
         })
       },
@@ -183,7 +171,7 @@
         this.openProcessView = false
         detailProcessDefinition(row.id).then(response => {
             this.$nextTick(() => {
-              this.processXml = response.data.modelXml
+              this.processXml = response.data.processXml
               this.openProcessView = true
             })
           }
@@ -194,11 +182,14 @@
         this.openFormView = false
         detailProcessDefinition(row.id).then(response => {
           this.$nextTick(() => {
-            if (response.data.formType === '1') {
-              if (response.data.formConf && response.data.formFields) {
-                this.parserForm = {
-                  fields: JSON.parse(response.data.formFields),
-                  ...JSON.parse(response.data.formConf)
+            this.processDefinition = response.data
+            if (response.data.formType === this.ProcessFormType.PROCESS_FORM) {
+              if (response.data.formType === '1') {
+                if (response.data.formConf && response.data.formFields) {
+                  this.parserForm = {
+                    fields: JSON.parse(response.data.formFields),
+                    ...JSON.parse(response.data.formConf)
+                  }
                 }
               }
             }
@@ -233,7 +224,7 @@
       /** 删除按钮操作 */
       handleProcessDefinitionDelete(row) {
         row = undefined === row.id ? this.selectRowList[0] : row
-        this.$confirm('是否确认删除流程名称为"' + row.modelName + '"的数据项?', '警告', {
+        this.$confirm('是否确认删除流程名称为"' + row.processName + '"的数据项?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

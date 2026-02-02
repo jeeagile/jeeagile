@@ -1,16 +1,16 @@
 <template>
   <div style="position: relative;">
-    <el-form :model="queryParam" ref="queryForm" label-width="80px" size="mini" :inline="true" v-show="showSearch">
+    <el-form ref="queryForm" label-width="80px" size="mini" :inline="true" v-show="showSearch">
       <drag-widget-filter>
         <el-form-item label="流程状态">
-          <el-select class="filter-item" v-model="processStatus" :clearable="true" placeholder="流程状态"
+          <el-select class="filter-item" v-model="processOrderStatus" :clearable="true" placeholder="流程状态"
                      style="width: 250px">
             <el-option v-for="item in ProcessOrderStatus.getList()" :key="item.value" :label="item.label"
                        :value="item.value"/>
           </el-select>
         </el-form-item>
         <el-form-item label="创建日期">
-          <el-date-picker class="filter-item" style="width: 250px" :clearable="true"
+          <el-date-picker class="filter-item" v-model="createTime" style="width: 250px" :clearable="true"
                           :allowTypes="['day']" align="left"
                           format="yyyy-MM-dd" value-format="yyyy-MM-dd HH:mm:ss" type="daterange"
                           range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"/>
@@ -32,7 +32,7 @@
                    @click="onStartProcess()">新建
         </el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="onSearch"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="loadProcessOrderList"></right-toolbar>
     </el-row>
 
     <el-row>
@@ -59,6 +59,7 @@
   import DragWidgetFilter from '../designer/dragWidgetFilter'
 
   import { selectMainProcessDefinition } from '@/api/process/definition'
+  import { selectOnlineOrderList } from '@/api/process/order'
 
   export default {
     name: 'OnlineOrderPage',
@@ -85,22 +86,33 @@
         processDefinitionId: undefined,
         processName: undefined,
         createTime: [],
-        processStatus: undefined,
-        showSearch: true,
-        queryParam: {
-          pageTotal: 0,
-          pageSize: 10,
-          currentPage: 1,
-          queryCond: {}
-        }
+        processOrderStatus: undefined,
+        showSearch: true
       }
     },
     methods: {
       getTableQueryParam(widget) {
 
       },
-      loadProcessOrderList(params) {
 
+      loadProcessOrderList(params) {
+        if (this.isPreview || this.processDefinitionId == null) return Promise.reject()
+        return new Promise((resolve, reject) => {
+          params.queryCond = {
+            ...params.queryCond,
+            processId: this.processId,
+            orderPageId: this.pageId,
+            instanceStatus: this.processOrderStatus,
+            createTimeStart: Array.isArray(this.createTime) ? this.createTime[0] : undefined,
+            createTimeEnd: Array.isArray(this.createTime) ? this.createTime[1] : undefined
+          }
+          selectOnlineOrderList(params).then(response => {
+            resolve({
+              dataList: response.data.records,
+              pageTotal: response.data.pageTotal
+            })
+          })
+        })
       },
       onSearch() {
         this.formPageData.pageFilterCopy = {
@@ -127,9 +139,6 @@
             this.deleteOnlinePageCache(key)
           })
         }
-      },
-      /** 获取工单列表 **/
-      getOrderList() {
       },
       /** 启动流程 **/
       onStartProcess() {

@@ -1,5 +1,6 @@
 package com.jeeagile.frame.service.online;
 
+import com.jeeagile.frame.entity.online.AgileOnlineTable;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.vo.online.OnlineQueryParam;
@@ -28,7 +29,13 @@ public interface IAgileOnlineOperationService {
      * @return
      */
     AgilePage<Map> selectPageData(AgilePageable<OnlineQueryParam> agilePageable);
-
+    /**
+     * 构建查询参数
+     *
+     * @param onlineQueryParam
+     * @return
+     */
+    Map<String, Object> makeQueryParam(AgileOnlineTable agileOnlineTable, OnlineQueryParam onlineQueryParam);
     /**
      * 查看数据明细
      *

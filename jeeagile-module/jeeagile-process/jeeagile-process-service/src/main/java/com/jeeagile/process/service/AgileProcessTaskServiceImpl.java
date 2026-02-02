@@ -1,14 +1,12 @@
 package com.jeeagile.process.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.protocol.annotation.AgileService;
-import com.jeeagile.core.security.context.AgileSecurityContext;
-import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.AgileBaseServiceImpl;
-import com.jeeagile.process.entity.AgileProcessInstance;
+import com.jeeagile.process.constants.ProcessOrderStatus;
+import com.jeeagile.process.entity.AgileProcessOrder;
 import com.jeeagile.process.entity.AgileProcessTask;
 import com.jeeagile.process.mapper.AgileProcessTaskMapper;
 import com.jeeagile.process.support.IAgileProcessService;
@@ -26,7 +24,7 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
     @Autowired
     private IAgileProcessService agileProcessService;
     @Autowired
-    private IAgileProcessInstanceService agileProcessInstanceService;
+    private IAgileProcessOrderService agileProcessInstanceService;
 
     @Override
     public AgilePage<AgileProcessTask> selectTodo(AgilePageable<AgileProcessTask> agilePageable) {
@@ -63,12 +61,12 @@ public class AgileProcessTaskServiceImpl extends AgileBaseServiceImpl<AgileProce
         } else {
             agileProcessTask.setTaskStatus("3");
             agileProcessService.refuseProcessTask(agileProcessTask.getInstanceId(), agileProcessTask.getId(), approveMessage);
-            AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(agileProcessTask.getInstanceId());
-            if (agileProcessInstance != null && agileProcessInstance.isNotEmptyPk()) {
-                agileProcessInstance.setInstanceStatus("3");
-                agileProcessInstance.setEndTime(new Date());
-                agileProcessInstance.setUpdateNullValue();
-                agileProcessInstanceService.updateById(agileProcessInstance);
+            AgileProcessOrder agileProcessOrder = agileProcessInstanceService.getById(agileProcessTask.getInstanceId());
+            if (agileProcessOrder != null && agileProcessOrder.isNotEmptyPk()) {
+                agileProcessOrder.setOrderStatus(ProcessOrderStatus.REJECTED);
+                agileProcessOrder.setEndTime(new Date());
+                agileProcessOrder.setUpdateNullValue();
+                agileProcessInstanceService.updateById(agileProcessOrder);
             }
         }
         return this.updateById(agileProcessTask);

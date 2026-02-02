@@ -26,19 +26,19 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
     @Override
     public LambdaQueryWrapper<AgileProcessDefinition> queryWrapper(AgileProcessDefinition agileProcessDefinition) {
         LambdaQueryWrapper<AgileProcessDefinition> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.select(AgileProcessDefinition.class, i -> !"modelXml".contains(i.getProperty()) || !"formFields".contains(i.getProperty()) || !"formConfig".contains(i.getProperty()));
+        lambdaQueryWrapper.select(AgileProcessDefinition.class, i -> !"processXml".contains(i.getProperty()) || !"formFields".contains(i.getProperty()) || !"formConfig".contains(i.getProperty()));
         if (agileProcessDefinition != null) {
-            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getModelId())) {
-                lambdaQueryWrapper.eq(AgileProcessDefinition::getModelId, agileProcessDefinition.getModelId());
+            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getProcessId())) {
+                lambdaQueryWrapper.eq(AgileProcessDefinition::getProcessId, agileProcessDefinition.getProcessId());
             }
-            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getModelCode())) {
-                lambdaQueryWrapper.eq(AgileProcessDefinition::getModelCode, agileProcessDefinition.getModelCode());
+            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getProcessCode())) {
+                lambdaQueryWrapper.eq(AgileProcessDefinition::getProcessCode, agileProcessDefinition.getProcessCode());
             }
-            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getModelName())) {
-                lambdaQueryWrapper.like(AgileProcessDefinition::getModelName, agileProcessDefinition.getModelName());
+            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getProcessName())) {
+                lambdaQueryWrapper.like(AgileProcessDefinition::getProcessName, agileProcessDefinition.getProcessName());
             }
         }
-        lambdaQueryWrapper.orderByDesc(AgileProcessDefinition::getModelVersion);
+        lambdaQueryWrapper.orderByDesc(AgileProcessDefinition::getProcessVersion);
         return lambdaQueryWrapper;
     }
 
@@ -46,14 +46,14 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
     public AgilePage<AgileProcessDefinition> selectMainVersionPage(AgilePageable<AgileProcessDefinition> agilePageable) {
         AgilePage<AgileProcessDefinition> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         LambdaQueryWrapper<AgileProcessDefinition> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.select(AgileProcessDefinition.class, i -> !"modelXml".contains(i.getProperty()) || !"formFields".contains(i.getProperty()) || !"formConfig".contains(i.getProperty()));
+        lambdaQueryWrapper.select(AgileProcessDefinition.class, i -> !"processXml".contains(i.getProperty()) || !"formFields".contains(i.getProperty()) || !"formConfig".contains(i.getProperty()));
         AgileProcessDefinition agileProcessDefinition = agilePageable.getQueryCond();
         if (agileProcessDefinition != null) {
-            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getModelCode())) {
-                lambdaQueryWrapper.eq(AgileProcessDefinition::getModelCode, agileProcessDefinition.getModelCode());
+            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getProcessCode())) {
+                lambdaQueryWrapper.eq(AgileProcessDefinition::getProcessCode, agileProcessDefinition.getProcessCode());
             }
-            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getModelName())) {
-                lambdaQueryWrapper.like(AgileProcessDefinition::getModelName, agileProcessDefinition.getModelName());
+            if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getProcessName())) {
+                lambdaQueryWrapper.like(AgileProcessDefinition::getProcessName, agileProcessDefinition.getProcessName());
             }
             if (AgileStringUtil.isNotEmpty(agileProcessDefinition.getFormName())) {
                 lambdaQueryWrapper.like(AgileProcessDefinition::getFormName, agileProcessDefinition.getFormName());
@@ -61,7 +61,7 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
         }
         lambdaQueryWrapper.eq(AgileProcessDefinition::getSuspensionState, 1);
         lambdaQueryWrapper.eq(AgileProcessDefinition::getMainVersion, 1);
-        lambdaQueryWrapper.orderByDesc(AgileProcessDefinition::getModelCode, AgileProcessDefinition::getModelVersion);
+        lambdaQueryWrapper.orderByDesc(AgileProcessDefinition::getProcessCode, AgileProcessDefinition::getProcessVersion);
         return this.page(agilePage, lambdaQueryWrapper);
     }
 
@@ -92,7 +92,7 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
     public boolean updateMainVersion(String id) {
         AgileProcessDefinition agileProcessDefinition = this.getById(id);
         if (agileProcessDefinition != null && agileProcessDefinition.isNotEmptyPk()) {
-            this.updateNoMainVersion(agileProcessDefinition.getModelId());
+            this.updateNoMainVersion(agileProcessDefinition.getProcessId());
             agileProcessDefinition.setMainVersion(1);
             return this.updateById(agileProcessDefinition);
         }
@@ -101,16 +101,16 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
 
     @Override
     public AgileProcessDefinition saveModel(AgileProcessDefinition agileProcessDefinition) {
-        this.updateNoMainVersion(agileProcessDefinition.getModelId());
+        this.updateNoMainVersion(agileProcessDefinition.getProcessId());
         agileProcessDefinition.setMainVersion(1);//设置新流程定义为主版本
         this.save(agileProcessDefinition);
         return agileProcessDefinition;
     }
 
     @Override
-    public AgileProcessDefinition selectMainProcessDefinition(String modelId) {
+    public AgileProcessDefinition selectMainProcessDefinition(String processId) {
         LambdaQueryWrapper<AgileProcessDefinition> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(AgileProcessDefinition::getModelId, modelId);
+        lambdaQueryWrapper.eq(AgileProcessDefinition::getProcessId, processId);
         lambdaQueryWrapper.eq(AgileProcessDefinition::getMainVersion, '1');
         lambdaQueryWrapper.eq(AgileProcessDefinition::getSuspensionState, 1);
         return this.getOne(lambdaQueryWrapper);
@@ -119,10 +119,10 @@ public class AgileProcessDefinitionServiceImpl extends AgileBaseServiceImpl<Agil
     /**
      * 将老版本更新为非主版本
      */
-    public void updateNoMainVersion(String modelId) {
+    public void updateNoMainVersion(String processId) {
         LambdaUpdateWrapper<AgileProcessDefinition> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
         lambdaUpdateWrapper.set(AgileProcessDefinition::getMainVersion, "2");
-        lambdaUpdateWrapper.eq(AgileProcessDefinition::getModelId, modelId);
+        lambdaUpdateWrapper.eq(AgileProcessDefinition::getProcessId, processId);
         this.update(lambdaUpdateWrapper);
     }
 }

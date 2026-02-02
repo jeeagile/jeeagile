@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="模型编码" prop="modelCode">
-        <el-input v-model="queryParam.queryCond.modelCode" placeholder="请输入模型编码" clearable size="small"
+      <el-form-item label="流程编码" prop="processCode">
+        <el-input v-model="queryParam.queryCond.processCode" placeholder="请输入流程编码" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="模型名称" prop="modelName">
-        <el-input v-model="queryParam.queryCond.modelName" placeholder="请输入模型名称" clearable size="small"
+      <el-form-item label="流程名称" prop="processName">
+        <el-input v-model="queryParam.queryCond.processName" placeholder="请输入流程名称" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="发起人" prop="modelName">
+      <el-form-item label="发起人" prop="processName">
         <el-input v-model="queryParam.queryCond.startUserName" placeholder="请输入流程发起人名称" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
@@ -24,15 +24,15 @@
     </el-row>
 
     <el-table v-loading="loading" :data="processList">
-      <el-table-column label="模型编码" align="center" prop="modelCode"/>
-      <el-table-column label="模型名称" align="center" prop="modelName" :show-overflow-tooltip="true"/>
+      <el-table-column label="流程编码" align="center" prop="processCode"/>
+      <el-table-column label="流程名称" align="center" prop="processName" :show-overflow-tooltip="true"/>
       <el-table-column label="表单名称" align="center" prop="formName" :show-overflow-tooltip="true"/>
       <el-table-column label="发起人" width="150" align="center" prop="startUserName"/>
       <el-table-column label="提交时间" width="150" align="center" prop="startTime"/>
       <el-table-column label="结束时间" width="150" align="center" prop="endTime"/>
       <el-table-column label="操作" width="200px" align="center" class-name="small-padding">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-view" @click="handleDetailInstance(scope.row)">
+          <el-button size="mini" type="text" icon="el-icon-view" @click="handleDetailOrder(scope.row)">
             查看详细
           </el-button>
         </template>
@@ -66,8 +66,8 @@
           pageSize: 10,
           currentPage: 1,
           queryCond: {
-            modelCode: undefined,
-            modelName: undefined,
+            processCode: undefined,
+            processName: undefined,
             formName: undefined
           }
         }
@@ -90,8 +90,8 @@
         )
       },
       /** 流程查看 */
-      handleDetailInstance(row) {
-        this.$router.push({ path: '/process/instance/detail/' + row.instanceId })
+      handleDetailOrder(row) {
+        this.$router.push({ path: '/process/order/detail/' + row.orderId })
       },
       /** 搜索按钮操作 */
       handleQuery() {

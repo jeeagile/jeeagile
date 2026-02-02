@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="模型编码" prop="modelCode">
-        <el-input v-model="queryParam.queryCond.modelCode" placeholder="请输入模型编码" clearable size="small"
+      <el-form-item label="流程编码" prop="processCode">
+        <el-input v-model="queryParam.queryCond.processCode" placeholder="请输入流程编码" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="模型名称" prop="modelName">
-        <el-input v-model="queryParam.queryCond.modelName" placeholder="请输入模型名称" clearable size="small"
+      <el-form-item label="流程名称" prop="processName">
+        <el-input v-model="queryParam.queryCond.processName" placeholder="请输入流程名称" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="发起人" prop="modelName">
+      <el-form-item label="发起人" prop="processName">
         <el-input v-model="queryParam.queryCond.startUserName" placeholder="请输入流程发起人名称" clearable size="small"
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
@@ -24,8 +24,8 @@
     </el-row>
 
     <el-table v-loading="loading" :data="processTodoList">
-      <el-table-column label="模型编码" align="center" prop="modelCode"/>
-      <el-table-column label="模型名称" align="center" prop="modelName" :show-overflow-tooltip="true"/>
+      <el-table-column label="流程编码" align="center" prop="processCode"/>
+      <el-table-column label="流程名称" align="center" prop="processName" :show-overflow-tooltip="true"/>
       <el-table-column label="表单名称" align="center" prop="formName" :show-overflow-tooltip="true"/>
       <el-table-column label="发起人" width="150" align="center" prop="startUserName"/>
       <el-table-column label="创建时间" width="150" align="center" prop="startTime"/>
@@ -91,9 +91,9 @@
     refuseProcessTask
   } from '@/api/process/task'
   import {
-    detailProcessInstance,
+    detailProcessOrder,
     detailProcessHistory
-  } from '@/api/process/instance'
+  } from '@/api/process/order'
   import FormParser from '@/components/FormDesigner/parser/Parser'
 
   export default {
@@ -114,8 +114,8 @@
           pageSize: 10,
           currentPage: 1,
           queryCond: {
-            modelCode: undefined,
-            modelName: undefined,
+            processCode: undefined,
+            processName: undefined,
             formName: undefined,
             startUserName: undefined
           }
@@ -126,7 +126,7 @@
         handleProcess: {
           loading: true,
           openProcess: false,
-          processInstances: undefined,
+          processOrder: undefined,
           processTask: undefined,
           activeName: 'formInfo',
           formView: false,
@@ -169,18 +169,18 @@
       /** 流程办理 */
       handleProcessTask(row) {
         this.handleProcess.openProcess = false
-        detailProcessInstance(row.instanceId).then(response => {
-          this.handleProcess.processInstances = response.data
+        detailProcessOrder(row.orderId).then(response => {
+          this.handleProcess.processOrder = response.data
           this.handleProcess.processTask = row
-          if (this.handleProcess.processInstances.formConf && this.handleProcess.processInstances.formFields) {
-            let formConf = JSON.parse(this.handleProcess.processInstances.formConf)
+          if (this.handleProcess.processOrder.formConf && this.handleProcess.processOrder.formFields) {
+            let formConf = JSON.parse(this.handleProcess.processOrder.formConf)
             formConf.formBtns = false
             formConf.disabled = true
             this.handleProcess.parserForm = {
-              fields: JSON.parse(this.handleProcess.processInstances.formFields),
+              fields: JSON.parse(this.handleProcess.processOrder.formFields),
               ...formConf
             }
-            this.fillFormData(this.handleProcess.parserForm, JSON.parse(this.handleProcess.processInstances.formData))
+            this.fillFormData(this.handleProcess.parserForm, JSON.parse(this.handleProcess.processOrder.formData))
             this.handleProcess.openProcess = true
           }
         })
@@ -196,9 +196,9 @@
       /** 流程进度 */
       handleProcessView(row) {
         this.openView = false
-        detailProcessInstance(row.instanceId).then(response => {
+        detailProcessOrder(row.orderId).then(response => {
           this.$nextTick(() => {
-            this.processXml = response.data.modelXml
+            this.processXml = response.data.processXml
             this.highLineData = response.data.highLineData
             this.openView = true
           })
@@ -216,13 +216,13 @@
       },
       handleClick(tab, event) {
         if (tab.name == 'processView' && !this.handleProcess.processXml) {
-          this.handleProcess.processXml = this.handleProcess.processInstances.modelXml
-          this.handleProcess.highLineData = this.handleProcess.processInstances.highLineData
+          this.handleProcess.processXml = this.handleProcess.processOrder.processXml
+          this.handleProcess.highLineData = this.handleProcess.processOrder.highLineData
         }
 
         if (tab.name == 'flowInfo' && !this.flowInfoList) {
           this.handleProcess.loading = true
-          detailProcessHistory(this.handleProcess.processInstances.id).then(response => {
+          detailProcessHistory(this.handleProcess.processOrder.id).then(response => {
             this.$nextTick(() => {
               this.handleProcess.flowInfoList = response.data
               this.handleProcess.loading = false

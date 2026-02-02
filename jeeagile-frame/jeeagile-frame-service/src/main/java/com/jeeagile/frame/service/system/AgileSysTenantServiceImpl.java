@@ -84,7 +84,7 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
 
     @Override
     public void saveModelValidate(AgileSysTenant agileSysTenant) {
-        if(!AgileTenantUtil.isTenantEnable()){
+        if (!AgileTenantUtil.isTenantEnable()) {
             throw new AgileFrameException("租户模式未开启请勿创建租户！");
         }
         agileSysTenant.setAuditStatus(AgileAuditStatus.AUDIT);
@@ -383,7 +383,6 @@ public class AgileSysTenantServiceImpl extends AgileBaseServiceImpl<AgileSysTena
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzLoggerId).menuName("查看").menuPerm("quartz:logger:detail").menuSort(1).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzLoggerId).menuName("删除").menuPerm("quartz:logger:delete").menuSort(2).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
         agileSysMenuList.add(AgileSysMenu.builder().id(AgileStringUtil.getUuid()).parentId(quartzLoggerId).menuName("清空").menuPerm("quartz:logger:clear").menuSort(3).menuIcon("#").menuType("F").menuVisible("0").menuStatus("0").menuFrame("1").build());
-
 
 
         String processId = AgileStringUtil.getUuid();

@@ -60,15 +60,29 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
         if (agileOnlineTable == null || agileOnlineTable.isEmptyPk()) {
             throw new AgileValidateException("数据表已不存在！");
         }
+        Map<String, Object> queryParam = this.makeQueryParam(agileOnlineTable, onlineQueryParam);
+        String selectFields = (String) queryParam.get("selectFields");
+        String orderBy = (String) queryParam.get("orderBy");
+        String tableName = (String) queryParam.get("tableName");
+        List<OnlineJoinTable> joinTableList = (List<OnlineJoinTable>) queryParam.get("joinTableList");
+        AgilePage<Map> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
+        return agileOnlineOperationMapper.getPageData(agilePage, tableName, selectFields, joinTableList, onlineQueryParam.getFilterList(), orderBy);
+    }
 
-        Map<String, AgileOnlineTable> onlineTableMap = new HashMap();
+    @Override
+    public Map<String, Object> makeQueryParam(AgileOnlineTable agileOnlineTable, OnlineQueryParam onlineQueryParam) {
+        Map<String, AgileOnlineTable> onlineTableMap = new HashMap<>();
         onlineTableMap.put(agileOnlineTable.getId(), agileOnlineTable);
         this.checkFieldFilter(agileOnlineTable, onlineTableMap, onlineQueryParam.getFilterList());
         String selectFields = this.makeTableSelectField(agileOnlineTable, onlineTableMap, onlineQueryParam.getQueryList());
         String orderBy = this.makeTableOrderBy(onlineTableMap, onlineQueryParam.getOrderList());
-        AgilePage<Map> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         List<OnlineJoinTable> joinTableList = this.makeJoinTable(agileOnlineTable, onlineTableMap);
-        return agileOnlineOperationMapper.getPageData(agilePage, agileOnlineTable.getTableName(), selectFields, joinTableList, onlineQueryParam.getFilterList(), orderBy);
+        Map<String, Object> queryParam = new HashMap<>();
+        queryParam.put("selectFields", selectFields);
+        queryParam.put("joinTableList", joinTableList);
+        queryParam.put("orderBy", orderBy);
+        queryParam.put("tableName", agileOnlineTable.getTableName());
+        return queryParam;
     }
 
     @Override
@@ -233,7 +247,6 @@ public class AgileOnlineOperationServiceImpl implements IAgileOnlineOperationSer
                 }
                 if (filterOnlineTable == null || filterOnlineTable.isEmptyPk()) {
                     errorMessage.append("过滤条件条件，过滤表《").append(onlineFieldFilter.getTableName()).append("》已不存在！\r\n");
-                    continue;
                 } else {
                     onlineTableMap.put(filterOnlineTable.getId(), filterOnlineTable);
                     onlineFieldFilter.setTableName(filterOnlineTable.getTableName());

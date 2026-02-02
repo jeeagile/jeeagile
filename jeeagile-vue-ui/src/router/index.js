@@ -133,22 +133,22 @@ export const agileRouter = [
         meta: { title: '表单设计' }
       },
       {
-        path: 'designer/:modelId(.*)',
-        component: (resolve) => require(['@/views/process/designer/index'], resolve),
+        path: 'designer/:processId(.*)',
+        component: (resolve) => require(['@/views/process/designer/designer'], resolve),
         name: 'ProcessDesigner',
         meta: { title: '流程设计' }
       },
       {
-        path: 'definition/:modelId(.*)',
+        path: 'definition/:processId(.*)',
         component: (resolve) => require(['@/views/process/definition/index'], resolve),
         name: 'ProcessDefinition',
         meta: { title: '流程定义' }
       },
       {
-        path: 'instance/detail/:instanceId(.*)',
-        component: (resolve) => require(['@/views/process/instance/detail'], resolve),
-        name: 'DetailInstance',
-        meta: { title: '流程实例信息' }
+        path: 'order/detail/:orderId(.*)',
+        component: (resolve) => require(['@/views/process/order/detail'], resolve),
+        name: 'DetailOrder',
+        meta: { title: '流程工单信息' }
       }
     ]
   }

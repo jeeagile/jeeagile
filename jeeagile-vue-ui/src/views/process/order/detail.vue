@@ -34,12 +34,12 @@
   import ProcessFormParser from '@/components/FormDesigner/parser/Parser'
   import OnlineFormParser from '../../online/index'
   import {
-    detailProcessInstance,
+    detailProcessOrder,
     detailProcessHistory
-  } from '@/api/process/instance'
+  } from '@/api/process/order'
 
   export default {
-    name: 'DetailInstance',
+    name: 'DetailOrder',
     components: {
       ProcessFormParser,
       OnlineFormParser
@@ -59,13 +59,13 @@
       }
     },
     created() {
-      const instanceId = this.$route.params && this.$route.params.instanceId
-      this.getProcessInstanceInfo(instanceId)
+      const orderId = this.$route.params && this.$route.params.orderId
+      this.getProcessOrderInfo(orderId)
     },
     methods: {
-      getProcessInstanceInfo(instanceId) {
+      getProcessOrderInfo(orderId) {
         this.activeName = 'formInfo'
-        detailProcessInstance(instanceId).then(response => {
+        detailProcessOrder(orderId).then(response => {
           this.$nextTick(() => {
             this.processInstances = response.data
             if (this.processInstances.formType === this.ProcessFormType.PROCESS_FORM) { // 流程表单
@@ -97,7 +97,7 @@
       handleClick(tab, event) {
         this.openProcessView = false
         if (tab.name == 'processView') {
-          this.processXml = this.processInstances.modelXml
+          this.processXml = this.processInstances.processXml
           this.highLineData = this.processInstances.highLineData
           this.openProcessView = true
         }

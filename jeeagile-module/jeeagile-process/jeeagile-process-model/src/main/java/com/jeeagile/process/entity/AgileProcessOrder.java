@@ -13,27 +13,31 @@ import java.util.Map;
  * @description 流程模型
  */
 @Data
-public class AgileProcessInstance extends AgileBaseTenantModel<AgileProcessInstance> {
+public class AgileProcessOrder extends AgileBaseTenantModel<AgileProcessOrder> {
     /**
-     * 流程模型编码
+     * 流程编码
      */
-    private String modelId;
+    private String processId;
     /**
-     * 流程模型编码
+     * 流程编码
      */
-    private String modelCode;
+    private String processCode;
     /**
-     * 流程模型名称
+     * 流程流程名称
      */
-    private String modelName;
+    private String processName;
     /**
-     * 流程模型版本
+     * 流程设计XMl
      */
-    private int modelVersion;
+    private String processXml;
     /**
-     * 流程模型设计XMl
+     * 流程定义ID
      */
-    private String modelXml;
+    private String definitionId;
+    /**
+     * 流程实例ID
+     */
+    private String instanceId;
     /**
      * 流程表单类型（1:流程表单 2:业务表单）
      */
@@ -43,11 +47,11 @@ public class AgileProcessInstance extends AgileBaseTenantModel<AgileProcessInsta
      */
     private String formName;
     /**
-     * 表单配置
+     * 流程表单配置
      */
     private String formConf;
     /**
-     * 表单字段
+     * 流程表单字段
      */
     private String formFields;
     /**
@@ -55,7 +59,7 @@ public class AgileProcessInstance extends AgileBaseTenantModel<AgileProcessInsta
      */
     private String formUrl;
     /**
-     * 表单数据
+     * 流程表单数据
      */
     private String formData;
     /**
@@ -67,21 +71,9 @@ public class AgileProcessInstance extends AgileBaseTenantModel<AgileProcessInsta
      */
     private String pageKey;
     /**
-     * 流程部署时间
+     * 工单状态
      */
-    private Date deploymentTime;
-    /**
-     * 流程定义ID
-     */
-    private String definitionId;
-    /**
-     * 实例挂起状态(1:激活，2:挂起)
-     */
-    private int suspensionState;
-    /**
-     * 流程实例状态(0:用户撤销 1:审批中 2:审批完成 3:审批拒绝)
-     */
-    private String instanceStatus;
+    private String orderStatus;
     /**
      * 流程实例发起人员
      */

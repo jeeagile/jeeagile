@@ -1,6 +1,49 @@
 import { postApi } from '@/utils/axios'
 
 /**
+ * 查询流程模型列表
+ */
+export const selectProcessPage = data => postApi('/process/designer/page', data)
+/**
+ * 查询流程模型列表
+ */
+export const selectProcessList = data => postApi('/process/designer/list', data)
+/**
+ * 查看流程模型
+ */
+export const detailProcess = processId => postApi('/process/designer/detail', processId)
+
+/**
+ * 新增流程模型
+ */
+export const addProcess = data => postApi('/process/designer/add', data)
+
+/**
+ * 修改流程模型
+ */
+export const updateProcess = data => postApi('/process/designer/update', data)
+
+/**
+ * 删除流程模型
+ */
+export const deleteProcess = data => postApi('/process/designer/delete', data)
+
+/**
+ * 保存流程设计
+ */
+export const saveProcessXml = data => postApi('/process/designer/xml', data)
+
+/**
+ * 流程发布
+ */
+export const processDeployment = processId => postApi('/process/designer/deployment', processId)
+
+/**
+ * 查询流程在线表单
+ */
+export const selectProcessOnlinePageList = data => postApi('/process/designer/selectProcessOnlinePageList', data)
+
+/**
  * 查询用户列表
  */
 export const selectUserPage = data => postApi('/process/designer/selectUserPage', data)

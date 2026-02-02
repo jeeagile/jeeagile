@@ -14,10 +14,10 @@ import com.jeeagile.frame.page.AgilePageable;
 import com.jeeagile.frame.service.system.IAgileSysUserPostService;
 import com.jeeagile.frame.service.system.IAgileSysUserRoleService;
 import com.jeeagile.frame.util.AgileBeanUtils;
-import com.jeeagile.process.entity.AgileProcessInstance;
-import com.jeeagile.process.entity.AgileProcessModel;
+import com.jeeagile.process.entity.AgileProcessOrder;
+import com.jeeagile.process.entity.AgileProcessDesigner;
 import com.jeeagile.process.entity.AgileProcessTask;
-import com.jeeagile.process.service.IAgileProcessInstanceService;
+import com.jeeagile.process.service.IAgileProcessOrderService;
 import com.jeeagile.process.support.IAgileProcessService;
 import com.jeeagile.process.vo.AgileProcessHistory;
 import org.activiti.bpmn.model.*;
@@ -58,14 +58,14 @@ public class AgileActivitiProcessService implements IAgileProcessService {
 
     @Lazy
     @Autowired
-    private IAgileProcessInstanceService agileProcessInstanceService;
+    private IAgileProcessOrderService agileProcessInstanceService;
 
     @Override
-    public String processDeployment(AgileProcessModel agileProcessModel) {
+    public String processDeployment(AgileProcessDesigner agileProcessDesigner) {
         Deployment deployment = repositoryService.createDeployment()
-                .addString(agileProcessModel.getId() + ".bpmn", agileProcessModel.getModelXml())
-                .name(agileProcessModel.getModelName())
-                .key(agileProcessModel.getModelCode())
+                .addString(agileProcessDesigner.getId() + ".bpmn", agileProcessDesigner.getProcessXml())
+                .name(agileProcessDesigner.getProcessName())
+                .key(agileProcessDesigner.getProcessCode())
                 .deploy();
         return deployment.getId();
     }
@@ -102,7 +102,7 @@ public class AgileActivitiProcessService implements IAgileProcessService {
     }
 
     @Override
-    public String startProcessInstance(String definitionId, Map<String, Object> variables) {
+    public String startProcess(String definitionId, Map<String, Object> variables) {
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(definitionId, variables);
         if (processInstance == null || AgileStringUtil.isEmpty(processInstance.getId())) {
             throw new AgileFrameException("流程定义启动失败！");
@@ -324,11 +324,11 @@ public class AgileActivitiProcessService implements IAgileProcessService {
      */
     private void buildTaskInfoQuery(TaskInfoQuery taskInfoQuery, AgileProcessTask agileProcessTask) {
         if (agileProcessTask != null) {
-            if (AgileStringUtil.isNotEmpty(agileProcessTask.getModelName())) {
-                taskInfoQuery.processDefinitionNameLike("%" + agileProcessTask.getModelName() + "%");
+            if (AgileStringUtil.isNotEmpty(agileProcessTask.getProcessName())) {
+                taskInfoQuery.processDefinitionNameLike("%" + agileProcessTask.getProcessName() + "%");
             }
-            if (AgileStringUtil.isNotEmpty(agileProcessTask.getModelCode())) {
-                taskInfoQuery.processDefinitionKeyLike("%" + agileProcessTask.getModelCode() + "%");
+            if (AgileStringUtil.isNotEmpty(agileProcessTask.getProcessCode())) {
+                taskInfoQuery.processDefinitionKeyLike("%" + agileProcessTask.getProcessCode() + "%");
             }
             if (AgileStringUtil.isNotEmpty(agileProcessTask.getStartUser())) {
                 taskInfoQuery.taskOwner(agileProcessTask.getStartUser());
@@ -344,17 +344,16 @@ public class AgileActivitiProcessService implements IAgileProcessService {
      */
     private AgileProcessTask buildAgileProcessTask(TaskInfo taskInfo) {
         AgileProcessTask agileProcessTask = null;
-        AgileProcessInstance agileProcessInstance = agileProcessInstanceService.getById(taskInfo.getProcessInstanceId());
-        if (agileProcessInstance != null && agileProcessInstance.isNotEmptyPk()) {
+        AgileProcessOrder agileProcessOrder = agileProcessInstanceService.getById(taskInfo.getProcessInstanceId());
+        if (agileProcessOrder != null && agileProcessOrder.isNotEmptyPk()) {
             agileProcessTask = new AgileProcessTask();
             agileProcessTask.setId(taskInfo.getId());
-            agileProcessTask.setInstanceId(agileProcessInstance.getId());
-            agileProcessTask.setModelCode(agileProcessInstance.getModelCode());
-            agileProcessTask.setModelName(agileProcessInstance.getModelName());
-            agileProcessTask.setFormName(agileProcessInstance.getFormName());
+            agileProcessTask.setInstanceId(agileProcessOrder.getId());
+            agileProcessTask.setProcessCode(agileProcessOrder.getProcessCode());
+            agileProcessTask.setProcessName(agileProcessOrder.getProcessName());
             agileProcessTask.setTaskName(taskInfo.getName());
-            agileProcessTask.setStartUser(agileProcessInstance.getStartUser());
-            agileProcessTask.setStartUserName(agileProcessInstance.getStartUserName());
+            agileProcessTask.setStartUser(agileProcessOrder.getStartUser());
+            agileProcessTask.setStartUserName(agileProcessOrder.getStartUserName());
             agileProcessTask.setStartTime(taskInfo.getCreateTime());
         }
         return agileProcessTask;

@@ -3,17 +3,43 @@ package com.jeeagile.process.service;
 import com.jeeagile.frame.entity.system.*;
 import com.jeeagile.frame.page.AgilePage;
 import com.jeeagile.frame.page.AgilePageable;
+import com.jeeagile.frame.service.IAgileBaseService;
+import com.jeeagile.process.entity.AgileProcessDesigner;
 import com.jeeagile.process.entity.AgileProcessExpression;
 import com.jeeagile.process.entity.AgileProcessScript;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author JeeAgile
  * @date 2022-06-07
  * @description 流程设计
  */
-public interface IAgileProcessDesignerService {
+public interface IAgileProcessDesignerService extends IAgileBaseService<AgileProcessDesigner> {
+    /**
+     * 保存流程模型设计
+     *
+     * @param processId
+     * @param processXml
+     * @return
+     */
+    AgileProcessDesigner saveProcessXml(String processId, String processXml);
+
+    /**
+     * 流程发布
+     *
+     * @param processId
+     * @return
+     */
+    boolean processDeployment(String processId);
+
+    /**
+     * 获取流程 在线表单页面 用于配置菜单使用
+     *
+     * @return
+     */
+    Map<String, Object> selectProcessOnlinePageList();
     /**
      * 分页查询用户列表
      *

@@ -1,394 +1,422 @@
 <template>
-  <div class="process-designer">
-    <el-container>
-      <el-header class="process-designer__header" height="auto">
-        <div class="header__left">
-          <div class="process-designer__tool">
-            <el-button-group key="base-tool">
-              <el-tooltip class="item" effect="left" content="打开文件" placement="bottom">
-                <el-button size="mini" icon="el-icon-folder-opened" @click="$refs.openProcessFile.click()"/>
-              </el-tooltip>
-              <el-tooltip class="item" effect="left" content="创建新流程" placement="bottom">
-                <el-button size="mini" icon="el-icon-circle-plus-outline" @click="handlerCreate"/>
-              </el-tooltip>
-              <input id="openFile" ref="openProcessFile" type="file" style="display: none" accept=".xml,.bpmn"
-                     @change="importProcessFile">
-              <el-tooltip effect="light" content="下载bpmn">
-                <el-button size="mini" icon="el-icon-download" @click="downloadBpmn()"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="下载svg">
-                <el-button size="mini" icon="el-icon-picture" @click="downloadSvg()"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="预览XML">
-                <el-button size="mini" icon="el-icon-view" @click="handlerPreview()"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="模拟">
-                <el-button size="mini" :icon="processSimulation ? 'el-icon-open' : 'el-icon-turn-off'"
-                           :type="processSimulation ? 'success' : ''" @click="handlerSimulation"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="校验">
-                <el-button size="mini" icon="el-icon-check" @click="handlerValidate"/>
-              </el-tooltip>
+  <div class="app-container">
+    <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="流程编码" prop="processCode">
+        <el-input v-model="queryParam.queryCond.processCode" placeholder="请输入流程编码" clearable size="small"
+                  @keyup.enter.native="handleQuery"/>
+      </el-form-item>
+      <el-form-item label="流程名称" prop="processName">
+        <el-input v-model="queryParam.queryCond.processName" placeholder="请输入流程名称" clearable size="small"
+                  @keyup.enter.native="handleQuery"/>
+      </el-form-item>
+      <el-form-item label="发布状态" prop="deploymentStatus">
+        <el-select v-model="queryParam.queryCond.deploymentStatus" placeholder="发布状态" clearable size="small">
+          <el-option v-for="item in ProcessDeploymentStatus.getList()" :key="item.value" :label="item.label"
+                     :value="item.value"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="cyan" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
 
-            </el-button-group>
-            <el-button-group key="align-tool">
-              <el-tooltip effect="light" content="向左对齐">
-                <el-button size="mini" class="align align-left" icon="el-icon-s-data" @click="handlerAlign('left')"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="向右对齐">
-                <el-button size="mini" class="align align-right" icon="el-icon-s-data" @click="handlerAlign('right')"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="向上对齐">
-                <el-button size="mini" class="align align-top" icon="el-icon-s-data" @click="handlerAlign('top')"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="向下对齐">
-                <el-button size="mini" class="align align-bottom" icon="el-icon-s-data"
-                           @click="handlerAlign('bottom')"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="水平居中">
-                <el-button size="mini" class="align align-center" icon="el-icon-s-data"
-                           @click="handlerAlign('center')"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="垂直居中">
-                <el-button size="mini" class="align align-middle" icon="el-icon-s-data"
-                           @click="handlerAlign('middle')"/>
-              </el-tooltip>
-            </el-button-group>
-            <el-button-group key="scale-tool">
-              <el-tooltip effect="light" content="重置视图居中" placement="bottom">
-                <el-button size="mini" icon="el-icon-rank" @click="handlerViewCenter"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="放大">
-                <el-button size="mini" :disabled="processZoom > 2" icon="el-icon-zoom-in" @click="handlerZoom(0.1)"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="实际尺寸">
-                <el-button size="mini" icon="el-icon-c-scale-to-original" @click="handlerZoom(0)"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="缩小">
-                <el-button size="mini" :disabled="processZoom < 0.5" icon="el-icon-zoom-out"
-                           @click="handlerZoom(-0.1)"/>
-              </el-tooltip>
-            </el-button-group>
-            <el-button-group key="stack-tool">
-              <el-tooltip effect="light" content="撤销">
-                <el-button size="mini" :disabled="!processUndo" icon="el-icon-refresh-left" @click="handlerUndo()"/>
-              </el-tooltip>
-              <el-tooltip effect="light" content="恢复">
-                <el-button size="mini" :disabled="!processRedo" icon="el-icon-refresh-right" @click="handlerRedo()"/>
-              </el-tooltip>
-            </el-button-group>
-          </div>
-        </div>
-        <div class="header__right">
-          <el-button-group key="save-control">
-            <el-button size="mini" type="primary" @click="saveProcessXml">保存流程</el-button>
-          </el-button-group>
-        </div>
-      </el-header>
-      <el-container class="process-designer__container">
-        <el-main class="process-designer__center">
-          <div ref="canvas" class="process-designer__canvas"/>
-        </el-main>
-        <el-aside class="process-designer__right" :width="panelFold ? '350px':'70px'">
-          <div class="panel-title">
-            <div v-if="panelFold" class="node-name">{{ processInfo.elementName }}</div>
-            <div class="panel-fold" :title="panelFold ? '折叠':'展开'" @click="handlerPanelFold()">
-              <i :class="panelFold ? 'el-icon-s-unfold':'el-icon-s-fold'"/>
-            </div>
-          </div>
-          <properties-panel v-if="processModeler" :process-modeler="processModeler" :process-info="processInfo"
-                              :panel-fold="panelFold"/>
-        </el-aside>
-      </el-container>
-    </el-container>
-    <el-dialog class="process-designer__preview" title="预览" width="60%" :visible.sync="previewVisible" append-to-body
-               destroy-on-close>
-      <highlightjs :language="previewType" :code="previewCode"/>
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleProcessAdd"
+                   v-hasPerm="['process:model:add']">
+          新增
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="success" icon="el-icon-edit" size="mini" :disabled="single" @click="handleProcessUpdate"
+                   v-hasPerm="['process:model:update']">
+          修改
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="danger" icon="el-icon-delete" size="mini" :disabled="single" @click="handleProcessDelete"
+                   v-hasPerm="['process:model:delete']">
+          删除
+        </el-button>
+      </el-col>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getProcessModelList"></right-toolbar>
+    </el-row>
+
+    <el-table v-loading="loading" :data="modelList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="流程编码" align="center" prop="processCode"/>
+      <el-table-column label="流程名称" align="center" prop="processName" :show-overflow-tooltip="true"/>
+      <el-table-column label="流程版本" align="center" prop="processVersion">
+        <template slot-scope="scope">
+          <span>v{{scope.row.processVersion}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="发布状态" align="center" prop="deploymentStatus">
+        <template slot-scope="scope">
+          {{ProcessDeploymentStatus.getLabel(scope.row.deploymentStatus)}}
+        </template>
+      </el-table-column>
+      <el-table-column label="发布时间" align="center" prop="deploymentTime" width="150px"/>
+      <el-table-column label="操作" width="450px" align="center" class-name="small-padding">
+        <template slot-scope="scope">
+          <el-button size="mini" type="text" icon="el-icon-s-custom" @click="handleProcessView(scope.row)">
+            流程预览
+          </el-button>
+          <el-button size="mini" type="text" icon="el-icon-setting" @click="handleProcessDesigner(scope.row)"
+                     v-hasPerm="['process:model:designer']">
+            流程设计
+          </el-button>
+          <el-button size="mini" type="text" icon="el-icon-thumb" @click="handleProcessDeployment(scope.row)"
+                     v-hasPerm="['process:model:deployment']">
+            流程发布
+          </el-button>
+
+          <el-dropdown size="mini" @command="(command) => handleProcessCommand(command, scope.row)">
+            <span class="el-dropdown-link">
+              <i class="el-icon-d-arrow-right el-icon--right"></i>更多操作
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="handleProcessUpdate" icon="el-icon-edit"
+                                v-hasPerm="['process:model:edit']">
+                流程编辑
+              </el-dropdown-item>
+              <el-dropdown-item command="handleProcessDefinition" icon="el-icon-ice-cream-round"
+                                v-hasPerm="['process:model:definition']">
+                流程定义
+              </el-dropdown-item>
+              <el-dropdown-item command="handleProcessDelete" icon="el-icon-delete"
+                                v-hasPerm="['process:model:remove']">
+                流程删除
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页 -->
+    <pagination v-show="queryParam.pageTotal>0" :total-page="queryParam.pageTotal"
+                :current-page.sync="queryParam.currentPage" :limit.sync="queryParam.pageSize"
+                @pagination="getProcessModelList"/>
+
+    <!-- 添加或修改流程对话框 -->
+    <el-dialog :title="dialogTitle" :visible.sync="openDialog" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="流程编码" prop="processCode">
+          <el-input v-model="form.processCode" placeholder="请输入流程编码"/>
+        </el-form-item>
+        <el-form-item label="流程名称" prop="processName">
+          <el-input v-model="form.processName" placeholder="请输入流程名称"/>
+        </el-form-item>
+        <el-form-item label="表单类型" prop="formType">
+          <el-radio-group v-model="form.formType" @change="formTypeChange">
+            <el-radio v-for="item in ProcessFormType.getList()" :key="item.value" :label="item.value">
+              {{ item.label }}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+
+        <el-form-item label="流程表单" prop="formId" v-if="form.formType === ProcessFormType.PROCESS_FORM">
+          <el-select v-model="form.formId" placeholder="请选择" @change="onProcessFormChange">
+            <el-option v-for="processFormOption in processFormList" :key="processFormOption.id"
+                       :label="processFormOption.formName" :value="processFormOption.id"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="业务表单" prop="formName" v-if="form.formType === ProcessFormType.BUSINESS_FORM">
+          <el-input v-model="form.formName" placeholder="业务名称"/>
+        </el-form-item>
+
+        <el-form-item label="业务表单" prop="formUrl" v-if="form.formType === ProcessFormType.BUSINESS_FORM">
+          <el-input v-model="form.formUrl" placeholder="请输入地址"/>
+        </el-form-item>
+
+        <el-form-item label="在线表单" prop="formId" v-if="form.formType === ProcessFormType.ONLINE_FORM">
+          <el-select v-model="form.formId" placeholder="请选择" @change="onOnlineFormChange">
+            <el-option v-for="item in onlineFormList" :key="item.id" :label="item.formName" :value="item.id"/>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="默认页面" prop="pageId" v-if="form.formType === ProcessFormType.ONLINE_FORM">
+          <el-select v-model="form.pageId" placeholder="请选择">
+            <el-option v-for="item in defOnlinePageList" :key="item.id" :label="item.pageName" :value="item.id"/>
+          </el-select>
+        </el-form-item>
+
+
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+    <!-- 流程模型图的预览 -->
+    <el-dialog title="流程图" :visible.sync="openProcessView" width="600px" append-to-body>
+      <process-view key="designer" v-model="processXml" style="height: 300px"/>
     </el-dialog>
   </div>
 </template>
+
 <script>
-  import ProcessModeler from 'bpmn-js/lib/Modeler'
-  // 流程模拟组件
-  import processSimulation from 'bpmn-js-token-simulation'
-  // 流程缩略图组件
-  import processMinimap from 'diagram-js-minimap'
-  // 流程校验组件
-  import processLint from 'bpmn-js-bpmnlint'
-  // 流程校验配置
-  import processLintConfig from '@/components/ProcessDesigner/config/.bpmnlintrc'
-  // 自定义 palette
-  import agilePalette from '@/components/ProcessDesigner/palette'
-  // 自定义 context-pad
-  import agileContextPadProvider from '@/components/ProcessDesigner/context-pad'
-  // 自定义 流程翻译组件
-  import agileTranslate from '@/components/ProcessDesigner/translate'
-  // 自定义 流程扩展组件
-  import agileExtension from '@/components/ProcessDesigner/extension'
-  // 自定义 流程解析文件
-  import agileDescriptor from '@/components/ProcessDesigner/descriptor'
-  // 默认流程配置
-  import defaultDiagram from '@/components/ProcessDesigner/default'
-  // 自定义流程配置分组
-  import CustomPropertiesGroup from './properties'
-
-  // 自定义 属性配置
-  import PropertiesPanel from '@/components/ProcessDesigner/properties'
-
-  import { saveAs } from 'file-saver'
-
-  import { detailProcessModel, saveProcessDesigner } from '@/api/process/model'
+  import {
+    selectProcessPage,
+    detailProcess,
+    deleteProcess,
+    addProcess,
+    updateProcess,
+    processDeployment
+  } from '@/api/process/designer'
+  import { selectProcessFormList } from '@/api/process/form'
+  import { selectOnlineProcessFormList } from '@/api/online/form'
 
   export default {
-    name: 'ProcessDesigner',
-    components: { PropertiesPanel },
+    name: 'ProcessModel',
     data() {
       return {
-        processModeler: null,
-        processZoom: 1,
-        processRedo: false,
-        processUndo: false,
-        previewVisible: false,
-        previewType: 'xml',
-        previewCode: null,
-        processSimulation: false,
-        panelFold: true,
-        processInfo: {
-          modelId: undefined,
-          processCode: `process_${new Date().getTime()}`,
-          processName: `流程_${new Date().getTime()}`,
-          processVersion: 'v0',
-          processPrefix: 'activiti',
-          processXml: undefined,
-          processDesc: undefined,
-          processProperties: CustomPropertiesGroup,
-          elementName: undefined
+        // 遮罩层
+        loading: true,
+        // 已选择的列表
+        selectRowList: [],
+        // 在线表单列表
+        onlineFormList: [],
+        // 在线表单页面
+        onlinePageList: [],
+        // 在线表单默认页面
+        defOnlinePageList: [],
+        // 非单个禁用
+        single: true,
+        // 非多个禁用
+        multiple: true,
+        // 显示搜索条件
+        showSearch: true,
+        // 流程表格数据
+        modelList: [],
+        // 弹出层标题
+        dialogTitle: '',
+        // 是否显示弹出层
+        openDialog: false,
+        // 流程表单列表
+        processFormList: [],
+        // 查询参数
+        queryParam: {
+          pageTotal: 0,
+          pageSize: 10,
+          currentPage: 1,
+          queryCond: {
+            processCode: undefined,
+            processName: undefined,
+            deploymentStatus: undefined
+          }
+        },
+        openProcessView: false,
+        processXml: undefined,
+        // 表单参数
+        form: {},
+        // 表单校验
+        rules: {
+          processCode: [
+            { required: true, message: '流程编码不能为空', trigger: 'blur' },
+            { pattern: /[a-zA-Z_][\-_.0-9_a-zA-Z$]*/, message: '请以字母或下划线开头' }
+          ],
+          processName: [
+            { required: true, message: '流程名称不能为空', trigger: 'blur' }
+          ],
+          formType: [
+            { required: true, message: '流程表单类型不能为空', trigger: 'blur' }
+          ],
+          formId: [
+            { required: true, message: '流程表单不能为空', trigger: 'blur' }
+          ],
+          formName: [
+            { required: true, message: '表单名称不能为空', trigger: 'blur' }
+          ],
+          formUrl: [
+            { required: true, message: '表单地址不能为空', trigger: 'blur' }
+          ]
         }
       }
-    },
-    computed: {
-      additionalModules() {
-        const modules = []
-        // 流程模拟模块
-        modules.push(processSimulation)
-        // 流程缩略图模块
-        modules.push(processMinimap)
-        // 流程校验模块
-        modules.push(processLint)
-        // palette
-        modules.push(agilePalette)
-        // context-pad
-        modules.push(agileContextPadProvider)
-        // 流程翻译组件
-        modules.push(agileTranslate(this.i18n))
-        // 流程扩展组件
-        modules.push(agileExtension(this.processInfo.processPrefix))
-
-        return modules
-      },
-      moddleExtensions() {
-        const extensions = {}
-        // 设置流程解析文件
-        extensions[this.processInfo.processPrefix] = agileDescriptor(this.processInfo.processPrefix)
-        return extensions
-      }
-    },
-    mounted() {
-      this.initProcessModeler()
-
-      this.monitorWindowsWidth()
     },
     created() {
-      const modelId = this.$route.params && this.$route.params.modelId
-      this.detailProcessModel(modelId)
+      this.getProcessFormList()
+      this.getProcessModelList()
+      this.getOnlineProcessFormList()
     },
     methods: {
-      detailProcessModel(modelId) {
-        detailProcessModel(modelId).then(response => {
-          this.processInfo.modelId = response.data.id
-          this.processInfo.processCode = response.data.modelCode
-          this.processInfo.processName = response.data.modelName
-          this.processInfo.processVersion = response.data.modelVersion
-          this.processInfo.processXml = response.data.modelXml
-          this.createNewProcess(this.processInfo.processXml)
-        })
+      /** 查询流程表单列表 */
+      getProcessFormList() {
+        selectProcessFormList().then(response => {
+            this.processFormList = response.data
+          }
+        )
       },
-      monitorWindowsWidth() {
-        window.onresize = () => {
-          return (() => {
-              if (!this.panelFold) return
-              this.panelFold = document.body.clientWidth - 700 > 0
-            }
-          )()
+      /** 查询在线表单列表 */
+      getOnlineProcessFormList() {
+        selectOnlineProcessFormList().then(response => {
+            this.onlineFormList = response.data.onlineFormList
+            this.onlinePageList = response.data.onlinePageList
+          }
+        )
+      },
+      /** 表单类型修改事件 */
+      formTypeChange() {
+        this.form.formId = ''
+        this.form.formName = ''
+        this.form.pageId = ''
+        this.defOnlinePageList = []
+      },
+      onProcessFormChange(){
+        const selectedForm = this.processFormList.find(item => item.id === this.form.formId)
+        if (selectedForm) {
+          this.form.formName = selectedForm.formName
         }
       },
-      /** 初始化流程设计器 */
-      initProcessModeler() {
-        if (this.processModeler) return
-        this.processModeler = new ProcessModeler({
-          container: this.$refs.canvas,
-          paletteContainer: this.$refs.palette,
-          keyboard: this.keyboard ? { bindTo: document } : null,
-          linting: { bpmnlint: processLintConfig },
-          additionalModules: this.additionalModules,
-          moddleExtensions: this.moddleExtensions
-        })
-        this.initModelListeners()
+      onOnlineFormChange() {
+        const selectedForm = this.onlineFormList.find(item => item.id === this.form.formId)
+        this.defOnlinePageList = this.onlinePageList.filter(item => item.formId = this.form.formId)
+        if (selectedForm) {
+          this.form.formName = selectedForm.formName
+        } else {
+          this.form.pageId = undefined
+          this.defOnlinePageList = []
+        }
       },
-      /** 注册监听事件 */
-      initModelListeners() {
-        const eventBus = this.processModeler.get('eventBus')
-        // 监听视图改变
-        eventBus.on('commandStack.changed', async () => {
-          try {
-            this.processRedo = this.processModeler.get('commandStack').canRedo()
-            this.processUndo = this.processModeler.get('commandStack').canUndo()
-            let { xml } = await this.processModeler.saveXML({ format: true })
-            this.$emit('input', xml)
-            this.$emit('change', xml)
-          } catch (e) {
-            console.error(`[Process Designer Warn]: ${e.message || e}`)
+      /** 查询流程列表 */
+      getProcessModelList() {
+        this.loading = true
+        selectProcessPage(this.queryParam).then(response => {
+          this.queryParam.pageTotal = response.data.pageTotal
+          this.modelList = response.data.records
+          this.loading = false
+        })
+      },
+      /** 取消按钮 */
+      cancel() {
+        this.openDialog = false
+        this.reset()
+      },
+      /** 表单重置 */
+      reset() {
+        this.form = {
+          id: undefined,
+          processCode: undefined,
+          processName: undefined,
+          formType: '01',
+          formId: undefined,
+          formName: undefined,
+          formUrl: undefined,
+          pageId: undefined,
+          remark: undefined
+        }
+        this.resetForm('form')
+      },
+      /** 搜索按钮操作 */
+      handleQuery() {
+        this.queryParam.pageNum = 1
+        this.getProcessModelList()
+      },
+      /** 重置按钮操作 */
+      resetQuery() {
+        this.resetForm('queryForm')
+        this.handleQuery()
+      },
+      /** 多选框选中数据 */
+      handleSelectionChange(selection) {
+        this.selectRowList = selection
+        this.single = selection.length != 1
+        this.multiple = !selection.length
+      },
+      /** 流程查看 */
+      handleProcessView(row) {
+        detailProcess(row.id).then(response => {
+            this.processXml = response.data.processXml
+            this.openProcessView = true
+          }
+        )
+      },
+      /** 新增按钮操作 */
+      handleProcessAdd() {
+        this.reset()
+        this.openDialog = true
+        this.dialogTitle = '添加流程'
+      },
+      // 更多操作触发
+      handleProcessCommand(command, row) {
+        switch (command) {
+          case 'handleProcessUpdate':
+            this.handleProcessUpdate(row)
+            break
+          case 'handleProcessDefinition':
+            this.handleProcessDefinition(row)
+            break
+          case 'handleProcessDelete':
+            this.handleProcessDelete(row)
+            break
+          default:
+            break
+        }
+      },
+      /** 修改按钮操作 */
+      handleProcessUpdate(row) {
+        this.reset()
+        row = undefined === row.id ? this.selectRowList[0] : row
+        detailProcess(row.id).then(response => {
+          this.form = response.data
+          this.openDialog = true
+          this.dialogTitle = '修改流程'
+        })
+      },
+      /** 流程设计操作 */
+      handleProcessDesigner(row) {
+        this.$router.push('/process/designer/' + row.id)
+      },
+      /** 流程定义 */
+      handleProcessDefinition(row) {
+        this.$router.push('/process/definition/' + row.id)
+      },
+      handleProcessDeployment(row) {
+        processDeployment(row.id).then(response => {
+          this.messageSuccess('流程发布成功')
+          this.getProcessModelList()
+        })
+      },
+      /** 提交按钮 */
+      submitForm: function () {
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            if (this.form.id != undefined) {
+              updateProcess(this.form).then(() => {
+                this.messageSuccess('修改成功')
+                this.openDialog = false
+                this.getProcessModelList()
+              })
+            } else {
+              addProcess(this.form).then(() => {
+                this.messageSuccess('新增成功')
+                this.openDialog = false
+                this.getProcessModelList()
+              })
+            }
           }
         })
-        // 监听视图缩放变化
-        this.processModeler.on('canvas.viewbox.changed', ({ viewbox }) => {
-          const { scale } = viewbox
-          this.processZoom = Math.floor(scale * 100) / 100
-        })
       },
-      /** 创建新的流程图 */
-      async createNewProcess(processXml) {
-        let newProcessXml = processXml || defaultDiagram(this.processInfo.processCode, this.processInfo.processName, this.processInfo.processPrefix)
-        try {
-          let { warnings } = await this.processModeler.importXML(newProcessXml)
-          if (warnings && warnings.length) {
-            warnings.forEach(warn => console.warn(warn))
-          }
-          this.processRedo = false
-          this.processUndo = false
-        } catch (e) {
-          console.error(`[Create New Process Warn]: ${e.message || e}`)
-        }
-      },
-      /** 导入本地流程文件 */
-      importProcessFile() {
-        if (this.$refs.openProcessFile.files.length < 1) {
-          return
-        }
-        const file = this.$refs.openProcessFile.files[0]
-        const reader = new FileReader()
-        reader.readAsText(file)
-        reader.onload = () => {
-          this.createNewProcess(reader.result).then(() => {
-              this.handlerViewCenter()
-            }
-          )
-        }
-        document.getElementById('openFile').value = null
-      },
-      /** 创建新流程 */
-      handlerCreate() {
-        this.$confirm('您确定放弃当前修改创建新流程吗？', '警告', {
+      /** 删除按钮操作 */
+      handleProcessDelete(row) {
+        row = undefined === row.id ? this.selectRowList[0] : row
+        this.$confirm('是否确认删除流程名称为"' + row.processName + '"的数据项?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => this.createNewProcess(null).then(() => {
-            this.handlerViewCenter()
-          }
-        ))
-      },
-      /** 下载BPMN */
-      async downloadBpmn() {
-        try {
-          const { err, xml } = await this.processModeler.saveXML()
-          // 读取异常时抛出异常
-          if (err) {
-            return console.error(err)
-          }
-          const blob = new Blob([xml], { type: 'application/xml' })
-          saveAs(blob, `${this.processInfo.processName}.bpmn`)
-        } catch (e) {
-          console.error(`[Download Bpmn Warn ]: ${e.message || e}`)
-        }
-      },
-      /** 下载SVG */
-      async downloadSvg() {
-        try {
-          const { err, svg } = await this.processModeler.saveSVG()
-          // 读取异常时抛出异常
-          if (err) {
-            return console.error(err)
-          }
-          const blob = new Blob([svg], { type: 'application/xml' })
-          saveAs(blob, `${this.processInfo.processName}.svg`)
-        } catch (e) {
-          console.error(`[Download Svg Warn ]: ${e.message || e}`)
-        }
-      },
-      /** 查看流程文件 */
-      handlerPreview() {
-        this.processModeler.saveXML({ format: true }).then(({ xml }) => {
-          this.previewCode = xml
-          this.previewType = 'xml'
-          this.previewVisible = true
-        })
-      },
-      /** 流程模拟 */
-      handlerSimulation() {
-        this.processSimulation = !this.processSimulation
-        this.processModeler.get('toggleMode').toggleMode()
-      },
-      /** 流程校验 */
-      handlerValidate() {
-        this.processModeler.get('linting').toggle()
-      },
-      /** 重置视图居中 */
-      handlerViewCenter() {
-        this.handlerZoom(null)
-        this.processModeler.get('canvas').zoom('fit-viewport', 'auto')
-      },
-      /** 视图放大缩小 */
-      handlerZoom(zoomStep) {
-        this.processZoom = !zoomStep ? 1.0 : this.processZoom + zoomStep
-        this.processModeler.get('canvas').zoom(this.processZoom)
-      },
-      /** 处理元素对齐方式 */
-      handlerAlign(align) {
-        const alignElements = this.processModeler.get('alignElements')
-        const selection = this.processModeler.get('selection')
-        const selectedElements = selection.get()
-        if (!selectedElements || selectedElements.length <= 1) {
-          this.$message.warning('请按住 Shift 键选择多个元素对齐')
-          return
-        }
-        this.$confirm('自动对齐可能造成图形变形，是否继续？', '警告', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => alignElements.trigger(selectedElements, align))
-      },
-      /** 恢复 */
-      handlerRedo() {
-        this.processModeler.get('commandStack').redo()
-      },
-      /** 撤销 */
-      handlerUndo() {
-        this.processModeler.get('commandStack').undo()
-      },
-      /** 展开 折叠 */
-      handlerPanelFold() {
-        this.panelFold = !this.panelFold
-      },
-      async saveProcessXml() {
-        const { xml } = await this.processModeler.saveXML()
-        saveProcessDesigner({
-          modelId: this.processInfo.modelId,
-          modelXml: xml
-        }).then(response => {
-          this.messageSuccess('流程设计保存成功')
+        }).then(() => {
+          return deleteProcess(row.id)
+        }).then(() => {
+          this.getProcessModelList()
+          this.messageSuccess('删除成功')
         })
       }
     }
   }
 </script>
-

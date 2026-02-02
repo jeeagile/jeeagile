@@ -13,21 +13,17 @@ import java.util.Date;
 @Data
 public class AgileProcessTask extends AgileBaseTenantModel<AgileProcessTask> {
     /**
-     * 流程模型编码
+     * 流程编码
      */
-    private String modelId;
+    private String processId;
     /**
-     * 流程模型编码
+     * 流程编码
      */
-    private String modelCode;
+    private String processCode;
     /**
-     * 流程模型名称
+     * 流程流程名称
      */
-    private String modelName;
-    /**
-     * 流程表单名称
-     */
-    private String formName;
+    private String processName;
     /**
      * 流程定义ID（流程组件生成）
      */
@@ -36,6 +32,10 @@ public class AgileProcessTask extends AgileBaseTenantModel<AgileProcessTask> {
      * 流程实例ID（流程组件生成）
      */
     private String instanceId;
+    /**
+     * 工单ID
+     */
+    private String orderId;
     /**
      * 流程任务名称
      */
