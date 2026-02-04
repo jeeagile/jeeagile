@@ -137,6 +137,9 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
             }
             agileProcessTask.setAssigneeUser(agileSysUser.getId());
             agileProcessTask.setAssigneeUserName(agileSysUser.getNickName());
+        } else {// 如果执行人为空，则默认为当前用户
+            agileProcessTask.setAssigneeUser(AgileSecurityContext.getUserId());
+            agileProcessTask.setAssigneeUserName(((AgileUserData) AgileSecurityContext.getUserData()).getNickName());
         }
 
 //        List<IdentityLink> identityLinkList = taskService.getIdentityLinksForTask(task.getId());

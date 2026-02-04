@@ -13,7 +13,6 @@
                                  :pageType="pageConfig.pageType"
                                  :primaryColumnName="widget.primaryColumnName"
                                  :isNew="checkAddRelationTable(widget)"
-                                 :tableQueryParam="getTableQueryParam"
                                  @operationClick="clickTableOperation"
             />
             <custom-base-widget

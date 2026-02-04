@@ -101,8 +101,7 @@
           </el-table-column>
           <el-table-column
             v-if="getTableOperation(true).length > 0 || pageType === OnlinePageType.ORDER"
-            label="操作" :width="(widgetConfig.operationWidth || 150) + 'px'" fixed="right" align="center"
-          >
+            label="操作" :width="(widgetConfig.operationWidth || 200) + 'px'" fixed="right" align="center">
             <template slot-scope="scope">
               <el-button v-for="operation in getTableOperation(true)" :key="operation.id"
                          :class="operation.btnClass"
@@ -113,23 +112,23 @@
                 {{operation.name}}
               </el-button>
               <el-button type="text" size="mini"
-                         v-if="pageType === OnlinePageType.ORDER && (scope.row.initTaskInfo || {}).taskKey !== (scope.row.runtimeTaskInfo || {}).taskKey"
-                         @click.stop="onViewWorkOrder(scope.row)">
+                         v-if="pageType === OnlinePageType.ORDER"
+                         @click.stop="onViewProcessOrder(scope.row)">
                 详情
               </el-button>
               <el-button type="text" size="mini"
-                         v-if="pageType === OnlinePageType.ORDER && (scope.row.initTaskInfo || {}).taskKey === (scope.row.runtimeTaskInfo || {}).taskKey"
-                         @click.stop="onHandlerWorkOrder(scope.row)">
+                         v-if="pageType === OnlinePageType.ORDER "
+                         @click.stop="onHandlerProcessOrder(scope.row)">
                 办理
               </el-button>
-              <el-button type="text" size="mini"
-                         v-if="pageType === OnlinePageType.ORDER"
-                         @click.stop="onHandlerRemindClick(scope.row)">
-                催办
-              </el-button>
+<!--              <el-button type="text" size="mini"-->
+<!--                         v-if="pageType === OnlinePageType.ORDER"-->
+<!--                         @click.stop="onHandlerRemindClick(scope.row)">-->
+<!--                催办-->
+<!--              </el-button>-->
               <el-button type="text" size="mini" class="table-btn error"
-                         v-if="pageType === OnlinePageType.ORDER"
-                         @click.stop="onCancelWorkOrder(scope.row)">
+                         v-if="pageType === OnlinePageType.ORDER && scope.row.orderStatus === ProcessOrderStatus.SUBMITTED"
+                         @click.stop="onCancelProcessOrder(scope.row)">
                 撤销
               </el-button>
             </template>
@@ -206,17 +205,17 @@
       }
     },
     methods: {
-      onViewWorkOrder(row) {
-        this.$emit('viewWOrkOrder', row, this.widgetConfig)
+      onViewProcessOrder(row) {
+        this.$emit('viewProcessOrder', row, this.widgetConfig)
       },
-      onHandlerWorkOrder(row) {
-        this.$emit('handlerWOrkOrder', row, this.widgetConfig)
+      onHandlerProcessOrder(row) {
+        this.$emit('handlerProcessOrder', row, this.widgetConfig)
       },
       onHandlerRemindClick(row) {
         this.$emit('handlerRemind', row, this.widgetConfig)
       },
-      onCancelWorkOrder(row) {
-        this.$emit('cancelWOrkOrder', row, this.widgetConfig)
+      onCancelProcessOrder(row) {
+        this.$emit('cancelProcessOrder', row, this.widgetConfig)
       },
       getTableWidget() {
         return this.tableWidget

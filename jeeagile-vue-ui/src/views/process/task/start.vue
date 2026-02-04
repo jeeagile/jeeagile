@@ -81,7 +81,7 @@
           </div>
           <div class="test-form" v-if="processDefinition.formType === this.ProcessFormType.ONLINE_FORM">
             <online-form-parser ref="onlineForm" :key="new Date().getTime()" :page-id="processDefinition.pageId"
-                                :process-id="processDefinition.id" :page-type="OnlinePageType.FLOW"/>
+                                :process-id="processDefinition.processId" :page-type="OnlinePageType.FLOW"/>
             <div style="height: 45px">
               <el-button style="float: right;" type="primary" size="mini" @click="submitOnlineForm">提交</el-button>
             </div>
@@ -103,9 +103,7 @@
     selectMainVersionProcess,
     detailProcessDefinition
   } from '@/api/process/definition'
-  import {
-    startProcess
-  } from '@/api/process/order'
+  import { startProcess } from '@/api/process/order'
   import ProcessFormParser from '@/components/FormDesigner/parser/Parser'
   import OnlineFormParser from '../../online/index'
 

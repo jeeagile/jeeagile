@@ -29,10 +29,10 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" icon="el-icon-plus" size="mini" :disabled="processDefinitionId == null"
-                   @click="onStartProcess()">新建
+                   @click="createOrder()">新建
         </el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="loadProcessOrderList"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="onSearch"></right-toolbar>
     </el-row>
 
     <el-row>
@@ -42,13 +42,24 @@
                              :pageType="pageConfig.pageType"
                              :tableQueryParam="getTableQueryParam"
                              :loadTableDataFunc="loadProcessOrderList"
-                             @viewWOrkOrder="onView"
-                             @handlerWOrkOrder="onSubmit"
-                             @cancelWOrkOrder="onCancelWorkOrder"
+                             @viewProcessOrder="onView"
+                             @handlerProcessOrder="onHandler"
+                             @cancelProcessOrder="onCancelProcessOrder"
                              @handlerRemind="onRemindClick"
         />
       </el-col>
     </el-row>
+
+
+    <el-dialog :title="orderDialogTitle" :visible.sync="openOrderDialog" width="650px" append-to-body>
+      <online-flow-page v-if="openOrderDialog" :key="new Date().getTime()" ref="onlineOrder"
+                        :page-id="processDefinition.pageId"/>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitOrder">提 交</el-button>
+        <el-button @click="openOrderDialog = false">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -57,9 +68,9 @@
   import { OnlinePageMixins } from './onlinePageMixins.js'
   import CustomTableWidget from '../designer/customTableWidget'
   import DragWidgetFilter from '../designer/dragWidgetFilter'
-
+  import OnlineFlowPage from './onlineFlowPage'
   import { selectMainProcessDefinition } from '@/api/process/definition'
-  import { selectOnlineOrderList } from '@/api/process/order'
+  import { selectOnlineOrderList, startProcess, cancelProcessOrder } from '@/api/process/order'
 
   export default {
     name: 'OnlineOrderPage',
@@ -79,15 +90,18 @@
     },
     mixins: [OnlinePageMixins],
     components: {
-      CustomTableWidget, DragWidgetFilter
+      CustomTableWidget, DragWidgetFilter, OnlineFlowPage
     },
     data() {
       return {
         processDefinitionId: undefined,
+        processDefinition: {},
         processName: undefined,
         createTime: [],
         processOrderStatus: undefined,
-        showSearch: true
+        showSearch: true,
+        orderDialogTitle: undefined,
+        openOrderDialog: false
       }
     },
     methods: {
@@ -140,21 +154,37 @@
           })
         }
       },
-      /** 启动流程 **/
-      onStartProcess() {
+      /** 创建工单 **/
+      createOrder() {
         if (this.isPreview || this.processDefinitionId === null) return
-
+        this.orderDialogTitle = this.processDefinition.processName
+        this.openOrderDialog = true
       },
-      onSubmit(row) {
-
+      submitOrder() {
+        this.$refs.onlineOrder.getFormPageData().then(orderData => {
+          startProcess({ processDefinitionId: this.processDefinition.id, orderData: orderData }).then(response => {
+              this.messageSuccess('流程工单发起成功')
+              this.onSearch()
+              this.openOrderDialog = false
+            }
+          )
+        })
       },
       onView(row) {
+        this.$router.push({ path: '/process/order/detail/' + row.orderId })
+      },
+      onHandler(row) {
 
       },
       onRemindClick(row) {
 
       },
-      onCancelWorkOrder(row) {
+      onCancelProcessOrder(row) {
+        cancelProcessOrder(row.orderId).then(response => {
+            this.messageSuccess('流程撤销成功！')
+            this.onSearch()
+          }
+        )
       }
     },
     provide() {
@@ -167,6 +197,7 @@
     },
     mounted() {
       selectMainProcessDefinition(this.processId).then(response => {
+          this.processDefinition = response.data
           this.processDefinitionId = response.data.id
           this.processName = response.data.processName
         }

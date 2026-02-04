@@ -3,11 +3,11 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="表单信息" name="formInfo">
         <process-form-parser :key="new Date().getTime()" :form-conf="parserForm" :form-data="formData"
-                             v-if="processInstances.formType === ProcessFormType.PROCESS_FORM"/>
+                             v-if="processInstances.formType === ProcessFormType.PROCESS_FORM && fromParser"/>
         <online-form-parser ref="onlineForm" :key="new Date().getTime()" :page-id="processInstances.pageId"
                             :process-id="processInstances.id" :read-only="true" :page-type="OnlinePageType.FLOW"
                             :page-data="processInstances.pageData"
-                            v-if="processInstances.formType === ProcessFormType.ONLINE_FORM"/>
+                            v-if="processInstances.formType === ProcessFormType.ONLINE_FORM && fromParser"/>
       </el-tab-pane>
       <el-tab-pane label="流程视图" name="processView">
         <div v-if="openProcessView">
@@ -47,6 +47,7 @@
     data() {
       return {
         loading: true,
+        fromParser: true,
         processInstances: {},
         activeName: 'formInfo',
         formView: false,
@@ -96,6 +97,10 @@
       },
       handleClick(tab, event) {
         this.openProcessView = false
+        this.fromParser = false
+        if (tab.name == 'formInfo') {
+          this.fromParser = true
+        }
         if (tab.name == 'processView') {
           this.processXml = this.processInstances.processXml
           this.highLineData = this.processInstances.highLineData

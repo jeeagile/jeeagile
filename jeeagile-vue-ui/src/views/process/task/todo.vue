@@ -47,27 +47,42 @@
                 @pagination="getProcessTodoList"/>
 
     <el-dialog title="流程进度" :visible.sync="openView" width="700px" append-to-body>
-      <process-view key="designer" v-model="processXml" :high-line-data="highLineData"/>
+      <process-view key="designer" v-model="processXml" :high-line-data="highLineData" style="height: 400px"/>
     </el-dialog>
     <el-dialog title="流程办理" :visible.sync="handleProcess.openProcess" width="750px" append-to-body>
       <el-tabs v-model="handleProcess.activeName" @tab-click="handleClick">
         <el-tab-pane label="表单信息" name="formInfo">
-          <form-parser :key="new Date().getTime()" :form-conf="handleProcess.parserForm"
-                       :form-data="handleProcess.formData"/>
+          <div v-if="handleProcess.fromParser">
+            <process-form-parser :key="new Date().getTime()" :form-conf="handleProcess.parserForm"
+                                 :form-data="handleProcess.processOrder.formData"
+                                 v-if="handleProcess.processOrder.formType === ProcessFormType.PROCESS_FORM && handleProcess.fromParser"
+                                 style="height: 260px"/>
+            <online-form-parser ref="onlineForm" :key="new Date().getTime()"
+                                :page-id="handleProcess.processOrder.pageId"
+                                :process-id="handleProcess.processOrder.processId" :read-only="true"
+                                :page-type="OnlinePageType.FLOW"
+                                :page-data="handleProcess.processOrder.pageData"
+                                v-if="handleProcess.processOrder.formType === ProcessFormType.ONLINE_FORM && handleProcess.fromParser"
+                                style="height: 260px" v-once/>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="流程视图" name="processView">
-          <process-view key="designer" v-model="handleProcess.processXml" :high-line-data="handleProcess.highLineData"/>
+          <process-view key="designer" v-model="handleProcess.processOrder.processXml"
+                        :high-line-data="handleProcess.processOrder.highLineData" style="height: 260px"
+                        v-if="handleProcess.openProcessView"/>
         </el-tab-pane>
         <el-tab-pane label="流转信息" name="flowInfo">
-          <el-table v-loading="handleProcess.loading" :data="handleProcess.flowInfoList">
-            <el-table-column label="执行环节" align="center" prop="activityName" :show-overflow-tooltip="true"/>
-            <el-table-column label="执行人" align="center" prop="assigneeName" :show-overflow-tooltip="true"/>
-            <el-table-column label="开始时间" width="150" align="center" prop="startTime"/>
-            <el-table-column label="结束时间" width="150" align="center" prop="endTime"/>
-            <el-table-column label="办理状态" align="center" prop="status"/>
-            <el-table-column label="审批意见" align="center" prop="message"/>
-            <el-table-column label="任务历时" align="center" prop="durationTime"/>
-          </el-table>
+          <div style="height: 260px;">
+            <el-table v-loading="handleProcess.loading" :data="handleProcess.flowInfoList">
+              <el-table-column label="执行环节" align="center" prop="activityName" :show-overflow-tooltip="true"/>
+              <el-table-column label="执行人" align="center" prop="assigneeName" :show-overflow-tooltip="true"/>
+              <el-table-column label="开始时间" width="150" align="center" prop="startTime"/>
+              <el-table-column label="结束时间" width="150" align="center" prop="endTime"/>
+              <el-table-column label="办理状态" align="center" prop="status"/>
+              <el-table-column label="审批意见" align="center" prop="message"/>
+              <el-table-column label="任务历时" align="center" prop="durationTime"/>
+            </el-table>
+          </div>
         </el-tab-pane>
       </el-tabs>
       <el-divider/>
@@ -94,15 +109,17 @@
     detailProcessOrder,
     detailProcessHistory
   } from '@/api/process/order'
-  import FormParser from '@/components/FormDesigner/parser/Parser'
+  import ProcessFormParser from '@/components/FormDesigner/parser/Parser'
+  import OnlineFormParser from '../../online/index'
 
   export default {
     name: 'Apply',
-    components: { FormParser },
+    components: { ProcessFormParser, OnlineFormParser },
     data() {
       return {
         // 遮罩层
         loading: true,
+
         // 显示搜索条件
         showSearch: true,
         taskStatusOptionList: [],
@@ -124,17 +141,17 @@
         processXml: undefined,
         highLineData: [],
         handleProcess: {
+          fromParser: true,
           loading: true,
           openProcess: false,
-          processOrder: undefined,
+          processOrder: {},
           processTask: undefined,
           activeName: 'formInfo',
           formView: false,
+          openProcessView: false,
           parserForm: undefined,
           formData: undefined,
-          processXml: undefined,
-          flowInfoList: undefined,
-          highLineData: undefined
+          flowInfoList: undefined
         },
         taskForm: {
           approveMessage: undefined
@@ -172,17 +189,19 @@
         detailProcessOrder(row.orderId).then(response => {
           this.handleProcess.processOrder = response.data
           this.handleProcess.processTask = row
-          if (this.handleProcess.processOrder.formConf && this.handleProcess.processOrder.formFields) {
-            let formConf = JSON.parse(this.handleProcess.processOrder.formConf)
-            formConf.formBtns = false
-            formConf.disabled = true
-            this.handleProcess.parserForm = {
-              fields: JSON.parse(this.handleProcess.processOrder.formFields),
-              ...formConf
+          if (this.handleProcess.processOrder.formType === this.ProcessFormType.PROCESS_FORM) { // 流程表单
+            if (this.handleProcess.processOrder.formConf && this.handleProcess.processOrder.formFields) {
+              let formConf = JSON.parse(this.handleProcess.processOrder.formConf)
+              formConf.formBtns = false
+              formConf.disabled = true
+              this.handleProcess.parserForm = {
+                fields: JSON.parse(this.handleProcess.processOrder.formFields),
+                ...formConf
+              }
+              this.fillFormData(this.handleProcess.parserForm, JSON.parse(this.handleProcess.processOrder.formData))
             }
-            this.fillFormData(this.handleProcess.parserForm, JSON.parse(this.handleProcess.processOrder.formData))
-            this.handleProcess.openProcess = true
           }
+          this.handleProcess.openProcess = true
         })
       },
       fillFormData(form, data) {
@@ -215,11 +234,14 @@
         this.handleQuery()
       },
       handleClick(tab, event) {
-        if (tab.name == 'processView' && !this.handleProcess.processXml) {
-          this.handleProcess.processXml = this.handleProcess.processOrder.processXml
-          this.handleProcess.highLineData = this.handleProcess.processOrder.highLineData
+        this.handleProcess.fromParser = false
+        this.handleProcess.openProcessView = false
+        if (tab.name == 'formInfo') {
+          this.handleProcess.fromParser = true
         }
-
+        if (tab.name == 'processView') {
+          this.handleProcess.openProcessView = true
+        }
         if (tab.name == 'flowInfo' && !this.flowInfoList) {
           this.handleProcess.loading = true
           detailProcessHistory(this.handleProcess.processOrder.id).then(response => {

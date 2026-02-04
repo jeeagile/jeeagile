@@ -26,7 +26,6 @@
     <el-table v-loading="loading" :data="processList">
       <el-table-column label="流程编码" align="center" prop="processCode"/>
       <el-table-column label="流程名称" align="center" prop="processName" :show-overflow-tooltip="true"/>
-      <el-table-column label="表单名称" align="center" prop="formName" :show-overflow-tooltip="true"/>
       <el-table-column label="发起人" width="150" align="center" prop="startUserName"/>
       <el-table-column label="提交时间" width="150" align="center" prop="startTime"/>
       <el-table-column label="结束时间" width="150" align="center" prop="endTime"/>

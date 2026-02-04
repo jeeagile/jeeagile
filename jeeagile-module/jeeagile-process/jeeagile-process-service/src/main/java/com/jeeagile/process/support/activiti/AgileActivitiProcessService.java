@@ -58,7 +58,7 @@ public class AgileActivitiProcessService implements IAgileProcessService {
 
     @Lazy
     @Autowired
-    private IAgileProcessOrderService agileProcessInstanceService;
+    private IAgileProcessOrderService agileProcessOrderService;
 
     @Override
     public String processDeployment(AgileProcessDesigner agileProcessDesigner) {
@@ -344,10 +344,14 @@ public class AgileActivitiProcessService implements IAgileProcessService {
      */
     private AgileProcessTask buildAgileProcessTask(TaskInfo taskInfo) {
         AgileProcessTask agileProcessTask = null;
-        AgileProcessOrder agileProcessOrder = agileProcessInstanceService.getById(taskInfo.getProcessInstanceId());
+        LambdaQueryWrapper<AgileProcessOrder> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileProcessOrder::getInstanceId, taskInfo.getProcessInstanceId());
+        AgileProcessOrder agileProcessOrder = agileProcessOrderService.getOne(lambdaQueryWrapper);
         if (agileProcessOrder != null && agileProcessOrder.isNotEmptyPk()) {
             agileProcessTask = new AgileProcessTask();
             agileProcessTask.setId(taskInfo.getId());
+            agileProcessTask.setOrderId(agileProcessOrder.getId());
+            agileProcessTask.setProcessId(agileProcessOrder.getProcessId());
             agileProcessTask.setInstanceId(agileProcessOrder.getId());
             agileProcessTask.setProcessCode(agileProcessOrder.getProcessCode());
             agileProcessTask.setProcessName(agileProcessOrder.getProcessName());
