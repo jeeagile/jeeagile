@@ -66,7 +66,10 @@ public class AgileUserDetailsService implements UserDetailsService {
             if (userData != null && AgileStringUtil.isNotEmpty(userData.getUserId())) {
                 userData.setUserToken(AgileStringUtil.getUuid());
                 userData.setUserPermList(agileUserDetailsService.getUserPermList(userData));
-                userData.setUserRoleList(agileUserDetailsService.getUserRoleList(userData));
+                List<String> userRoleList = userData.getUserRoleList();
+                if (userRoleList == null || userRoleList.isEmpty()) {
+                    userData.setUserRoleList(agileUserDetailsService.getUserRoleList(userData));
+                }
                 HttpServletRequest httpServletRequest = AgileServletUtil.getHttpServletRequest();
                 if (httpServletRequest != null) {
                     UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);

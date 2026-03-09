@@ -2,6 +2,7 @@ package com.jeeagile.process.support.activiti.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.security.context.AgileSecurityContext;
 import com.jeeagile.core.util.AgileStringUtil;
@@ -137,9 +138,6 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
             }
             agileProcessTask.setAssigneeUser(agileSysUser.getId());
             agileProcessTask.setAssigneeUserName(agileSysUser.getNickName());
-        } else {// 如果执行人为空，则默认为当前用户
-            agileProcessTask.setAssigneeUser(AgileSecurityContext.getUserId());
-            agileProcessTask.setAssigneeUserName(((AgileUserData) AgileSecurityContext.getUserData()).getNickName());
         }
 
 //        List<IdentityLink> identityLinkList = taskService.getIdentityLinksForTask(task.getId());
@@ -152,6 +150,11 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
 
         agileProcessTask.setTaskStatus("1");
         agileProcessTaskService.saveModel(agileProcessTask);
+
+        LambdaUpdateWrapper<AgileProcessOrder> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+        lambdaUpdateWrapper.eq(AgileProcessOrder::getId, agileProcessOrder.getId());
+        lambdaUpdateWrapper.set(AgileProcessOrder::getTaskId, agileProcessTask.getId());
+        agileProcessInstanceService.update(lambdaUpdateWrapper);
     }
 
     private void processCompleted(ActivitiEntityEventImpl activitiEntityEvent) {

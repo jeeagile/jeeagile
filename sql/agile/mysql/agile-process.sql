@@ -101,6 +101,7 @@ CREATE TABLE agile_process_order
     page_id          varchar(32)  DEFAULT NULL COMMENT '在线表单页面ID',
     page_key         varchar(32)  DEFAULT NULL COMMENT '在线表单页面数据主键值',
     order_status     varchar(2)   DEFAULT NULL COMMENT '工单状态',
+    task_id          varchar(100)  DEFAULT NULL COMMENT '当前执行任务ID',
     start_user       varchar(32)  NOT NULL COMMENT '工单发起人',
     start_user_name  varchar(100) NOT NULL COMMENT '工单发起人名称',
     start_time       datetime     DEFAULT NULL COMMENT '工单启动时间',

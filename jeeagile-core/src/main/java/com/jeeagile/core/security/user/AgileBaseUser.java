@@ -90,6 +90,22 @@ public abstract class AgileBaseUser implements Serializable {
      * 用户角色编码
      */
     private List<String> userRoleList;
+    /**
+     * 用户岗位编码
+     */
+    private List<String> userPostList;
+    /**
+     * 用户分组编码
+     */
+    private List<String> userGroupList;
+    /**
+     * 用户数据权限
+     */
+    private List<String> userDataScopeList;
+    /**
+     * 用户权限部门列表
+     */
+    private List<String> userDeptScopeList;
 
     /**
      * 租户ID

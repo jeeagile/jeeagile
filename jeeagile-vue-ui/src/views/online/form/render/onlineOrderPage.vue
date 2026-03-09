@@ -60,6 +60,53 @@
       </div>
     </el-dialog>
 
+    <el-dialog title="流程办理" :visible.sync="handleProcess.openProcess" width="750px" append-to-body>
+      <el-tabs v-model="handleProcess.activeName" @tab-click="handleClick">
+        <el-tab-pane label="表单信息" name="formInfo">
+          <div v-if="handleProcess.fromParser">
+            <process-form-parser :key="new Date().getTime()" :form-conf="handleProcess.parserForm"
+                                 :form-data="handleProcess.processOrder.formData"
+                                 v-if="handleProcess.processOrder.formType === ProcessFormType.PROCESS_FORM && handleProcess.fromParser"
+            <online-flow-page ref="onlineForm" :key="new Date().getTime()"
+                              :page-id="handleProcess.processOrder.pageId"
+                              :process-id="handleProcess.processOrder.processId" :read-only="true"
+                              :page-type="OnlinePageType.FLOW"
+                              :page-data="handleProcess.processOrder.pageData"
+                              v-if="handleProcess.processOrder.formType === ProcessFormType.ONLINE_FORM && handleProcess.fromParser"
+                              style="height: 260px" v-once/>
+
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="流程视图" name="processView">
+          <process-view key="designer" v-model="handleProcess.processOrder.processXml"
+                        :high-line-data="handleProcess.processOrder.highLineData" style="height: 260px"
+                        v-if="handleProcess.openProcessView"/>
+        </el-tab-pane>
+        <el-tab-pane label="流转信息" name="flowInfo">
+          <div style="height: 260px;">
+            <el-table v-loading="handleProcess.loading" :data="handleProcess.flowInfoList">
+              <el-table-column label="执行环节" align="center" prop="activityName" :show-overflow-tooltip="true"/>
+              <el-table-column label="执行人" align="center" prop="assigneeName" :show-overflow-tooltip="true"/>
+              <el-table-column label="开始时间" width="150" align="center" prop="startTime"/>
+              <el-table-column label="结束时间" width="150" align="center" prop="endTime"/>
+              <el-table-column label="办理状态" align="center" prop="status"/>
+              <el-table-column label="审批意见" align="center" prop="message" :show-overflow-tooltip="true"/>
+              <el-table-column label="任务历时" align="center" prop="durationTime"/>
+            </el-table>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+      <el-divider/>
+      <el-form ref="taskForm" :model="taskForm" :rules="taskRules" label-width="80px">
+        <el-form-item label="审批意见" prop="approveMessage">
+          <el-input v-model="taskForm.approveMessage" type="textarea" placeholder="请输入内容"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleApproveProcessTask">同 意</el-button>
+        <el-button type="danger" @click="handleRefuseProcessTask">拒 绝</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -70,7 +117,15 @@
   import DragWidgetFilter from '../designer/dragWidgetFilter'
   import OnlineFlowPage from './onlineFlowPage'
   import { selectMainProcessDefinition } from '@/api/process/definition'
-  import { selectOnlineOrderList, startProcess, cancelProcessOrder } from '@/api/process/order'
+  import {
+    selectOnlineOrderList,
+    startProcess,
+    detailProcessOrder,
+    cancelProcessOrder,
+    detailProcessHistory
+  } from '@/api/process/order'
+  import { approveProcessTask, refuseProcessTask } from '@/api/process/task'
+  import ProcessFormParser from '@/components/FormDesigner/parser/Parser'
 
   export default {
     name: 'OnlineOrderPage',
@@ -90,7 +145,7 @@
     },
     mixins: [OnlinePageMixins],
     components: {
-      CustomTableWidget, DragWidgetFilter, OnlineFlowPage
+      CustomTableWidget, DragWidgetFilter, OnlineFlowPage, ProcessFormParser
     },
     data() {
       return {
@@ -101,7 +156,28 @@
         processOrderStatus: undefined,
         showSearch: true,
         orderDialogTitle: undefined,
-        openOrderDialog: false
+        openOrderDialog: false,
+        handleProcess: {
+          fromParser: true,
+          loading: true,
+          openProcess: false,
+          processOrder: {},
+          processTask: undefined,
+          activeName: 'formInfo',
+          formView: false,
+          openProcessView: false,
+          parserForm: undefined,
+          formData: undefined,
+          flowInfoList: undefined
+        },
+        taskForm: {
+          approveMessage: undefined
+        },
+        taskRules: {
+          approveMessage: [
+            { required: true, message: '审批意见不能为空', trigger: 'blur' }
+          ]
+        }
       }
     },
     methods: {
@@ -174,10 +250,46 @@
         this.$router.push({ path: '/process/order/detail/' + row.orderId })
       },
       onHandler(row) {
-
+        this.handleProcess.openProcess = false
+        detailProcessOrder(row.orderId).then(response => {
+          this.handleProcess.processOrder = response.data
+          this.handleProcess.processTask = row
+          if (this.handleProcess.processOrder.formType === this.ProcessFormType.PROCESS_FORM) { // 流程表单
+            if (this.handleProcess.processOrder.formConf && this.handleProcess.processOrder.formFields) {
+              let formConf = JSON.parse(this.handleProcess.processOrder.formConf)
+              formConf.formBtns = false
+              formConf.disabled = true
+              this.handleProcess.parserForm = {
+                fields: JSON.parse(this.handleProcess.processOrder.formFields),
+                ...formConf
+              }
+              this.fillFormData(this.handleProcess.parserForm, JSON.parse(this.handleProcess.processOrder.formData))
+            }
+          }
+          this.handleProcess.openProcess = true
+        })
       },
       onRemindClick(row) {
 
+      },
+      handleClick(tab, event) {
+        this.handleProcess.fromParser = false
+        this.handleProcess.openProcessView = false
+        if (tab.name == 'formInfo') {
+          this.handleProcess.fromParser = true
+        }
+        if (tab.name == 'processView') {
+          this.handleProcess.openProcessView = true
+        }
+        if (tab.name == 'flowInfo' && !this.flowInfoList) {
+          this.handleProcess.loading = true
+          detailProcessHistory(this.handleProcess.processOrder.id).then(response => {
+            this.$nextTick(() => {
+              this.handleProcess.flowInfoList = response.data
+              this.handleProcess.loading = false
+            })
+          })
+        }
       },
       onCancelProcessOrder(row) {
         cancelProcessOrder(row.orderId).then(response => {
@@ -185,6 +297,34 @@
             this.onSearch()
           }
         )
+      },
+      handleApproveProcessTask() {
+        this.$refs.taskForm.validate(valid => {
+          if (valid) {
+            approveProcessTask({
+              id: this.handleProcess.processTask.taskId,
+              approveMessage: this.taskForm.approveMessage
+            }).then(response => {
+              this.messageSuccess('任务执行成功！')
+              this.handleProcess.openProcess = false
+              this.getProcessTodoList()
+            })
+          }
+        })
+      },
+      handleRefuseProcessTask() {
+        this.$refs.taskForm.validate(valid => {
+          if (valid) {
+            refuseProcessTask({
+              id: this.handleProcess.processTask.taskId,
+              approveMessage: this.taskForm.approveMessage
+            }).then(response => {
+              this.messageSuccess('任务拒绝成功！')
+              this.handleProcess.openProcess = false
+              this.getProcessTodoList()
+            })
+          }
+        })
       }
     },
     provide() {

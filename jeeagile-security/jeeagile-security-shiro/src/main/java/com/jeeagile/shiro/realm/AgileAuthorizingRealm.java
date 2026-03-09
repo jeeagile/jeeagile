@@ -63,7 +63,10 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
                 if (AgileSecurityUtil.encryptPassword(password).equals(userData.getPassword())) {
                     userData.setUserToken(SecurityUtils.getSubject().getSession().getId().toString());
                     userData.setUserPermList(agileUserDetailsService.getUserPermList(userData));
-                    userData.setUserRoleList(agileUserDetailsService.getUserRoleList(userData));
+                    List<String> userRoleList = userData.getUserRoleList();
+                    if (userRoleList == null || userRoleList.isEmpty()) {
+                        userData.setUserRoleList(agileUserDetailsService.getUserRoleList(userData));
+                    }
                     HttpServletRequest httpServletRequest = AgileServletUtil.getHttpServletRequest();
                     if (httpServletRequest != null) {
                         UserAgent userAgent = AgileAgentUtil.getUserAgent(httpServletRequest);

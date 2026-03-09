@@ -117,7 +117,7 @@
                 详情
               </el-button>
               <el-button type="text" size="mini"
-                         v-if="pageType === OnlinePageType.ORDER "
+                         v-if="pageType === OnlinePageType.ORDER && scope.row.orderStatus != ProcessOrderStatus.CANCEL"
                          @click.stop="onHandlerProcessOrder(scope.row)">
                 办理
               </el-button>

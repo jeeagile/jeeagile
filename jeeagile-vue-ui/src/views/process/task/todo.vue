@@ -79,7 +79,7 @@
               <el-table-column label="开始时间" width="150" align="center" prop="startTime"/>
               <el-table-column label="结束时间" width="150" align="center" prop="endTime"/>
               <el-table-column label="办理状态" align="center" prop="status"/>
-              <el-table-column label="审批意见" align="center" prop="message"/>
+              <el-table-column label="审批意见" align="center" prop="message" :show-overflow-tooltip="true"/>
               <el-table-column label="任务历时" align="center" prop="durationTime"/>
             </el-table>
           </div>

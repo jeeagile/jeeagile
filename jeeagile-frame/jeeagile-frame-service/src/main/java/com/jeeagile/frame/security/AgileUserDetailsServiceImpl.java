@@ -51,6 +51,10 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     private IAgileSysRoleDeptService agileSysRoleDeptService;
     @Autowired
     private IAgileSysTenantService agileSysTenantService;
+    @Autowired
+    private IAgileSysPostService agileSysPostService;
+    @Autowired
+    private IAgileSysUserPostService agileSysUserPostService;
 
     @Override
     public AgileUserData getUserData(String loginName) {
@@ -122,6 +126,10 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         AgileBeanUtils.copyProperties(agileSysUser, agileUserData);
         agileUserData.setPassword(agileSysUser.getUserPwd());
         agileUserData.setUserId(agileSysUser.getId());
+        agileUserData.setUserDataScopeList(this.getUserDataScopeList(agileUserData));
+        agileUserData.setUserPostList(this.getUserPostIdList(agileUserData.getUserId()));
+        agileUserData.setUserRoleList(this.getUserRoleIdList(agileUserData.getUserId()));
+        agileUserData.setUserDeptScopeList(this.getUserDeptScopeList(agileUserData.getUserId()));
         return agileUserData;
     }
 
@@ -214,6 +222,25 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         }
     }
 
+    private List<String> getUserDataScopeList(String userId) {
+        try {
+            List<String> userDataScopeList = new ArrayList<>();
+            List<AgileSysRole> agileSysRoleList = this.getUserRoleList(userId);
+            agileSysRoleList.forEach(agileSysRole -> {
+                if (agileSysRole.getRoleStatus().equals("0")
+                        && !userDataScopeList.contains(agileSysRole.getDataScope())) {
+                    userDataScopeList.add(agileSysRole.getDataScope());
+                }
+            });
+            return userDataScopeList;
+        } catch (AgileBaseException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            log.error("获取用户权限类型异常！", ex);
+            throw new AgileAuthException("获取用户权限类型异常！");
+        }
+    }
+
     @Override
     public Set<String> getUserDeptScopeList(AgileBaseUser agileBaseUser, String dataScopeType) {
         try {
@@ -238,6 +265,7 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
         }
     }
 
+
     /**
      * 获取用户部门权限列表
      *
@@ -246,12 +274,24 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
      */
     private List<String> getUserDeptScopeList(String userId) {
         List<String> userRoleIdList = this.getUserRoleIdList(userId);
+        if (userRoleIdList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return this.getUserDeptScopeList(userRoleIdList);
+    }
+
+    /**
+     * 获取用户部门权限列表
+     *
+     * @param userRoleIdList
+     * @return
+     */
+    private List<String> getUserDeptScopeList(List<String> userRoleIdList) {
         QueryWrapper<AgileSysRoleDept> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("distinct dept_id");
         queryWrapper.lambda().in(AgileSysRoleDept::getRoleId, userRoleIdList);
         return agileSysRoleDeptService.listObjs(queryWrapper).stream().map(deptId -> (String) deptId).collect(Collectors.toList());
     }
-
 
     /**
      * 获取超级管理员菜单列表
@@ -371,10 +411,59 @@ public class AgileUserDetailsServiceImpl implements IAgileUserDetailsService {
     private List<AgileSysRole> getUserRoleList(String userId) {
         List<String> userRoleIdList = agileSysUserRoleService.getUserRoleIdList(userId);
         if (AgileCollectionUtil.isNotEmpty(userRoleIdList)) {
+            return this.getUserRoleList(userRoleIdList);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * 获取用户分配角色对象
+     *
+     * @param userRoleIdList
+     * @return
+     */
+    private List<AgileSysRole> getUserRoleList(List<String> userRoleIdList) {
+        if (AgileCollectionUtil.isNotEmpty(userRoleIdList)) {
             LambdaQueryWrapper<AgileSysRole> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(AgileSysRole::getRoleStatus, "0");
             lambdaQueryWrapper.in(AgileSysRole::getId, userRoleIdList);
             return agileSysRoleService.list(lambdaQueryWrapper);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * 获取用户角色ID列表
+     *
+     * @param userId
+     * @return
+     */
+    private List<String> getUserPostIdList(String userId) {
+        List<String> userPostIdList = new ArrayList<>();
+        List<AgileSysPost> agileSysPostList = this.getUserPostList(userId);
+        agileSysPostList.forEach(agileSysPost -> {
+            if (agileSysPost.getPostStatus().equals("0")) {
+                userPostIdList.add(agileSysPost.getId());
+            }
+        });
+        return userPostIdList;
+    }
+
+    /**
+     * 获取用户分配岗位对象
+     *
+     * @param userId
+     * @return
+     */
+    private List<AgileSysPost> getUserPostList(String userId) {
+        List<String> userPostIdList = agileSysUserPostService.getUserPostIdList(userId);
+        if (AgileCollectionUtil.isNotEmpty(userPostIdList)) {
+            LambdaQueryWrapper<AgileSysPost> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(AgileSysPost::getPostStatus, "0");
+            lambdaQueryWrapper.in(AgileSysPost::getId, userPostIdList);
+            return agileSysPostService.list(lambdaQueryWrapper);
         } else {
             return new ArrayList<>();
         }

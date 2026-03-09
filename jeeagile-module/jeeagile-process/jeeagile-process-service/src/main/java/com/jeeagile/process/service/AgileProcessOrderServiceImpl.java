@@ -198,6 +198,7 @@ public class AgileProcessOrderServiceImpl extends AgileBaseServiceImpl<AgileProc
         selectFieldsBuilder.append("agile_process_order.page_id pageId").append(",");
         selectFieldsBuilder.append("agile_process_order.page_key pageKey").append(",");
         selectFieldsBuilder.append("agile_process_order.order_status orderStatus").append(",");
+        selectFieldsBuilder.append("agile_process_order.task_id taskId").append(",");
         selectFieldsBuilder.append("agile_process_order.start_user_name startUserName").append(",");
         selectFieldsBuilder.append("agile_process_order.start_time startTime");
         // 添加 流程实例关联表
@@ -208,6 +209,12 @@ public class AgileProcessOrderServiceImpl extends AgileBaseServiceImpl<AgileProc
         joinTableList.add(onlineJoinTable);
 
         List<OnlineFieldFilter> onlineFieldFilterList = this.makeFieldFilter(onlineOrderQueryParam);
+
+        if (AgileStringUtil.isEmpty(orderBy)) {
+            orderBy = "agile_process_order.start_time desc";
+        } else {
+            orderBy = "agile_process_order.start_time desc," + orderBy;
+        }
 
         AgilePage<Map> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
         return agileOnlineOperationMapper.getPageData(agilePage, agileOnlineTable.getTableName(), selectFieldsBuilder.toString(), joinTableList, onlineFieldFilterList, orderBy);
@@ -248,6 +255,10 @@ public class AgileProcessOrderServiceImpl extends AgileBaseServiceImpl<AgileProc
             onlineFieldFilter_createTime.setColumnValueEnd(onlineOrderQueryParam.getCreateTimeEnd());
             onlineFieldFilter_createTime.setFilterType("03");
             onlineFieldFilterList.add(onlineFieldFilter_createTime);
+        }
+        // 如果非超级管理员，则只查询当前用户创建的流程和需自己处理的流程
+        if (AgileSecurityContext.getUserData().isSuperAdmin()){
+
         }
         return onlineFieldFilterList;
     }

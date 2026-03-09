@@ -367,8 +367,20 @@ public class AgileActivitiProcessService implements IAgileProcessService {
         List<String> userCandidateGroupList = new ArrayList<>();
         AgileBaseUser agileUserData = AgileSecurityContext.getUserData();
         userCandidateGroupList.add("dept:" + agileUserData.getDeptId());
+
         userCandidateGroupList.addAll(this.getUserRoleList(agileUserData.getUserId()));
         userCandidateGroupList.addAll(this.getUserPostList(agileUserData.getUserId()));
+
+//        // 添加岗位信息
+//        if (userData.getPostIds() != null && !userData.getPostIds().isEmpty()) {
+//            userData.getPostIds().forEach(postId -> candidateGroups.add("post:" + postId));
+//        }
+//
+//        // 添加角色信息
+//        if (userData.getRoleIds() != null && !userData.getRoleIds().isEmpty()) {
+//            userData.getRoleIds().forEach(roleId -> candidateGroups.add("role:" + roleId));
+//        }
+
         return userCandidateGroupList;
     }
 

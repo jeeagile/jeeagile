@@ -75,6 +75,10 @@ public class AgileProcessOrder extends AgileBaseTenantModel<AgileProcessOrder> {
      */
     private String orderStatus;
     /**
+     * 当前执行任务ID
+     */
+    private String taskId;
+    /**
      * 流程实例发起人员
      */
     private String startUser;
