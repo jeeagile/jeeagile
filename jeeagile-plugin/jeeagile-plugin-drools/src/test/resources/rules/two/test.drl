@@ -1,0 +1,6 @@
+package com.jeeagile.drools.test
+rule "测试"
+    when
+    then
+        System.out.println("测试2!!!!");
+end

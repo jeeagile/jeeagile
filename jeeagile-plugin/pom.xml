@@ -16,5 +16,6 @@
         <module>jeeagile-plugin-redis</module>
         <module>jeeagile-plugin-http</module>
         <module>jeeagile-plugin-crypto</module>
+        <module>jeeagile-plugin-drools</module>
     </modules>
 </project>

@@ -1,0 +1,5 @@
+package com.jeeagile.drools.test
+declare Person
+    name : String
+    dd:String
+end

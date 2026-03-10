@@ -1,0 +1,27 @@
+package com.jeeagile.drools.test1
+import com.jeeagile.drools.test.One;
+import com.jeeagile.drools.test.Two;
+import com.jeeagile.drools.test.Person;
+import java.util.Map
+
+rule "测试1"
+    when
+        $one:One(getName()=="测试")
+    then
+        System.out.println("测试1!!!!");
+end
+
+rule "测试11"
+    when
+        $two:Two(getName()=="测试2")
+    then
+        System.out.println("测试2222!!!!");
+end
+
+
+rule "测试33"
+    when
+        $person:Person(getName()=="00")
+    then
+        System.out.println("测试declare对象（外部引用）!!!!");
+end

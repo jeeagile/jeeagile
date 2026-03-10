@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns="http://www.drools.org/xsd/kmodule" >
+    <kbase name="kbase-1" default="true" packages="com.jeeagile.drools.test">
+        <ksession name="one-session" default="true" type="stateful">
+
+        </ksession>
+        <ksession name="two-session" type="stateless" />
+    </kbase>
+</kmodule>
+
