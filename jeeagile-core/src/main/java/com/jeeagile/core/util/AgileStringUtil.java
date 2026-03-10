@@ -1,5 +1,6 @@
 package com.jeeagile.core.util;
 
+import java.util.Collection;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,6 +55,24 @@ public class AgileStringUtil {
         return !isEmpty(object);
     }
 
+    /**
+     * 判断一个Collection是否为空， 包含List，Set，Queue
+     *
+     * @param coll 要判断的Collection
+     * @return 如果Collection为null或空，返回true；否则返回false
+     */
+    public static boolean isEmpty(Collection<?> coll) {
+        return isNull(coll) || coll.isEmpty();
+    }
+    /**
+     * 判断一个对象是否为空
+     *
+     * @param object 输入对象
+     * @return 如果对象为null，返回true；否则返回false
+     */
+    public static boolean isNull(Object object) {
+        return object == null;
+    }
     /**
      * 杀空函数，将"null"和null对象转换为""
      *
