@@ -298,6 +298,12 @@
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-plugin-drools</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
                 <artifactId>jeeagile-frame-api</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
