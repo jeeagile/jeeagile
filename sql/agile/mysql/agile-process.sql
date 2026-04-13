@@ -110,9 +110,24 @@ CREATE TABLE agile_process_order
     create_time      datetime     DEFAULT NULL COMMENT '创建时间',
     update_user      varchar(32)  DEFAULT NULL COMMENT '修改人',
     update_time      datetime     DEFAULT NULL COMMENT '修改时间',
-    PRIMARY KEY (id)
 );
 alter table agile_process_order comment '流程实例表';
+
+/*==============================================================*/
+/* table: agile_process_order_scope   工单权限关联表              */
+/*==============================================================*/
+CREATE TABLE agile_process_order_scope
+(
+    id             varchar(32) NOT NULL COMMENT '主键ID',
+    order_id       varchar(32) NOT NULL COMMENT '工单ID',
+    scope_type     varchar(20) NOT NULL COMMENT '权限类型(dept/role/post/user)',
+    scope_id       varchar(32) NOT NULL COMMENT '权限ID(部门ID/角色ID/岗位ID/用户ID)',
+    create_time    datetime DEFAULT NULL COMMENT '创建时间',
+    PRIMARY KEY (id),
+    KEY idx_order_id (order_id),
+    KEY idx_scope (scope_type, scope_id)
+);
+alter table agile_process_order_scope comment '工单权限关联表';
 
 
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeagile.process.mapper.AgileProcessOrderScopeMapper">
+
+    <!-- 批量插入权限 -->
+    <insert id="batchInsert">
+        INSERT INTO agile_process_order_scope (id, order_id, scope_type, scope_id, create_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.orderId}, #{item.scopeType}, #{item.scopeId}, #{item.createTime})
+        </foreach>
+    </insert>
+
+    <!-- 根据工单ID删除权限 -->
+    <delete id="deleteByOrderId">
+        DELETE FROM agile_process_order_scope WHERE order_id = #{orderId}
+    </delete>
+
+    <!-- 根据工单ID查询权限列表 -->
+    <select id="selectByOrderId" resultType="com.jeeagile.process.entity.AgileProcessOrderScope">
+        SELECT id, order_id, scope_type, scope_id, create_time
+        FROM agile_process_order_scope
+        WHERE order_id = #{orderId}
+    </select>
+
+</mapper>

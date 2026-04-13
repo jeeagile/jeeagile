@@ -5,6 +5,7 @@ import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.context.AgileSecurityContext;
+import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.entity.online.AgileOnlinePage;
 import com.jeeagile.frame.entity.online.AgileOnlineTable;
@@ -52,6 +53,8 @@ public class AgileProcessOrderServiceImpl extends AgileBaseServiceImpl<AgileProc
     private IAgileOnlineTableService agileOnlineTableService;
     @Autowired
     private IAgileOnlineOperationService agileOnlineOperationService;
+    @Autowired
+    private IAgileProcessOrderScopeService agileProcessOrderScopeService;
 
 
     @Override
@@ -256,10 +259,28 @@ public class AgileProcessOrderServiceImpl extends AgileBaseServiceImpl<AgileProc
             onlineFieldFilter_createTime.setFilterType("03");
             onlineFieldFilterList.add(onlineFieldFilter_createTime);
         }
-        // 如果非超级管理员，则只查询当前用户创建的流程和需自己处理的流程
-        if (AgileSecurityContext.getUserData().isSuperAdmin()){
-
+        
+        // 添加权限过滤：非超级管理员需按权限关联表过滤
+        if (!AgileSecurityContext.getUserData().isSuperAdmin()) {
+            List<String> visibleOrderIds = agileProcessOrderScopeService.getUserVisibleOrderIds();
+            if (AgileCollectionUtil.isNotEmpty(visibleOrderIds)) {
+                OnlineFieldFilter onlineFieldFilter_orderId = new OnlineFieldFilter();
+                onlineFieldFilter_orderId.setTableName("agile_process_order");
+                onlineFieldFilter_orderId.setColumnName("id");
+                onlineFieldFilter_orderId.setFilterType("05"); // IN 类型
+                onlineFieldFilter_orderId.setColumnValueList(new HashSet<>(visibleOrderIds));
+                onlineFieldFilterList.add(onlineFieldFilter_orderId);
+            } else {
+                // 无权限时返回空结果
+                OnlineFieldFilter onlineFieldFilter_empty = new OnlineFieldFilter();
+                onlineFieldFilter_empty.setTableName("agile_process_order");
+                onlineFieldFilter_empty.setColumnName("id");
+                onlineFieldFilter_empty.setFilterType("05");
+                onlineFieldFilter_empty.setColumnValueList(new HashSet<>(Arrays.asList("NONE")));
+                onlineFieldFilterList.add(onlineFieldFilter_empty);
+            }
         }
+        
         return onlineFieldFilterList;
     }
 }
