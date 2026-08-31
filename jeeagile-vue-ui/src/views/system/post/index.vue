@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="80px">
       <el-form-item label="岗位编码" prop="postCode">
         <el-input v-model="queryParam.queryCond.postCode" placeholder="请输入岗位编码" clearable size="small"
                   @keyup.enter.native="handleQuery"/>

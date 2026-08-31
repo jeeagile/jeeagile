@@ -37,26 +37,28 @@ module.exports = {
         }
       }
     },
-    disableHostCheck: true
+    allowedHosts: 'all'
   },
   configureWebpack: {
     name: name,
     resolve: {
       alias: {
         '@': resolve('src')
+      },
+      fallback: {
+        path: require.resolve('path-browserify'),
+        util: require.resolve('util/'),
+        events: require.resolve('events/'),
+        crypto: require.resolve('crypto-browserify'),
+        buffer: require.resolve('buffer/'),
+        stream: require.resolve('stream-browserify'),
+        process: require.resolve('process/browser'),
+        os: require.resolve('os-browserify/browser')
       }
     }
   },
   chainWebpack(config) {
     config.module.rule('bpmnlintrc').test(/\.bpmnlintrc$/).use('bpmnlint-loader').loader('bpmnlint-loader').end()
-    config.plugin('preload').tap(() => [
-      {
-        rel: 'preload',
-        fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
-        include: 'initial'
-      }
-    ])
-
     config.plugins.delete('prefetch')
 
     // set svg-sprite-loader

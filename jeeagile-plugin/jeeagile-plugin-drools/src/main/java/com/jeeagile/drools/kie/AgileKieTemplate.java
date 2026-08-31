@@ -82,7 +82,7 @@ public class AgileKieTemplate implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        ReleaseId releaseId = this.kieServices.newReleaseId("com.jeeagile", "jeeagile-plugin-drools", "1.0.0");
+        ReleaseId releaseId = this.kieServices.newReleaseId("com.jeeagile", "jeeagile-drools", "1.0.0");
         this.kieFileSystem.generateAndWritePomXML(releaseId);
         this.kieFileSystem.writeKModuleXML(kieModuleModel.toXML());
         this.kieServices.newKieBuilder(kieFileSystem).buildAll();

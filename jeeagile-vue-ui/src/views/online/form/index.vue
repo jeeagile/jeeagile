@@ -1,6 +1,6 @@
 <template>
   <div v-if="!openOnlineForm" class="app-container">
-    <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
+    <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="80px">
       <el-form-item label="表单编码" prop="formCode">
         <el-input v-model="queryParam.queryCond.formCode" placeholder="请输入表单编码" clearable size="small"
                   @keyup.enter.native="handleQuery"/>

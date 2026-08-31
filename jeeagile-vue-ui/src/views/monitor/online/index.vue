@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
+    <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="80px">
       <el-form-item label="登录地址" prop="ipAddr">
         <el-input v-model="queryParam.queryCond.ipAddr" placeholder="请输入登录地址" clearable size="small"
                   @keyup.enter.native="handleQuery"/>

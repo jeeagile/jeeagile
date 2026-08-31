@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="80px">
       <el-form-item label="流程模型" prop="processId">
         <el-select v-model="queryParam.queryCond.processId" placeholder="流程模型" clearable size="small"
                    @change="handleQuery">

@@ -311,7 +311,7 @@ export default {
       this.loading = true
       select${ClassName}Page(this.queryParam).then(response => {
         this.queryParam.pageTotal = response.data.pageTotal
-        this.${businessName}List = response.data.recordList
+        this.${businessName}List = response.data.records
         this.loading = false
       })
     },

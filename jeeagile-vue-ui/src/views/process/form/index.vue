@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParam" ref="queryForm" :inline="true" v-show="showSearch" label-width="80px">
       <el-form-item label="表单编码" prop="formCode">
         <el-input v-model="queryParam.queryCond.formCode" placeholder="请输入表单编码" clearable size="small"
                   @keyup.enter.native="handleQuery"/>

@@ -95,7 +95,7 @@ agile.tenant.enable=true
 
 2. 执行数据库脚本
 ```
-agile-tenant.sql
+09-agile-tenant.sql
 ```
 
 3. 默认租户访问地址

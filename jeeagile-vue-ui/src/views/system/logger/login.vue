@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="68px">
+    <el-form v-show="showSearch" ref="queryForm" :model="queryParam" :inline="true" label-width="80px">
       <el-form-item label="登录用户" prop="loginName">
         <el-input v-model="queryParam.queryCond.loginName" placeholder="请输入登录用户名" clearable style="width: 240px;"
                   size="small" @keyup.enter.native="handleQuery"/>

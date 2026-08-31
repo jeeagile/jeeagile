@@ -66,6 +66,14 @@
       border: none;
       height: 100%;
       width: 100% !important;
+      background-color: $menuBg !important;
+    }
+
+    // 顶层菜单项背景色和文字颜色
+    .el-menu-item,
+    .el-submenu__title {
+      background-color: $menuBg !important;
+      color: $menuText !important;
     }
 
     // menu hover
@@ -84,9 +92,11 @@
     & .el-submenu .el-menu-item {
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg !important;
+      color: $menuText !important;
 
       &:hover {
         background-color: $subMenuHover !important;
+        color: $menuText !important;
       }
     }
   }
@@ -199,6 +209,8 @@
 
   .nest-menu .el-submenu>.el-submenu__title,
   .el-menu-item {
+    color: $menuText;
+
     &:hover {
       // you can use $subMenuHover
       background-color: $menuHover !important;

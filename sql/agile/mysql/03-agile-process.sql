@@ -203,7 +203,7 @@ INSERT INTO agile_sys_dict_data VALUES ('143', '0', 2, '审批通过', '2', 'pro
 INSERT INTO agile_sys_dict_data VALUES ('144', '0', 3, '审批拒绝', '3', 'process_task_status', '0', '0', NULL, NULL, NULL, NULL, NULL);
 
 /*==============================================================*/
-/* 菜单配置                                                     */
+/* 菜单配置                                                      */
 /*==============================================================*/
 INSERT INTO agile_sys_menu VALUES ('6', '0', '流程管理', '6', '', 'process', 'process', 'M', '0', '0', '0', '', '', '', '', '', NULL, NULL, NULL, NULL);
 INSERT INTO agile_sys_menu VALUES ('601', '6', '流程表单', '0', 'process/form/index', 'form', 'form', 'C', '0', '0', '0', '01', '', '', 'process:form:page', '', NULL, NULL, NULL, NULL);

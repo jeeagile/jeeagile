@@ -41,6 +41,7 @@ import '@/components/AgileDict'
 import '@/components/AgileDict/system'
 import '@/components/AgileDict/online'
 import '@/components/AgileDict/process'
+import '@/components/AgileDict/drools'
 import '@/components/Dialog'
 
 // 全局组件挂载
@@ -84,6 +85,10 @@ Vue.prototype.messageInfo = function (message) {
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
+
+import VCharts from 'v-charts'
+import 'v-charts/lib/style.css'
+Vue.use(VCharts)
 
 Vue.use(vuePlugin)
 

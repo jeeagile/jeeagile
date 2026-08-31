@@ -298,6 +298,12 @@
 
             <dependency>
                 <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-plugin-drools</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
                 <artifactId>jeeagile-frame-api</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
@@ -413,6 +419,30 @@
             <dependency>
                 <groupId>com.jeeagile</groupId>
                 <artifactId>jeeagile-process-web</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-drools-api</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-drools-model</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-drools-service</artifactId>
+                <version>${jeeagile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jeeagile</groupId>
+                <artifactId>jeeagile-drools-web</artifactId>
                 <version>${jeeagile.version}</version>
             </dependency>
 

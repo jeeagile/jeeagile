@@ -16,6 +16,25 @@ public class AgileStringUtil {
     }
 
     /**
+     * 字符串常量：空 JSON {@code "{}"}
+     */
+    public static final String EMPTY_JSON = "{}";
+    /**
+     * 字符串常量：空字符串 {@code ""}
+     */
+    public static final String EMPTY = "";
+
+    /**
+     * 字符串常量：空格符 {@code " "}
+     */
+    public static final String SPACE = " ";
+    /**
+     * 字符串常量：{@code "null"} <br>
+     * 注意：{@code "null" != null}
+     */
+    public static final String NULL = "null";
+
+    /**
      * 判断字符串对象是为空
      *
      * @param str
@@ -64,6 +83,7 @@ public class AgileStringUtil {
     public static boolean isEmpty(Collection<?> coll) {
         return isNull(coll) || coll.isEmpty();
     }
+
     /**
      * 判断一个对象是否为空
      *
@@ -73,6 +93,7 @@ public class AgileStringUtil {
     public static boolean isNull(Object object) {
         return object == null;
     }
+
     /**
      * 杀空函数，将"null"和null对象转换为""
      *
@@ -117,6 +138,7 @@ public class AgileStringUtil {
 
     /**
      * 将驼峰式命名的字符串转换为下划线方式。如果转换前的驼峰式命名的字符串为空，则返回空字符串。
+     *
      * @param str 转换前的驼峰式命名的字符串，也可以为下划线形式
      * @return 转换后下划线方式命名的字符串
      */
@@ -144,8 +166,10 @@ public class AgileStringUtil {
         matcher.appendTail(stringBuffer);
         return stringBuffer.toString();
     }
+
     /**
      * 小写首字母
+     *
      * @param str 字符串
      * @return 字符串
      */
@@ -158,6 +182,7 @@ public class AgileStringUtil {
         }
         return str;
     }
+
     /**
      * 将下划线方式命名的字符串转换为驼峰式。如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。<br>
      * 例如：hello_world=》helloWorld

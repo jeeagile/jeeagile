@@ -151,6 +151,31 @@ export const agileRouter = [
         meta: { title: '流程工单信息' }
       }
     ]
+  },
+  {
+    path: '/drools',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'model/field/:modelId(.*)',
+        component: (resolve) => require(['@/views/drools/model/field'], resolve),
+        name: 'ModelField',
+        meta: { title: '数据对象字段' }
+      },
+      {
+        path: 'rule/designer/:ruleId(.*)',
+        component: (resolve) => require(['@/views/drools/rule/designer'], resolve),
+        name: 'RuleDesigner',
+        meta: { title: '规则设计' }
+      },
+      {
+        path: 'scene/execute/:sceneId(.*)',
+        component: (resolve) => require(['@/views/drools/scene/execute'], resolve),
+        name: 'SceneExecute',
+        meta: { title: '规则场景执行' }
+      }
+    ]
   }
 ]
 
@@ -164,6 +189,7 @@ export default router
 
 NProgress.configure({ showSpinner: false })
 const whiteList = ['/login'] // no Redirect whitelist
+let hasRoutesAdded = false // 防止重复添加路由导致重定向循环
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getUserToken()) {
@@ -171,9 +197,10 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      if (store.getters.userRole.length === 0) {
+      if (store.getters.userRole.length === 0 && !hasRoutesAdded) {
         store.dispatch('auth/getInfo').then(() => {
           store.dispatch('auth/getRoutes').then(accessRoutes => {
+            hasRoutesAdded = true
             if (accessRoutes instanceof Array) {
               for (const itemRoute of accessRoutes) {
                 router.addRoute(itemRoute)
