@@ -1,0 +1,22 @@
+package ${packageName};
+
+#foreach ($import in $importList)
+import ${import};
+#end
+
+declare ${ClassName}
+#foreach ($field in $fieldList)
+
+#if($field.fieldType=="Object")
+    #set($fieldType=$field.droolsModelInfo.modelName)
+#else
+    #set($fieldType=$field.fieldType)
+#end
+
+#if($field.listFlag=="1")
+    $field.fieldName: List<$fieldType>
+#else
+    $field.fieldName: $fieldType
+#end
+#end
+end

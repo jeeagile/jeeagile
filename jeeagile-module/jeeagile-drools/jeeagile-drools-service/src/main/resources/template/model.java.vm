@@ -1,0 +1,21 @@
+package ${packageName};
+
+#foreach ($import in $importList)
+import ${import};
+#end
+import lombok.Data;
+
+@Data
+public class ${ClassName} {
+#foreach ($field in $fieldList)
+    /**
+     * $field.fieldLabel
+     */
+    #if($column.listFlag=="1")
+    private List<$field.fieldType> $field.fieldName
+    #else
+    private $field.fieldType $field.fieldName
+    #end
+
+#end
+}
