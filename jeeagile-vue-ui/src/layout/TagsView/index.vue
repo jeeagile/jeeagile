@@ -141,7 +141,7 @@
           this.$nextTick(() => {
             this.$router.replace({
               path: '/Redirect' + fullPath
-            })
+            }).catch(() => {})
           })
         })
       },
@@ -153,7 +153,7 @@
         })
       },
       closeOthersTags() {
-        this.$router.push(this.selectedTag)
+        this.$router.push(this.selectedTag).catch(() => {})
         this.$store.dispatch('tagsView/delOthersViews', this.selectedTag).then(() => {
           this.moveToCurrentTag()
         })
@@ -169,12 +169,12 @@
       toLastView(visitedViews, view) {
         const latestView = visitedViews.slice(-1)[0]
         if (latestView) {
-          this.$router.push(latestView.fullPath)
+          this.$router.push(latestView.fullPath).catch(() => {})
         } else {
           if (view.name === 'Dashboard') {
-            this.$router.replace({ path: '/Redirect' + view.fullPath })
+            this.$router.replace({ path: '/Redirect' + view.fullPath }).catch(() => {})
           } else {
-            this.$router.push('/')
+            this.$router.push('/').catch(() => {})
           }
         }
       },

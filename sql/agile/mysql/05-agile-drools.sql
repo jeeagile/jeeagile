@@ -169,6 +169,7 @@ INSERT INTO agile_sys_menu VALUES ('80103', '801', '数据对象修改', 3, '', 
 INSERT INTO agile_sys_menu VALUES ('80104', '801', '数据对象删除', 4, '', '', '#', 'F', '0', '0', '0', '', '', '', 'drools:model:delete', '', NULL, NULL, NULL, NULL);
 INSERT INTO agile_sys_menu VALUES ('80105', '801', '数据对象导入', 5, '', '', '#', 'F', '0', '0', '0', '', '', '', 'drools:model:import', '', NULL, NULL, NULL, NULL);
 INSERT INTO agile_sys_menu VALUES ('80106', '801', '数据对象导出', 6, '', '', '#', 'F', '0', '0', '0', '', '', '', 'drools:model:export', '', NULL, NULL, NULL, NULL);
+INSERT INTO agile_sys_menu VALUES ('80107', '801', '数据对象列表', 7, '', '', '#', 'F', '0', '0', '0', '', '', '', 'drools:model:list', '', NULL, NULL, NULL, NULL);
 
 INSERT INTO agile_sys_menu VALUES ('802', '8', '规则管理', '1', 'drools/rule/index', 'rule', 'rule', 'C', '0', '0', '0', '01', '', '', 'drools:rule:page', '', NULL, NULL, NULL, NULL);
 INSERT INTO agile_sys_menu VALUES ('80201', '802', '规则明细', 1, '', '', '#', 'F', '0', '0', '0', '', '', '', 'drools:rule:detail', '', NULL, NULL, NULL, NULL);

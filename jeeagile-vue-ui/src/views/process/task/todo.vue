@@ -173,8 +173,8 @@
       /** 查询流程表单列表 */
       getProcessTodoList() {
         selectTodoPage(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.processTodoList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.processTodoList = (response.data && response.data.records) || []
             this.loading = false
           }
         )
@@ -187,6 +187,7 @@
       handleProcessTask(row) {
         this.handleProcess.openProcess = false
         detailProcessOrder(row.orderId).then(response => {
+          if (!response.data) return
           this.handleProcess.processOrder = response.data
           this.handleProcess.processTask = row
           if (this.handleProcess.processOrder.formType === this.ProcessFormType.PROCESS_FORM) { // 流程表单
@@ -216,9 +217,10 @@
       handleProcessView(row) {
         this.openView = false
         detailProcessOrder(row.orderId).then(response => {
+          if (!response.data) return
           this.$nextTick(() => {
-            this.processXml = response.data.processXml
-            this.highLineData = response.data.highLineData
+            this.processXml = (response.data && response.data.processXml) || ''
+            this.highLineData = (response.data && response.data.highLineData) || []
             this.openView = true
           })
         })

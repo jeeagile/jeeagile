@@ -38,7 +38,7 @@ export default {
   methods: {
     back() {
       if (this.$route.query.noGoBack) {
-        this.$router.push({ path: '/' })
+        this.$router.push({ path: '/' }).catch(() => {})
       } else {
         this.$router.go(-1)
       }

@@ -9,6 +9,7 @@ import { OnlinePageType } from '@/components/AgileDict/online'
 
 
 const state = {
+  userId: '',
   userName: '',
   nickName: '',
   userAvatar: '',
@@ -20,6 +21,9 @@ const state = {
 }
 
 const mutations = {
+  SET_USER_ID: (state, userId) => {
+    state.userId = userId
+  },
   SET_USER_NAME: (state, userName) => {
     state.userName = userName
   },
@@ -68,6 +72,7 @@ const actions = {
         } else {
           commit('SET_USER_ROLE', ['ROLE_DEFAULT'])
         }
+        commit('SET_USER_ID', userInfo.userId)
         commit('SET_USER_NAME', userInfo.userName)
         commit('SET_NICK_NAME', userInfo.nickName)
         commit('SET_USER_AVATAR', userAvatar)
@@ -78,7 +83,7 @@ const actions = {
     })
   },
   getRoutes({ commit }) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       // 向后端请求路由数据
       getUserMenu().then(response => {
         let asyncRoutes = buildUserRoutes(response.data)
@@ -86,6 +91,8 @@ const actions = {
         accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
         commit('SET_USER_ROUTE', accessedRoutes)
         resolve(accessedRoutes)
+      }).catch(err => {
+        reject(err)
       })
     })
   },
@@ -106,7 +113,7 @@ const actions = {
   // 前端 登出
   fedLogOut({ commit }) {
     return new Promise(resolve => {
-      commit('SET_TOKEN', '')
+      commit('SET_USER_TOKEN', '')
       removeUserToken()
       resolve()
     })
@@ -149,6 +156,7 @@ export function filterAsyncRoutes(asyncRoutes) {
 
 function buildUserRoutes(userMenu) {
   const routerList = []
+  if (!Array.isArray(userMenu)) return routerList
   userMenu.forEach(menu => {
     let router = {
       id: menu.id,

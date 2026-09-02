@@ -298,8 +298,8 @@
       getJobList() {
         this.loading = true
         selectJobPage(this.queryParam).then(response => {
-          this.queryParam.pageTotal = response.data.pageTotal
-          this.quartzJobList = response.data.records
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+          this.quartzJobList = (response.data && response.data.records) || []
           this.loading = false
         })
       },
@@ -393,7 +393,7 @@
       /** 任务日志列表查询 */
       handleJobLogger(row) {
         const jobCode = row.jobCode || 0
-        this.$router.push({ path: '/quartz/logger/' + jobCode })
+        this.$router.push({ path: '/quartz/logger/' + jobCode }).catch(() => {})
       },
       /** 新增按钮操作 */
       handleAdd() {

@@ -56,10 +56,10 @@
       handleLink(item) {
         const { redirect, path } = item
         if (redirect) {
-          this.$router.push(redirect)
+          this.$router.push(redirect).catch(() => {})
           return
         }
-        this.$router.push(this.pathCompile(path))
+        this.$router.push(this.pathCompile(path)).catch(() => {})
       }
     }
   }

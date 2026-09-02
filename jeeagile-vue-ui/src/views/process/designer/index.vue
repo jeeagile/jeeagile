@@ -256,8 +256,8 @@
       /** 查询在线表单列表 */
       getOnlineProcessFormList() {
         selectOnlineProcessFormList().then(response => {
-            this.onlineFormList = response.data.onlineFormList
-            this.onlinePageList = response.data.onlinePageList
+            this.onlineFormList = (response.data && response.data.onlineFormList) || []
+            this.onlinePageList = (response.data && response.data.onlinePageList) || []
           }
         )
       },
@@ -288,8 +288,8 @@
       getProcessModelList() {
         this.loading = true
         selectProcessPage(this.queryParam).then(response => {
-          this.queryParam.pageTotal = response.data.pageTotal
-          this.modelList = response.data.records
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+          this.modelList = (response.data && response.data.records) || []
           this.loading = false
         })
       },
@@ -332,7 +332,7 @@
       /** 流程查看 */
       handleProcessView(row) {
         detailProcess(row.id).then(response => {
-            this.processXml = response.data.processXml
+            this.processXml = (response.data && response.data.processXml) || ''
             this.openProcessView = true
           }
         )
@@ -371,11 +371,11 @@
       },
       /** 流程设计操作 */
       handleProcessDesigner(row) {
-        this.$router.push('/process/designer/' + row.id)
+        this.$router.push('/process/designer/' + row.id).catch(() => {})
       },
       /** 流程定义 */
       handleProcessDefinition(row) {
-        this.$router.push('/process/definition/' + row.id)
+        this.$router.push('/process/definition/' + row.id).catch(() => {})
       },
       handleProcessDeployment(row) {
         processDeployment(row.id).then(response => {

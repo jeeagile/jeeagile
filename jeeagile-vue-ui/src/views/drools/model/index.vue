@@ -171,8 +171,8 @@
       getModelList() {
         this.loading = true
         selectDroolsModelPage(this.queryParam).then(response => {
-          this.queryParam.pageTotal = response.data.pageTotal
-          this.modelList = response.data.records
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+          this.modelList = (response.data && response.data.records) || []
           this.loading = false
         })
       },

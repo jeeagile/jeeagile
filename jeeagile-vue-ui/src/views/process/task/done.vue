@@ -82,15 +82,15 @@
       /** 查询流程表单列表 */
       getProcessDoneList() {
         selectDonePage(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.processList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.processList = (response.data && response.data.records) || []
             this.loading = false
           }
         )
       },
       /** 流程查看 */
       handleDetailOrder(row) {
-        this.$router.push({ path: '/process/order/detail/' + row.orderId })
+        this.$router.push({ path: '/process/order/detail/' + row.orderId }).catch(() => {})
       },
       /** 搜索按钮操作 */
       handleQuery() {

@@ -177,8 +177,8 @@
       getProcessFormList() {
         this.loading = true
         selectProcessFormPage(this.queryParam).then(response => {
-          this.queryParam.pageTotal = response.data.pageTotal
-          this.formList = response.data.records
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+          this.formList = (response.data && response.data.records) || []
           this.loading = false
         })
       },
@@ -236,6 +236,7 @@
       },
       handleFormView(row) {
         detailProcessForm(row.id).then(response => {
+          if (!response.data) return
           this.$nextTick(() => {
             if (response.data.formConf && response.data.formFields) {
               this.parserForm = {
@@ -249,7 +250,7 @@
       },
       /** 流程设计操作 */
       handleFormDesigner(row) {
-        this.$router.push('/process/form/designer/' + row.id)
+        this.$router.push('/process/form/designer/' + row.id).catch(() => {})
       },
       /** 提交按钮 */
       submitForm: function () {

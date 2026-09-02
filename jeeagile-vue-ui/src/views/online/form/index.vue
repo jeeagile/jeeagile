@@ -582,8 +582,8 @@
       getOnlineFormList() {
         this.formLoading = true
         selectOnlineFormPage(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.onlineFormList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.onlineFormList = (response.data && response.data.records) || []
             this.formLoading = false
           }
         )

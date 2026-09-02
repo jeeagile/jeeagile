@@ -179,8 +179,8 @@
       getLoggerList() {
         this.loading = true
         selectLoggerPage(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.loggerList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.loggerList = (response.data && response.data.records) || []
             this.loading = false
           }
         )

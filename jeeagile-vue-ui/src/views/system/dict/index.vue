@@ -183,8 +183,8 @@
       getDictTypeList() {
         this.loading = true
         selectDictTypePage(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.dictTypeList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.dictTypeList = (response.data && response.data.records) || []
             this.loading = false
           }
         )

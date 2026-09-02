@@ -181,8 +181,8 @@
       getConfigList() {
         this.loading = true
         selectConfigPage(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.configList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.configList = (response.data && response.data.records) || []
             this.loading = false
           }
         )

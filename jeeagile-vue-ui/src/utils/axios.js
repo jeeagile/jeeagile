@@ -48,13 +48,17 @@ service.interceptors.response.use(
           window.location.href = '/'
         })
       })
+      // 登录过期：reject Promise，阻止 .then() 回调执行，避免无效数据到达业务层
+      return Promise.reject({ code: res.code, message: res.message || '登录已过期', isLoginExpired: true })
     } else if (res.code === '1002') {
       Message.error(res.message || '权限不足!')
       window.location.href = '/401'
+      // 权限不足：reject Promise
+      return Promise.reject({ code: res.code, message: res.message || '权限不足', isPermissionDenied: true })
     } else if (res.code !== '0000' && res.message) {
       // 弹警告信息
       Message.warning(res.message)
-      return Promise.reject(new Error(res.message))
+      return { ...res, data: res.data || {} }
     }
     return res
   },
@@ -68,7 +72,7 @@ service.interceptors.response.use(
       message = '系统接口' + message.substr(message.length - 3) + '异常'
     }
     Message.error(message)
-    return Promise.reject(error)
+    return { code: '9999', message: message, data: {} }
   }
 )
 

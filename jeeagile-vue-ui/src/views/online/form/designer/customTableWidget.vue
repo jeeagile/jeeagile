@@ -117,7 +117,7 @@
                 详情
               </el-button>
               <el-button type="text" size="mini"
-                         v-if="pageType === OnlinePageType.ORDER && scope.row.orderStatus != ProcessOrderStatus.CANCEL"
+                         v-if="pageType === OnlinePageType.ORDER && scope.row.canHandle"
                          @click.stop="onHandlerProcessOrder(scope.row)">
                 办理
               </el-button>
@@ -127,7 +127,7 @@
 <!--                催办-->
 <!--              </el-button>-->
               <el-button type="text" size="mini" class="table-btn error"
-                         v-if="pageType === OnlinePageType.ORDER && scope.row.orderStatus === ProcessOrderStatus.SUBMITTED"
+                         v-if="pageType === OnlinePageType.ORDER && scope.row.orderStatus === ProcessOrderStatus.SUBMITTED && scope.row.startUser === userId"
                          @click.stop="onCancelProcessOrder(scope.row)">
                 撤销
               </el-button>
@@ -292,8 +292,8 @@
           selectPageData(queryParam).then(response => {
               this.loading = false
               resolve({
-                dataList: response.data.records,
-                pageTotal: response.data.pageTotal
+                dataList: (response.data && response.data.records) || [],
+                pageTotal: (response.data && response.data.pageTotal) || 0
               })
             }
           )
@@ -400,7 +400,7 @@
       }
     },
     computed: {
-      ...mapGetters(['onlinePageCache']),
+      ...mapGetters(['onlinePageCache', 'userId']),
       /** 获取主键字段名  */
       getPrimaryFieldName() {
         if (this.widgetConfig && this.widgetConfig.onlineTable && Array.isArray(this.widgetConfig.onlineTable.tableColumnList)) {

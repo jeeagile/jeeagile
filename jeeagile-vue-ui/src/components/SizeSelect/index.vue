@@ -46,7 +46,7 @@
         this.$nextTick(() => {
           this.$router.replace({
             path: '/Redirect' + fullPath
-          })
+          }).catch(() => {})
         })
       }
     }

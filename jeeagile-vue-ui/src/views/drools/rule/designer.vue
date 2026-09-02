@@ -215,6 +215,7 @@
       },
       detailDroolsRule() {
         detailDroolsRuleInfo(this.ruleId).then(response => {
+          if (!response.data) return
           this.$nextTick(() => {
             this.ruleId = response.data.id
             this.ruleInfo = response.data

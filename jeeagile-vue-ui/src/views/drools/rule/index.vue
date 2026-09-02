@@ -197,8 +197,8 @@
       getDroolsRuleList() {
         this.loading = true
         selectDroolsRulePage(this.queryParam).then(response => {
-          this.ruleList = response.data.records
-          this.queryParam.pageTotal = response.data.pageTotal
+          this.ruleList = (response.data && response.data.records) || []
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
           this.loading = false
         })
       },
@@ -309,7 +309,7 @@
         })
       },
       handleDesigner(row) {
-        this.$router.push('/drools/rule/designer/' + row.id)
+        this.$router.push('/drools/rule/designer/' + row.id).catch(() => {})
       }
     }
   }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.security.context.AgileSecurityContext;
+import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.entity.system.AgileSysUser;
 import com.jeeagile.frame.service.system.IAgileSysUserService;
@@ -17,6 +18,7 @@ import com.jeeagile.process.entity.AgileProcessOrder;
 import com.jeeagile.process.entity.AgileProcessTask;
 import com.jeeagile.process.service.IAgileProcessDefinitionService;
 import com.jeeagile.process.service.IAgileProcessOrderService;
+import com.jeeagile.process.service.IAgileProcessOrderScopeService;
 import com.jeeagile.process.service.IAgileProcessTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.TaskService;
@@ -24,12 +26,16 @@ import org.activiti.engine.delegate.event.ActivitiEvent;
 import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.activiti.engine.delegate.event.impl.ActivitiEntityEventImpl;
 import org.activiti.engine.delegate.event.impl.ActivitiProcessStartedEventImpl;
+import org.activiti.engine.task.IdentityLink;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -47,6 +53,9 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
     @Lazy
     @Autowired
     private IAgileSysUserService agileSysUserService;
+    @Lazy
+    @Autowired
+    private IAgileProcessOrderScopeService agileProcessOrderScopeService;
 
     @Lazy
     @Autowired
@@ -140,13 +149,33 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
             agileProcessTask.setAssigneeUserName(agileSysUser.getNickName());
         }
 
-//        List<IdentityLink> identityLinkList = taskService.getIdentityLinksForTask(task.getId());
-//        if (AgileCollectionUtil.isNotEmpty(identityLinkList)) {
-//            identityLinkList.forEach(identityLink -> {
-//                System.out.println(identityLink.getType() + " " + identityLink.getUserId() + "  " + identityLink.getGroupId());
-//            });
-//        }
+        // 收集工单办理权限：候选用户 + 候选人组 + 任务执行人
+        // 注意：流程发起人不写入 scope 表（发起人通过 start_user 字段单独控制列表可见性）
+        Set<String> candidateUsers = new HashSet<>();
+        Set<String> candidateGroups = new HashSet<>();
 
+        // 1. 从 Activiti 任务获取候选用户和候选组（来自 BPMN XML 配置）
+        List<IdentityLink> identityLinkList = taskService.getIdentityLinksForTask(task.getId());
+        if (AgileCollectionUtil.isNotEmpty(identityLinkList)) {
+            for (IdentityLink identityLink : identityLinkList) {
+                if ("candidate".equals(identityLink.getType())) {
+                    if (AgileStringUtil.isNotEmpty(identityLink.getUserId())) {
+                        candidateUsers.add(identityLink.getUserId());
+                    }
+                    if (AgileStringUtil.isNotEmpty(identityLink.getGroupId())) {
+                        candidateGroups.add(identityLink.getGroupId());
+                    }
+                }
+            }
+        }
+
+        // 2. 任务执行人也加入权限（BPMN 未配置候选时，至少保证执行人可办理）
+        if (AgileStringUtil.isNotEmpty(task.getAssignee())) {
+            candidateUsers.add(task.getAssignee());
+        }
+
+        // 写入工单办理权限关联表（scope 表 = 可办理权限，不含发起人）
+        agileProcessOrderScopeService.saveOrderScope(agileProcessOrder.getId(), candidateUsers, candidateGroups);
 
         agileProcessTask.setTaskStatus("1");
         agileProcessTaskService.saveModel(agileProcessTask);
@@ -158,11 +187,15 @@ public class AgileActivitiEventListener implements ActivitiEventListener {
     }
 
     private void processCompleted(ActivitiEntityEventImpl activitiEntityEvent) {
-        AgileProcessOrder agileProcessOrder = agileProcessInstanceService.getById(activitiEntityEvent.getProcessInstanceId());
-        agileProcessOrder.setOrderStatus(ProcessOrderStatus.FINISHED);
-        agileProcessOrder.setEndTime(new Date());
-        agileProcessOrder.setUpdateNullValue();
-        agileProcessInstanceService.updateById(agileProcessOrder);
+        LambdaQueryWrapper<AgileProcessOrder> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(AgileProcessOrder::getInstanceId, activitiEntityEvent.getProcessInstanceId());
+        AgileProcessOrder agileProcessOrder = agileProcessInstanceService.getOne(lambdaQueryWrapper);
+        if (agileProcessOrder != null && !agileProcessOrder.isEmptyPk()) {
+            agileProcessOrder.setOrderStatus(ProcessOrderStatus.FINISHED);
+            agileProcessOrder.setEndTime(new Date());
+            agileProcessOrder.setUpdateNullValue();
+            agileProcessInstanceService.updateById(agileProcessOrder);
+        }
     }
 
 //    private void processCancelled(ActivitiProcessCancelledEventImpl processCancelledEvent) {

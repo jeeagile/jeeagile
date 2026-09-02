@@ -69,7 +69,7 @@
       },
       close() {
         this.$store.dispatch('tagsView/delView', this.$route)
-        this.$router.push({ path: '/home' })
+        this.$router.push({ path: '/home' }).catch(() => {})
       }
     }
   }

@@ -364,7 +364,7 @@ export default {
           formData: this.formData,
           generateConf: this.generateConf
         }
-      })
+      }).catch(() => {})
     },
     execRun(data) {
       this.AssembleFormData()

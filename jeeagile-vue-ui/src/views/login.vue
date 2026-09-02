@@ -158,7 +158,7 @@
             }
             this.$store.dispatch('auth/login', this.loginForm)
               .then(() => {
-                this.$router.push({ path: this.redirect || '/' })
+                this.$router.push({ path: this.redirect || '/' }).catch(() => {})
               })
               .catch(() => {
                 this.loading = false

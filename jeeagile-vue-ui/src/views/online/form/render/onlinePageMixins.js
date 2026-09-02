@@ -78,9 +78,10 @@ const OnlinePageMixins = {
     loadOnlinePageConfig() {
       return new Promise((resolve, reject) => {
         renderOnlineFormPage({ pageId: this.pageId }).then(response => {
-          let onlinePage = response.data.onlinePage
+          let onlinePage = response.data && response.data.onlinePage
+          if (!onlinePage) return reject(new Error('页面数据加载失败'))
           let pageConfigData = JSON.parse(onlinePage.widgetJson)
-          this.pageTableList = response.data.pageTableList
+          this.pageTableList = (response.data && response.data.pageTableList) || []
           let pageConfig = {
             pageName: onlinePage.pageName,
             pageType: onlinePage.pageType,
@@ -255,7 +256,7 @@ const OnlinePageMixins = {
         // 校验组件表格数据表绑定是否正确
         if (widget.onlineColumn == null) {
           let table = this.onlineTableMap.get(widget.tableId)
-          if (table.tableId !== widget.onlineTable.tableId) {
+          if (table && widget.onlineTable && table.tableId !== widget.onlineTable.tableId) {
             let errorItem = {
               widget: widget,
               message: '组件绑定字段不属于选张的数据表！'
@@ -391,9 +392,10 @@ const OnlinePageMixins = {
           return this.params ? this.params[valueData] : undefined
         case this.OnlineParamValueType.TABLE_COLUMN: {
           const onlineColumn = this.onlineColumnMap.get(valueData)
+          if (onlineColumn == null) return null
           const onlineTable = this.onlineTableMap.get(onlineColumn.tableId)
           const columnValue = this.formPageData[this.getColumnFieldName(onlineTable, onlineColumn)]
-          if (onlineColumn == null || columnValue == null || columnValue === '') {
+          if (columnValue == null || columnValue === '') {
             return null
           } else {
             return columnValue
@@ -418,9 +420,9 @@ const OnlinePageMixins = {
     loadDropdownData() {
       if (Array.isArray(this.dropdownWidgetList)) {
         this.dropdownWidgetList.forEach(dropdownWidget => {
-          let dropdownWidgetImpl = this.$refs[dropdownWidget.variableName][0]
-          if (dropdownWidgetImpl) {
-            dropdownWidgetImpl.onVisibleChange()
+          let refs = this.$refs[dropdownWidget.variableName]
+          if (refs && refs[0]) {
+            refs[0].onVisibleChange()
           }
         })
       }
@@ -501,6 +503,7 @@ const OnlinePageMixins = {
             }
             const masterOnlineTable = this.onlineTableMap.get(subFormMasterTable.masterTableId)
             const masterOnlineColumn = this.onlineColumnMap.get(subFormMasterTable.masterColumnId)
+            if (masterOnlineTable == null || masterOnlineColumn == null) return null
             const fieldName = this.getColumnFieldName(masterOnlineTable, masterOnlineColumn)
             this.params[subFormMasterTable.slaveColumnName] = this.formPageData[fieldName]
             return {
@@ -515,7 +518,7 @@ const OnlinePageMixins = {
       if (this.preview()) return
       if (operation.pageId != null) {
         renderOnlineFormPage({ pageId: operation.pageId }).then(response => {
-          let onlinePage = response.data.onlinePage
+          let onlinePage = response.data && response.data.onlinePage
           if (onlinePage != null) {
             let params = this.buildSubFormParams(operation, onlinePage, pageData)
             if (onlinePage.pageKind === this.OnlinePageKind.JUMP) {
@@ -578,7 +581,7 @@ const OnlinePageMixins = {
                   ) ? '0' : '1',
                   pageData: pageData
                 }
-              })
+              }).catch(() => {})
             }
           }
         })

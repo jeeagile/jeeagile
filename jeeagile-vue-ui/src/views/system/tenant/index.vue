@@ -292,8 +292,8 @@
       getTenantList() {
         this.loading = true
         selectTenantPage(this.queryParam).then(response => {
-          this.queryParam.pageTotal = response.data.pageTotal
-          this.tenantList = response.data.records
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+          this.tenantList = (response.data && response.data.records) || []
           this.loading = false
         })
       },

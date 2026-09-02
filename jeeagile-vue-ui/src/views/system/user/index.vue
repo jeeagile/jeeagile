@@ -368,16 +368,17 @@
       this.initData()
       this.getUserList()
       this.getSysConfig('sys.user.pwd').then(response => {
-        this.defaultPwd = response.data.configValue
+        this.defaultPwd = (response.data && response.data.configValue) || ''
       })
     },
     methods: {
       /** 初始化页面数据 */
       initData() {
         initData().then(response => {
-          this.deptList = response.data.deptList
-          this.postList = response.data.postList
-          this.roleList = response.data.roleList
+          if (!response.data) return
+          this.deptList = response.data.deptList || []
+          this.postList = response.data.postList || []
+          this.roleList = response.data.roleList || []
           this.deptTreeOptionList = this.handleTree(this.deptList)
         })
       },
@@ -385,8 +386,8 @@
       getUserList() {
         this.loading = true
         selectUserPage(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.userList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.userList = (response.data && response.data.records) || []
             this.loading = false
           }
         )
@@ -490,6 +491,7 @@
         this.reset()
         row = undefined === row.id ? this.selectRowList[0] : row
         detailUser(row.id).then(response => {
+          if (!response.data) return
           this.form = response.data
           this.form.postIdList = response.data.postIdList
           this.form.roleIdList = response.data.roleIdList

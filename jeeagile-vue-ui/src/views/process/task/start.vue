@@ -147,8 +147,8 @@
       /** 查询流程表单列表 */
       getProcessDefinitionList() {
         selectMainVersionProcess(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.processList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.processList = (response.data && response.data.records) || []
             this.loading = false
           }
         )

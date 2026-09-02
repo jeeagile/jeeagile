@@ -24,6 +24,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.springframework.context.annotation.Lazy;
 
 import javax.servlet.http.HttpServletRequest;
@@ -77,7 +78,9 @@ public class AgileAuthorizingRealm extends AuthorizingRealm {
                         userData.setBrowserName(userAgent.getBrowser().getName());
                     }
                     AgileSecurityContext.putUserData(userData);
-                    return new SimpleAuthenticationInfo(userData, password, userData.getUserName());
+                    // 使用 SimplePrincipalCollection 避免 SimpleAuthenticationInfo 三参数构造导致的 Comparable 转换异常
+                    PrincipalCollection principalCollection = new SimplePrincipalCollection(userData, getName());
+                    return new SimpleAuthenticationInfo(principalCollection, password);
                 } else {
                     throw new AgileAuthException(AgileResultCode.FAIL_USER_PWD);
                 }

@@ -71,7 +71,7 @@
         if (this.isHttp(val.path)) {
           window.open(val.path, '_blank')
         } else {
-          this.$router.push(val.path)
+          this.$router.push(val.path).catch(() => {})
         }
         this.search = ''
         this.options = []

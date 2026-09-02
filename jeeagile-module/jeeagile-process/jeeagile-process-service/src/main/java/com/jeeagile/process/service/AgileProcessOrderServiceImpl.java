@@ -5,6 +5,7 @@ import com.jeeagile.core.exception.AgileFrameException;
 import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.core.protocol.annotation.AgileService;
 import com.jeeagile.core.security.context.AgileSecurityContext;
+import com.jeeagile.core.security.user.AgileBaseUser;
 import com.jeeagile.core.util.AgileCollectionUtil;
 import com.jeeagile.core.util.AgileStringUtil;
 import com.jeeagile.frame.entity.online.AgileOnlinePage;
@@ -202,16 +203,54 @@ public class AgileProcessOrderServiceImpl extends AgileBaseServiceImpl<AgileProc
         selectFieldsBuilder.append("agile_process_order.page_key pageKey").append(",");
         selectFieldsBuilder.append("agile_process_order.order_status orderStatus").append(",");
         selectFieldsBuilder.append("agile_process_order.task_id taskId").append(",");
+        selectFieldsBuilder.append("agile_process_order.start_user startUser").append(",");
         selectFieldsBuilder.append("agile_process_order.start_user_name startUserName").append(",");
-        selectFieldsBuilder.append("agile_process_order.start_time startTime");
+        selectFieldsBuilder.append("agile_process_order.start_time startTime").append(",");
+        selectFieldsBuilder.append("agile_process_task.assignee_user assigneeUser");
         // 添加 流程实例关联表
         OnlineJoinTable onlineJoinTable = new OnlineJoinTable();
         onlineJoinTable.setLeftJoin(true);
         onlineJoinTable.setJoinTableName("agile_process_order");
         onlineJoinTable.setJoinCondition("agile_process_order.page_key = " + agileOnlineTable.getTableName() + "." + agileOnlineTable.getPrimaryColumnName());
         joinTableList.add(onlineJoinTable);
+        // 添加 流程任务关联表（获取当前任务执行人）
+        OnlineJoinTable taskJoinTable = new OnlineJoinTable();
+        taskJoinTable.setLeftJoin(true);
+        taskJoinTable.setJoinTableName("agile_process_task");
+        taskJoinTable.setJoinCondition("agile_process_task.id = agile_process_order.task_id");
+        joinTableList.add(taskJoinTable);
 
         List<OnlineFieldFilter> onlineFieldFilterList = this.makeFieldFilter(onlineOrderQueryParam);
+
+        // 列表可见性过滤：
+        // 1. scope表（候选人+候选组+执行人）OR start_user=当前用户（发起人看自己的）
+        // 2. scope 为空时，只看 start_user=当前用户
+        AgileBaseUser currentUser = AgileSecurityContext.getUserData();
+        if (currentUser != null) {
+            List<String> scopeOrderIds = agileProcessOrderScopeService.getUserVisibleOrderIds();
+            if (AgileCollectionUtil.isNotEmpty(scopeOrderIds)) {
+                Set<Object> idSet = new HashSet<>();
+                for (String id : scopeOrderIds) {
+                    idSet.add(id);
+                }
+                OnlineFieldFilter scopeFilter = new OnlineFieldFilter();
+                scopeFilter.setTableName("agile_process_order");
+                scopeFilter.setColumnName("id");
+                scopeFilter.setFilterType("06");
+                scopeFilter.setColumnValueList(idSet);
+                scopeFilter.setExtraColumnName("start_user");
+                scopeFilter.setExtraColumnValue(currentUser.getUserId());
+                onlineFieldFilterList.add(scopeFilter);
+            } else {
+                // scope 表为空时，只看自己发起的（避免 IN () 无效 SQL）
+                OnlineFieldFilter startUserFilter = new OnlineFieldFilter();
+                startUserFilter.setTableName("agile_process_order");
+                startUserFilter.setColumnName("start_user");
+                startUserFilter.setFilterType("02");
+                startUserFilter.setColumnValue(currentUser.getUserId());
+                onlineFieldFilterList.add(startUserFilter);
+            }
+        }
 
         if (AgileStringUtil.isEmpty(orderBy)) {
             orderBy = "agile_process_order.start_time desc";
@@ -220,7 +259,40 @@ public class AgileProcessOrderServiceImpl extends AgileBaseServiceImpl<AgileProc
         }
 
         AgilePage<Map> agilePage = new AgilePage<>(agilePageable.getCurrentPage(), agilePageable.getPageSize());
-        return agileOnlineOperationMapper.getPageData(agilePage, agileOnlineTable.getTableName(), selectFieldsBuilder.toString(), joinTableList, onlineFieldFilterList, orderBy);
+        AgilePage<Map> result = agileOnlineOperationMapper.getPageData(agilePage, agileOnlineTable.getTableName(), selectFieldsBuilder.toString(), joinTableList, onlineFieldFilterList, orderBy);
+
+        // 计算当前登录用户是否可以办理每条工单
+        this.fillCanHandleFlag(result.getRecords());
+
+        return result;
+    }
+
+    /**
+     * 为工单列表填充 canHandle 标志：当前用户在 scope 表（候选人+候选组+执行人）中且工单状态允许办理时，canHandle = true
+     * 注意：scope 表不含流程发起人，发起人不能仅因发起身份而办理
+     */
+    private void fillCanHandleFlag(List<Map> records) {
+        if (AgileCollectionUtil.isEmpty(records)) {
+            return;
+        }
+        // 查询当前用户在 scope 表中的工单ID集合（候选人、候选人组、任务执行人）
+        List<String> scopeOrderIds = agileProcessOrderScopeService.getUserVisibleOrderIds();
+        Set<String> scopeOrderIdSet = new HashSet<>(scopeOrderIds);
+
+        // 不可办理的状态：已完成、已终止、已撤销
+        Set<String> terminalStatus = new HashSet<>(Arrays.asList(
+                ProcessOrderStatus.FINISHED, ProcessOrderStatus.STOPPED, ProcessOrderStatus.CANCEL
+        ));
+
+        for (Map record : records) {
+            Object orderId = record.get("orderId");
+            Object orderStatus = record.get("orderStatus");
+            boolean canHandle = orderId != null
+                    && scopeOrderIdSet.contains(orderId.toString())
+                    && orderStatus != null
+                    && !terminalStatus.contains(orderStatus.toString());
+            record.put("canHandle", canHandle);
+        }
     }
 
     /**
@@ -258,27 +330,6 @@ public class AgileProcessOrderServiceImpl extends AgileBaseServiceImpl<AgileProc
             onlineFieldFilter_createTime.setColumnValueEnd(onlineOrderQueryParam.getCreateTimeEnd());
             onlineFieldFilter_createTime.setFilterType("03");
             onlineFieldFilterList.add(onlineFieldFilter_createTime);
-        }
-        
-        // 添加权限过滤：非超级管理员需按权限关联表过滤
-        if (!AgileSecurityContext.getUserData().isSuperAdmin()) {
-            List<String> visibleOrderIds = agileProcessOrderScopeService.getUserVisibleOrderIds();
-            if (AgileCollectionUtil.isNotEmpty(visibleOrderIds)) {
-                OnlineFieldFilter onlineFieldFilter_orderId = new OnlineFieldFilter();
-                onlineFieldFilter_orderId.setTableName("agile_process_order");
-                onlineFieldFilter_orderId.setColumnName("id");
-                onlineFieldFilter_orderId.setFilterType("05"); // IN 类型
-                onlineFieldFilter_orderId.setColumnValueList(new HashSet<>(visibleOrderIds));
-                onlineFieldFilterList.add(onlineFieldFilter_orderId);
-            } else {
-                // 无权限时返回空结果
-                OnlineFieldFilter onlineFieldFilter_empty = new OnlineFieldFilter();
-                onlineFieldFilter_empty.setTableName("agile_process_order");
-                onlineFieldFilter_empty.setColumnName("id");
-                onlineFieldFilter_empty.setFilterType("05");
-                onlineFieldFilter_empty.setColumnValueList(new HashSet<>(Arrays.asList("NONE")));
-                onlineFieldFilterList.add(onlineFieldFilter_empty);
-            }
         }
         
         return onlineFieldFilterList;

@@ -275,8 +275,8 @@
       /** 查询在线表单列表 */
       getOnlineFormPageList() {
         selectOnlineFormPageList().then(response => {
-          let formList = response.data.onlineFormList
-          let pageList = response.data.onlinePageList
+          let formList = (response.data && response.data.onlineFormList) || []
+          let pageList = (response.data && response.data.onlinePageList) || []
           if (!Array.isArray(formList) || !Array.isArray(pageList)) {
             this.formPageData = []
             return
@@ -305,8 +305,8 @@
       /** 查询在线流程表单列表 */
       getOnlineProcessPageList() {
         selectProcessOnlinePageList().then(response => {
-          let processList = response.data.processList
-          let pageList = response.data.orderPageList
+          let processList = (response.data && response.data.processList) || []
+          let pageList = (response.data && response.data.orderPageList) || []
           if (!Array.isArray(processList) || !Array.isArray(pageList)) {
             this.processPageData = []
             return

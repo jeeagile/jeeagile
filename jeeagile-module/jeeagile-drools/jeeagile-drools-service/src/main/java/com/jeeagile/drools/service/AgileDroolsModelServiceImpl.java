@@ -107,7 +107,7 @@ public class AgileDroolsModelServiceImpl extends AgileBaseServiceImpl<AgileDrool
             AgileKieRule agileKieRule = new AgileKieRule();
             agileKieRule.setContent(sourceCode);
             agileKieRule.setPath(agileDroolsModel.getId() + ".drl");
-            agileKieTemplate.addContent(agileKieRule);
+            agileKieTemplate.addOrUpdateKieRule(agileKieRule);
         } else {
             agileKieTemplate.removeContent(agileDroolsModel.getId() + ".drl");
         }

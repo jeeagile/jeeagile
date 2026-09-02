@@ -177,8 +177,8 @@
           this.queryParam.queryCond.endTime = this.dateRange[1]
         }
         selectDroolsLoggerPage(this.queryParam).then(response => {
-            this.loggerList = response.data.records
-            this.queryParam.pageTotal = response.data.pageTotal
+            this.loggerList = (response.data && response.data.records) || []
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
             this.loading = false
           }
         )

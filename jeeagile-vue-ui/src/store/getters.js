@@ -5,6 +5,7 @@ const getters = {
   device: state => state.app.device,
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
+  userId: state => state.auth.userId,
   userName: state => state.auth.userName,
   nickName: state => state.auth.nickName,
   userToken: state => state.auth.userToken,

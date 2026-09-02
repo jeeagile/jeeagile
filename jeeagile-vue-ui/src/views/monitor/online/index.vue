@@ -80,8 +80,8 @@
       getOnlineUserList() {
         this.loading = true
         getOnlineUserList(this.queryParam).then(response => {
-          this.queryParam.pageTotal = response.data.pageTotal
-          this.onlineList = response.data.records
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+          this.onlineList = (response.data && response.data.records) || []
           this.loading = false
         })
       },

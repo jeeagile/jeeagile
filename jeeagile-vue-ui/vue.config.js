@@ -1,5 +1,6 @@
 'use strict'
 const path = require('path')
+const webpack = require('webpack')
 const defaultSettings = require('./src/settings.js')
 
 function resolve(dir) {
@@ -55,7 +56,13 @@ module.exports = {
         process: require.resolve('process/browser'),
         os: require.resolve('os-browserify/browser')
       }
-    }
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+        Buffer: ['buffer', 'Buffer']
+      })
+    ]
   },
   chainWebpack(config) {
     config.module.rule('bpmnlintrc').test(/\.bpmnlintrc$/).use('bpmnlint-loader').loader('bpmnlint-loader').end()

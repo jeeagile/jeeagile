@@ -38,4 +38,16 @@ public class AgileDroolsModelController extends AgileCrudController<IAgileDrools
             return this.error(AgileResultCode.FAIL_UPDATE_EXCEPTION, "数据对象状态更新失败！");
         }
     }
+
+    @PostMapping(value = "/validate")
+    @ApiOperation(value = "验证数据对象", notes = "验证数据对象")
+    @AgileLogger(notes = "验证数据对象", type = AgileOperateType.OTHER)
+    public AgileResult<Object> validate(@SingleRequestBody String modelId) {
+        AgileDroolsModel agileDroolsModel = this.agileService.getById(modelId);
+        if (agileDroolsModel == null || agileDroolsModel.isEmptyPk()) {
+            return this.error(AgileResultCode.FAIL_SEARCH_EXCEPTION, "数据对象不存在！");
+        }
+        this.agileService.validateModel(agileDroolsModel);
+        return this.success();
+    }
 }

@@ -435,6 +435,7 @@
     methods: {
       detailDroolsScene() {
         detailDroolsSceneInfo(this.sceneId).then(response => {
+          if (!response.data) return
           this.sceneId = response.data.id
           this.sceneInfo = response.data
           this.address = window.location.origin + '/drools/scene/execute/'
@@ -481,7 +482,7 @@
       handleSubmitExecute() {
         this.executeResults = ''
         executeDroolsScene(this.sceneInfo.sceneCode, this.paramData).then(response => {
-          this.executeResults = JSON.stringify(response.data, null, '\t')
+          this.executeResults = response.data ? JSON.stringify(response.data, null, '\t') : ''
         })
       },
       handleClickTab() {
@@ -496,14 +497,15 @@
       getDroolsLoggerList() {
         this.loading = true
         selectDroolsLoggerPage(this.queryParam).then(response => {
-            this.loggerList = response.data.records
-            this.queryParam.pageTotal = response.data.pageTotal
+            this.loggerList = (response.data && response.data.records) || []
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
             this.loading = false
           }
         )
       },
       handleViewLogger(row) {
         detailDroolsLogger(row.id).then(response => {
+          if (!response.data) return
           this.loggerForm = response.data
           this.openLogger = true
         })
@@ -511,6 +513,7 @@
       getDroolsStatistic() {
         let queryParam = { sceneId: this.sceneId }
         droolsStatistic(queryParam).then(response => {
+          if (!response.data) return
           this.statisticInfo = response.data
           this.statisticExecuteCount.rows = response.data.statisticExecuteCount
           this.statisticSuccessCount.rows = response.data.statisticSuccessCount

@@ -8,7 +8,7 @@ import 'nprogress/nprogress.css'
 
 import { Message } from 'element-ui'
 
-import { getUserToken, getUserTenantId, getUserTenantSign } from '@/utils/cookie'
+import { getUserToken, removeUserToken, getUserTenantId, getUserTenantSign } from '@/utils/cookie'
 
 import Layout from '@/layout/index'
 
@@ -208,17 +208,41 @@ router.beforeEach((to, from, next) => {
             } else {
               router.addRoute(accessRoutes)
             }
-            next({ ...to, replace: true })
+            // 不使用 next({ ...to, replace: true })，避免 Vue Router 3.x 抛出 NavigationRedirected 错误
+            // 先完成当前导航（可能会到404），然后延迟替换到目标路由
+            next()
+            setTimeout(() => {
+              router.replace(to.fullPath).catch(() => {})
+            }, 100)
+          }).catch(err => {
+            // getRoutes 失败（登录过期等），统一走错误处理
+            removeUserToken()
+            hasRoutesAdded = true
+            next()
+            store.dispatch('auth/fedLogOut').then(() => {
+              const tenantId = getUserTenantId()
+              const tenantSign = getUserTenantSign()
+              if (tenantId && tenantSign) {
+                router.replace(`/login?tenantId=${tenantId}&tenantSign=${tenantSign}`).catch(() => {})
+              } else {
+                router.replace('/login').catch(() => {})
+              }
+            })
           })
         }).catch(err => {
+          // 同步清除 token，防止守卫再次检测到 token 导致重定向循环
+          removeUserToken()
+          hasRoutesAdded = true // 防止重复尝试获取路由
+          // 先同步调用 next() 完成当前导航守卫，避免异步 next() 导致 NavigationCancelledError
+          next()
           store.dispatch('auth/fedLogOut').then(() => {
             Message.error(err)
             const tenantId = getUserTenantId()
             const tenantSign = getUserTenantSign()
             if (tenantId && tenantSign) {
-              next({ path: `/login?tenantId=${tenantId}&tenantSign=${tenantSign}` })
+              router.replace(`/login?tenantId=${tenantId}&tenantSign=${tenantSign}`).catch(() => {})
             } else {
-              next({ path: '/login' })
+              router.replace('/login').catch(() => {})
             }
           })
         })
@@ -245,4 +269,25 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
   NProgress.done()
+})
+
+// Vue Router 3.x 中 next({ ...to, replace: true }) 和 router.replace() 会抛出无害的导航错误
+router.onError((error) => {
+  const pattern = /Redirected|Avoided redundant navigation|Navigation cancelled/gi
+  if (pattern.test(error.message)) {
+    return
+  }
+  console.error(error)
+})
+
+// Vue Router 3.x 的 NavigationCancelledError / NavigationDuplicated 会以 unhandled rejection 形式
+// 传播，不经过 router.onError()，会被 Vue 全局错误处理器捕获导致全屏红色覆盖层。
+// 在此统一拦截并静默处理。
+const NAV_ERROR_PATTERN = /Navigation cancelled|NavigationDuplicated|Avoided redundant navigation|Redirected/gi
+window.addEventListener('unhandledrejection', (event) => {
+  const reason = event.reason
+  const msg = (reason && (reason.message || String(reason))) || ''
+  if (NAV_ERROR_PATTERN.test(msg)) {
+    event.preventDefault()
+  }
 })

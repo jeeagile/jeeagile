@@ -249,8 +249,8 @@
       getDroolsModelFieldList() {
         this.loading = true
         selectDroolsModelFieldPage(this.queryParam).then(response => {
-            this.modelFieldList = response.data.records
-            this.queryParam.pageTotal = response.data.pageTotal
+            this.modelFieldList = (response.data && response.data.records) || []
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
             this.loading = false
           }
         )

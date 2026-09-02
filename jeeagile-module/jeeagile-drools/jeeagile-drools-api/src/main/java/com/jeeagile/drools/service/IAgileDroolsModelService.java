@@ -1,5 +1,6 @@
 package com.jeeagile.drools.service;
 
+import com.jeeagile.core.exception.AgileValidateException;
 import com.jeeagile.drools.entity.AgileDroolsModel;
 import com.jeeagile.drools.vo.AgileDroolsModelFieldInfo;
 import com.jeeagile.frame.service.IAgileBaseService;
@@ -25,4 +26,9 @@ public interface IAgileDroolsModelService extends IAgileBaseService<AgileDroolsM
      * @return
      */
     List<AgileDroolsModelFieldInfo> selectModelFieldInfoList(String modelId);
+
+    /**
+     * 验证数据对象（名称+包名唯一性）
+     */
+    void validateModel(AgileDroolsModel agileDroolsModel) throws AgileValidateException;
 }

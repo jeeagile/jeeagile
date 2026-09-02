@@ -168,8 +168,8 @@
       getPostList() {
         this.loading = true
         selectPostPage(this.queryParam).then(response => {
-          this.queryParam.pageTotal = response.data.pageTotal
-          this.postList = response.data.records
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+          this.postList = (response.data && response.data.records) || []
           this.loading = false
         })
       },

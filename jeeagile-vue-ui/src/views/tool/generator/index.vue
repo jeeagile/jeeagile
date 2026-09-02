@@ -145,8 +145,8 @@
       getGeneratorTableList() {
         this.loading = true
         selectGeneratorTablePage(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.generatorTableList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.generatorTableList = (response.data && response.data.records) || []
             this.loading = false
           }
         )
@@ -203,7 +203,7 @@
       /** 修改按钮操作 */
       handleEditTable(row) {
         row = undefined === row.id ? this.selectRowList[0] : row
-        this.$router.push('/generator/edit/' + row.id)
+        this.$router.push('/generator/edit/' + row.id).catch(() => {})
       },
       /** 删除按钮操作 */
       handleDelete(row) {

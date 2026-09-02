@@ -170,8 +170,8 @@
       getDroolsSceneList() {
         this.loading = true
         selectDroolsScenePage(this.queryParam).then(response => {
-          this.sceneList = response.data.records
-          this.queryParam.pageTotal = response.data.pageTotal
+          this.sceneList = (response.data && response.data.records) || []
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
           this.loading = false
         })
       },
@@ -280,7 +280,7 @@
         })
       },
       handleExecute(row) {
-        this.$router.push('/drools/scene/execute/' + row.id)
+        this.$router.push('/drools/scene/execute/' + row.id).catch(() => {})
       }
     }
   }

@@ -33,3 +33,8 @@ export const deleteDroolsModel = data => postApi('/drools/model/delete', data)
  * 更新规则引擎 数据对象 状态
  */
 export const changeDroolsModelStatus = data => postApi('/drools/model/changeStatus', data)
+
+/**
+ * 验证规则引擎 数据对象
+ */
+export const validateDroolsModel = data => postApi('/drools/model/validate', data)

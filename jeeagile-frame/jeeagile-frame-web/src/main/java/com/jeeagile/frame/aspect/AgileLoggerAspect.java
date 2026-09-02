@@ -41,8 +41,8 @@ import java.util.List;
  * @date 2021-03-21
  * @description
  */
+//@Aspect
 @Slf4j
-@Aspect
 @Component
 @Order
 public class AgileLoggerAspect implements ApplicationListener<WebServerInitializedEvent> {

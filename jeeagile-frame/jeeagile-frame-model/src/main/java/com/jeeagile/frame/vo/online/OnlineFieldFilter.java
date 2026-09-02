@@ -60,8 +60,20 @@ public class OnlineFieldFilter {
     private Set<Object> columnValueList;
 
     /**
+     * 额外字段名（filterType=06 OR条件时使用）
+     */
+    @ApiModelProperty(value = "额外字段名")
+    private String extraColumnName;
+
+    /**
+     * 额外字段值（filterType=06 OR条件时使用）
+     */
+    @ApiModelProperty(value = "额外字段值")
+    private Object extraColumnValue;
+
+    /**
      * 过滤类型
-     * 01:无过滤 02:普通过滤 03:范围过滤 04:模糊过滤 05：IN LIST列表过滤
+     * 01:无过滤 02:普通过滤 03:范围过滤 04:模糊过滤 05：IN LIST列表过滤 06：IN OR 等值过滤
      */
     @ApiModelProperty(value = "过滤类型")
     private String filterType = "02";

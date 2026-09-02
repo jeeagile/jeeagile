@@ -188,6 +188,7 @@
       /** 查询字典类型详细 */
       detailDictType(dictTypeId) {
         detailDictType(dictTypeId).then(response => {
+          if (!response.data) return
           this.queryParam.queryCond.dictType = response.data.dictType
           this.defaultDictType = response.data.dictType
           this.getDictDataList()
@@ -196,15 +197,15 @@
       /** 查询字典类型列表 */
       getDictTypeList() {
         selectDictTypeList().then(response => {
-          this.dictTypeOptionList = response.data
+          this.dictTypeOptionList = response.data || []
         })
       },
       /** 查询字典数据列表 */
       getDictDataList() {
         this.loading = true
         selectDictDataPage(this.queryParam).then(response => {
-          this.queryParam.pageTotal = response.data.pageTotal
-          this.dictDataList = response.data.records
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+          this.dictDataList = (response.data && response.data.records) || []
           this.loading = false
         })
       },

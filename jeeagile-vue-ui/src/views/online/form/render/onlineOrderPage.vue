@@ -198,8 +198,8 @@
           }
           selectOnlineOrderList(params).then(response => {
             resolve({
-              dataList: response.data.records,
-              pageTotal: response.data.pageTotal
+              dataList: (response.data && response.data.records) || [],
+              pageTotal: (response.data && response.data.pageTotal) || 0
             })
           })
         })
@@ -232,12 +232,13 @@
       },
       /** 创建工单 **/
       createOrder() {
-        if (this.isPreview || this.processDefinitionId === null) return
+        if (this.isPreview || this.processDefinitionId === null || !this.processDefinition) return
         this.orderDialogTitle = this.processDefinition.processName
         this.openOrderDialog = true
       },
       submitOrder() {
         this.$refs.onlineOrder.getFormPageData().then(orderData => {
+          if (!this.processDefinition) return
           startProcess({ processDefinitionId: this.processDefinition.id, orderData: orderData }).then(response => {
               this.messageSuccess('流程工单发起成功')
               this.onSearch()
@@ -247,11 +248,23 @@
         })
       },
       onView(row) {
-        this.$router.push({ path: '/process/order/detail/' + row.orderId })
+        this.$router.push({ path: '/process/order/detail/' + row.orderId }).catch(() => {})
       },
       onHandler(row) {
+        // 先关闭对话框并清除旧数据
         this.handleProcess.openProcess = false
+        this.handleProcess.processOrder = {}
+        this.handleProcess.processTask = undefined
+        this.handleProcess.parserForm = undefined
+        this.handleProcess.formData = undefined
+        this.handleProcess.flowInfoList = undefined
+        this.handleProcess.activeName = 'formInfo'
+        this.handleProcess.fromParser = true
+        this.handleProcess.openProcessView = false
+        this.taskForm.approveMessage = undefined
+
         detailProcessOrder(row.orderId).then(response => {
+          if (!response.data) return
           this.handleProcess.processOrder = response.data
           this.handleProcess.processTask = row
           if (this.handleProcess.processOrder.formType === this.ProcessFormType.PROCESS_FORM) { // 流程表单
@@ -307,7 +320,7 @@
             }).then(response => {
               this.messageSuccess('任务执行成功！')
               this.handleProcess.openProcess = false
-              this.getProcessTodoList()
+              this.onSearch()
             })
           }
         })
@@ -321,7 +334,7 @@
             }).then(response => {
               this.messageSuccess('任务拒绝成功！')
               this.handleProcess.openProcess = false
-              this.getProcessTodoList()
+              this.onSearch()
             })
           }
         })
@@ -337,9 +350,11 @@
     },
     mounted() {
       selectMainProcessDefinition(this.processId).then(response => {
-          this.processDefinition = response.data
-          this.processDefinitionId = response.data.id
-          this.processName = response.data.processName
+          if (response.data) {
+            this.processDefinition = response.data
+            this.processDefinitionId = response.data.id
+            this.processName = response.data.processName
+          }
         }
       )
     }

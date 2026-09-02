@@ -151,8 +151,8 @@
       getProcessDefinitionList() {
         this.loading = true
         selectProcessDefinitionPage(this.queryParam).then(response => {
-          this.queryParam.pageTotal = response.data.pageTotal
-          this.definitionList = response.data.records
+          this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+          this.definitionList = (response.data && response.data.records) || []
           this.loading = false
         })
       },
@@ -171,7 +171,7 @@
         this.openProcessView = false
         detailProcessDefinition(row.id).then(response => {
             this.$nextTick(() => {
-              this.processXml = response.data.processXml
+              this.processXml = (response.data && response.data.processXml) || ''
               this.openProcessView = true
             })
           }
@@ -181,6 +181,7 @@
       handleFormView(row) {
         this.openFormView = false
         detailProcessDefinition(row.id).then(response => {
+          if (!response.data) return
           this.$nextTick(() => {
             this.processDefinition = response.data
             if (response.data.formType === this.ProcessFormType.PROCESS_FORM) {

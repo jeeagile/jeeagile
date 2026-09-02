@@ -33,7 +33,8 @@ export async function getOnlineDictData(sender, onlineDict, dictParam) {
         })
         return Promise.resolve(dictDataList)
       } else {
-        return Promise.reject(new Error('未知的静态字典！'))
+        return Promise.reject(new Error('未知的静态字典！')).catch(() => {
+        })
       }
     case OnlineDictType.CUSTOM:
       let dictData = JSON.parse(onlineDict.dictDataJson)

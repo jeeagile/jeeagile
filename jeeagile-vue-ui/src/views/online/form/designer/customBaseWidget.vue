@@ -149,9 +149,20 @@
       initData() {
         if (this.widgetConfig.onlineColumn != null) {
           const fieldKind = this.widgetConfig.onlineColumn.fieldKind
-          if (fieldKind === this.OnlineFieldKind.CREATE_USER_NAME || fieldKind === this.OnlineFieldKind.CREATE_USER_NAME) {
-            if (!this.value) {
+          if (!this.value) {
+            if (fieldKind === this.OnlineFieldKind.CREATE_USER_ID) {
+              this.$emit('input', this.$store.getters.userId, this.widgetConfig)
+            } else if (fieldKind === this.OnlineFieldKind.CREATE_USER_NAME) {
               this.$emit('input', this.$store.getters.nickName, this.widgetConfig)
+            } else if (fieldKind === this.OnlineFieldKind.CREATE_TIME) {
+              const now = new Date()
+              const timeStr = now.getFullYear() + '-' +
+                String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                String(now.getDate()).padStart(2, '0') + ' ' +
+                String(now.getHours()).padStart(2, '0') + ':' +
+                String(now.getMinutes()).padStart(2, '0') + ':' +
+                String(now.getSeconds()).padStart(2, '0')
+              this.$emit('input', timeStr, this.widgetConfig)
             }
           }
         }

@@ -379,8 +379,8 @@
       getDictList() {
         this.loading = true
         selectDictPage(this.queryParam).then(response => {
-            this.queryParam.pageTotal = response.data.pageTotal
-            this.dictList = response.data.records
+            this.queryParam.pageTotal = (response.data && response.data.pageTotal) || 0
+            this.dictList = (response.data && response.data.records) || []
             this.loading = false
           }
         )
